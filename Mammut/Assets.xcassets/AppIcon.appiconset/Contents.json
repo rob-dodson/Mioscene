@@ -21,36 +21,43 @@
       "size" : "32x32"
     },
     {
+      "filename" : "icon 1.jpg",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "32x32"
     },
     {
+      "filename" : "icon.jpg",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "128x128"
     },
     {
+      "filename" : "istockphoto-187120569-612x612 4.jpg",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "128x128"
     },
     {
+      "filename" : "istockphoto-187120569-612x612 3.jpg",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "256x256"
     },
     {
+      "filename" : "istockphoto-187120569-612x612 2.jpg",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "256x256"
     },
     {
+      "filename" : "istockphoto-187120569-612x612 1.jpg",
       "idiom" : "mac",
       "scale" : "1x",
       "size" : "512x512"
     },
     {
+      "filename" : "istockphoto-187120569-612x612.jpg",
       "idiom" : "mac",
       "scale" : "2x",
       "size" : "512x512"

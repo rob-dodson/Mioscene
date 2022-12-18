@@ -16,7 +16,15 @@ struct MammutApp: App
     {
         WindowGroup
         {
-            ContentView(client: mast)
+            ContentView(mast: mast)
+        }
+    }
+    
+    static func openCurrentUserAccountURL()
+    {
+        if let url = URL(string:Mastodon.shared.getCurrentUserAccount().url)
+        {
+            NSWorkspace.shared.open(url)
         }
     }
 }

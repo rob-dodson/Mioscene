@@ -11,7 +11,7 @@ import MastodonKit
 
 struct ContentView: View
 {
-    @ObservedObject var client : Mastodon
+    @ObservedObject var mast : Mastodon
 
     var body: some View
     {
@@ -19,7 +19,7 @@ struct ContentView: View
         {
             ScrollView()
             {
-                ForEach(client.getStats())
+                ForEach(mast.getStats())
                 { mstat in
                         Post(mstat: mstat)
                             .padding(.horizontal)
@@ -29,50 +29,7 @@ struct ContentView: View
         }
         .toolbar
         {
-            
-            ToolbarItem
-            {
-                Picker(selection: .constant(1),label: Text("Account"),content:
-                        {
-                            Text("@rdodson").tag(1)
-                            Text("@frogradio").tag(2)
-                        })
-            }
-            ToolbarItem
-            {
-                Picker(selection: .constant(1),label: Text("Timeline"),content:
-                        {
-                            Text("Home").tag(1)
-                            Text("Local").tag(2)
-                            Text("Public").tag(3)
-                            Text("Notifications").tag(4)
-                    
-                        })
-            }
-            
-            ToolbarItem
-            {
-                Button
-                {
-                    
-                }
-                label:
-                {
-                    Image(systemName: "square.and.pencil")
-                }
-
-            }
-            ToolbarItem
-            {
-                Button
-                {
-                    
-                }
-                label:
-                {
-                    Image(systemName: "magnifyingglass")
-                }
-            }
+            mammutToolBar()
         }
     }
 }

@@ -14,7 +14,9 @@ class Mastodon : ObservableObject
     static let shared = Mastodon()
     
     var client : Client!
-    @Published var stats = Array<MStatus>()
+    var useraccount : Account!
+    
+    @Published var stats = [MStatus]()
     
     init()
     {
@@ -40,7 +42,18 @@ class Mastodon : ObservableObject
                 print("client secret: \(application.clientSecret)")
             }
         }
+        
+        client.run(Accounts.currentUser())
+        { result in
+            self.useraccount = result.value
+        }
+        
         getTimeline()
+    }
+    
+    func getCurrentUserAccount() -> Account
+    {
+        return useraccount
     }
     
     func getStats() -> Array<MStatus>

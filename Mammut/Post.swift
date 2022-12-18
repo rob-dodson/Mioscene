@@ -12,7 +12,7 @@ import MastodonKit
 
 struct Post: View
 {
-    var mstat : MStatus
+    @State var mstat : MStatus
     
     
     var body: some View
@@ -29,41 +29,101 @@ struct Post: View
         }
     }
 
+    
     func dopost(status:Status,mstatus:MStatus) -> some View
     {
         GroupBox()
         {
             HStack(alignment: .top)
             {
-                    AsyncImage(url: URL(string: status.account.avatar)) { image in
+                //
+                // Poster's avatar
+                //
+                AsyncImage(url: URL(string: status.account.avatar))
+                { image in
                         image.resizable()
-                    } placeholder: {
-                        Image(systemName: "person.fill.questionmark")
+                }
+            placeholder:
+                {
+                    Image(systemName: "person.fill.questionmark")
+                }
+                .frame(width: 50, height: 50)
+                .cornerRadius(15)
+                .onTapGesture
+                {
+                    if let url = URL(string:status.account.url)
+                    {
+                        NSWorkspace.shared.open(url)
                     }
-                    .frame(width: 50, height: 50)
-                    .cornerRadius(15)
+                }
               
-                
                 
                 VStack(alignment: .leading,spacing: 10)
                 {
+                    //
+                    // names
+                    //
                     VStack(alignment: .leading)
                     {
                         Text(status.account.displayName)
                             .font(.title)
                             .foregroundColor(.white)
+                        
                         Text(status.account.acct)
-                            .font(.footnote)
+                            .font(.title3)
                             .foregroundColor(.gray)
+                        
+                        if let appname = status.application?.name
+                        {
+                            Text("posted with \(appname)")
+                                .font(.footnote).italic()
+                                .foregroundColor(.gray)
+                        }
+                        
                     }
+                   
                     
+                    //
+                    // html body of post
+                    //
                     if let nsAttrString = status.content.htmlAttributedString()
                     {
                         Text(AttributedString(nsAttrString))
-                            .font(.caption)
+                            .font(.body)
                             .foregroundColor(.white)
                     }
+                  
                     
+                    //
+                    // attachments.
+                    //
+                    ForEach(status.mediaAttachments.indices)
+                    { index in
+                        let attachment = status.mediaAttachments[index]
+                        if attachment.type == .image
+                        {
+                            AsyncImage(url: URL(string:attachment.previewURL))
+                            { image in
+                                    image.resizable()
+                            }
+                        placeholder:
+                            {
+                                Image(systemName: "photo")
+                            }
+                            .frame(width: 300,height:200, alignment: .center)
+                            .onTapGesture
+                            {
+                                if let url = URL(string:attachment.url)
+                                {
+                                    NSWorkspace.shared.open(url)
+                                }
+                            }
+                        }
+                    }
+                    
+                    //
+                    // tags
+                    //
                     if status.tags.count > 0
                     {
                         HStack
@@ -80,29 +140,50 @@ struct Post: View
                             }
                         }
                     }
-                            
+                    
+                           
+                    //
+                    // reblogged
+                    //
                     if mstatus.status.reblog != nil
                     {
                         HStack
                         {
                             Image(systemName: "arrow.2.squarepath")
-                            Text("by \(mstatus.status.account.displayName)").foregroundColor(.orange)
+                            if let url = URL(string:mstatus.status.account.url)
+                            {
+                                Link("by \(mstatus.status.account.displayName)", destination: url)
+                            }
+                            else
+                            {
+                                Text("by \(mstatus.status.account.displayName)").foregroundColor(Color("AccentColor"))
+                            }
                         }
                     }
                 
                     
-                        
+                    //
+                    // buttons
+                    //
                     HStack(spacing: 10)
                     {
+                        //
+                        // reply
+                        //
                         Button
                         {
-                            
+                        
                         }
                     label:
                         {
                             Image(systemName: "arrowshape.turn.up.left.fill")
+                                .foregroundColor(.white)
                         }
                         
+                        
+                        //
+                        // favorite
+                        //
                         Button
                         {
                             
@@ -111,11 +192,24 @@ struct Post: View
                         {
                             HStack
                             {
-                                Image(systemName: "star.fill")
+                                if status.favourited == true
+                                {
+                                    Image(systemName: "star.fill")
+                                        .foregroundColor(Color("AccentColor"))
+                                }
+                                else
+                                {
+                                    Image(systemName: "star.fill")
+                                        .foregroundColor(.white)
+                                }
                                 Text("\(status.favouritesCount)")
                             }
                         }
+                       
                         
+                        //
+                        // reblog
+                        //
                         Button
                         {
                             
@@ -129,6 +223,10 @@ struct Post: View
                             }
                         }
                         
+                        
+                        //
+                        // created Date
+                        //
                         let hoursstr = dateSinceNowToString(date: status.createdAt)
                         Text("\(hoursstr) · \(status.createdAt.formatted(date: .abbreviated, time: .omitted)) · \(status.createdAt.formatted(date: .omitted, time: .standard))").foregroundColor(.cyan)
                     }
