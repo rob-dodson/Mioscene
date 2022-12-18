@@ -14,7 +14,7 @@ class Mastodon : ObservableObject
     static let shared = Mastodon()
     
     var client : Client!
-    @Published var stats = Array<mstatus>()
+    @Published var stats = Array<MStatus>()
     
     init()
     {
@@ -27,7 +27,7 @@ class Mastodon : ObservableObject
         let request = Clients.register(
             clientName: "Mammute Client",
             scopes: [.read, .write, .follow],
-            website: "https://github.com/MastodonKit/MastodonKit"
+            website: "https://shyfrogproductions.com"
         )
 
         client.run(request)
@@ -43,14 +43,14 @@ class Mastodon : ObservableObject
         getTimeline()
     }
     
-    func getStats() -> Array<mstatus>
+    func getStats() -> Array<MStatus>
     {
             return stats
     }
     
     func getTimeline()
     {
-        var returnstats = Array<mstatus>()
+        var returnstats = Array<MStatus>()
         let request = Timelines.home(range: .limit(50))
         
         client.run(request)
@@ -70,7 +70,7 @@ class Mastodon : ObservableObject
     }
 }
 
-struct mstatus : Identifiable
+struct MStatus : Identifiable
 {
     var status  : Status
    /* var account : Account
@@ -80,10 +80,10 @@ struct mstatus : Identifiable
     var id = UUID()
 }
 
-func convert(status:Status) -> mstatus
+func convert(status:Status) -> MStatus
 {
    // let newmstatus = mstatus(account: status.account,content: status.content,date:status.createdAt)
-    let newmstatus = mstatus(status: status)
+    let newmstatus = MStatus(status: status)
 
     return newmstatus
 }

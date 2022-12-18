@@ -12,7 +12,7 @@ import MastodonKit
 
 struct Post: View
 {
-    var mstat : mstatus
+    var mstat : MStatus
     
     
     var body: some View
@@ -21,15 +21,15 @@ struct Post: View
         
         if status.reblog != nil
         {
-            dopost(status: status.reblog!,reblogged: true)
+            dopost(status: status.reblog!,mstatus:mstat)
         }
         else
         {
-            dopost(status: status,reblogged: false)
+            dopost(status: status,mstatus:mstat)
         }
     }
 
-    func dopost(status:Status,reblogged:Bool) -> some View
+    func dopost(status:Status,mstatus:MStatus) -> some View
     {
         GroupBox()
         {
@@ -41,36 +41,55 @@ struct Post: View
                         Image(systemName: "person.fill.questionmark")
                     }
                     .frame(width: 50, height: 50)
+                    .cornerRadius(15)
               
                 
                 
                 VStack(alignment: .leading,spacing: 10)
                 {
-                        VStack(alignment: .leading)
+                    VStack(alignment: .leading)
+                    {
+                        Text(status.account.displayName)
+                            .font(.title)
+                            .foregroundColor(.white)
+                        Text(status.account.acct)
+                            .font(.footnote)
+                            .foregroundColor(.gray)
+                    }
+                    
+                    if let nsAttrString = status.content.htmlAttributedString()
+                    {
+                        Text(AttributedString(nsAttrString))
+                            .font(.caption)
+                            .foregroundColor(.white)
+                    }
+                    
+                    if status.tags.count > 0
+                    {
+                        HStack
                         {
-                            Text(status.account.displayName)
-                                .font(.title)
-                                .foregroundColor(.white)
-                            Text(status.account.acct)
-                                .font(.footnote)
-                                .foregroundColor(.gray)
+                            ForEach(status.tags.indices)
+                            { index in
+                                Button("\(status.tags[index].name)", action:
+                                {
+                                    if let url = URL(string:status.tags[index].url)
+                                    {
+                                        NSWorkspace.shared.open(url)
+                                    }
+                                })
+                            }
                         }
-                        
-                        if let nsAttrString = status.content.htmlAttributedString()
-                        {
-                            Text(AttributedString(nsAttrString))
-                                .font(.caption)
-                                .foregroundColor(.white)
-                        }
+                    }
                             
-                    if reblogged == true
+                    if mstatus.status.reblog != nil
                     {
                         HStack
                         {
                             Image(systemName: "arrow.2.squarepath")
-                            Text("Reblogged by \(status.account.displayName)").foregroundColor(.orange)
+                            Text("by \(mstatus.status.account.displayName)").foregroundColor(.orange)
                         }
                     }
+                
                     
                         
                     HStack(spacing: 10)
@@ -79,7 +98,7 @@ struct Post: View
                         {
                             
                         }
-                        label:
+                    label:
                         {
                             Image(systemName: "arrowshape.turn.up.left.fill")
                         }
@@ -88,7 +107,7 @@ struct Post: View
                         {
                             
                         }
-                        label:
+                    label:
                         {
                             HStack
                             {
@@ -101,7 +120,7 @@ struct Post: View
                         {
                             
                         }
-                        label:
+                    label:
                         {
                             HStack
                             {
@@ -110,7 +129,8 @@ struct Post: View
                             }
                         }
                         
-                        Text(status.createdAt.formatted()).foregroundColor(.cyan)
+                        let hoursstr = dateSinceNowToString(date: status.createdAt)
+                        Text("\(hoursstr) · \(status.createdAt.formatted(date: .abbreviated, time: .omitted)) · \(status.createdAt.formatted(date: .omitted, time: .standard))").foregroundColor(.cyan)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -118,6 +138,41 @@ struct Post: View
         }
     }
 }
+
+
+func dateSinceNowToString(date:Date) -> String
+{
+    let hours = abs(date.timeIntervalSinceNow) / 60 / 60
+    if hours > 1.0
+    {
+        if hours > 24
+        {
+            return "\(Int(hours / 24))d"
+        }
+        else
+        {
+            return "\(Int(hours))h"
+        }
+    }
+    else
+    {
+        let minutes = 60 * hours
+        if minutes >= 1.0
+        {
+            return "\(Int(minutes))m"
+        }
+        else
+        {
+            let seconds = 60 * minutes
+            return "\(Int(seconds))s"
+        }
+    }
+    
+}
+
+
+
+
 
 extension String {
     func htmlAttributedString(
