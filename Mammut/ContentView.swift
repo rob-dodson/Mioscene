@@ -6,21 +6,74 @@
 //
 
 import SwiftUI
+import MastodonKit
 
-struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+
+struct ContentView: View
+{
+    @ObservedObject var client : Mastodon
+
+    var body: some View
+    {
+        ZStack
+        {
+            ScrollView()
+            {
+                ForEach(client.getStats())
+                { mstat in
+                        Post(mstat: mstat)
+                            .padding(.horizontal)
+                            .padding(.top)
+                }
+            }
         }
-        .padding()
+        .toolbar
+        {
+            
+            ToolbarItem
+            {
+                Picker(selection: .constant(1),label: Text("Account"),content:
+                        {
+                            Text("@rdodson").tag(1)
+                            Text("@frogradio").tag(2)
+                        })
+            }
+            ToolbarItem
+            {
+                Picker(selection: .constant(1),label: Text("Timeline"),content:
+                        {
+                            Text("Home").tag(1)
+                            Text("Local").tag(2)
+                            Text("Public").tag(3)
+                            Text("Notifications").tag(4)
+                    
+                        })
+            }
+            
+            ToolbarItem
+            {
+                Button
+                {
+                    
+                }
+                label:
+                {
+                    Image(systemName: "square.and.pencil")
+                }
+
+            }
+            ToolbarItem
+            {
+                Button
+                {
+                    
+                }
+                label:
+                {
+                    Image(systemName: "magnifyingglass")
+                }
+            }
+        }
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-    }
-}

@@ -1,0 +1,14 @@
+{
+  "pins" : [
+    {
+      "identity" : "mastodonkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/MastodonKit/MastodonKit.git",
+      "state" : {
+        "revision" : "6df5dba74344a3abe4b793c15ebf141a4d516e2d",
+        "version" : "2.0.0"
+      }
+    }
+  ],
+  "version" : 2
+}

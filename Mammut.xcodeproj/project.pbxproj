@@ -11,6 +11,9 @@
 		AE06EBF2294D16BB006CAB67 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE06EBF1294D16BB006CAB67 /* ContentView.swift */; };
 		AE06EBF4294D16BC006CAB67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE06EBF3294D16BC006CAB67 /* Assets.xcassets */; };
 		AE06EBF8294D16BC006CAB67 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE06EBF7294D16BC006CAB67 /* Preview Assets.xcassets */; };
+		AE06EC00294D16F8006CAB67 /* MastodonKit in Frameworks */ = {isa = PBXBuildFile; productRef = AE06EBFF294D16F8006CAB67 /* MastodonKit */; };
+		AE06EC02294D1D1D006CAB67 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE06EC01294D1D1D006CAB67 /* Post.swift */; };
+		AE06EC04294D234D006CAB67 /* Mastodon.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE06EC03294D234D006CAB67 /* Mastodon.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,6 +23,8 @@
 		AE06EBF3294D16BC006CAB67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AE06EBF5294D16BC006CAB67 /* Mammut.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mammut.entitlements; sourceTree = "<group>"; };
 		AE06EBF7294D16BC006CAB67 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		AE06EC01294D1D1D006CAB67 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		AE06EC03294D234D006CAB67 /* Mastodon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mastodon.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -27,6 +32,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE06EC00294D16F8006CAB67 /* MastodonKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,6 +60,8 @@
 			children = (
 				AE06EBEF294D16BB006CAB67 /* MammutApp.swift */,
 				AE06EBF1294D16BB006CAB67 /* ContentView.swift */,
+				AE06EC01294D1D1D006CAB67 /* Post.swift */,
+				AE06EC03294D234D006CAB67 /* Mastodon.swift */,
 				AE06EBF3294D16BC006CAB67 /* Assets.xcassets */,
 				AE06EBF5294D16BC006CAB67 /* Mammut.entitlements */,
 				AE06EBF6294D16BC006CAB67 /* Preview Content */,
@@ -85,6 +93,9 @@
 			dependencies = (
 			);
 			name = Mammut;
+			packageProductDependencies = (
+				AE06EBFF294D16F8006CAB67 /* MastodonKit */,
+			);
 			productName = Mammut;
 			productReference = AE06EBEC294D16BB006CAB67 /* Mammut.app */;
 			productType = "com.apple.product-type.application";
@@ -113,6 +124,9 @@
 				Base,
 			);
 			mainGroup = AE06EBE3294D16BB006CAB67;
+			packageReferences = (
+				AE06EBFE294D16F8006CAB67 /* XCRemoteSwiftPackageReference "MastodonKit" */,
+			);
 			productRefGroup = AE06EBED294D16BB006CAB67 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -139,7 +153,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE06EC02294D1D1D006CAB67 /* Post.swift in Sources */,
 				AE06EBF2294D16BB006CAB67 /* ContentView.swift in Sources */,
+				AE06EC04294D234D006CAB67 /* Mastodon.swift in Sources */,
 				AE06EBF0294D16BB006CAB67 /* MammutApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -269,6 +285,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Mammut;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -307,6 +325,8 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Mammut;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -354,6 +374,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		AE06EBFE294D16F8006CAB67 /* XCRemoteSwiftPackageReference "MastodonKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MastodonKit/MastodonKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		AE06EBFF294D16F8006CAB67 /* MastodonKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AE06EBFE294D16F8006CAB67 /* XCRemoteSwiftPackageReference "MastodonKit" */;
+			productName = MastodonKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = AE06EBE4294D16BB006CAB67 /* Project object */;
 }
