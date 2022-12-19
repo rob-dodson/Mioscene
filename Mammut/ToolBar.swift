@@ -16,7 +16,7 @@ enum TimeLine : String, CaseIterable, Identifiable
 
 class MToolBar
 {
-    @State  var timeLine: TimeLine = .home
+    @State var timeLine: TimeLine = .home
     
 @ToolbarContentBuilder
 func mammutToolBar() -> some ToolbarContent

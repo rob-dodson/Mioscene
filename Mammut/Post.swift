@@ -101,24 +101,32 @@ struct Post: View
                     { index in
                         let attachment = status.mediaAttachments[index]
                         
+                        //
+                        // video
+                        //
                         if attachment.type == .video
                         {
                             let player = AVPlayer(url: URL(string:attachment.url)!)
                             VideoPlayer(player: player)
                                 .frame(width: 400, height: 300, alignment: .center)
-                                
+                            
                         }
+                        //
+                        // image
+                        //
                         else if attachment.type == .image || attachment.type == .gifv
                         {
                             AsyncImage(url: URL(string:attachment.url))
                             { image in
-                              image.resizable()
+                                image.resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(maxWidth:300)
                             }
                         placeholder:
                             {
                                 Image(systemName: "photo")
                             }
-                            .frame(maxWidth:250,maxHeight: 250,alignment: .center)
+                            
                             .cornerRadius(15)
                             .onTapGesture
                             {
@@ -242,7 +250,7 @@ struct Post: View
                             .foregroundColor(.cyan)
                     }
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
+                .frame(maxWidth:.infinity, alignment: .leading)  // .infinity
            }
         }
     }
