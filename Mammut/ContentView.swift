@@ -13,24 +13,27 @@ struct ContentView: View
 {
     @ObservedObject var mast : Mastodon
 
+    var mtoolbar = MToolBar()
+    
     var body: some View
     {
-        ZStack
+        ZStack()
         {
             ScrollView()
             {
                 ForEach(mast.getStats())
                 { mstat in
-                        Post(mstat: mstat)
-                            .padding(.horizontal)
-                            .padding(.top)
+                    Post(mstat: mstat)
+                        .padding(.horizontal)
+                        .padding(.top)
                 }
             }
         }
         .toolbar
         {
-            mammutToolBar()
+            mtoolbar.mammutToolBar()
         }
+        
     }
 }
 

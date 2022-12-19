@@ -18,7 +18,9 @@ struct MammutApp: App
         {
             ContentView(mast: mast)
         }
+        .windowToolbarStyle(.expanded)
     }
+    
     
     static func openCurrentUserAccountURL()
     {

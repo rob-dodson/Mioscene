@@ -7,7 +7,7 @@
 
 import SwiftUI
 import MastodonKit
-
+import AVKit
 
 
 struct Post: View
@@ -100,17 +100,26 @@ struct Post: View
                     ForEach(status.mediaAttachments.indices)
                     { index in
                         let attachment = status.mediaAttachments[index]
-                        if attachment.type == .image
+                        
+                        if attachment.type == .video
                         {
-                            AsyncImage(url: URL(string:attachment.previewURL))
+                            let player = AVPlayer(url: URL(string:attachment.url)!)
+                            VideoPlayer(player: player)
+                                .frame(width: 400, height: 300, alignment: .center)
+                                
+                        }
+                        else if attachment.type == .image || attachment.type == .gifv
+                        {
+                            AsyncImage(url: URL(string:attachment.url))
                             { image in
-                                    image.resizable()
+                              image.resizable()
                             }
                         placeholder:
                             {
                                 Image(systemName: "photo")
                             }
-                            .frame(width: 300,height:200, alignment: .center)
+                            .frame(maxWidth:250,maxHeight: 250,alignment: .center)
+                            .cornerRadius(15)
                             .onTapGesture
                             {
                                 if let url = URL(string:attachment.url)
@@ -228,7 +237,9 @@ struct Post: View
                         // created Date
                         //
                         let hoursstr = dateSinceNowToString(date: status.createdAt)
-                        Text("\(hoursstr) · \(status.createdAt.formatted(date: .abbreviated, time: .omitted)) · \(status.createdAt.formatted(date: .omitted, time: .standard))").foregroundColor(.cyan)
+                        Text("\(hoursstr) · \(status.createdAt.formatted(date: .abbreviated, time: .omitted)) · \(status.createdAt.formatted(date: .omitted, time: .standard))")
+                            .font(.callout)
+                            .foregroundColor(.cyan)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)

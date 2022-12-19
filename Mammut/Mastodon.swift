@@ -56,14 +56,14 @@ class Mastodon : ObservableObject
         return useraccount
     }
     
-    func getStats() -> Array<MStatus>
+    func getStats() -> [MStatus]
     {
             return stats
     }
     
     func getTimeline()
     {
-        var returnstats = Array<MStatus>()
+        var returnstats = [MStatus]()
         let request = Timelines.home(range: .limit(50))
         
         client.run(request)
