@@ -253,6 +253,15 @@ struct Post: View
                 .frame(maxWidth:.infinity, alignment: .leading)  // .infinity
            }
         }
+        .contextMenu
+        {
+            VStack
+            {
+                Button { } label: { Image(systemName: "mail"); Text("Mail Author") }
+                Button { } label: { Image(systemName: "speaker.slash.fill"); Text("Mute Author") }
+                Button { } label: { Image(systemName: "mail"); Text("Unfollow Author") }
+            }
+        }
     }
 }
 
