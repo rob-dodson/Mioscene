@@ -11,7 +11,8 @@ import SwiftUI
 struct MammutApp: App
 {
     @StateObject private var mast : Mastodon = Mastodon.shared
-
+    
+    
     var body: some Scene
     {
         WindowGroup

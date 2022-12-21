@@ -15,6 +15,7 @@
 		AE06EC02294D1D1D006CAB67 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE06EC01294D1D1D006CAB67 /* Post.swift */; };
 		AE06EC04294D234D006CAB67 /* Mastodon.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE06EC03294D234D006CAB67 /* Mastodon.swift */; };
 		AE06EC06294F9A9F006CAB67 /* ToolBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE06EC05294F9A9F006CAB67 /* ToolBar.swift */; };
+		AE28C5D82953C8A500C8C928 /* NewPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5D72953C8A500C8C928 /* NewPost.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +28,7 @@
 		AE06EC01294D1D1D006CAB67 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		AE06EC03294D234D006CAB67 /* Mastodon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mastodon.swift; sourceTree = "<group>"; };
 		AE06EC05294F9A9F006CAB67 /* ToolBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolBar.swift; sourceTree = "<group>"; };
+		AE28C5D72953C8A500C8C928 /* NewPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPost.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 				AE06EC05294F9A9F006CAB67 /* ToolBar.swift */,
 				AE06EC01294D1D1D006CAB67 /* Post.swift */,
 				AE06EC03294D234D006CAB67 /* Mastodon.swift */,
+				AE28C5D72953C8A500C8C928 /* NewPost.swift */,
 				AE06EBF3294D16BC006CAB67 /* Assets.xcassets */,
 				AE06EBF5294D16BC006CAB67 /* Mammut.entitlements */,
 				AE06EBF6294D16BC006CAB67 /* Preview Content */,
@@ -160,6 +163,7 @@
 				AE06EBF2294D16BB006CAB67 /* ContentView.swift in Sources */,
 				AE06EC06294F9A9F006CAB67 /* ToolBar.swift in Sources */,
 				AE06EC04294D234D006CAB67 /* Mastodon.swift in Sources */,
+				AE28C5D82953C8A500C8C928 /* NewPost.swift in Sources */,
 				AE06EBF0294D16BB006CAB67 /* MammutApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -17,6 +17,8 @@ struct ContentView: View
     @State private var stats2 = [MStatus]()
     @State private var stats3 = [MStatus]()
     @State private var stats4 = [MStatus]()
+    @State private var newPost : String = ""
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View
     {
@@ -79,14 +81,7 @@ struct ContentView: View
                 //
                 ToolbarItem
                 {
-                    Button
-                    {
-                        MammutApp.openCurrentUserAccountURL()
-                    }
-                label:
-                    {
-                        Image(systemName: "square.and.pencil")
-                    }
+                    NewPost(selectedTimeline: $selectedTimeline)
                 }
                 
                 
