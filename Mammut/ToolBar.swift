@@ -8,18 +8,16 @@
 import SwiftUI
 import MastodonKit
 
-enum TimeLine : String, CaseIterable, Identifiable
-{
-    case home, localTimeline, publicTimeline, notifications
-    var id: Self { self }
-}
 
 class MToolBar
 {
-    @State var timeLine: TimeLine = .home
+    @ObservedObject var mast = Mastodon.shared
+    @State private var selectedTimeline: TimeLine = .home
+
     
-@ToolbarContentBuilder
-func mammutToolBar() -> some ToolbarContent
+    
+    @ToolbarContentBuilder
+    func mammutToolBar() -> some ToolbarContent
     {
        
         //
@@ -41,13 +39,14 @@ func mammutToolBar() -> some ToolbarContent
         //
         ToolbarItem
         {
-            Picker("Timeline",selection: $timeLine)
+            Picker("Timeline",selection: $selectedTimeline)
                     {
-                        Text("Home").tag(TimeLine.home)
-                        Text("Local").tag(TimeLine.localTimeline)
-                        Text("Public").tag(TimeLine.publicTimeline)
-                        Text("Notifications").tag(TimeLine.notifications)
+                        ForEach(TimeLine.allCases)
+                        { timeline in
+                               Text(timeline.rawValue.capitalized)
+                        }
                     }
+                    
         }
         
         

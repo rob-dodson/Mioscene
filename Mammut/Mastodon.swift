@@ -8,6 +8,12 @@
 import Foundation
 import MastodonKit
 
+enum TimeLine : String,CaseIterable, Identifiable,Equatable
+{
+    case home, localTimeline = "Local Timeline", publicTimeline = "Public Timeline", tag
+    var id: Self { self }
+}
+
 @MainActor
 class Mastodon : ObservableObject
 {
@@ -15,12 +21,10 @@ class Mastodon : ObservableObject
     
     var client : Client!
     var useraccount : Account!
-    
-    @Published var stats = [MStatus]()
+    var currentTimeline : TimeLine = .home
     
     init()
     {
-        
         client = Client(
             baseURL: "https://mastodon.social",
             accessToken: "aEC-QUgClG1fJD0vJw3yrqFDduBwU2iI_1PM0tcfjbA"
@@ -47,24 +51,34 @@ class Mastodon : ObservableObject
         { result in
             self.useraccount = result.value
         }
-        
-        getTimeline()
     }
+
     
     func getCurrentUserAccount() -> Account
     {
         return useraccount
     }
     
-    func getStats() -> [MStatus]
+       
+    func getTimeline(timeline:TimeLine,done: @escaping ([MStatus]) -> Void)
     {
-            return stats
-    }
-    
-    func getTimeline()
-    {
+        currentTimeline = timeline
+        
+        var request : Request<[Status]>
+        
+        switch timeline
+        {
+        case .home:
+            request = Timelines.home(range: .limit(50))
+        case .localTimeline:
+            request = Timelines.public(local:true,range: .limit(50))
+        case .publicTimeline:
+            request = Timelines.public(local:false,range: .limit(50))
+        case .tag:
+            request = Timelines.tag("#help")
+        }
+        
         var returnstats = [MStatus]()
-        let request = Timelines.home(range: .limit(50))
         
         client.run(request)
         { result in
@@ -73,29 +87,22 @@ class Mastodon : ObservableObject
                 for status in statuses
                 {
                     returnstats.append(convert(status: status))
-                   // print(status.account.displayName)
                 }
-                DispatchQueue.main.async {
-                    self.stats = returnstats
-                }
+                done(returnstats)
             }
         }
+       
     }
 }
 
 struct MStatus : Identifiable
 {
     var status  : Status
-   /* var account : Account
-    var content : String
-    var date    : Date*/
-    
     var id = UUID()
 }
 
 func convert(status:Status) -> MStatus
 {
-   // let newmstatus = mstatus(account: status.account,content: status.content,date:status.createdAt)
     let newmstatus = MStatus(status: status)
 
     return newmstatus

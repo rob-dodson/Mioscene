@@ -22,6 +22,9 @@ struct MammutApp: App
     }
     
     
+    //
+    // static support functions
+    //
     static func openCurrentUserAccountURL()
     {
         if let url = URL(string:Mastodon.shared.getCurrentUserAccount().url)
