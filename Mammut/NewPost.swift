@@ -6,16 +6,20 @@
 //
 
 import SwiftUI
+import MastodonKit
+
 
 struct NewPost: View
 {
+    @ObservedObject var mast : Mastodon
     @State var selectedTimeline : Binding<TimeLine>
     
     @Environment(\.dismiss) private var dismiss
     @State private var shouldPresentSheet = false
     @State private var newPost : String = ""
     
-    var body: some View {
+    var body: some View
+    {
         Button()
         {
             shouldPresentSheet.toggle()
@@ -30,41 +34,18 @@ struct NewPost: View
         }
         content:
         {
+            Text("New Post")
             VStack
             {
                 TextEditor(text: $newPost)
-                    .padding()
+                    .foregroundColor(Color.gray)
+                    .font(.custom("HelveticaNeue", size: 18))
+                    .scrollIndicators(.automatic)
                 
                 Text("\(500 - $newPost.wrappedValue.count)")
-                    .padding()
             }
             .toolbar
             {
-                ToolbarItem
-                {
-                    Picker(selection: .constant(1),label: Text("Account"),content:
-                    {
-                        Text("@rdodson").tag(1)
-                        Text("@frogradio").tag(2)
-                    })
-                }
-                
-                ToolbarItem
-                {
-                    Picker("Timeline",selection: $selectedTimeline.wrappedValue)
-                            {
-                                ForEach(TimeLine.allCases)
-                                { timeline in
-                                    Text(timeline.rawValue.capitalized)
-                                }
-                            }
-                }
-                
-                ToolbarItem
-                {
-                    Spacer()
-                }
-                
                 ToolbarItem
                 {
                     Button("Cancel")
@@ -76,6 +57,12 @@ struct NewPost: View
                 {
                     Button("Post")
                     {
+                        let request = Statuses.create(status:$newPost.wrappedValue)
+                        mast.client.run(request)
+                        { result in
+                            print("result \(result)")
+                        }
+                        
                         dismiss()
                     }
                 }
