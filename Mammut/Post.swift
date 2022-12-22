@@ -69,7 +69,9 @@ struct Post: View
                             .font(.title)
                             .foregroundColor(.white)
                         
-                        Text(status.account.acct)
+                        let path = NSURL(string:status.account.url)!.pathComponents
+                        let name = "@\(status.account.acct)@\(path[0])"
+                        Text(name)
                             .font(.title3)
                             .foregroundColor(.gray)
                         
