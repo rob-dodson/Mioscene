@@ -11,6 +11,8 @@ import MastodonKit
 struct ContentView: View
 {
     @ObservedObject var mast : Mastodon
+    @ObservedObject var settings: Settings
+
     
     @State private var selectedTimeline : TimeLine = .home
     @State private var stats1 = [MStatus]()
@@ -18,7 +20,6 @@ struct ContentView: View
     @State private var stats3 = [MStatus]()
     @State private var stats4 = [MStatus]()
     @State private var newPost : String = ""
-    @Environment(\.dismiss) private var dismiss
     
     var body: some View
     {
@@ -29,7 +30,7 @@ struct ContentView: View
             {
                 ForEach(getstats(timeline: $selectedTimeline))
                 { mstat in
-                    Post(mstat:mstat)
+                    Post(mstat:mstat,settings: settings)
                         .padding(.horizontal)
                         .padding(.top)
                 }

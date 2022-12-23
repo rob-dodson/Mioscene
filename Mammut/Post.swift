@@ -13,6 +13,7 @@ import AVKit
 struct Post: View
 {
     @State var mstat : MStatus
+    @ObservedObject var settings: Settings
     
     
     var body: some View
@@ -67,19 +68,18 @@ struct Post: View
                     {
                         Text(status.account.displayName)
                             .font(.title)
-                            .foregroundColor(.white)
+                            .foregroundColor(settings.theme.nameColor)
                         
-                        let path = NSURL(string:status.account.url)!.pathComponents
-                        let name = "@\(status.account.acct)@\(path[0])"
+                        let name = "@\(status.account.acct)"
                         Text(name)
                             .font(.title3)
-                            .foregroundColor(.gray)
+                            .foregroundColor(settings.theme.minorColor)
                         
                         if let appname = status.application?.name
                         {
                             Text("posted with \(appname)")
                                 .font(.footnote).italic()
-                                .foregroundColor(.gray)
+                                .foregroundColor(settings.theme.minorColor)
                         }
                         
                     }
@@ -88,11 +88,11 @@ struct Post: View
                     //
                     // html body of post
                     //
-                    if let nsAttrString = status.content.htmlAttributedString()
+                    if let nsAttrString = status.content.htmlAttributedString(color:settings.theme.bodyColor)
                     {
                         Text(AttributedString(nsAttrString))
                             .font(.body)
-                            .foregroundColor(.white)
+                            .foregroundColor(settings.theme.bodyColor)
                     }
                   
                     
@@ -128,8 +128,7 @@ struct Post: View
                             {
                                 Image(systemName: "photo")
                             }
-                            
-                            .cornerRadius(15)
+                            .cornerRadius(15) // not working
                             .onTapGesture
                             {
                                 if let url = URL(string:attachment.url)
@@ -305,7 +304,7 @@ func dateSinceNowToString(date:Date) -> String
 extension String {
     func htmlAttributedString(
         fontSize: CGFloat = 16,
-        color : Color = Color.white,
+    color : Color = Color.black,
         linkColor : Color = Color.blue,
         fontFamily: String = "SF Pro"
     ) -> NSAttributedString? {
@@ -315,7 +314,7 @@ extension String {
           <head>
             <style>
                 body {
-                    color: #bbbbbb;
+                    color: \(color);
                     font-family: \(fontFamily);
                     font-size: \(fontSize)px;
                 }
