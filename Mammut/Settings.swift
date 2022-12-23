@@ -17,29 +17,18 @@ struct Theme : Identifiable
         case body = "body"
         case name = "name"
         case minor = "minor"
-        
-        case symbol = "symbol"
+        case link = "link"
+        case date = "date"
         case block = "block"
-        case title = "title"
-        case header = "header"
-        case wind = "wind"
-        case precip = "percip"
-        case hitemp = "hitemp"
-        case lowtemp = "lowtemp"
     }
     
     var bodyColor : Color
     var nameColor : Color
     var minorColor : Color
-    
-    var symbolColor : Color
-    var headerColor : Color
-    var titleColor : Color
+    var linkColor : Color
+    var dateColor : Color
     var blockColor : Color
-    var windColor : Color
-    var precipColor : Color
-    var hitempColor : Color
-    var lowtempColor : Color
+
     
     var name: String
     var colors : Dictionary<String,Color>
@@ -51,19 +40,14 @@ struct Theme : Identifiable
         self.id = UUID()
         self.colors = colors
         
-        self.bodyColor = colors[colorName.body.rawValue] ?? Color.gray
-        self.nameColor = colors[colorName.name.rawValue] ?? Color.gray
-        self.minorColor = colors[colorName.minor.rawValue] ?? Color.gray
+        self.bodyColor = colors[colorName.body.rawValue] ?? Color.black
+        self.nameColor = colors[colorName.name.rawValue] ?? Color.black
+        self.minorColor = colors[colorName.minor.rawValue] ?? Color.black
+        self.linkColor = colors[colorName.link.rawValue] ?? Color.blue
+        self.dateColor = colors[colorName.date.rawValue] ?? Color.mint
+        self.blockColor = colors[colorName.block.rawValue] ?? Color.gray
 
-        
-        self.symbolColor = colors[colorName.symbol.rawValue] ?? Color.blue
-        self.headerColor = colors[colorName.header.rawValue] ?? Color.white
-        self.titleColor = colors[colorName.title.rawValue] ?? Color.white
-        self.blockColor = colors[colorName.block.rawValue] ?? Color.black
-        self.windColor = colors[colorName.wind.rawValue] ?? Color.pink
-        self.precipColor = colors[colorName.precip.rawValue] ?? Color.yellow
-        self.hitempColor = colors[colorName.hitemp.rawValue] ?? Color.green
-        self.lowtempColor = colors[colorName.lowtemp.rawValue] ?? Color.blue
+
     }
     
     func color(name:colorName) -> Color
@@ -103,6 +87,9 @@ class Settings: ObservableObject
             let colors = [Theme.colorName.body.rawValue:Color("body\(index)"),
                            Theme.colorName.name.rawValue:Color("name\(index)"),
                           Theme.colorName.minor.rawValue:Color("minor\(index)"),
+                          Theme.colorName.link.rawValue:Color("link\(index)"),
+                          Theme.colorName.date.rawValue:Color("date\(index)"),
+                          Theme.colorName.block.rawValue:Color("date\(index)"),
 
                            ]
             
@@ -120,25 +107,6 @@ class Settings: ObservableObject
     }
 }
 
-extension Color
-{
-    init(hex: String, alpha: CGFloat = 1)
-    {
-        let scanner = Scanner(string: hex)
-        var set = CharacterSet()
-        set.insert("#")
-        scanner.charactersToBeSkipped = set
-        
-        var rgb: UInt64 = 0
-        scanner.scanHexInt64(&rgb)
-        
-        self.init(
-            red:   CGFloat((rgb & 0xFF0000) >> 16) / 255.0,
-            green: CGFloat((rgb &   0xFF00) >>  8) / 255.0,
-            blue:  CGFloat((rgb &     0xFF)      ) / 255.0)
-    }
-}
-   
-    
+ 
 
 

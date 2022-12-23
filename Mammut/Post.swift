@@ -88,7 +88,7 @@ struct Post: View
                     //
                     // html body of post
                     //
-                    if let nsAttrString = status.content.htmlAttributedString(color:settings.theme.bodyColor)
+                    if let nsAttrString = status.content.htmlAttributedString(color:settings.theme.bodyColor,linkColor: settings.theme.linkColor)
                     {
                         Text(AttributedString(nsAttrString))
                             .font(.body)
@@ -174,7 +174,7 @@ struct Post: View
                             }
                             else
                             {
-                                Text("by \(mstatus.status.account.displayName)").foregroundColor(Color("AccentColor"))
+                                Text("by \(mstatus.status.account.displayName)").foregroundColor(settings.theme.linkColor)
                             }
                         }
                     }
@@ -195,7 +195,7 @@ struct Post: View
                     label:
                         {
                             Image(systemName: "arrowshape.turn.up.left.fill")
-                                .foregroundColor(.white)
+                                .foregroundColor(settings.theme.minorColor)
                         }
                         
                         
@@ -218,7 +218,7 @@ struct Post: View
                                 else
                                 {
                                     Image(systemName: "star.fill")
-                                        .foregroundColor(.white)
+                                        .foregroundColor(settings.theme.minorColor)
                                 }
                                 Text("\(status.favouritesCount)")
                             }
@@ -237,6 +237,7 @@ struct Post: View
                             HStack
                             {
                                 Image(systemName: "arrow.2.squarepath")
+                                    .foregroundColor(settings.theme.minorColor)
                                 Text("\(status.reblogsCount)")
                             }
                         }
@@ -248,7 +249,7 @@ struct Post: View
                         let hoursstr = dateSinceNowToString(date: status.createdAt)
                         Text("\(hoursstr) · \(status.createdAt.formatted(date: .abbreviated, time: .omitted)) · \(status.createdAt.formatted(date: .omitted, time: .standard))")
                             .font(.callout)
-                            .foregroundColor(.cyan)
+                            .foregroundColor(settings.theme.dateColor)
                     }
                 }
                 .frame(maxWidth:.infinity, alignment: .leading)  // .infinity
@@ -319,7 +320,7 @@ extension String {
                     font-size: \(fontSize)px;
                 }
                 a {
-                    color: #005500;
+                    color: \(linkColor);
                 }
             </style>
           </head>
