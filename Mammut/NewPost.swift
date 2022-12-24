@@ -12,11 +12,13 @@ import MastodonKit
 struct NewPost: View
 {
     @ObservedObject var mast : Mastodon
+    @ObservedObject var settings: Settings
     @State var selectedTimeline : Binding<TimeLine>
     
-    @Environment(\.dismiss) private var dismiss
+    
     @State private var shouldPresentSheet = false
     @State private var newPost : String = ""
+    
     
     var body: some View
     {
@@ -38,11 +40,12 @@ struct NewPost: View
             VStack
             {
                 TextEditor(text: $newPost)
-                    .foregroundColor(Color.gray)
+                    .foregroundColor(settings.theme.bodyColor)
                     .font(.custom("HelveticaNeue", size: 18))
                     .scrollIndicators(.automatic)
                 
                 Text("\(500 - $newPost.wrappedValue.count)")
+                    .foregroundColor(.green)
             }
             .toolbar
             {
@@ -50,7 +53,7 @@ struct NewPost: View
                 {
                     Button("Cancel")
                     {
-                        dismiss()
+                        shouldPresentSheet = false
                     }
                 }
                 ToolbarItem
@@ -62,8 +65,7 @@ struct NewPost: View
                         { result in
                             print("result \(result)")
                         }
-                        
-                        dismiss()
+                        shouldPresentSheet = false
                     }
                 }
                     

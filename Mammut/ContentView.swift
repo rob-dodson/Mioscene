@@ -82,7 +82,7 @@ struct ContentView: View
                 //
                 ToolbarItem
                 {
-                    NewPost(mast: mast,selectedTimeline: $selectedTimeline)
+                   NewPost(mast: mast,settings:settings, selectedTimeline: $selectedTimeline)
                 }
                 
                 
