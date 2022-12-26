@@ -10,7 +10,7 @@ import MastodonKit
 
 enum TimeLine : String,CaseIterable, Identifiable,Equatable
 {
-    case home, localTimeline = "Local Timeline", publicTimeline = "Public Timeline", tag
+    case home, localTimeline = "Local Timeline", publicTimeline = "Public Timeline", tag = "Tag", notifications = "Notifications"
     var id: Self { self }
 }
 
@@ -75,6 +75,8 @@ class Mastodon : ObservableObject
         case .publicTimeline:
             request = Timelines.public(local:false,range: .limit(50))
         case .tag:
+            request = Timelines.tag("#help")
+        case .notifications:
             request = Timelines.tag("#help")
         }
         

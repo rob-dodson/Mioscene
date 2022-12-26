@@ -37,15 +37,14 @@ struct NewPost: View
         content:
         {
             Text("New Post")
-            VStack
+                .foregroundColor(settings.theme.nameColor)
+            
+            VStack(alignment: .trailing)
             {
                 TextEditor(text: $newPost)
                     .foregroundColor(settings.theme.bodyColor)
                     .font(.custom("HelveticaNeue", size: 18))
                     .scrollIndicators(.automatic)
-                
-                Text("\(500 - $newPost.wrappedValue.count)")
-                    .foregroundColor(.green)
             }
             .toolbar
             {
@@ -56,6 +55,7 @@ struct NewPost: View
                         shouldPresentSheet = false
                     }
                 }
+                
                 ToolbarItem
                 {
                     Button("Post")
@@ -65,10 +65,16 @@ struct NewPost: View
                         { result in
                             print("result \(result)")
                         }
+                        // $newPost = "" only on success
                         shouldPresentSheet = false
                     }
                 }
-                    
+                
+                ToolbarItem
+                {
+                    Text("\(500 - $newPost.wrappedValue.count)")
+                        .foregroundColor(.green)
+                }
             }
             .frame(width: 400, height: 300)
         }

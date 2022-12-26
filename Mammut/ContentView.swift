@@ -19,11 +19,11 @@ struct ContentView: View
     @State private var stats2 = [MStatus]()
     @State private var stats3 = [MStatus]()
     @State private var stats4 = [MStatus]()
+    @State private var notifications = [MStatus]()
     @State private var newPost : String = ""
     
     var body: some View
     {
-        
         ZStack()
         {
             ScrollView
@@ -40,9 +40,9 @@ struct ContentView: View
                 fetchStatuses(timeline: TimeLine.home)
                 Task
                 {
-                    fetchStatuses(timeline: TimeLine.localTimeline)
-                    fetchStatuses(timeline: TimeLine.publicTimeline)
-                    fetchStatuses(timeline: TimeLine.tag)
+                   // fetchStatuses(timeline: TimeLine.localTimeline)
+                   // fetchStatuses(timeline: TimeLine.publicTimeline)
+                   // fetchStatuses(timeline: TimeLine.tag)
                 }
             }
         }
@@ -130,6 +130,8 @@ struct ContentView: View
             return stats3
         case .tag:
             return stats4
+        case .notifications:
+            return notifications
         }
     }
         
@@ -147,6 +149,8 @@ struct ContentView: View
                 stats3 = newstats
             case .tag:
                 stats4 = newstats
+            case .notifications:
+                notifications = newstats
             }
         })
     }
