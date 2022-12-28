@@ -8,151 +8,60 @@
 import SwiftUI
 import MastodonKit
 
+
 struct ContentView: View
 {
     @ObservedObject var mast : Mastodon
     @ObservedObject var settings: Settings
 
     
-    @State private var selectedTimeline : TimeLine = .home
-    @State private var stats1 = [MStatus]()
-    @State private var stats2 = [MStatus]()
-    @State private var stats3 = [MStatus]()
-    @State private var stats4 = [MStatus]()
-    @State private var notifications = [MStatus]()
-    @State private var newPost : String = ""
-    
     var body: some View
     {
-        ZStack()
+        NavigationStack
         {
-            ScrollView
+            List()
             {
-                ForEach(getstats(timeline: $selectedTimeline))
-                { mstat in
-                    Post(mstat:mstat,settings: settings)
-                        .padding(.horizontal)
-                        .padding(.top)
-                }
-            }
-            .task
-            {
-                fetchStatuses(timeline: TimeLine.home)
-                Task
-                {
-                   // fetchStatuses(timeline: TimeLine.localTimeline)
-                   // fetchStatuses(timeline: TimeLine.publicTimeline)
-                   // fetchStatuses(timeline: TimeLine.tag)
-                }
-            }
-        }
-        .toolbar
-        {
-                //
-                // account
-                //
-                ToolbarItem
-                {
-                    Picker(selection: .constant(1),label: Text("Account"),content:
-                            {
-                        Text("@rdodson").tag(1)
-                        Text("@frogradio").tag(2)
-                        Text("Add Account...").tag(3)
-                    })
-                }
-                
-                
-                //
-                // timeline
-                //
-                ToolbarItem
-                {
-                    Picker("Timeline",selection: $selectedTimeline)
-                            {
-                                ForEach(TimeLine.allCases)
-                                { timeline in
-                                    Text(timeline.rawValue.capitalized)
-                                }
-                            }
-                }
-                
-                
-                //
-                // new post
-                //
-                ToolbarItem
-                {
-                   NewPost(mast: mast,settings:settings, selectedTimeline: $selectedTimeline)
-                }
-                
-                
-                //
-                // search
-                //
-                ToolbarItem
-                {
-                    Button
-                    {
-                        MammutApp.openCurrentUserAccountURL()
-                    }
+                NavigationLink { TimeLineView(mast: mast, settings: settings) }
                 label:
+                {
+                    HStack
                     {
-                        Image(systemName: "magnifyingglass")
+                        Image(systemName: "house.fill")
+                        Text("Timelines")
+                            .font(.headline)
+                            .foregroundColor(settings.theme.nameColor)
+
                     }
-                    
                 }
                 
-                //
-                // settings
-                //
-                ToolbarItem
-                {
-                    Button
-                    {
-                    }
+                NavigationLink { TimeLineView(mast: mast, settings: settings) }
                 label:
+                {
+                    HStack
                     {
-                        Image(systemName: "gearshape")
+                        Image(systemName: "gear")
+                        Text("Settings")
+                            .font(.headline)
+                            .foregroundColor(settings.theme.nameColor)
+
                     }
                 }
+                
+                NavigationLink { AccountView(mast: mast, settings: settings) }
+                label:
+                {
+                    HStack
+                    {
+                        Image(systemName: "person.crop.circle")
+                        Text("Account")
+                            .font(.headline)
+                            .foregroundColor(settings.theme.nameColor)
+                    }
+                }
+
+            }
         }
     }
     
-    func getstats(timeline:Binding<TimeLine>) -> [MStatus]
-    {
-        switch timeline.wrappedValue
-        {
-        case .home:
-            return stats1
-        case .localTimeline:
-            return stats2
-        case .publicTimeline:
-            return stats3
-        case .tag:
-            return stats4
-        case .notifications:
-            return notifications
-        }
-    }
-        
-    func fetchStatuses(timeline:TimeLine)
-    {
-        mast.getTimeline(timeline: timeline,done:
-        { newstats in
-            switch timeline
-            {
-            case .home:
-                stats1 = newstats
-            case .localTimeline:
-                stats2 = newstats
-            case .publicTimeline:
-                stats3 = newstats
-            case .tag:
-                stats4 = newstats
-            case .notifications:
-                notifications = newstats
-            }
-        })
-    }
 }
 

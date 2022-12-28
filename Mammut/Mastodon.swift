@@ -10,7 +10,7 @@ import MastodonKit
 
 enum TimeLine : String,CaseIterable, Identifiable,Equatable
 {
-    case home, localTimeline = "Local Timeline", publicTimeline = "Public Timeline", tag = "Tag", notifications = "Notifications"
+    case home, localTimeline = "Local Timeline", publicTimeline = "Public Timeline", notifications = "Notifications"
     var id: Self { self }
 }
 
@@ -38,18 +38,24 @@ class Mastodon : ObservableObject
 
         client.run(request)
         { result in
-            if let application = result.value
-            {
-                print("id: \(application.id)")
-                print("redirect uri: \(application.redirectURI)")
-                print("client id: \(application.clientID)")
-                print("client secret: \(application.clientSecret)")
-            }
+                if let application = try? result.get().value
+                {
+                    print("id: \(application.id)")
+                    print("redirect uri: \(application.redirectURI)")
+                    print("client id: \(application.clientID)")
+                    print("client secret: \(application.clientSecret)")
+                }
         }
         
         client.run(Accounts.currentUser())
         { result in
-            self.useraccount = result.value
+            do
+            {
+                self.useraccount = try result.get().value
+            }
+            catch{
+                
+            }
         }
     }
 
@@ -59,7 +65,34 @@ class Mastodon : ObservableObject
         return useraccount
     }
     
-       
+    
+    func post(newpost:String)
+    {
+        let request = Statuses.create(status:newpost)
+        client.run(request)
+        { result in
+            print("result \(result)")
+        }
+    }
+    
+    
+    func search(query:String)
+    {
+        let request =  MastodonKit.Search.search(query:query,resolve:false)
+        client.run(request)
+        { result in
+            
+            switch result
+            {
+              case .success:
+                print("search result: \(result)")
+              case .failure(let error):
+                  print(error.localizedDescription)
+              }
+        }
+    }
+    
+    
     func getTimeline(timeline:TimeLine,done: @escaping ([MStatus]) -> Void)
     {
         currentTimeline = timeline
@@ -74,8 +107,6 @@ class Mastodon : ObservableObject
             request = Timelines.public(local:true,range: .limit(50))
         case .publicTimeline:
             request = Timelines.public(local:false,range: .limit(50))
-        case .tag:
-            request = Timelines.tag("#help")
         case .notifications:
             request = Timelines.tag("#help")
         }
@@ -84,13 +115,19 @@ class Mastodon : ObservableObject
         
         client.run(request)
         { result in
-            if let statuses = result.value
+            do
             {
-                for status in statuses
+                if let statuses = try? result.get().value
                 {
-                    returnstats.append(convert(status: status))
+                    for status in statuses
+                    {
+                        returnstats.append(convert(status: status))
+                    }
+                    done(returnstats)
                 }
-                done(returnstats)
+            }
+            catch{
+                
             }
         }
        

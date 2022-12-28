@@ -299,16 +299,10 @@ func dateSinceNowToString(date:Date) -> String
 }
 
 
-
-
-
-extension String {
-    func htmlAttributedString(
-        fontSize: CGFloat = 16,
-    color : Color = Color.black,
-        linkColor : Color = Color.blue,
-        fontFamily: String = "SF Pro"
-    ) -> NSAttributedString? {
+extension String
+{
+    func htmlAttributedString(fontSize: CGFloat = 16, color : Color = Color.black,linkColor : Color = Color.blue,fontFamily: String = "SF Pro") -> NSAttributedString?
+    {
         let htmlTemplate = """
         <!doctype html>
         <html>
@@ -330,7 +324,8 @@ extension String {
         </html>
         """
 
-        guard let data = htmlTemplate.data(using: .unicode) else {
+        guard let data = htmlTemplate.data(using: .unicode) else
+        {
             return nil
         }
 

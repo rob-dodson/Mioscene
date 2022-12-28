@@ -1,24 +1,22 @@
 //
-//  NewPost.swift
+//  Search.swift
 //  Mammut
 //
-//  Created by Robert Dodson on 12/21/22.
+//  Created by Robert Dodson on 12/26/22.
 //
 
 import SwiftUI
 import MastodonKit
 
 
-struct NewPost: View
+struct Search: View
 {
     @ObservedObject var mast : Mastodon
     @ObservedObject var settings: Settings
-    @State var selectedTimeline : Binding<TimeLine>
     
     
     @State private var shouldPresentSheet = false
-    @State private var newPost : String = ""
-    @State private var countColor = Color.green
+    @State private var searchTerm : String = ""
     
     var body: some View
     {
@@ -28,7 +26,7 @@ struct NewPost: View
         }
         label:
         {
-            Image(systemName: "square.and.pencil")
+            Image(systemName: "magnifyingglass")
         }
         .sheet(isPresented: $shouldPresentSheet)
         {
@@ -36,16 +34,15 @@ struct NewPost: View
         }
         content:
         {
-            Text("New Post")
+            Text("Search")
                 .foregroundColor(settings.theme.nameColor)
                 .padding(.top)
             
             VStack(alignment: .trailing)
             {
-                TextEditor(text: $newPost)
-                    .foregroundColor(settings.theme.bodyColor)
+                TextField("Search", text: $searchTerm)
+                    .padding()
                     .font(.title)
-                    .scrollIndicators(.automatic)
             }
             .toolbar
             {
@@ -59,28 +56,14 @@ struct NewPost: View
                 
                 ToolbarItem
                 {
-                    Button("Post")
+                    Button("Search")
                     {
-                        mast.post(newpost:$newPost.wrappedValue)
+                        mast.search(query: $searchTerm.wrappedValue)
                         shouldPresentSheet = false
                     }
                 }
-                
-                ToolbarItem
-                {
-                    if $newPost.wrappedValue.count <= 500
-                    {
-                        Text("\(500 - $newPost.wrappedValue.count)")
-                            .foregroundColor(.green)
-                    }
-                    else
-                    {
-                        Text("\(500 - $newPost.wrappedValue.count)")
-                            .foregroundColor(.red)
-                    }
-                }
             }
-            .frame(width: 400, height: 300)
+            .frame(width: 400, height: 100)
         }
     }
 }
