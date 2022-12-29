@@ -95,19 +95,6 @@ struct TimeLineView: View
                 Search(mast: mast,settings:settings)
             }
             
-            //
-            // settings
-            //
-            ToolbarItem
-            {
-                Button
-                {
-                }
-                label:
-                {
-                    Image(systemName: "gearshape")
-                }
-            }
         }
     }
     

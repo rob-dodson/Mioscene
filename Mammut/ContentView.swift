@@ -17,12 +17,12 @@ struct ContentView: View
     
     var body: some View
     {
-        NavigationStack
+        NavigationSplitView
         {
             List()
             {
                 NavigationLink { TimeLineView(mast: mast, settings: settings) }
-                label:
+            label:
                 {
                     HStack
                     {
@@ -30,12 +30,12 @@ struct ContentView: View
                         Text("Timelines")
                             .font(.headline)
                             .foregroundColor(settings.theme.nameColor)
-
+                        
                     }
                 }
                 
                 NavigationLink { TimeLineView(mast: mast, settings: settings) }
-                label:
+            label:
                 {
                     HStack
                     {
@@ -43,12 +43,12 @@ struct ContentView: View
                         Text("Settings")
                             .font(.headline)
                             .foregroundColor(settings.theme.nameColor)
-
+                        
                     }
                 }
                 
                 NavigationLink { AccountView(mast: mast, settings: settings) }
-                label:
+            label:
                 {
                     HStack
                     {
@@ -58,9 +58,14 @@ struct ContentView: View
                             .foregroundColor(settings.theme.nameColor)
                     }
                 }
-
             }
+
         }
+        detail:
+        {
+            
+        }
+
     }
     
 }
