@@ -14,10 +14,11 @@
 		AE06EC02294D1D1D006CAB67 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE06EC01294D1D1D006CAB67 /* Post.swift */; };
 		AE06EC04294D234D006CAB67 /* Mastodon.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE06EC03294D234D006CAB67 /* Mastodon.swift */; };
 		AE28C5D82953C8A500C8C928 /* NewPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5D72953C8A500C8C928 /* NewPost.swift */; };
-		AE28C5DA295A7ACE00C8C928 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5D9295A7ACE00C8C928 /* Search.swift */; };
+		AE28C5DA295A7ACE00C8C928 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5D9295A7ACE00C8C928 /* SearchView.swift */; };
 		AE28C5E2295B723A00C8C928 /* MastodonKit in Frameworks */ = {isa = PBXBuildFile; productRef = AE28C5E1295B723A00C8C928 /* MastodonKit */; };
 		AE28C5E4295CE9F900C8C928 /* TimeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5E3295CE9F900C8C928 /* TimeLineView.swift */; };
 		AE28C5E6295CEDCE00C8C928 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5E5295CEDCE00C8C928 /* AccountView.swift */; };
+		AE28C5EC295E4B1C00C8C928 /* AccountSmall.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5EB295E4B1C00C8C928 /* AccountSmall.swift */; };
 		AE9A85D6295629C100E8B193 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9A85D5295629C100E8B193 /* Settings.swift */; };
 /* End PBXBuildFile section */
 
@@ -31,11 +32,12 @@
 		AE06EC01294D1D1D006CAB67 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		AE06EC03294D234D006CAB67 /* Mastodon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mastodon.swift; sourceTree = "<group>"; };
 		AE28C5D72953C8A500C8C928 /* NewPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPost.swift; sourceTree = "<group>"; };
-		AE28C5D9295A7ACE00C8C928 /* Search.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Search.swift; sourceTree = "<group>"; };
+		AE28C5D9295A7ACE00C8C928 /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		AE28C5DC295B6EB400C8C928 /* MastodonKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MastodonKit; path = ../MastodonKit; sourceTree = "<group>"; };
 		AE28C5E0295B722F00C8C928 /* MastodonKit-2.0.0 */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "MastodonKit-2.0.0"; path = "../MastodonKit-2.0.0"; sourceTree = "<group>"; };
 		AE28C5E3295CE9F900C8C928 /* TimeLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineView.swift; sourceTree = "<group>"; };
 		AE28C5E5295CEDCE00C8C928 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		AE28C5EB295E4B1C00C8C928 /* AccountSmall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSmall.swift; sourceTree = "<group>"; };
 		AE9A85D5295629C100E8B193 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -76,11 +78,12 @@
 				AE06EBF1294D16BB006CAB67 /* ContentView.swift */,
 				AE28C5E3295CE9F900C8C928 /* TimeLineView.swift */,
 				AE28C5E5295CEDCE00C8C928 /* AccountView.swift */,
+				AE28C5D9295A7ACE00C8C928 /* SearchView.swift */,
 				AE06EC01294D1D1D006CAB67 /* Post.swift */,
 				AE06EC03294D234D006CAB67 /* Mastodon.swift */,
 				AE9A85D5295629C100E8B193 /* Settings.swift */,
 				AE28C5D72953C8A500C8C928 /* NewPost.swift */,
-				AE28C5D9295A7ACE00C8C928 /* Search.swift */,
+				AE28C5EB295E4B1C00C8C928 /* AccountSmall.swift */,
 				AE06EBF3294D16BC006CAB67 /* Assets.xcassets */,
 				AE06EBF5294D16BC006CAB67 /* Mammut.entitlements */,
 				AE06EBF6294D16BC006CAB67 /* Preview Content */,
@@ -184,10 +187,11 @@
 				AE06EC02294D1D1D006CAB67 /* Post.swift in Sources */,
 				AE06EBF2294D16BB006CAB67 /* ContentView.swift in Sources */,
 				AE06EC04294D234D006CAB67 /* Mastodon.swift in Sources */,
+				AE28C5EC295E4B1C00C8C928 /* AccountSmall.swift in Sources */,
 				AE28C5D82953C8A500C8C928 /* NewPost.swift in Sources */,
 				AE28C5E6295CEDCE00C8C928 /* AccountView.swift in Sources */,
 				AE06EBF0294D16BB006CAB67 /* MammutApp.swift in Sources */,
-				AE28C5DA295A7ACE00C8C928 /* Search.swift in Sources */,
+				AE28C5DA295A7ACE00C8C928 /* SearchView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

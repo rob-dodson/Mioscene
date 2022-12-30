@@ -21,6 +21,9 @@ struct ContentView: View
         {
             List()
             {
+                //
+                // Timeline (home)
+                //
                 NavigationLink { TimeLineView(mast: mast, settings: settings) }
             label:
                 {
@@ -34,6 +37,10 @@ struct ContentView: View
                     }
                 }
                 
+                
+                //
+                // Settings
+                //
                 NavigationLink { TimeLineView(mast: mast, settings: settings) }
             label:
                 {
@@ -47,6 +54,10 @@ struct ContentView: View
                     }
                 }
                 
+                
+                //
+                // Account
+                //
                 NavigationLink { AccountView(mast: mast, settings: settings) }
             label:
                 {
@@ -58,8 +69,25 @@ struct ContentView: View
                             .foregroundColor(settings.theme.nameColor)
                     }
                 }
+                
+                
+                //
+                // Search
+                //
+                
+                NavigationLink { SearchView(mast: mast, settings: settings) }
+            label:
+                {
+                    HStack
+                    {
+                        Image(systemName: "magnifyingglass")
+                        Text("Search")
+                            .font(.headline)
+                            .foregroundColor(settings.theme.nameColor)
+                    }
+                }
+                 
             }
-
         }
         detail:
         {

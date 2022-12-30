@@ -75,8 +75,8 @@ class Mastodon : ObservableObject
         }
     }
     
-    
-    func search(query:String)
+    /*
+    func search(query:String) -> Results
     {
         let request =  MastodonKit.Search.search(query:query,resolve:false)
         client.run(request)
@@ -86,12 +86,13 @@ class Mastodon : ObservableObject
             {
               case .success:
                 print("search result: \(result)")
+                return
               case .failure(let error):
                   print(error.localizedDescription)
               }
         }
     }
-    
+    */
     
     func getTimeline(timeline:TimeLine,done: @escaping ([MStatus]) -> Void)
     {

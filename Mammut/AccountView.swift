@@ -74,8 +74,6 @@ struct AccountView: View
                 Text("Username \(mast.useraccount.username)")
                 Text("\(mast.useraccount.url)")
                 Text("\(mast.useraccount.locked.description)")
-                
-                
             }
         }
     }

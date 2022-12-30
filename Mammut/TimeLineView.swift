@@ -86,15 +86,6 @@ struct TimeLineView: View
                 NewPost(mast: mast,settings:settings, selectedTimeline: $selectedTimeline)
             }
             
-            
-            //
-            // search
-            //
-            ToolbarItem
-            {
-                Search(mast: mast,settings:settings)
-            }
-            
         }
     }
     
