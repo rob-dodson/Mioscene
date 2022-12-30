@@ -66,6 +66,25 @@ class Mastodon : ObservableObject
     }
     
     
+    func unfavorite(status:Status)
+    {
+        let request = Statuses.unfavourite(id: status.id)
+        client.run(request)
+        { result in
+            print("unfavorite result \(result)")
+        }
+    }
+    
+    func favorite(status:Status)
+    {
+        let request = Statuses.favourite(id: status.id)
+        client.run(request)
+        { result in
+            print("favorite result \(result)")
+        }
+    }
+    
+    
     func post(newpost:String)
     {
         let request = Statuses.create(status:newpost)
@@ -116,8 +135,6 @@ class Mastodon : ObservableObject
         
         client.run(request)
         { result in
-            do
-            {
                 if let statuses = try? result.get().value
                 {
                     for status in statuses
@@ -126,10 +143,6 @@ class Mastodon : ObservableObject
                     }
                     done(returnstats)
                 }
-            }
-            catch{
-                
-            }
         }
        
     }

@@ -204,7 +204,15 @@ struct Post: View
                         //
                         Button
                         {
-                            
+                            if status.favourited == true
+                            {
+                                Mastodon.shared.unfavorite(status: status)
+                            }
+                            else
+                            {
+                                Mastodon.shared.favorite(status: status)
+                            }
+                                
                         }
                     label:
                         {
