@@ -22,7 +22,7 @@ struct SearchView: View
     {
         VStack
         {
-            VStack
+            VStack(alignment: .trailing)
             {
                 TextField("Search", text: $searchTerm)
                     .padding()
@@ -52,6 +52,8 @@ struct SearchView: View
                             }
                         }
                     }
+                    .padding(.trailing)
+                    .padding(.bottom)
                     .keyboardShortcut(.defaultAction)
             }
             
