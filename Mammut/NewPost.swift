@@ -12,7 +12,7 @@ import MastodonKit
 struct NewPost: View
 {
     @ObservedObject var mast : Mastodon
-    @ObservedObject var settings: Settings
+    @EnvironmentObject var settings: Settings
     @State var selectedTimeline : Binding<TimeLine>
     
     

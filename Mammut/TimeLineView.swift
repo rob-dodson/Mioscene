@@ -10,8 +10,9 @@ import SwiftUI
 struct TimeLineView: View
 {
     @ObservedObject var mast : Mastodon
-    @ObservedObject var settings: Settings
     
+    @EnvironmentObject var settings: Settings
+
     @State private var selectedTimeline : TimeLine = .home
     @State private var stats1 = [MStatus]()
     @State private var stats2 = [MStatus]()
@@ -26,7 +27,7 @@ struct TimeLineView: View
             {
                 ForEach(getstats(timeline: $selectedTimeline))
                 { mstat in
-                    Post(mstat:mstat,settings: settings)
+                    Post(mstat:mstat)
                         .padding(.horizontal)
                         .padding(.top)
                 }
@@ -83,7 +84,7 @@ struct TimeLineView: View
             //
             ToolbarItem
             {
-                NewPost(mast: mast,settings:settings, selectedTimeline: $selectedTimeline)
+                NewPost(mast: mast, selectedTimeline: $selectedTimeline)
             }
             
         }

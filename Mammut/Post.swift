@@ -13,7 +13,7 @@ import AVKit
 struct Post: View
 {
     @State var mstat : MStatus
-    @ObservedObject var settings: Settings
+    @EnvironmentObject var settings: Settings
     
     
     var body: some View

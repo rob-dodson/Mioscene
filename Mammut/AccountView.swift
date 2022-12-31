@@ -10,7 +10,7 @@ import SwiftUI
 struct AccountView: View
 {
     @ObservedObject var mast : Mastodon
-    @ObservedObject var settings: Settings
+    @EnvironmentObject var settings: Settings
     
     var body: some View
     {

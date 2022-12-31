@@ -11,7 +11,7 @@ import MastodonKit
 
 struct AccountSmall: View
 {
-    @ObservedObject var settings: Settings
+    @EnvironmentObject var settings: Settings
     @State var account : Account
     
     var body: some View

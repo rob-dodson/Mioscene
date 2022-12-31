@@ -12,7 +12,7 @@ import MastodonKit
 struct ContentView: View
 {
     @ObservedObject var mast : Mastodon
-    @ObservedObject var settings: Settings
+    @EnvironmentObject var settings: Settings
 
     
     var body: some View
@@ -24,7 +24,7 @@ struct ContentView: View
                 //
                 // Timeline (home)
                 //
-                NavigationLink { TimeLineView(mast: mast, settings: settings) }
+                NavigationLink { TimeLineView(mast: mast) }
             label:
                 {
                     HStack
@@ -41,7 +41,7 @@ struct ContentView: View
                 //
                 // Settings
                 //
-                NavigationLink { TimeLineView(mast: mast, settings: settings) }
+                NavigationLink { TimeLineView(mast: mast) }
             label:
                 {
                     HStack
@@ -58,7 +58,7 @@ struct ContentView: View
                 //
                 // Account
                 //
-                NavigationLink { AccountView(mast: mast, settings: settings) }
+                NavigationLink { AccountView(mast: mast) }
             label:
                 {
                     HStack
@@ -75,7 +75,7 @@ struct ContentView: View
                 // Search
                 //
                 
-                NavigationLink { SearchView(mast: mast, settings: settings) }
+                NavigationLink { SearchView(mast: mast) }
             label:
                 {
                     HStack

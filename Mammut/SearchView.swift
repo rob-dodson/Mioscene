@@ -12,7 +12,7 @@ import MastodonKit
 struct SearchView: View
 {
     @ObservedObject var mast : Mastodon
-    @ObservedObject var settings: Settings
+    @EnvironmentObject var settings: Settings
     
     @State private var searchTerm : String = ""
     @State private var results : Results?
@@ -70,7 +70,7 @@ struct SearchView: View
                             
                             ForEach(res.accounts.indices, id:\.self)
                             { index in
-                                AccountSmall(settings:settings,account: res.accounts[index])
+                                AccountSmall(account: res.accounts[index])
                             }
                         }
                     
