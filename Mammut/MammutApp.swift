@@ -19,7 +19,7 @@ struct MammutApp: App
         {
             ContentView(mast: mast,settings: Settings())
         }
-        .windowToolbarStyle(.expanded)
+      //  .windowToolbarStyle(.expanded)
     }
     
     

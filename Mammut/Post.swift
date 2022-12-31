@@ -99,7 +99,7 @@ struct Post: View
                     //
                     // attachments.
                     //
-                    ForEach(status.mediaAttachments.indices)
+                    ForEach(status.mediaAttachments.indices, id:\.self)
                     { index in
                         let attachment = status.mediaAttachments[index]
                         
@@ -146,7 +146,7 @@ struct Post: View
                     {
                         HStack
                         {
-                            ForEach(status.tags.indices)
+                            ForEach(status.tags.indices, id:\.self)
                             { index in
                                 Button("\(status.tags[index].name)", action:
                                 {

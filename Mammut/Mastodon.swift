@@ -94,6 +94,11 @@ class Mastodon : ObservableObject
         }
     }
     
+    func favorite()
+    {
+        
+    }
+    
     /*
     func search(query:String) -> Results
     {

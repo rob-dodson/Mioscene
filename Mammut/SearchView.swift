@@ -30,6 +30,7 @@ struct SearchView: View
                 
                     Button("Search")
                     {
+                        results = nil
                         let request =  MastodonKit.Search.search(query:searchTerm,resolve:false)
                         mast.client.run(request)
                         { result in
@@ -51,51 +52,51 @@ struct SearchView: View
                             }
                         }
                     }
+                    .keyboardShortcut(.defaultAction)
             }
             
             Rectangle().frame(width:500, height: 1).foregroundColor(.gray)
             
-                ScrollView
+            ScrollView
+            {
+                if let res = results
                 {
-                    if let res = results
-                    {
-                            VStack(alignment: .leading)
-                            {
+                        VStack(alignment: .leading)
+                        {
+                        
+                            Text("Accounts \(res.accounts.count)")
+                                .foregroundColor(.orange)
+                                .font(.title)
                             
-                                Text("Accounts \(res.accounts.count)")
-                                    .foregroundColor(.orange)
-                                    .font(.title)
-                                
-                                ForEach(0 ..< res.accounts.count)
-                                {index in
-                                    AccountSmall(settings:settings,account: res.accounts[index])
-                                }
+                            ForEach(res.accounts.indices, id:\.self)
+                            { index in
+                                AccountSmall(settings:settings,account: res.accounts[index])
                             }
-                        
-                        
-                       
-                            VStack(alignment: .leading)
-                            {
-                                Text("Statuses \(res.statuses.count)")
-                                    .foregroundColor(.orange)
-                                    .font(.title)
+                        }
+                    
+                   
+                        VStack(alignment: .leading)
+                        {
+                            Text("Statuses \(res.statuses.count)")
+                                .foregroundColor(.orange)
+                                .font(.title)
+                        }
+                    
+                    
+                        VStack(alignment: .leading)
+                        {
+                            Text("Hashtags \(res.hashtags.count)")
+                                .foregroundColor(.orange)
+                                .font(.title)
+                            
+                            ForEach(res.hashtags.indices, id:\.self)
+                            { index in
+                                Link("\(res.hashtags[index].name)",destination: URL(string:res.hashtags[index].url)!)
                             }
-                        
-                        
-                            VStack(alignment: .leading)
-                            {
-                                Text("Hashtags \(res.hashtags.count)")
-                                    .foregroundColor(.orange)
-                                    .font(.title)
-                                
-                                ForEach(0 ..< res.hashtags.count)
-                                {index in
-                                    Link("\(res.hashtags[index].name)",destination: URL(string:res.hashtags[index].url)!)
-                                }
-                            }
-                    }
+                        }
                 }
-                .frame(width:500)
+            }
+            .frame(width:500)
             
         }
     }

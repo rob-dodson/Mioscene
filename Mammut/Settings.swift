@@ -73,7 +73,6 @@ class Settings: ObservableObject
     let headingFont : Font
     let mainFont : Font
     let smallFont : Font
-    let screen = NSScreen()
     
     let blockPadding = 8.0
     
