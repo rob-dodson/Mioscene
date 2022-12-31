@@ -20,7 +20,7 @@ struct SearchView: View
     
     var body: some View
     {
-        VStack
+        VStack(alignment: .leading)
         {
             VStack(alignment: .trailing)
             {
@@ -57,7 +57,7 @@ struct SearchView: View
                     .keyboardShortcut(.defaultAction)
             }
             
-            Rectangle().frame(width:500, height: 1).foregroundColor(.gray)
+            Rectangle().frame( height: 1).foregroundColor(.gray)
             
             ScrollView
             {
@@ -98,8 +98,6 @@ struct SearchView: View
                         }
                 }
             }
-            .frame(width:500)
-            
         }
     }
 }
