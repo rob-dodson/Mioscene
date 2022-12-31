@@ -12,7 +12,7 @@ import AVKit
 
 struct Post: View
 {
-    @State var mstat : MStatus
+    @ObservedObject var mstat : MStatus
     @EnvironmentObject var settings: Settings
     
     
@@ -20,14 +20,14 @@ struct Post: View
     {
         let status = mstat.status
         
-        if status.reblog != nil
-        {
-            dopost(status: status.reblog!,mstatus:mstat)
-        }
-        else
-        {
-            dopost(status: status,mstatus:mstat)
-        }
+            if status.reblog != nil
+            {
+                dopost(status: status.reblog!,mstatus:mstat)
+            }
+            else
+            {
+                dopost(status: status,mstatus:mstat)
+            }
     }
 
     
@@ -204,21 +204,24 @@ struct Post: View
                         //
                         Button
                         {
-                            if status.favourited == true
+                            if mstatus.favorited == true
                             {
                                 Mastodon.shared.unfavorite(status: status)
+                                mstatus.favoritesCount -= 1
                             }
                             else
                             {
                                 Mastodon.shared.favorite(status: status)
+                                mstatus.favoritesCount += 1
+
                             }
-                                
+                            mstatus.favorited.toggle()
                         }
                     label:
                         {
                             HStack
                             {
-                                if status.favourited == true
+                                if mstatus.favorited == true
                                 {
                                     Image(systemName: "star.fill")
                                         .foregroundColor(Color("AccentColor"))
@@ -228,7 +231,7 @@ struct Post: View
                                     Image(systemName: "star.fill")
                                         .foregroundColor(settings.theme.minorColor)
                                 }
-                                Text("\(status.favouritesCount)")
+                                Text("\(mstatus.favoritesCount)")
                             }
                         }
                        
@@ -238,15 +241,34 @@ struct Post: View
                         //
                         Button
                         {
-                            
+                            if mstatus.reblogged == true
+                            {
+                                Mastodon.shared.unreblog(status: status)
+                                mstatus.reblogsCount -= 1
+                            }
+                            else
+                            {
+                                Mastodon.shared.reblog(status: status)
+                                mstatus.reblogsCount += 1
+
+                            }
+                            mstatus.reblogged.toggle()
                         }
                     label:
                         {
                             HStack
                             {
-                                Image(systemName: "arrow.2.squarepath")
-                                    .foregroundColor(settings.theme.minorColor)
-                                Text("\(status.reblogsCount)")
+                                if mstatus.reblogged == true
+                                {
+                                    Image(systemName: "arrow.2.squarepath")
+                                        .foregroundColor(Color("AccentColor"))
+                                }
+                                else
+                                {
+                                    Image(systemName: "arrow.2.squarepath")
+                                        .foregroundColor(settings.theme.minorColor)
+                                }
+                                Text("\(mstatus.reblogsCount)")
                             }
                         }
                         

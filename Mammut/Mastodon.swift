@@ -84,6 +84,25 @@ class Mastodon : ObservableObject
         }
     }
     
+    func reblog(status:Status)
+    {
+        let request = Statuses.reblog(id: status.id)
+        client.run(request)
+        { result in
+            print("reblog result \(result)")
+        }
+    }
+    
+    
+    func unreblog(status:Status)
+    {
+        let request = Statuses.unreblog(id: status.id)
+        client.run(request)
+        { result in
+            print("unreblog result \(result)")
+        }
+    }
+    
     
     func post(newpost:String)
     {
@@ -153,9 +172,23 @@ class Mastodon : ObservableObject
     }
 }
 
-struct MStatus : Identifiable
+class MStatus : Identifiable,ObservableObject
 {
-    var status  : Status
+    var status : Status
+    @Published var favorited : Bool = false
+    @Published var favoritesCount : Int = 0
+    @Published var reblogged : Bool = false
+    @Published var reblogsCount: Int = 0
+
+    init(status:Status)
+    {
+        self.status = status
+        self.favorited = status.favourited ?? false
+        self.favoritesCount = status.favouritesCount
+        self.reblogged = status.reblogged ?? false
+        self.reblogsCount = status.reblogsCount
+    }
+    
     var id = UUID()
 }
 
