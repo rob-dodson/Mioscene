@@ -16,31 +16,54 @@ struct AccountSmall: View
     
     var body: some View
     {
-        VStack(alignment: .leading)
+        GroupBox
         {
-            HStack(alignment: .top)
+            VStack(alignment: .leading)
             {
-                AsyncImage(url: URL(string: account.avatar))
-                { image in
-                    image.resizable()
-                }
-            placeholder:
+                HStack(alignment: .top)
                 {
-                    Image(systemName: "person.fill.questionmark")
-                }
-                .frame(width: 50, height: 50)
-                .cornerRadius(15)
-                
-                VStack(alignment: .leading,spacing: 3)
-                {
-                    Text(account.displayName)
-                        .font(.title)
-                        .foregroundColor(settings.theme.nameColor)
+                    AsyncImage(url: URL(string: account.avatar))
+                    { image in
+                        image.resizable()
+                    }
+                placeholder:
+                    {
+                        Image(systemName: "person.fill.questionmark")
+                    }
+                    .frame(width: 50, height: 50)
+                    .cornerRadius(15)
                     
-                    let name = "@\(account.acct)"
-                    Link(name,destination: URL(string:account.url)!)
-                        .font(.title3)
+                    VStack(alignment: .leading,spacing: 3)
+                    {
+                        Text(account.displayName)
+                            .font(.title)
+                            .foregroundColor(settings.theme.nameColor)
+                        
+                        let name = "@\(account.acct)"
+                        Link(name,destination: URL(string:account.url)!)
+                            .font(.title3)
+                    }
                 }
+                
+                HStack(alignment: .top)
+                {
+                    VStack
+                    {
+                        Text("\(account.statusesCount)")
+                        Text("Posts")
+                    }
+                    VStack
+                    {
+                        Text("\(account.followersCount)")
+                        Text("Followers")
+                    }
+                    VStack
+                    {
+                        Text("\(account.followingCount)")
+                        Text("Following")
+                    }
+                }
+                .font(.footnote)
             }
         }
     }

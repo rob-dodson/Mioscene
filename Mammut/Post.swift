@@ -20,14 +20,14 @@ struct Post: View
     {
         let status = mstat.status
         
-            if status.reblog != nil
-            {
-                dopost(status: status.reblog!,mstatus:mstat)
-            }
-            else
-            {
-                dopost(status: status,mstatus:mstat)
-            }
+        if status.reblog != nil
+        {
+            dopost(status: status.reblog!,mstatus:mstat)
+        }
+        else
+        {
+            dopost(status: status,mstatus:mstat)
+        }
     }
 
     

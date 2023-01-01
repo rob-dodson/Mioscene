@@ -22,6 +22,7 @@ class Mastodon : ObservableObject
     var client : Client!
     var useraccount : Account!
     var currentTimeline : TimeLine = .home
+   
     
     init()
     {
@@ -53,8 +54,9 @@ class Mastodon : ObservableObject
             {
                 self.useraccount = try result.get().value
             }
-            catch{
-                
+            catch
+            {
+                print("Error getting user account \(error)")
             }
         }
     }
@@ -75,6 +77,7 @@ class Mastodon : ObservableObject
         }
     }
     
+    
     func favorite(status:Status)
     {
         let request = Statuses.favourite(id: status.id)
@@ -83,6 +86,7 @@ class Mastodon : ObservableObject
             print("favorite result \(result)")
         }
     }
+    
     
     func reblog(status:Status)
     {
@@ -113,29 +117,6 @@ class Mastodon : ObservableObject
         }
     }
     
-    func favorite()
-    {
-        
-    }
-    
-    /*
-    func search(query:String) -> Results
-    {
-        let request =  MastodonKit.Search.search(query:query,resolve:false)
-        client.run(request)
-        { result in
-            
-            switch result
-            {
-              case .success:
-                print("search result: \(result)")
-                return
-              case .failure(let error):
-                  print(error.localizedDescription)
-              }
-        }
-    }
-    */
     
     func getTimeline(timeline:TimeLine,done: @escaping ([MStatus]) -> Void)
     {
@@ -163,13 +144,21 @@ class Mastodon : ObservableObject
                 {
                     for status in statuses
                     {
-                        returnstats.append(convert(status: status))
+                        returnstats.append(self.convert(status: status))
                     }
                     done(returnstats)
                 }
         }
        
     }
+    
+    func convert(status:Status) -> MStatus
+    {
+        let newmstatus = MStatus(status: status)
+
+        return newmstatus
+    }
+
 }
 
 class MStatus : Identifiable,ObservableObject
@@ -192,9 +181,3 @@ class MStatus : Identifiable,ObservableObject
     var id = UUID()
 }
 
-func convert(status:Status) -> MStatus
-{
-    let newmstatus = MStatus(status: status)
-
-    return newmstatus
-}

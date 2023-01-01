@@ -15,6 +15,7 @@ struct Theme : Identifiable
     enum colorName : String
     {
         case body = "body"
+        case accent = "accent"
         case name = "name"
         case minor = "minor"
         case link = "link"
@@ -23,6 +24,7 @@ struct Theme : Identifiable
     }
     
     var bodyColor : Color
+    var accentColor : Color
     var nameColor : Color
     var minorColor : Color
     var linkColor : Color
@@ -41,13 +43,12 @@ struct Theme : Identifiable
         self.colors = colors
         
         self.bodyColor = colors[colorName.body.rawValue] ?? Color.black
+        self.accentColor = colors[colorName.accent.rawValue] ?? Color.orange
         self.nameColor = colors[colorName.name.rawValue] ?? Color.black
         self.minorColor = colors[colorName.minor.rawValue] ?? Color.black
         self.linkColor = colors[colorName.link.rawValue] ?? Color.blue
         self.dateColor = colors[colorName.date.rawValue] ?? Color.mint
         self.blockColor = colors[colorName.block.rawValue] ?? Color.gray
-
-
     }
     
     func color(name:colorName) -> Color
@@ -84,7 +85,8 @@ class Settings: ObservableObject
         for index in 0..<themeNames.count
         {
             let colors = [Theme.colorName.body.rawValue:Color("body\(index)"),
-                           Theme.colorName.name.rawValue:Color("name\(index)"),
+                          Theme.colorName.accent.rawValue:Color("accent\(index)"),
+                          Theme.colorName.name.rawValue:Color("name\(index)"),
                           Theme.colorName.minor.rawValue:Color("minor\(index)"),
                           Theme.colorName.link.rawValue:Color("link\(index)"),
                           Theme.colorName.date.rawValue:Color("date\(index)"),

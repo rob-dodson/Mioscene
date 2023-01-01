@@ -28,74 +28,101 @@ struct SearchView: View
                     .padding()
                     .font(.title)
                 
-                    Button("Search")
-                    {
-                        results = nil
-                        let request =  MastodonKit.Search.search(query:searchTerm,resolve:false)
-                        mast.client.run(request)
-                        { result in
-                            
-                            do
+                Button("Search")
+                {
+                    results = nil
+                    let request =  MastodonKit.Search.search(query:searchTerm,resolve:false)
+                    mast.client.run(request)
+                    { result in
+                        
+                        do
+                        {
+                            switch result
                             {
-                                switch result
-                                {
-                                case .success:
-                                    print("search result: \(result)")
-                                    results = try result.get().value
-                                case .failure(let error):
-                                    print(error.localizedDescription)
-                                }
-                            }
-                            catch
-                            {
-                                
+                            case .success:
+                                print("search result: \(result)")
+                                results = try result.get().value
+                            case .failure(let error):
+                                print(error.localizedDescription)
                             }
                         }
+                        catch
+                        {
+                            print("Error running search \(error)")
+                        }
                     }
-                    .padding(.trailing)
-                    .padding(.bottom)
-                    .keyboardShortcut(.defaultAction)
+                }
+                .padding(.trailing)
+                .padding(.bottom)
+                .keyboardShortcut(.defaultAction)
             }
             
-            Rectangle().frame( height: 1).foregroundColor(.gray)
+            Rectangle().frame(height: 1).foregroundColor(.gray)
             
             ScrollView
             {
                 if let res = results
                 {
-                        VStack(alignment: .leading)
+                    VStack(alignment: .leading)
+                    {
+                        //
+                        // accounts
+                        //
+                        if res.accounts.count > 0
                         {
+                            GroupBox(label: Label("Accounts", systemImage: "person.crop.circle")
+                                .foregroundColor(settings.theme.accentColor)
+                                .font(.title))
+                            {
+                                VStack(alignment: .leading)
+                                {
+                                    ForEach(res.accounts.indices, id:\.self)
+                                    { index in
+                                        AccountSmall(account: res.accounts[index])
+                                    }
+                                }
+                            }
+                        }
                         
-                            Text("Accounts \(res.accounts.count)")
-                                .foregroundColor(.orange)
-                                .font(.title)
-                            
-                            ForEach(res.accounts.indices, id:\.self)
-                            { index in
-                                AccountSmall(account: res.accounts[index])
+                        //
+                        // statuses
+                        //
+                        if res.statuses.count > 0
+                        {
+                            GroupBox(label: Label("Statuses", systemImage: "square.and.pencil")
+                                .foregroundColor(settings.theme.accentColor)
+                                .font(.title))
+                            {
+                                VStack(alignment: .leading)
+                                {
+                                    ForEach(res.statuses.indices, id:\.self)
+                                    { index in
+                                        let mstat = mast.convert(status:res.statuses[index])
+                                        Post(mstat: mstat)
+                                    }
+                                }
                             }
                         }
-                    
-                   
-                        VStack(alignment: .leading)
+                        
+                        //
+                        // hasgtags
+                        //
+                        if res.hashtags.count > 0
                         {
-                            Text("Statuses \(res.statuses.count)")
-                                .foregroundColor(.orange)
-                                .font(.title)
-                        }
-                    
-                    
-                        VStack(alignment: .leading)
-                        {
-                            Text("Hashtags \(res.hashtags.count)")
-                                .foregroundColor(.orange)
-                                .font(.title)
-                            
-                            ForEach(res.hashtags.indices, id:\.self)
-                            { index in
-                                Link("\(res.hashtags[index].name)",destination: URL(string:res.hashtags[index].url)!)
+                            GroupBox(label: Label("Hashtags", systemImage: "number")
+                                .foregroundColor(settings.theme.accentColor)
+                                .font(.title))
+                            {
+                                VStack(alignment: .leading)
+                                {
+                                    ForEach(res.hashtags.indices, id:\.self)
+                                    { index in
+                                        Link("\(res.hashtags[index].name)",destination: URL(string:res.hashtags[index].url)!)
+                                    }
+                                }
                             }
                         }
+                    }
                 }
             }
         }

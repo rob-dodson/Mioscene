@@ -74,7 +74,6 @@ struct ContentView: View
                 //
                 // Search
                 //
-                
                 NavigationLink { SearchView(mast: mast) }
             label:
                 {
@@ -86,7 +85,6 @@ struct ContentView: View
                             .foregroundColor(settings.theme.nameColor)
                     }
                 }
-                 
             }
         }
         detail:
