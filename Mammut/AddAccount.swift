@@ -16,7 +16,7 @@ struct AddAccount: View
     @State private var shouldPresentSheet = false
     
     @State private var server : String = ""
-    @State private var userEmail : String = ""
+    @State private var userName : String = ""
     @State private var password : String = ""
     
     
@@ -51,13 +51,17 @@ struct AddAccount: View
                     .padding()
                     .font(.title)
                 
-                TextField("User email", text: $userEmail)
+                TextField("User name or email", text: $userName)
                     .padding()
                     .font(.title)
                 
                 TextField("Password", text: $password)
                     .padding()
                     .font(.title)
+                
+                Text("Password is not kept, it's only used to aquire a token.")
+                    .foregroundColor(.gray)
+                    .font(.footnote)
             }
             .frame(width: 400, height: 300)
             .toolbar
@@ -74,7 +78,7 @@ struct AddAccount: View
                     {
                         Button("Submit")
                         {
-                            mast.newAccount(server: server, userEmail: userEmail, password: password)
+                            mast.newAccount(server: server, userName: userName, password: password)
                             
                             shouldPresentSheet = false
                         }

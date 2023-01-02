@@ -19,31 +19,50 @@ enum TimeLine : String,CaseIterable, Identifiable,Equatable
 @MainActor
 class Mastodon : ObservableObject
 {
-    static let accessTokenKeyName = "Mammut.mastodon.access.token"
-    static let accessURLKeyName = "Mammut.mastodon.baseurl"
+    static let accessTokenKeyNamePrefix = "Mammut.mastodon.access.token"
     
     var client : Client!
     var useraccount : Account!
     var currentTimeline : TimeLine = .home
-   
+    var sql : SqliteDB
+    var currentlocalAccountRecord : LocalAccountRecord?
+    var localAccountRecords : [LocalAccountRecord]?
+    
     
     init()
     {
-        connect()
+       
+        do
+        {
+            sql = SqliteDB()
+            localAccountRecords = try sql.loadAccounts()
+            
+            if localAccountRecords != nil
+            {
+                for localrec in localAccountRecords!
+                {
+                    if localrec.lastViewed == true
+                    {
+                        currentlocalAccountRecord = localrec
+                        
+                        let token = Keys.getFromKeychain(name: currentlocalAccountRecord!.makeKeyChainName())
+                        if let token
+                        {
+                            connect(serverurl: currentlocalAccountRecord!.server, token: token)
+                        }
+                    }
+                }
+            }
+        }
+        catch
+        {
+            print("sql error \(error)")
+        }
     }
     
-    func connect()
+    func connect(serverurl:String,token:String)
     {
-        let token = Keys.getFromKeychain(name: Mastodon.accessTokenKeyName)
-        let baseurl = Keys.getFromKeychain(name: Mastodon.accessURLKeyName)
-        
-        guard token != nil && baseurl != nil else
-        {
-                print("no token or url")
-                return
-        }
-        
-        client = Client(baseURL: baseurl!,accessToken: token)
+        client = Client(baseURL: serverurl,accessToken: token)
         
         let request = Clients.register(
             clientName: "Mammut",
@@ -76,7 +95,7 @@ class Mastodon : ObservableObject
     }
 
     
-    func newAccount(server:String,userEmail:String,password:String)
+    func newAccount(server:String,userName:String,password:String)
     {
         let serverurl = "https://\(server)"
         let newClient = Client(baseURL: serverurl)
@@ -97,14 +116,26 @@ class Mastodon : ObservableObject
                 clientid = application.clientID
                 clientsecret = application.clientSecret
                 
-                let loginrequest = Login.silent(clientID: clientid, clientSecret: clientsecret, scopes: [.read, .write, .follow], username: userEmail, password: password)
+                let loginrequest = Login.silent(clientID: clientid, clientSecret: clientsecret, scopes: [.read, .write, .follow], username: userName, password: password)
                 
                 newClient.run(loginrequest)
                 { result in
                     if let loginsettings = try? result.get().value
                     {
-                        Keys.storeInKeychain(name: Mastodon.accessTokenKeyName, value: loginsettings.accessToken)
-                        Keys.storeInKeychain(name: Mastodon.accessURLKeyName, value: serverurl)
+                        do
+                        {
+                            let localaccount = LocalAccountRecord(username: userName, server: server, lastViewed: true)
+                            try self.sql.updateAccount(account: localaccount)
+                            Keys.storeInKeychain(name: localaccount.makeKeyChainName(), value: loginsettings.accessToken)
+                        }
+                        catch
+                        {
+                            print("error saving account \(error)")
+                        }
+                    }
+                    else
+                    {
+                        print("failed to get login credentials \(result)")
                     }
                 }
             }
