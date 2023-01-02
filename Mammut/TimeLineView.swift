@@ -27,7 +27,7 @@ struct TimeLineView: View
             {
                 ForEach(getstats(timeline: $selectedTimeline))
                 { mstat in
-                    Post(mstat:mstat)
+                    Post(mast:mast,mstat:mstat)
                         .padding(.horizontal)
                         .padding(.top)
                 }

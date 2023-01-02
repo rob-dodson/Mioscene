@@ -12,6 +12,7 @@ import MastodonKit
 struct SearchView: View
 {
     @ObservedObject var mast : Mastodon
+    
     @EnvironmentObject var settings: Settings
     
     @State private var searchTerm : String = ""
@@ -40,7 +41,6 @@ struct SearchView: View
                             switch result
                             {
                             case .success:
-                                print("search result: \(result)")
                                 results = try result.get().value
                             case .failure(let error):
                                 print(error.localizedDescription)
@@ -88,7 +88,7 @@ struct SearchView: View
                         // statuses
                         //
                         if res.statuses.count > 0
-                        {
+                        {/*
                             GroupBox(label: Label("Statuses", systemImage: "square.and.pencil")
                                 .foregroundColor(settings.theme.accentColor)
                                 .font(.title))
@@ -102,10 +102,11 @@ struct SearchView: View
                                     }
                                 }
                             }
+                          */
                         }
                         
                         //
-                        // hasgtags
+                        // hashtags
                         //
                         if res.hashtags.count > 0
                         {
@@ -117,7 +118,7 @@ struct SearchView: View
                                 {
                                     ForEach(res.hashtags.indices, id:\.self)
                                     { index in
-                                        Link("\(res.hashtags[index].name)",destination: URL(string:res.hashtags[index].url)!)
+                                        Link("#\(res.hashtags[index].name)",destination: URL(string:res.hashtags[index].url)!)
                                     }
                                 }
                             }

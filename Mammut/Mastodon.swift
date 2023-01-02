@@ -8,16 +8,19 @@
 import Foundation
 import MastodonKit
 
+
 enum TimeLine : String,CaseIterable, Identifiable,Equatable
 {
     case home, localTimeline = "Local Timeline", publicTimeline = "Public Timeline", notifications = "Notifications"
     var id: Self { self }
 }
 
+
 @MainActor
 class Mastodon : ObservableObject
 {
-    static let shared = Mastodon()
+    static let accessTokenKeyName = "Mammut.mastodon.access.token"
+    static let accessURLKeyName = "Mammut.mastodon.baseurl"
     
     var client : Client!
     var useraccount : Account!
@@ -26,13 +29,24 @@ class Mastodon : ObservableObject
     
     init()
     {
-        client = Client(
-            baseURL: "https://mastodon.social",
-            accessToken: "aEC-QUgClG1fJD0vJw3yrqFDduBwU2iI_1PM0tcfjbA"
-        )
+        connect()
+    }
+    
+    func connect()
+    {
+        let token = Keys.getFromKeychain(name: Mastodon.accessTokenKeyName)
+        let baseurl = Keys.getFromKeychain(name: Mastodon.accessURLKeyName)
+        
+        guard token != nil && baseurl != nil else
+        {
+                print("no token or url")
+                return
+        }
+        
+        client = Client(baseURL: baseurl!,accessToken: token)
         
         let request = Clients.register(
-            clientName: "Mammute Client",
+            clientName: "Mammut",
             scopes: [.read, .write, .follow],
             website: "https://shyfrogproductions.com"
         )
@@ -61,6 +75,46 @@ class Mastodon : ObservableObject
         }
     }
 
+    
+    func newAccount(server:String,userEmail:String,password:String)
+    {
+        let serverurl = "https://\(server)"
+        let newClient = Client(baseURL: serverurl)
+        
+        let request = Clients.register(
+            clientName: "Mammut",
+            scopes: [.read, .write, .follow],  // follow depricated? .push?
+            website: "https://shyfrogproductions.com"
+        )
+        
+        var clientid = ""
+        var clientsecret = ""
+        
+        newClient.run(request)
+        { result in
+            if let application = try? result.get().value
+            {
+                clientid = application.clientID
+                clientsecret = application.clientSecret
+                
+                let loginrequest = Login.silent(clientID: clientid, clientSecret: clientsecret, scopes: [.read, .write, .follow], username: userEmail, password: password)
+                
+                newClient.run(loginrequest)
+                { result in
+                    if let loginsettings = try? result.get().value
+                    {
+                        Keys.storeInKeychain(name: Mastodon.accessTokenKeyName, value: loginsettings.accessToken)
+                        Keys.storeInKeychain(name: Mastodon.accessURLKeyName, value: serverurl)
+                    }
+                }
+            }
+            else
+            {
+                print("result error \(result)")
+            }
+        }
+    }
+        
     
     func getCurrentUserAccount() -> Account
     {

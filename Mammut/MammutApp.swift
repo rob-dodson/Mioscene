@@ -18,7 +18,7 @@ import SwiftUI
 @main
 struct MammutApp: App
 {
-    @StateObject private var mast : Mastodon = Mastodon.shared
+    @StateObject private var mast = Mastodon()
     @StateObject var settings = Settings()
 
     
@@ -27,18 +27,6 @@ struct MammutApp: App
         WindowGroup
         {
             ContentView(mast: mast).environmentObject(settings)
-        }
-    }
-    
-    
-    //
-    // static support functions
-    //
-    static func openCurrentUserAccountURL()
-    {
-        if let url = URL(string:Mastodon.shared.getCurrentUserAccount().url)
-        {
-            NSWorkspace.shared.open(url)
         }
     }
 }

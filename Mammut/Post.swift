@@ -12,7 +12,9 @@ import AVKit
 
 struct Post: View
 {
+    @ObservedObject var mast : Mastodon
     @ObservedObject var mstat : MStatus
+    
     @EnvironmentObject var settings: Settings
     
     
@@ -206,12 +208,12 @@ struct Post: View
                         {
                             if mstatus.favorited == true
                             {
-                                Mastodon.shared.unfavorite(status: status)
+                                mast.unfavorite(status: status)
                                 mstatus.favoritesCount -= 1
                             }
                             else
                             {
-                                Mastodon.shared.favorite(status: status)
+                                mast.favorite(status: status)
                                 mstatus.favoritesCount += 1
 
                             }
@@ -243,12 +245,12 @@ struct Post: View
                         {
                             if mstatus.reblogged == true
                             {
-                                Mastodon.shared.unreblog(status: status)
+                                mast.unreblog(status: status)
                                 mstatus.reblogsCount -= 1
                             }
                             else
                             {
-                                Mastodon.shared.reblog(status: status)
+                                mast.reblog(status: status)
                                 mstatus.reblogsCount += 1
 
                             }

@@ -12,6 +12,7 @@ import MastodonKit
 struct ContentView: View
 {
     @ObservedObject var mast : Mastodon
+    
     @EnvironmentObject var settings: Settings
 
     
@@ -64,7 +65,7 @@ struct ContentView: View
                     HStack
                     {
                         Image(systemName: "person.crop.circle")
-                        Text("Account")
+                        Text("Accounts")
                             .font(.headline)
                             .foregroundColor(settings.theme.nameColor)
                     }

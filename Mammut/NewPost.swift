@@ -37,7 +37,8 @@ struct NewPost: View
         content:
         {
             Text("New Post")
-                .foregroundColor(settings.theme.nameColor)
+                .foregroundColor(settings.theme.accentColor)
+                .font(.title)
                 .padding(.top)
             
             VStack(alignment: .trailing)
@@ -80,7 +81,7 @@ struct NewPost: View
                     }
                 }
             }
-            //.frame(width: 400, height: 300)
+            .frame(width: 400, height: 300)
         }
     }
 }
