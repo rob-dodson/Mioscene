@@ -22,7 +22,6 @@ class Mastodon : ObservableObject
     static let accessTokenKeyNamePrefix = "Mammut.mastodon.access.token"
     
     var client : Client!
-    var useraccount : Account!
     var currentTimeline : TimeLine = .home
     var sql : SqliteDB
     var currentlocalAccountRecord : LocalAccountRecord?
@@ -31,7 +30,6 @@ class Mastodon : ObservableObject
     
     init()
     {
-       
         do
         {
             sql = SqliteDB()
@@ -48,7 +46,7 @@ class Mastodon : ObservableObject
                         let token = Keys.getFromKeychain(name: currentlocalAccountRecord!.makeKeyChainName())
                         if let token
                         {
-                            connect(serverurl: currentlocalAccountRecord!.server, token: token)
+                            connect(localaccount:localrec,serverurl: currentlocalAccountRecord!.server, token: token)
                         }
                     }
                 }
@@ -60,9 +58,9 @@ class Mastodon : ObservableObject
         }
     }
     
-    func connect(serverurl:String,token:String)
+    func connect(localaccount:LocalAccountRecord,serverurl:String,token:String)
     {
-        client = Client(baseURL: serverurl,accessToken: token)
+        client = Client(baseURL: "https://\(serverurl)",accessToken: token)
         
         let request = Clients.register(
             clientName: "Mammut",
@@ -85,13 +83,18 @@ class Mastodon : ObservableObject
         { result in
             do
             {
-                self.useraccount = try result.get().value
+                localaccount.usersMastodonAccount = try result.get().value
             }
             catch
             {
                 print("Error getting user account \(error)")
             }
         }
+    }
+    
+    func getCurrentMastodonAccount() -> Account?
+    {
+        return currentlocalAccountRecord?.usersMastodonAccount ?? nil
     }
 
     
@@ -146,13 +149,6 @@ class Mastodon : ObservableObject
         }
     }
         
-    
-    func getCurrentUserAccount() -> Account
-    {
-        return useraccount
-    }
-    
-    
     func unfavorite(status:Status)
     {
         let request = Statuses.unfavourite(id: status.id)

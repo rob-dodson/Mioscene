@@ -53,9 +53,9 @@ struct TimeLineView: View
             {
                 Picker(selection: .constant(1),label: Text("Account"),content:
                 {
-                    Text("@rdodson").tag(1)
-                    Text("@frogradio").tag(2)
-                    Text("Add Account...").tag(3)
+                    let username = mast.getCurrentMastodonAccount()?.username ?? "error"
+                    Text("@\(username)").tag(1)
+                    Text("Add Account...").tag(2)
                 })
             }
             

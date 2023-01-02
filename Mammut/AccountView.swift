@@ -16,15 +16,15 @@ struct AccountView: View
     {
         ZStack
         {
-            if mast.useraccount != nil
+            if let account = mast.currentlocalAccountRecord?.usersMastodonAccount
             {
-            VStack
+                VStack
                 {
                     VStack
                     {
                         HStack(alignment: .top)
                         {
-                            AsyncImage(url: URL(string: mast.useraccount.avatar))
+                            AsyncImage(url: URL(string:account.avatar))
                             { image in
                                 image.resizable()
                             }
@@ -35,7 +35,7 @@ struct AccountView: View
                             .frame(width: 100, height: 100)
                             .cornerRadius(15)
                             
-                            AsyncImage(url: URL(string: mast.useraccount.header))
+                            AsyncImage(url: URL(string: account.header))
                             { image in
                                 image.resizable()
                                     .aspectRatio(contentMode: .fit)
@@ -47,25 +47,25 @@ struct AccountView: View
                             }
                         }
                         
-                        Text("\(mast.useraccount.displayName)")
-                        Text("@\(mast.useraccount.acct)")
-                        Text("User since \(mast.useraccount.createdAt.formatted())")
-                        Text("\(mast.useraccount.note)")
+                        Text("\(account.displayName)")
+                        Text("@\(account.acct)")
+                        Text("User since \(account.createdAt.formatted())")
+                        Text("\(account.note)")
                         HStack
                         {
                             VStack
                             {
-                                Text("\(mast.useraccount.statusesCount)")
+                                Text("\(account.statusesCount)")
                                 Text("Posts")
                             }
                             VStack
                             {
-                                Text("\(mast.useraccount.followersCount)")
+                                Text("\(account.followersCount)")
                                 Text("Followers")
                             }
                             VStack
                             {
-                                Text("\(mast.useraccount.followingCount)")
+                                Text("\(account.followingCount)")
                                 Text("Following")
                             }
                         }
@@ -74,10 +74,10 @@ struct AccountView: View
                     
                     VStack
                     {
-                        Text("ID \(mast.useraccount.id)")
-                        Text("Username \(mast.useraccount.username)")
-                        Text("\(mast.useraccount.url)")
-                        Text("\(mast.useraccount.locked.description)")
+                        Text("ID \(account.id)")
+                        Text("Username \(account.username)")
+                        Text("\(account.url)")
+                        Text("\(account.locked.description)")
                     }
                 }
             }

@@ -7,6 +7,7 @@
 
 import Foundation
 
+import MastodonKit
 import GRDB
 
 class LocalAccountRecord : Record,Codable
@@ -15,6 +16,9 @@ class LocalAccountRecord : Record,Codable
     var username : String
     var server : String
     var lastViewed : Bool
+    
+    var usersMastodonAccount : Account?
+    
     
     enum CodingKeys: String,CodingKey
     {
