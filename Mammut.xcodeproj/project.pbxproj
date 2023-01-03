@@ -25,6 +25,7 @@
 		AE28C5F72963717D00C8C928 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = AE28C5F62963717D00C8C928 /* GRDB */; };
 		AE28C5F92963719B00C8C928 /* SqliteDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5F82963719B00C8C928 /* SqliteDB.swift */; };
 		AE28C5FB2963727500C8C928 /* LocalAccountRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5FA2963727500C8C928 /* LocalAccountRecord.swift */; };
+		AE28C5FD29648C2400C8C928 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5FC29648C2400C8C928 /* SettingsView.swift */; };
 		AE9A85D6295629C100E8B193 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9A85D5295629C100E8B193 /* Settings.swift */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +49,7 @@
 		AE28C5EF29635CAA00C8C928 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		AE28C5F82963719B00C8C928 /* SqliteDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqliteDB.swift; sourceTree = "<group>"; };
 		AE28C5FA2963727500C8C928 /* LocalAccountRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAccountRecord.swift; sourceTree = "<group>"; };
+		AE28C5FC29648C2400C8C928 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		AE9A85D5295629C100E8B193 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -91,10 +93,11 @@
 				AE28C5E3295CE9F900C8C928 /* TimeLineView.swift */,
 				AE28C5E5295CEDCE00C8C928 /* AccountView.swift */,
 				AE28C5D9295A7ACE00C8C928 /* SearchView.swift */,
+				AE28C5FC29648C2400C8C928 /* SettingsView.swift */,
+				AE9A85D5295629C100E8B193 /* Settings.swift */,
 				AE06EC01294D1D1D006CAB67 /* Post.swift */,
 				AE06EC03294D234D006CAB67 /* Mastodon.swift */,
 				AE28C5EF29635CAA00C8C928 /* Keys.swift */,
-				AE9A85D5295629C100E8B193 /* Settings.swift */,
 				AE28C5D72953C8A500C8C928 /* NewPost.swift */,
 				AE28C5ED29634C0B00C8C928 /* AddAccount.swift */,
 				AE28C5EB295E4B1C00C8C928 /* AccountSmall.swift */,
@@ -202,6 +205,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE28C5FD29648C2400C8C928 /* SettingsView.swift in Sources */,
 				AE28C5E4295CE9F900C8C928 /* TimeLineView.swift in Sources */,
 				AE28C5F029635CAA00C8C928 /* Keys.swift in Sources */,
 				AE9A85D6295629C100E8B193 /* Settings.swift in Sources */,

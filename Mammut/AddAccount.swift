@@ -16,7 +16,7 @@ struct AddAccount: View
     @State private var shouldPresentSheet = false
     
     @State private var server : String = ""
-    @State private var userName : String = ""
+    @State private var email : String = ""
     @State private var password : String = ""
     
     
@@ -51,7 +51,7 @@ struct AddAccount: View
                     .padding()
                     .font(.title)
                 
-                TextField("User name or email", text: $userName)
+                TextField("Email", text: $email)
                     .padding()
                     .font(.title)
                 
@@ -78,7 +78,7 @@ struct AddAccount: View
                     {
                         Button("Submit")
                         {
-                            mast.newAccount(server: server, userName: userName, password: password)
+                            mast.newAccount(server: server, email: email, password: password)
                             
                             shouldPresentSheet = false
                         }

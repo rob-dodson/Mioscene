@@ -98,7 +98,7 @@ class Mastodon : ObservableObject
     }
 
     
-    func newAccount(server:String,userName:String,password:String)
+    func newAccount(server:String,email:String,password:String)
     {
         let serverurl = "https://\(server)"
         let newClient = Client(baseURL: serverurl)
@@ -119,7 +119,7 @@ class Mastodon : ObservableObject
                 clientid = application.clientID
                 clientsecret = application.clientSecret
                 
-                let loginrequest = Login.silent(clientID: clientid, clientSecret: clientsecret, scopes: [.read, .write, .follow], username: userName, password: password)
+                let loginrequest = Login.silent(clientID: clientid, clientSecret: clientsecret, scopes: [.read, .write, .follow], username: email, password: password)
                 
                 newClient.run(loginrequest)
                 { result in
@@ -127,7 +127,7 @@ class Mastodon : ObservableObject
                     {
                         do
                         {
-                            let localaccount = LocalAccountRecord(username: userName, server: server, lastViewed: true)
+                            let localaccount = LocalAccountRecord(username: email, server: server, lastViewed: true)
                             try self.sql.updateAccount(account: localaccount)
                             Keys.storeInKeychain(name: localaccount.makeKeyChainName(), value: loginsettings.accessToken)
                         }

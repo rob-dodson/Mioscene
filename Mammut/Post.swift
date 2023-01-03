@@ -150,7 +150,7 @@ struct Post: View
                         {
                             ForEach(status.tags.indices, id:\.self)
                             { index in
-                                Button("\(status.tags[index].name)", action:
+                                Button("#\(status.tags[index].name)", action:
                                 {
                                     if let url = URL(string:status.tags[index].url)
                                     {

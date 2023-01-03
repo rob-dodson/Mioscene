@@ -42,7 +42,7 @@ struct ContentView: View
                 //
                 // Settings
                 //
-                NavigationLink { TimeLineView(mast: mast) }
+                NavigationLink { SettingsView(mast: mast) }
             label:
                 {
                     HStack
