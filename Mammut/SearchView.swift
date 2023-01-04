@@ -52,8 +52,7 @@ struct SearchView: View
                         }
                     }
                 }
-                .padding(.trailing)
-                .padding(.bottom)
+                .padding([.bottom,.trailing])
                 .keyboardShortcut(.defaultAction)
             }
             

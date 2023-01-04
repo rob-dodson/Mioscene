@@ -8,18 +8,17 @@
 import SwiftUI
 import MastodonKit
 
+
 struct AddAccount: View
 {
     @ObservedObject var mast : Mastodon
     @EnvironmentObject var settings: Settings
     
     @State private var shouldPresentSheet = false
-    
     @State private var server : String = ""
     @State private var email : String = ""
     @State private var password : String = ""
-    
-    
+
     var body: some View
     {
         Button()
@@ -55,34 +54,29 @@ struct AddAccount: View
                     .padding()
                     .font(.title)
                 
-                TextField("Password", text: $password)
-                    .padding()
-                    .font(.title)
-                
-                Text("Password is not kept, it's only used to aquire a token.")
-                    .foregroundColor(.gray)
-                    .font(.footnote)
+                    SecureField("Password", text: $password)
+                        .padding()
+                        .font(.title)
             }
             .frame(width: 400, height: 300)
             .toolbar
             {
-                    ToolbarItem
+                ToolbarItem
+                {
+                    Button("Cancel")
                     {
-                        Button("Cancel")
-                        {
-                            shouldPresentSheet = false
-                        }
+                        shouldPresentSheet = false
                     }
-                    
-                    ToolbarItem
+                }
+                
+                ToolbarItem
+                {
+                    Button("Submit")
                     {
-                        Button("Submit")
-                        {
-                            mast.newAccount(server: server, email: email, password: password)
-                            
-                            shouldPresentSheet = false
-                        }
+                        mast.newAccount(server: server, email: email, password: password)
+                        shouldPresentSheet = false
                     }
+                }
             }
         }
     }

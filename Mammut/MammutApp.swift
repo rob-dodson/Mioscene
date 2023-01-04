@@ -15,13 +15,13 @@
 
 import SwiftUI
 
+
 @main
 struct MammutApp: App
 {
     @StateObject private var mast = Mastodon()
     @StateObject var settings = Settings()
 
-    
     var body: some Scene
     {
         WindowGroup

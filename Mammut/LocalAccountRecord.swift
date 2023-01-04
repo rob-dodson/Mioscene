@@ -10,10 +10,11 @@ import Foundation
 import MastodonKit
 import GRDB
 
-class LocalAccountRecord : Record,Codable
+class LocalAccountRecord : Record,Codable,Identifiable
 {
     var uuid : UUID
     var username : String
+    var email : String
     var server : String
     var lastViewed : Bool
     
@@ -24,14 +25,16 @@ class LocalAccountRecord : Record,Codable
     {
         case uuid
         case username
+        case email
         case server
         case lastViewed
     }
     
-    init(uuid: UUID = UUID(), username: String, server: String, lastViewed: Bool)
+    init(uuid: UUID = UUID(), username: String, email:String, server: String, lastViewed: Bool)
     {
         self.uuid = uuid
         self.username = username
+        self.email = email
         self.server = server
         self.lastViewed = lastViewed
         
@@ -45,10 +48,11 @@ class LocalAccountRecord : Record,Codable
 
     override func encode(to container: inout PersistenceContainer)
     {
-        container[CodingKeys.uuid.rawValue]           = uuid
-        container[CodingKeys.username.rawValue]       = username
-        container[CodingKeys.server.rawValue]          = server
-        container[CodingKeys.lastViewed.rawValue]       = lastViewed
+        container[CodingKeys.uuid.rawValue]       = uuid
+        container[CodingKeys.username.rawValue]   = username
+        container[CodingKeys.email.rawValue]      = email
+        container[CodingKeys.server.rawValue]     = server
+        container[CodingKeys.lastViewed.rawValue] = lastViewed
     }
 
     
@@ -56,6 +60,7 @@ class LocalAccountRecord : Record,Codable
     {
         uuid = row[CodingKeys.uuid.rawValue]
         username = row[CodingKeys.username.rawValue]
+        email = row[CodingKeys.email.rawValue]
         server = row[CodingKeys.server.rawValue]
         lastViewed = row[CodingKeys.lastViewed.rawValue]
         
@@ -65,6 +70,6 @@ class LocalAccountRecord : Record,Codable
     
     func makeKeyChainName() -> String
     {
-        return "\(Mastodon.accessTokenKeyNamePrefix).\(username).\(server)"
+        return "\(Mastodon.accessTokenKeyNamePrefix).\(email).\(server)"
     }
 }

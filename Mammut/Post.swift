@@ -130,7 +130,7 @@ struct Post: View
                             {
                                 Image(systemName: "photo")
                             }
-                            .cornerRadius(15) // not working
+                            .cornerRadius(15)
                             .onTapGesture
                             {
                                 if let url = URL(string:attachment.url)

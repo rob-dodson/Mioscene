@@ -71,7 +71,8 @@ class SqliteDB
             try db.create(table: SqliteDB.ACCOUNT, ifNotExists: true)
             { t in
                 t.column(LocalAccountRecord.CodingKeys.uuid.rawValue,.text).notNull()
-                t.column(LocalAccountRecord.CodingKeys.username.rawValue,.text).notNull()
+                t.column(LocalAccountRecord.CodingKeys.username.rawValue,.text)
+                t.column(LocalAccountRecord.CodingKeys.email.rawValue,.text).notNull()
                 t.column(LocalAccountRecord.CodingKeys.server.rawValue,.blob)
                 t.column(LocalAccountRecord.CodingKeys.lastViewed.rawValue,.blob)
                 t.primaryKey([LocalAccountRecord.CodingKeys.uuid.rawValue,LocalAccountRecord.CodingKeys.username.rawValue])

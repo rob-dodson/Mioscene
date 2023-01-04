@@ -7,88 +7,43 @@
 
 import SwiftUI
 
+
+
 struct AccountView: View
 {
     @ObservedObject var mast : Mastodon
     @EnvironmentObject var settings: Settings
+   
+   @State var error : MammutError?
+
     
     var body: some View
     {
-        ZStack
+        VStack
         {
-            if let account = mast.currentlocalAccountRecord?.usersMastodonAccount
+            HStack
             {
-                VStack
-                {
-                    VStack
-                    {
-                        HStack(alignment: .top)
+                Picker(selection: .constant(1),label: Text("Account"),content:
                         {
-                            AsyncImage(url: URL(string:account.avatar))
-                            { image in
-                                image.resizable()
-                            }
-                        placeholder:
-                            {
-                                Image(systemName: "person.fill.questionmark")
-                            }
-                            .frame(width: 100, height: 100)
-                            .cornerRadius(15)
-                            
-                            AsyncImage(url: URL(string: account.header))
-                            { image in
-                                image.resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(maxWidth:300)
-                            }
-                        placeholder:
-                            {
-                                Image(systemName: "person.fill.questionmark")
-                            }
-                        }
-                        
-                        Text("\(account.displayName)")
-                        Text("@\(account.acct)")
-                        Text("User since \(account.createdAt.formatted())")
-                        Text("\(account.note)")
-                        HStack
-                        {
-                            VStack
-                            {
-                                Text("\(account.statusesCount)")
-                                Text("Posts")
-                            }
-                            VStack
-                            {
-                                Text("\(account.followersCount)")
-                                Text("Followers")
-                            }
-                            VStack
-                            {
-                                Text("\(account.followingCount)")
-                                Text("Following")
-                            }
-                        }
-                    }
-                    
-                    
-                    VStack
-                    {
-                        Text("ID \(account.id)")
-                        Text("Username \(account.username)")
-                        Text("\(account.url)")
-                        Text("\(account.locked.description)")
-                    }
-                }
-            }
-        }
-        .toolbar
-        {
-            ToolbarItem
-            {
+                    Text("@rdodson").tag(1)
+                    Text("@FrogradioHQ").tag(2)
+                })
+                
                 AddAccount(mast: mast)
             }
+            .padding()
+            
+            Rectangle().frame(height: 1).foregroundColor(.gray)
+            
+            
+            if let account = mast.currentlocalAccountRecord?.usersMastodonAccount
+            {
+                AccountLarge(account: account)
+            }
         }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .padding()
     }
 }
+
 

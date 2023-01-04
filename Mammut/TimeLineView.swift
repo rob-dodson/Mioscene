@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+
+
 struct TimeLineView: View
 {
     @ObservedObject var mast : Mastodon
@@ -18,18 +20,51 @@ struct TimeLineView: View
     @State private var stats2 = [MStatus]()
     @State private var stats3 = [MStatus]()
     @State private var notifications = [MStatus]()
+    @State private var showText = true
     
     var body: some View
     {
-        ZStack
+        VStack
         {
+            HStack
+            {
+                Picker(selection: .constant(1),label: Text("Account"),content:
+                {
+                    Text("@rdodson").tag(1)
+                    Text("@FrogradioHQ").tag(2)
+                })
+                
+                Picker("Timeline",selection: $selectedTimeline)
+                {
+                    ForEach(TimeLine.allCases)
+                    { timeline in
+                        Text(timeline.rawValue.capitalized)
+                    }
+                }
+                .onChange(of: selectedTimeline)
+                { newValue in
+                    fetchStatuses(timeline:newValue)
+                }
+                
+                NewPost(mast: mast, selectedTimeline: $selectedTimeline)
+            }
+            .padding()
+            
+            Rectangle().frame(height: 1).foregroundColor(.gray)
+            
+            if showText
+            {
+                Text("Loading...")
+                    .foregroundColor(settings.theme.accentColor)
+                    .font(.title)
+            }
+
             ScrollView
             {
                 ForEach(getstats(timeline: $selectedTimeline))
                 { mstat in
                     Post(mast:mast,mstat:mstat)
-                        .padding(.horizontal)
-                        .padding(.top)
+                        .padding([.horizontal,.top])
                 }
             }
             .task
@@ -43,50 +78,6 @@ struct TimeLineView: View
                     }
                 }
             }
-        }
-        .toolbar
-        {
-            //
-            // account
-            //
-            ToolbarItem
-            {
-                Picker(selection: .constant(1),label: Text("Account"),content:
-                {
-                    let username = mast.getCurrentMastodonAccount()?.username ?? "error"
-                    Text("@\(username)").tag(1)
-                    Text("Add Account...").tag(2)
-                })
-            }
-            
-            
-            //
-            // timeline
-            //
-            ToolbarItem
-            {
-                Picker("Timeline",selection: $selectedTimeline)
-                {
-                    ForEach(TimeLine.allCases)
-                    { timeline in
-                        Text(timeline.rawValue.capitalized)
-                    }
-                }
-                .onChange(of: selectedTimeline)
-                { newValue in
-                    fetchStatuses(timeline:newValue)
-                }
-            }
-            
-            
-            //
-            // new post
-            //
-            ToolbarItem
-            {
-                NewPost(mast: mast, selectedTimeline: $selectedTimeline)
-            }
-            
         }
     }
     
@@ -108,8 +99,13 @@ struct TimeLineView: View
     
     func fetchStatuses(timeline:TimeLine)
     {
+        showText = true
+        
         mast.getTimeline(timeline: timeline,done:
         { newstats in
+            
+            showText = false
+            
             switch timeline
             {
             case .home:

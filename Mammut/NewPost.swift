@@ -15,7 +15,6 @@ struct NewPost: View
     @EnvironmentObject var settings: Settings
     @State var selectedTimeline : Binding<TimeLine>
     
-    
     @State private var shouldPresentSheet = false
     @State private var newPost : String = ""
     @State private var countColor = Color.green

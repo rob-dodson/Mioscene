@@ -127,9 +127,10 @@ class Mastodon : ObservableObject
                     {
                         do
                         {
-                            let localaccount = LocalAccountRecord(username: email, server: server, lastViewed: true)
+                            let localaccount = LocalAccountRecord(username: email, email:email, server: server, lastViewed: true)
                             try self.sql.updateAccount(account: localaccount)
                             Keys.storeInKeychain(name: localaccount.makeKeyChainName(), value: loginsettings.accessToken)
+                            print("Account created OK")
                         }
                         catch
                         {

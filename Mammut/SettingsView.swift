@@ -24,29 +24,24 @@ struct SettingsView: View
     
     var body: some View
     {
-        
-        VStack(spacing: 100)
+        VStack
         {
-            Text("Settings")
-                .frame(alignment:.topLeading)
-            
-            
-            VStack (alignment:.leading)
+            VStack
             {
                 Text("Themes")
-                    .frame(alignment:.topLeading)
+                    .font(.title)
+                    .foregroundColor(settings.theme.accentColor)
                 
                 ForEach(0 ..< settings.themes.count)
                 { index in
                     
-                    HStack(alignment: .center)
+                    HStack
                     {
                         Button()
                         {
                             pickTheme(index:index)
-                          
                         }
-                        label:
+                    label:
                         {
                             if settings.themes[index].name == settings.theme.name
                             {
@@ -58,23 +53,38 @@ struct SettingsView: View
                             }
                         }
                         .buttonStyle(.plain)
-                        .frame(alignment: .leading)
                         
                         Text(settings.themes[index].name)
-                                
+                        
                         let theme = settings.themes[index]
                         HStack()
                         {
                             Rectangle().fill(theme.accentColor).frame(width: themesize, height: themesize)
+                            Rectangle().fill(theme.bodyColor).frame(width: themesize, height: themesize)
+                            Rectangle().fill(theme.nameColor).frame(width: themesize, height: themesize)
                         }
                     }
                 }
             }
+            
+            VStack
+            {
+                Text("Stuff")
+                    .font(.title)
+                    .foregroundColor(settings.theme.accentColor)
+                
+                Button("Setting 1") { }
+                Button("Setting 1") { }
+                Button("Setting 1") { }
+                Button("Setting 1") { }
+                Button("Setting 1") { }
+                Button("Setting 1") { }
+                Button("Setting 1") { }
+                Button("Setting 1") { }
+            }
         }
-        .frame(width: 300, height: 300)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding()
-        .cornerRadius(15)
-        .opacity(60.0)
     }
    
     func pickTheme(index:Int)

@@ -19,7 +19,6 @@ import KeychainSwift
 
 class Keys
 {
-    
     static func getFromKeychain(name:String) -> String?
     {
         return KeychainSwift().get(name)
