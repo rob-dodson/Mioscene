@@ -79,7 +79,7 @@ struct TabBarButton: View
 {
     @EnvironmentObject var settings: Settings
     
-    let text: String
+    let text : String
     
     @Binding var isSelected: Bool
     
