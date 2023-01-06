@@ -18,6 +18,7 @@ struct AccountLarge: View
     
     @State private var relationship : Relationship?
     
+    
     var body: some View
     {
         VStack(alignment:.leading)
@@ -53,29 +54,44 @@ struct AccountLarge: View
                         {
                             if relationship != nil
                             {
-                                if relationship?.following == true
+                                toggleButton(state: relationship!.following, truelabel: "Unfollow", falselabel: "Follow")
                                 {
-                                    Button("UnFollow")
-                                    {
-                                        mast.unfollow(account: account)
-                                        getRelationship(account: account)
-                                    }
+                                    mast.unfollow(account: account, done:
+                                                    { followingresult in
+                                        relationship = followingresult
+                                    })
+                                } falsefunc: {
+                                    mast.follow(account: account, done:
+                                                    { followingresult in
+                                        relationship = followingresult
+                                    })
                                 }
-                                else
+                                
+                                toggleButton(state: relationship!.muting, truelabel: "Unmute", falselabel: "Mute")
                                 {
-                                    Button("Follow")
-                                    {
-                                        mast.follow(account: account)
-                                        getRelationship(account: account)
-                                    }
+                                    mast.unmute(account: account, done:
+                                                    { followingresult in
+                                        relationship = followingresult
+                                    })
+                                } falsefunc: {
+                                    mast.mute(account: account, done:
+                                                    { followingresult in
+                                        relationship = followingresult
+                                    })
                                 }
-                        
-                                Button("Block") {}
-                                Button("Mute") {}
-                            }
-                            else
-                            {
-                                Button("Edit") {}
+                                
+                                toggleButton(state: relationship!.blocking, truelabel: "Unblock", falselabel: "Block")
+                                {
+                                    mast.unblock(account: account, done:
+                                                    { followingresult in
+                                        relationship = followingresult
+                                    })
+                                } falsefunc: {
+                                    mast.block(account: account, done:
+                                                    { followingresult in
+                                        relationship = followingresult
+                                    })
+                                }
                             }
                         }
                         .onAppear()
@@ -85,6 +101,9 @@ struct AccountLarge: View
                                 getRelationship(account: account)
                             }
                         }
+                        
+                        Text(relationship?.followedBy == true ? "Is following you" : "Is not following you")
+                            .foregroundColor(settings.theme.accentColor).italic()
                     }
                 }
                 
@@ -142,14 +161,27 @@ struct AccountLarge: View
             }
     }
     
+    
     func getRelationship(account:Account)
     {
         mast.getRelationships(ids: [account.id])
         { relationships in
             relationship = relationships[0]
-            for relationship in relationships
+        }
+    }
+    
+    
+    func toggleButton(state:Bool,truelabel:String,falselabel:String,truefunc: @escaping () -> Void,falsefunc:@escaping () -> Void) -> some View
+    {
+        return Button(state == true ? truelabel : falselabel)
+        {
+            if state == true
             {
-                print("relationship: \(relationship)")
+                truefunc()
+            }
+            else
+            {
+                falsefunc()
             }
         }
     }

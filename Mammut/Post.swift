@@ -172,14 +172,14 @@ struct Post: View
                         HStack
                         {
                             Image(systemName: "arrow.2.squarepath")
-                            if let url = URL(string:mstatus.status.account.url)
-                            {
-                                Link("by \(mstatus.status.account.displayName)", destination: url)
-                            }
-                            else
-                            {
-                                Text("by \(mstatus.status.account.displayName)").foregroundColor(settings.theme.linkColor)
-                            }
+                            Text("by")
+                            Text("\(mstatus.status.account.displayName)")
+                                .foregroundColor(settings.theme.linkColor)
+                                .onTapGesture
+                                {
+                                    settings.setSeeAccount(account:mstatus.status.account)
+                                    settings.tabIndex = 1
+                                }
                         }
                     }
                 

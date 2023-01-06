@@ -169,23 +169,86 @@ class Mastodon : ObservableObject
     }
     
     
-    func follow(account:Account)
+    func follow(account:Account,done: @escaping (Relationship) -> Void)
     {
         let request = Accounts.follow(id: account.id)
         client.run(request)
         { result in
             print("follow result \(result)")
+            if let relationship = try? result.get().value
+            {
+                done(relationship)
+            }
         }
     }
     
-    func unfollow(account:Account)
+    func unfollow(account:Account,done: @escaping (Relationship) -> Void)
     {
         let request = Accounts.unfollow(id: account.id)
         client.run(request)
         { result in
             print("unfollow result \(result)")
+            if let relationship = try? result.get().value
+            {
+                done(relationship)
+            }
         }
     }
+    
+    
+    func mute(account:Account,done: @escaping (Relationship) -> Void)
+    {
+        let request = Accounts.mute(id: account.id)
+        client.run(request)
+        { result in
+            print("mute result \(result)")
+            if let relationship = try? result.get().value
+            {
+                done(relationship)
+            }
+        }
+    }
+    
+    func unmute(account:Account,done: @escaping (Relationship) -> Void)
+    {
+        let request = Accounts.unmute(id: account.id)
+        client.run(request)
+        { result in
+            print("unmute result \(result)")
+            if let relationship = try? result.get().value
+            {
+                done(relationship)
+            }
+        }
+    }
+    
+    
+    func block(account:Account,done: @escaping (Relationship) -> Void)
+    {
+        let request = Accounts.block(id: account.id)
+        client.run(request)
+        { result in
+            print("block result \(result)")
+            if let relationship = try? result.get().value
+            {
+                done(relationship)
+            }
+        }
+    }
+    
+    func unblock(account:Account,done: @escaping (Relationship) -> Void)
+    {
+        let request = Accounts.unblock(id: account.id)
+        client.run(request)
+        { result in
+            print("unblock result \(result)")
+            if let relationship = try? result.get().value
+            {
+                done(relationship)
+            }
+        }
+    }
+    
     
     func unfavorite(status:Status)
     {
