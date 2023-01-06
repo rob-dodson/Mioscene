@@ -35,10 +35,13 @@ struct AccountView: View
             
             Rectangle().frame(height: 1).foregroundColor(.gray)
             
-            
-            if let account = mast.currentlocalAccountRecord?.usersMastodonAccount
+            if let account = settings.seeAccount
             {
-                AccountLarge(account: account)
+                AccountLarge(mast:mast,account: account)
+            }
+            else if let account = mast.currentlocalAccountRecord?.usersMastodonAccount
+            {
+                AccountLarge(mast:mast,account: account)
             }
         }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

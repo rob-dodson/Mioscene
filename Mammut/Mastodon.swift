@@ -149,7 +149,44 @@ class Mastodon : ObservableObject
             }
         }
     }
-        
+   
+    
+    func getRelationships(ids:[String],done: @escaping ([Relationship]) -> Void)
+    {
+        let request = Accounts.relationships(ids: ids)
+        client.run(request)
+        { result in
+            print("getRelationships result \(result)")
+            if let relationships = try? result.get().value
+            {
+                done(relationships)
+            }
+            else
+            {
+                done([Relationship]())
+            }
+        }
+    }
+    
+    
+    func follow(account:Account)
+    {
+        let request = Accounts.follow(id: account.id)
+        client.run(request)
+        { result in
+            print("follow result \(result)")
+        }
+    }
+    
+    func unfollow(account:Account)
+    {
+        let request = Accounts.unfollow(id: account.id)
+        client.run(request)
+        { result in
+            print("unfollow result \(result)")
+        }
+    }
+    
     func unfavorite(status:Status)
     {
         let request = Statuses.unfavourite(id: status.id)

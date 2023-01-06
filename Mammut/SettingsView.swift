@@ -86,6 +86,8 @@ struct SettingsView: View
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding()
     }
+    
+ 
    
     func pickTheme(index:Int)
     {

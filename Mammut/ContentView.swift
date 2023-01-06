@@ -13,17 +13,15 @@ struct ContentView: View
 {
     @ObservedObject var mast : Mastodon
     
-    @EnvironmentObject var settings: Settings
-    
-    @State var tabIndex = 0
+    @EnvironmentObject var settings : Settings
     
     var body: some View
     {
         VStack
         {
-            CustomTopTabBar(tabIndex: $tabIndex)
+            CustomTopTabBar(tabIndex: $settings.tabIndex)
             
-            switch tabIndex
+            switch settings.tabIndex
             {
             case 0: TimeLineView(mast: mast)
             case 1: AccountView(mast: mast)
@@ -34,15 +32,16 @@ struct ContentView: View
             }
             Spacer()
         }
-        .frame(width: 500, alignment: .center)
+        .frame(minWidth: 400, alignment: .center)
         .padding(.horizontal, 12)
     }
 }
        
-
 struct CustomTopTabBar: View
 {
     @Binding var tabIndex: Int
+    @EnvironmentObject var settings : Settings
+    
     var body: some View
     {
         Spacer()
@@ -51,16 +50,16 @@ struct CustomTopTabBar: View
         {
             Spacer()
             
-            TabBarButton(text: "Timelines", isSelected: .constant(tabIndex == 0))
+            TabBarButton(text: "Timelines", isSelected: .constant(settings.tabIndex == 0))
                 .onTapGesture { onButtonTapped(index: 0) }
             
-            TabBarButton(text: "Accounts", isSelected: .constant(tabIndex == 1))
+            TabBarButton(text: "Accounts", isSelected: .constant(settings.tabIndex == 1))
                 .onTapGesture { onButtonTapped(index: 1) }
             
-            TabBarButton(text: "Search", isSelected: .constant(tabIndex == 2))
+            TabBarButton(text: "Search", isSelected: .constant(settings.tabIndex == 2))
                 .onTapGesture { onButtonTapped(index: 2) }
             
-            TabBarButton(text: "Settings", isSelected: .constant(tabIndex == 3))
+            TabBarButton(text: "Settings", isSelected: .constant(settings.tabIndex == 3))
                 .onTapGesture { onButtonTapped(index: 3) }
                          
            Spacer()
@@ -70,7 +69,7 @@ struct CustomTopTabBar: View
     
     private func onButtonTapped(index: Int)
     {
-        tabIndex = index
+        settings.tabIndex = index
     }
 }
 

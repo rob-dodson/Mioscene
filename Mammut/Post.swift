@@ -54,10 +54,12 @@ struct Post: View
                 .cornerRadius(15)
                 .onTapGesture
                 {
-                    if let url = URL(string:status.account.url)
-                    {
-                        NSWorkspace.shared.open(url)
-                    }
+                    settings.setSeeAccount(account:status.account)
+                    settings.tabIndex = 1
+                //    if let url = URL(string:status.account.url)
+                 //   {
+                 //       NSWorkspace.shared.open(url)
+                 //   }
                 }
               
                 

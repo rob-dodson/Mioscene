@@ -7,7 +7,7 @@
 
 import Foundation
 import SwiftUI
-import Combine
+import MastodonKit
 
 
 struct Theme : Identifiable
@@ -51,6 +51,8 @@ struct Theme : Identifiable
         self.blockColor = colors[colorName.block.rawValue] ?? Color.gray
     }
     
+    
+    
     func color(name:colorName) -> Color
     {
         return colors[name.rawValue] ?? Color.white
@@ -61,7 +63,10 @@ struct Theme : Identifiable
 class Settings: ObservableObject
 {
     @Published var theme : Theme
-            
+    @Published var tabIndex : Int
+    @Published var seeAccount : MastodonKit.Account?
+    
+    
     var themes : [Theme]
     
     
@@ -79,6 +84,7 @@ class Settings: ObservableObject
     
     init()
     {
+        tabIndex = 0
         themes = Array<Theme>()
         let themeNames = ["Hyper","Serious"]
         
@@ -104,6 +110,11 @@ class Settings: ObservableObject
          headingFont = Font.system(size: fontsize - 22.0)
          mainFont = Font.system(size: fontsize - 25.0)
          smallFont = Font.system(size: fontsize - 30.0)
+    }
+    
+    func setSeeAccount(account:Account)
+    {
+        seeAccount = account
     }
 }
 

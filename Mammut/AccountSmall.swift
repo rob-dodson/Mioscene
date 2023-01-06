@@ -12,6 +12,7 @@ import MastodonKit
 struct AccountSmall: View
 {
     @EnvironmentObject var settings: Settings
+    
     @State var account : Account
     
     var body: some View
@@ -42,6 +43,11 @@ struct AccountSmall: View
                         let name = "@\(account.acct)"
                         Link(name,destination: URL(string:account.url)!)
                             .font(.title3)
+                    }
+                    .onTapGesture
+                    {
+                        settings.setSeeAccount(account:account)
+                        settings.tabIndex = 1
                     }
                 }
                 
