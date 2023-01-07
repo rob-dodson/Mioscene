@@ -38,60 +38,48 @@ struct AccountLarge: View
                     
                     VStack
                     {
-                        AsyncImage(url: URL(string: account.header))
-                        { image in
-                            image.resizable()
-                                .aspectRatio(contentMode: .fit)
-                            //.frame(maxWidth:300)
-                        }
-                    placeholder:
+                        if !account.header.hasSuffix("missing.png")
                         {
-                            Image(systemName: "person.fill.questionmark")
+                            AsyncImage(url: URL(string: account.header))
+                            { image in
+                                image.resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(maxWidth:300)
+                            }
+                        placeholder:
+                            {
+                                Image(systemName: "person.fill.questionmark")
+                            }
+                            .cornerRadius(15)
                         }
-                        .cornerRadius(15)
+                        else
+                        {
+                            Image(systemName: "photo.fill").imageScale(.large)
+                        }
+                            
                         
                         HStack
                         {
                             if relationship != nil
                             {
-                                toggleButton(state: relationship!.following, truelabel: "Unfollow", falselabel: "Follow")
+                                if relationship?.requested == true
                                 {
-                                    mast.unfollow(account: account, done:
-                                                    { followingresult in
-                                        relationship = followingresult
-                                    })
-                                } falsefunc: {
-                                    mast.follow(account: account, done:
-                                                    { followingresult in
-                                        relationship = followingresult
-                                    })
+                                    Text("Follow Requested") // Need to add: withdraw request button
+                                }
+                                else
+                                {
+                                    toggleButton(state: relationship!.following, truelabel: "Unfollow", falselabel: "Follow",
+                                                 truefunc: { mast.unfollow(account: account, done: { followingresult in relationship = followingresult }) },
+                                                 falsefunc: { mast.follow(account: account, done: { followingresult in relationship = followingresult }) })
                                 }
                                 
-                                toggleButton(state: relationship!.muting, truelabel: "Unmute", falselabel: "Mute")
-                                {
-                                    mast.unmute(account: account, done:
-                                                    { followingresult in
-                                        relationship = followingresult
-                                    })
-                                } falsefunc: {
-                                    mast.mute(account: account, done:
-                                                    { followingresult in
-                                        relationship = followingresult
-                                    })
-                                }
+                                toggleButton(state: relationship!.following, truelabel: "Unmute", falselabel: "Mute",
+                            truefunc: { mast.unmute(account: account, done: { followingresult in relationship = followingresult }) },
+                            falsefunc: { mast.mute(account: account, done: { followingresult in relationship = followingresult }) })
                                 
-                                toggleButton(state: relationship!.blocking, truelabel: "Unblock", falselabel: "Block")
-                                {
-                                    mast.unblock(account: account, done:
-                                                    { followingresult in
-                                        relationship = followingresult
-                                    })
-                                } falsefunc: {
-                                    mast.block(account: account, done:
-                                                    { followingresult in
-                                        relationship = followingresult
-                                    })
-                                }
+                                toggleButton(state: relationship!.following, truelabel: "Unblock", falselabel: "Block",
+                            truefunc: { mast.unblock(account: account, done: { followingresult in relationship = followingresult }) },
+                            falsefunc: { mast.block(account: account, done: { followingresult in relationship = followingresult }) })
                             }
                         }
                         .onAppear()
