@@ -11,7 +11,12 @@ import MastodonKit
 
 enum TimeLine : String,CaseIterable, Identifiable,Equatable
 {
-    case home, localTimeline = "Local Timeline", publicTimeline = "Public Timeline", notifications = "Notifications"
+    case home,
+         localTimeline = "Local Timeline",
+         publicTimeline = "Public Timeline",
+         tag = "Tag",
+         favorites = "Favorites"
+    
     var id: Self { self }
 }
 
@@ -299,8 +304,26 @@ class Mastodon : ObservableObject
         }
     }
     
+    func getNotifications(done: @escaping ([MastodonKit.Notification]) -> Void)
+    {
+        let request  = MastodonKit.Notifications.all()
+        
+        var returnnotes = [MastodonKit.Notification]()
+        
+        client.run(request)
+        { result in
+                if let notes = try? result.get().value
+                {
+                    for note in notes
+                    {
+                        returnnotes.append(note)
+                    }
+                    done(returnnotes)
+                }
+        }
+    }
     
-    func getTimeline(timeline:TimeLine,done: @escaping ([MStatus]) -> Void)
+    func getTimeline(timeline:TimeLine,tag:String,done: @escaping ([MStatus]) -> Void)
     {
         currentTimeline = timeline
         
@@ -314,8 +337,10 @@ class Mastodon : ObservableObject
             request = Timelines.public(local:true,range: .limit(50))
         case .publicTimeline:
             request = Timelines.public(local:false,range: .limit(50))
-        case .notifications:
-            request = Timelines.tag("#help")
+        case .favorites:
+            request = Favourites.all()
+        case .tag:
+            request = Timelines.tag(tag)
         }
         
         var returnstats = [MStatus]()

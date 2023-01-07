@@ -20,12 +20,17 @@ struct TimeLineView: View
     @State private var stats2 = [MStatus]()
     @State private var stats3 = [MStatus]()
     @State private var notifications = [MStatus]()
-    @State private var showText = true
+    @State private var favorites = [MStatus]()
+    @State private var tags = [MStatus]()
+    @State private var showLoading = true
+    @State private var showTagAsk = false
+    @State private var tag : String = ""
     
     var body: some View
     {
         VStack
         {
+            
             HStack
             {
                 Picker(selection: .constant(1),label: Text("Account"),content:
@@ -43,7 +48,15 @@ struct TimeLineView: View
                 }
                 .onChange(of: selectedTimeline)
                 { newValue in
-                    fetchStatuses(timeline:newValue)
+                    if selectedTimeline == .tag
+                    {
+                        showTagAsk = true
+                    }
+                    else
+                    {
+                        showTagAsk = false
+                        fetchStatuses(timeline:newValue,tag:tag)
+                    }
                 }
                 
                 NewPost(mast: mast, selectedTimeline: $selectedTimeline)
@@ -52,7 +65,20 @@ struct TimeLineView: View
             
             Rectangle().frame(height: 1).foregroundColor(.gray)
             
-            if showText
+            if showTagAsk == true
+            {
+                TextField("Tag", text: $tag)
+                    .padding()
+                    .font(.title)
+                
+                Button("Load")
+                {
+                    fetchStatuses(timeline:.tag,tag:tag)
+                }
+                .keyboardShortcut(.defaultAction)
+            }
+            
+            if showLoading
             {
                 Text("Loading...")
                     .foregroundColor(settings.theme.accentColor)
@@ -73,7 +99,7 @@ struct TimeLineView: View
                 {
                     while(true)
                     {
-                        fetchStatuses(timeline: selectedTimeline)
+                        fetchStatuses(timeline: selectedTimeline,tag:tag)
                         try await Task.sleep(nanoseconds: 60 * 15 * NSEC_PER_SEC)
                     }
                 }
@@ -91,20 +117,22 @@ struct TimeLineView: View
             return stats2
         case .publicTimeline:
             return stats3
-        case .notifications:
-            return notifications
+        case .favorites:
+            return favorites
+        case .tag:
+            return tags
         }
     }
      
     
-    func fetchStatuses(timeline:TimeLine)
+    func fetchStatuses(timeline:TimeLine,tag:String)
     {
-        showText = true
+        showLoading = true
         
-        mast.getTimeline(timeline: timeline,done:
+        mast.getTimeline(timeline: timeline,tag:tag,done:
         { newstats in
             
-            showText = false
+            showLoading = false
             
             switch timeline
             {
@@ -114,8 +142,10 @@ struct TimeLineView: View
                 stats2 = newstats
             case .publicTimeline:
                 stats3 = newstats
-            case .notifications:
-                notifications = newstats
+            case .favorites:
+                favorites = newstats
+            case .tag:
+                tags = newstats
             }
         })
     }
