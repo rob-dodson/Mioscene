@@ -18,6 +18,8 @@ struct NewPost: View
     @State private var shouldPresentSheet = false
     @State private var newPost : String = ""
     @State private var countColor = Color.green
+    @State private var showContentWarning : Bool = false
+    @State private var contentWarning : String = ""
     
     var body: some View
     {
@@ -42,6 +44,15 @@ struct NewPost: View
             
             VStack(alignment: .trailing)
             {
+                if showContentWarning == true
+                {
+                    TextField("Content Warning", text: $contentWarning)
+                        .foregroundColor(settings.theme.bodyColor)
+                        .font(.title)
+                        .padding()
+                }
+                
+                
                 TextEditor(text: $newPost)
                     .foregroundColor(settings.theme.bodyColor)
                     .font(.title)
@@ -59,9 +70,21 @@ struct NewPost: View
                 
                 ToolbarItem
                 {
+                    Button
+                    {
+                        showContentWarning.toggle()
+                    }
+                label:
+                    {
+                        Image(systemName: "exclamationmark.triangle")
+                    }
+                }
+                
+                ToolbarItem
+                {
                     Button("Post")
                     {
-                        mast.post(newpost:$newPost.wrappedValue)
+                        mast.post(newpost:newPost,spoiler:showContentWarning == true ? contentWarning : nil)
                         shouldPresentSheet = false
                     }
                 }
