@@ -32,7 +32,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		AE06EBEC294D16BB006CAB67 /* Mammut.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mammut.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AE06EBEC294D16BB006CAB67 /* Mioscene.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mioscene.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE06EBEF294D16BB006CAB67 /* MammutApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MammutApp.swift; sourceTree = "<group>"; };
 		AE06EBF1294D16BB006CAB67 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AE06EBF3294D16BC006CAB67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -84,7 +84,7 @@
 		AE06EBED294D16BB006CAB67 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				AE06EBEC294D16BB006CAB67 /* Mammut.app */,
+				AE06EBEC294D16BB006CAB67 /* Mioscene.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -135,9 +135,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AE06EBEB294D16BB006CAB67 /* Mammut */ = {
+		AE06EBEB294D16BB006CAB67 /* Mioscene */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AE06EBFB294D16BC006CAB67 /* Build configuration list for PBXNativeTarget "Mammut" */;
+			buildConfigurationList = AE06EBFB294D16BC006CAB67 /* Build configuration list for PBXNativeTarget "Mioscene" */;
 			buildPhases = (
 				AE06EBE8294D16BB006CAB67 /* Sources */,
 				AE06EBE9294D16BB006CAB67 /* Frameworks */,
@@ -147,14 +147,14 @@
 			);
 			dependencies = (
 			);
-			name = Mammut;
+			name = Mioscene;
 			packageProductDependencies = (
 				AE28C5E1295B723A00C8C928 /* MastodonKit */,
 				AE28C5F329635DE600C8C928 /* KeychainSwift */,
 				AE28C5F62963717D00C8C928 /* GRDB */,
 			);
 			productName = Mammut;
-			productReference = AE06EBEC294D16BB006CAB67 /* Mammut.app */;
+			productReference = AE06EBEC294D16BB006CAB67 /* Mioscene.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -172,7 +172,7 @@
 					};
 				};
 			};
-			buildConfigurationList = AE06EBE7294D16BB006CAB67 /* Build configuration list for PBXProject "Mammut" */;
+			buildConfigurationList = AE06EBE7294D16BB006CAB67 /* Build configuration list for PBXProject "Mioscene" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -189,7 +189,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AE06EBEB294D16BB006CAB67 /* Mammut */,
+				AE06EBEB294D16BB006CAB67 /* Mioscene */,
 			);
 		};
 /* End PBXProject section */
@@ -356,7 +356,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Mammut;
+				INFOPLIST_KEY_CFBundleDisplayName = Miocene;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -373,7 +373,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = shyfrogproductions.com.Mammut;
+				PRODUCT_BUNDLE_IDENTIFIER = shyfrogproductions.com.Mioscene;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -396,7 +396,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Mammut;
+				INFOPLIST_KEY_CFBundleDisplayName = Miocene;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -413,7 +413,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.1;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = shyfrogproductions.com.Mammut;
+				PRODUCT_BUNDLE_IDENTIFIER = shyfrogproductions.com.Mioscene;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -426,7 +426,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AE06EBE7294D16BB006CAB67 /* Build configuration list for PBXProject "Mammut" */ = {
+		AE06EBE7294D16BB006CAB67 /* Build configuration list for PBXProject "Mioscene" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AE06EBF9294D16BC006CAB67 /* Debug */,
@@ -435,7 +435,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AE06EBFB294D16BC006CAB67 /* Build configuration list for PBXNativeTarget "Mammut" */ = {
+		AE06EBFB294D16BC006CAB67 /* Build configuration list for PBXNativeTarget "Mioscene" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				AE06EBFC294D16BC006CAB67 /* Debug */,
