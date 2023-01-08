@@ -56,10 +56,6 @@ struct Post: View
                 {
                     settings.setSeeAccount(account:status.account)
                     settings.tabIndex = 1
-                //    if let url = URL(string:status.account.url)
-                 //   {
-                 //       NSWorkspace.shared.open(url)
-                 //   }
                 }
               
                 
@@ -148,19 +144,7 @@ struct Post: View
                     //
                     if status.tags.count > 0
                     {
-                        HStack
-                        {
-                            ForEach(status.tags.indices, id:\.self)
-                            { index in
-                                Button("#\(status.tags[index].name)", action:
-                                {
-                                    if let url = URL(string:status.tags[index].url)
-                                    {
-                                        NSWorkspace.shared.open(url)
-                                    }
-                                })
-                            }
-                        }
+                        makeTagStack(tags: status.tags)
                     }
                     
                            
@@ -299,7 +283,38 @@ struct Post: View
             }
         }
     }
+    
+    func makeTagStack(tags:[Tag]) -> some View
+    {
+        let min = 50.0
+        let max = 300.0
+        let columns = [
+            GridItem(.flexible(minimum: min, maximum: max)),
+            GridItem(.flexible(minimum: min, maximum: max)),
+            GridItem(.flexible(minimum: min, maximum: max)),
+            GridItem(.flexible(minimum: min, maximum: max)),
+            ]
+        
+        return Grid
+        {
+            LazyVGrid(columns: columns,alignment:.leading)
+            {
+                ForEach(tags.indices, id:\.self)
+                { index in
+                    let name = "#\(tags[index].name)"
+                    Button(name, action:
+                    {
+                        settings.currentTag = name
+                        settings.tabIndex = 0
+                    }).help(name)
+                }
+            }
+        }
+    }
 }
+
+
+
 
 
 func dateSinceNowToString(date:Date) -> String

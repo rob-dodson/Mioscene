@@ -24,7 +24,7 @@ struct TimeLineView: View
     @State private var tags = [MStatus]()
     @State private var showLoading = true
     @State private var showTagAsk = false
-    @State private var tag : String = ""
+  //  @State private var tag : String = ""
     
     var body: some View
     {
@@ -55,7 +55,7 @@ struct TimeLineView: View
                     else
                     {
                         showTagAsk = false
-                        fetchStatuses(timeline:newValue,tag:tag)
+                        fetchStatuses(timeline:newValue,tag:settings.currentTag)
                     }
                 }
                 
@@ -67,15 +67,18 @@ struct TimeLineView: View
             
             if showTagAsk == true
             {
-                TextField("Tag", text: $tag)
-                    .padding()
-                    .font(.title)
-                
-                Button("Load")
+                HStack
                 {
-                    fetchStatuses(timeline:.tag,tag:tag)
+                    TextField("#tag", text: $settings.currentTag)
+                        .padding()
+                        .font(.title)
+                    
+                    Button("Load")
+                    {
+                        fetchStatuses(timeline:.tag,tag:settings.currentTag)
+                    }
+                    .keyboardShortcut(.defaultAction)
                 }
-                .keyboardShortcut(.defaultAction)
             }
             
             if showLoading
@@ -99,7 +102,7 @@ struct TimeLineView: View
                 {
                     while(true)
                     {
-                        fetchStatuses(timeline: selectedTimeline,tag:tag)
+                        fetchStatuses(timeline: selectedTimeline,tag:settings.currentTag)
                         try await Task.sleep(nanoseconds: 60 * 15 * NSEC_PER_SEC)
                     }
                 }

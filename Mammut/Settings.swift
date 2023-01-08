@@ -65,7 +65,7 @@ class Settings: ObservableObject
     @Published var theme : Theme
     @Published var tabIndex : Int
     @Published var seeAccount : MastodonKit.Account?
-    
+    @Published var currentTag = String()
     
     var themes : [Theme]
     
