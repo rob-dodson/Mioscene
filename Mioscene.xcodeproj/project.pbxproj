@@ -36,7 +36,7 @@
 		AE06EBEF294D16BB006CAB67 /* MammutApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MammutApp.swift; sourceTree = "<group>"; };
 		AE06EBF1294D16BB006CAB67 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AE06EBF3294D16BC006CAB67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		AE06EBF5294D16BC006CAB67 /* Mammut.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mammut.entitlements; sourceTree = "<group>"; };
+		AE06EBF5294D16BC006CAB67 /* Mioscene.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mioscene.entitlements; sourceTree = "<group>"; };
 		AE06EBF7294D16BC006CAB67 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		AE06EC01294D1D1D006CAB67 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		AE06EC03294D234D006CAB67 /* Mastodon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mastodon.swift; sourceTree = "<group>"; };
@@ -75,7 +75,7 @@
 			isa = PBXGroup;
 			children = (
 				AE28C5DC295B6EB400C8C928 /* MastodonKit */,
-				AE06EBEE294D16BB006CAB67 /* Mammut */,
+				AE06EBEE294D16BB006CAB67 /* Mioscene */,
 				AE06EBED294D16BB006CAB67 /* Products */,
 				AE28C5DD295B6EEE00C8C928 /* Frameworks */,
 			);
@@ -89,7 +89,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AE06EBEE294D16BB006CAB67 /* Mammut */ = {
+		AE06EBEE294D16BB006CAB67 /* Mioscene */ = {
 			isa = PBXGroup;
 			children = (
 				AE28C5FE296524AE00C8C928 /* ErrorSystem.swift */,
@@ -110,10 +110,10 @@
 				AE28C5F82963719B00C8C928 /* SqliteDB.swift */,
 				AE28C5FA2963727500C8C928 /* LocalAccountRecord.swift */,
 				AE06EBF3294D16BC006CAB67 /* Assets.xcassets */,
-				AE06EBF5294D16BC006CAB67 /* Mammut.entitlements */,
+				AE06EBF5294D16BC006CAB67 /* Mioscene.entitlements */,
 				AE06EBF6294D16BC006CAB67 /* Preview Content */,
 			);
-			path = Mammut;
+			path = Mioscene;
 			sourceTree = "<group>";
 		};
 		AE06EBF6294D16BC006CAB67 /* Preview Content */ = {
@@ -348,7 +348,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Mammut/Mammut.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Mioscene/Mioscene.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";
@@ -388,7 +388,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Mammut/Mammut.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Mioscene/Mioscene.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "";

@@ -46,8 +46,7 @@ struct AccountSmall: View
                     }
                     .onTapGesture
                     {
-                        settings.setSeeAccount(account:account)
-                        settings.tabIndex = .Accounts
+                        settings.showAccount(account:account)
                     }
                 }
                 

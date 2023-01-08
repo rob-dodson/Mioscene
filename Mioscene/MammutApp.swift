@@ -17,7 +17,7 @@ import SwiftUI
 
 
 @main
-struct MammutApp: App
+struct MiosceneApp: App
 {
     @StateObject private var mast = Mastodon()
     @StateObject var settings = Settings()

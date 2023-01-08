@@ -54,8 +54,7 @@ struct Post: View
                 .cornerRadius(15)
                 .onTapGesture
                 {
-                    settings.setSeeAccount(account:status.account)
-                    settings.tabIndex = .Accounts
+                    settings.showAccount(account:status.account)
                 }
               
                 
@@ -161,8 +160,7 @@ struct Post: View
                                 .foregroundColor(settings.theme.linkColor)
                                 .onTapGesture
                                 {
-                                    settings.setSeeAccount(account:mstatus.status.account)
-                                    settings.tabIndex = .Accounts
+                                    settings.showAccount(account:mstatus.status.account)
                                 }
                         }
                     }
@@ -304,17 +302,13 @@ struct Post: View
                     let name = "#\(tags[index].name)"
                     Button(name, action:
                     {
-                        settings.currentTag = name
-                        settings.tabIndex = .TimeLine
+                        settings.showTag(tag: name)
                     }).help(name)
                 }
             }
         }
     }
 }
-
-
-
 
 
 func dateSinceNowToString(date:Date) -> String

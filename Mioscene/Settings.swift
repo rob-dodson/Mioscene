@@ -124,10 +124,17 @@ class Settings: ObservableObject
          mainFont = Font.system(size: fontsize - 25.0)
          smallFont = Font.system(size: fontsize - 30.0)
     }
+   
+    func showTag(tag:String)
+    {
+        currentTag = tag
+        tabIndex = .TimeLine
+    }
     
-    func setSeeAccount(account:Account)
+    func showAccount(account:Account)
     {
         seeAccount = account
+        tabIndex = .Accounts
     }
 }
 
