@@ -295,9 +295,9 @@ class Mastodon : ObservableObject
     }
     
     
-    func post(newpost:String,spoiler:String?)
+    func post(newpost:String,spoiler:String?,visibility:Visibility)
     {
-        let request = Statuses.create(status:newpost,spoilerText:spoiler)
+        let request = Statuses.create(status:newpost,spoilerText:spoiler,visibility: visibility)
         client.run(request)
         { result in
             print("result \(result)")

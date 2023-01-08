@@ -9,6 +9,7 @@ import SwiftUI
 import MastodonKit
 
 
+
 struct NewPost: View
 {
     @ObservedObject var mast : Mastodon
@@ -20,6 +21,8 @@ struct NewPost: View
     @State private var countColor = Color.green
     @State private var showContentWarning : Bool = false
     @State private var contentWarning : String = ""
+    @State private var postVisibility : MastodonKit.Visibility = .public
+    
     
     var body: some View
     {
@@ -42,7 +45,7 @@ struct NewPost: View
                 .font(.title)
                 .padding(.top)
             
-            VStack(alignment: .trailing)
+            VStack(alignment: .leading)
             {
                 if showContentWarning == true
                 {
@@ -52,22 +55,32 @@ struct NewPost: View
                         .padding()
                 }
                 
-                
                 TextEditor(text: $newPost)
                     .foregroundColor(settings.theme.bodyColor)
                     .font(.title)
                     .scrollIndicators(.automatic)
+                
+                VStack
+                {
+                    switch postVisibility
+                    {
+                    case .public:
+                        Text("The post is public.\nVisible on Profile: Anyone including anonymous viewers.\nVisible on Public Timeline: Yes.\nFederates to other instances: Yes.")
+                    case .unlisted:
+                        Text("The post is unlisted.\nVisible on Profile: Anyone including anonymous viewers.\nVisible on Public Timeline: No.\nFederates to other instances: Yes.")
+                    case .private:
+                        Text("The post is private.\nVisible on Profile: Followers only.\nVisible on Public Timeline: No.\nFederates to other instances: Only remote @mentions.")
+                    case .direct:
+                        Text("The post is direct.\nVisible on Profile: No.\nVisible on Public Timeline: No.\nFederates to other instances: Only remote @mentions.")
+                    }
+                }
+                .padding(EdgeInsets(top: 1, leading: 10, bottom: 10, trailing: 10))
+                .font(.footnote).italic()
+                .foregroundColor(settings.theme.minorColor)
+                
             }
             .toolbar
             {
-                ToolbarItem
-                {
-                    Button("Cancel")
-                    {
-                        shouldPresentSheet = false
-                    }
-                }
-                
                 ToolbarItem
                 {
                     Button
@@ -79,13 +92,16 @@ struct NewPost: View
                         Image(systemName: "exclamationmark.triangle")
                     }
                 }
+               
                 
                 ToolbarItem
                 {
-                    Button("Post")
+                    Picker("Visibility", selection: $postVisibility)
                     {
-                        mast.post(newpost:newPost,spoiler:showContentWarning == true ? contentWarning : nil)
-                        shouldPresentSheet = false
+                        Text(MastodonKit.Visibility.public.rawValue).tag(MastodonKit.Visibility.public)
+                        Text(MastodonKit.Visibility.unlisted.rawValue).tag(MastodonKit.Visibility.unlisted)
+                        Text(MastodonKit.Visibility.private.rawValue).tag(MastodonKit.Visibility.private)
+                        Text(MastodonKit.Visibility.direct.rawValue).tag(MastodonKit.Visibility.direct)
                     }
                 }
                 
@@ -100,6 +116,24 @@ struct NewPost: View
                     {
                         Text("\(500 - $newPost.wrappedValue.count)")
                             .foregroundColor(.red)
+                    }
+                }
+                
+                ToolbarItem
+                {
+                    Button("Cancel")
+                    {
+                        shouldPresentSheet = false
+                    }
+                }
+                
+                
+                ToolbarItem
+                {
+                    Button("Post")
+                    {
+                        mast.post(newpost:newPost,spoiler:showContentWarning == true ? contentWarning : nil,visibility:postVisibility)
+                        shouldPresentSheet = false
                     }
                 }
             }
