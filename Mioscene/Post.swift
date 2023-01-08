@@ -17,6 +17,7 @@ struct Post: View
     
     @EnvironmentObject var settings: Settings
     
+    @State var showSensitiveContent : Bool = false
     
     var body: some View
     {
@@ -83,15 +84,36 @@ struct Post: View
                         
                     }
                    
-                    
-                    //
-                    // html body of post
-                    //
-                    if let nsAttrString = status.content.htmlAttributedString(color:settings.theme.bodyColor,linkColor: settings.theme.linkColor)
+                    if status.sensitive == true
                     {
-                        Text(AttributedString(nsAttrString))
-                            .font(.body)
-                            .foregroundColor(settings.theme.bodyColor)
+                        HStack
+                        {
+                            Button
+                            {
+                                showSensitiveContent.toggle()
+                            }
+                        label:
+                            {
+                                Text("CW")
+                            }
+                            
+                            Text(status.spoilerText)
+                        }
+                        .padding(EdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4))
+                        .border(width: 1, edges: [.top,.bottom,.leading,.trailing], color: settings.theme.accentColor)
+                    }
+
+                    if status.sensitive == false || (status.sensitive == true && showSensitiveContent == true)
+                    {
+                        //
+                        // html body of post
+                        //
+                        if let nsAttrString = status.content.htmlAttributedString(color:settings.theme.bodyColor,linkColor: settings.theme.linkColor)
+                        {
+                            Text(AttributedString(nsAttrString))
+                                .font(.body)
+                                .foregroundColor(settings.theme.bodyColor)
+                        }
                     }
                   
                     
