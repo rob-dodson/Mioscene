@@ -24,7 +24,6 @@ struct TimeLineView: View
     @State private var tags = [MStatus]()
     @State private var showLoading = true
     @State private var showTagAsk = false
-  //  @State private var tag : String = ""
     
     var body: some View
     {

@@ -40,14 +40,14 @@ struct AccountSmall: View
                             .font(.title)
                             .foregroundColor(settings.theme.nameColor)
                         
-                        let name = "@\(account.acct)"
-                        Link(name,destination: URL(string:account.url)!)
+                        Text("@\(account.acct)")
                             .font(.title3)
+                            .foregroundColor(settings.theme.minorColor)
                     }
                     .onTapGesture
                     {
                         settings.setSeeAccount(account:account)
-                        settings.tabIndex = 1
+                        settings.tabIndex = .Accounts
                     }
                 }
                 
@@ -69,6 +69,7 @@ struct AccountSmall: View
                         Text("Following")
                     }
                 }
+                .foregroundColor(settings.theme.minorColor)
                 .font(.footnote)
             }
         }

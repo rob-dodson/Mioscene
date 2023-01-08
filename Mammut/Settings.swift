@@ -60,10 +60,24 @@ struct Theme : Identifiable
 }
 
 
+enum TabIndex : Int
+{
+    case TimeLine = 0
+    case Accounts
+    case Search
+    case Settings
+}
+
+class CurrentTabIndex : ObservableObject
+{
+    var index : TabIndex = .TimeLine
+}
+
+
 class Settings: ObservableObject
 {
     @Published var theme : Theme
-    @Published var tabIndex : Int
+    @Published var tabIndex : TabIndex = .TimeLine
     @Published var seeAccount : MastodonKit.Account?
     @Published var currentTag = String()
     
@@ -84,7 +98,6 @@ class Settings: ObservableObject
     
     init()
     {
-        tabIndex = 0
         themes = Array<Theme>()
         let themeNames = ["Hyper","Serious"]
         

@@ -9,6 +9,8 @@ import SwiftUI
 import MastodonKit
 
 
+
+
 struct ContentView: View
 {
     @ObservedObject var mast : Mastodon
@@ -23,12 +25,10 @@ struct ContentView: View
             
             switch settings.tabIndex
             {
-            case 0: TimeLineView(mast: mast)
-            case 1: AccountView(mast: mast)
-            case 2: SearchView(mast: mast)
-            case 3: SettingsView(mast: mast)
-            default:
-                TimeLineView(mast: mast)
+            case .TimeLine: TimeLineView(mast: mast)
+            case .Accounts: AccountView(mast: mast)
+            case .Search: SearchView(mast: mast)
+            case .Settings: SettingsView(mast: mast)
             }
             Spacer()
         }
@@ -39,7 +39,7 @@ struct ContentView: View
        
 struct CustomTopTabBar: View
 {
-    @Binding var tabIndex: Int
+    @Binding var tabIndex: TabIndex
     @EnvironmentObject var settings : Settings
     
     var body: some View
@@ -50,24 +50,24 @@ struct CustomTopTabBar: View
         {
             Spacer()
             
-            TabBarButton(text: "Timelines", isSelected: .constant(settings.tabIndex == 0))
-                .onTapGesture { onButtonTapped(index: 0) }
+            TabBarButton(text: "Timelines", isSelected: .constant(settings.tabIndex == .TimeLine))
+                .onTapGesture { onButtonTapped(index: .TimeLine) }
             
-            TabBarButton(text: "Accounts", isSelected: .constant(settings.tabIndex == 1))
-                .onTapGesture { onButtonTapped(index: 1) }
+            TabBarButton(text: "Accounts", isSelected: .constant(settings.tabIndex == .Accounts))
+                .onTapGesture { onButtonTapped(index: .Accounts) }
             
-            TabBarButton(text: "Search", isSelected: .constant(settings.tabIndex == 2))
-                .onTapGesture { onButtonTapped(index: 2) }
+            TabBarButton(text: "Search", isSelected: .constant(settings.tabIndex == .Search))
+                .onTapGesture { onButtonTapped(index: .Search) }
             
-            TabBarButton(text: "Settings", isSelected: .constant(settings.tabIndex == 3))
-                .onTapGesture { onButtonTapped(index: 3) }
+            TabBarButton(text: "Settings", isSelected: .constant(settings.tabIndex == .Settings))
+                .onTapGesture { onButtonTapped(index: .Settings) }
                          
            Spacer()
         }
         .border(width: 1, edges: [.bottom], color: .black)
     }
     
-    private func onButtonTapped(index: Int)
+    private func onButtonTapped(index: TabIndex)
     {
         settings.tabIndex = index
     }

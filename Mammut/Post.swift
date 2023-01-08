@@ -55,7 +55,7 @@ struct Post: View
                 .onTapGesture
                 {
                     settings.setSeeAccount(account:status.account)
-                    settings.tabIndex = 1
+                    settings.tabIndex = .Accounts
                 }
               
                 
@@ -162,7 +162,7 @@ struct Post: View
                                 .onTapGesture
                                 {
                                     settings.setSeeAccount(account:mstatus.status.account)
-                                    settings.tabIndex = 1
+                                    settings.tabIndex = .Accounts
                                 }
                         }
                     }
@@ -287,7 +287,7 @@ struct Post: View
     func makeTagStack(tags:[Tag]) -> some View
     {
         let min = 50.0
-        let max = 300.0
+        let max = 400.0
         let columns = [
             GridItem(.flexible(minimum: min, maximum: max)),
             GridItem(.flexible(minimum: min, maximum: max)),
@@ -305,7 +305,7 @@ struct Post: View
                     Button(name, action:
                     {
                         settings.currentTag = name
-                        settings.tabIndex = 0
+                        settings.tabIndex = .TimeLine
                     }).help(name)
                 }
             }

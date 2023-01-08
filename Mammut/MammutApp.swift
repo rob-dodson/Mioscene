@@ -15,17 +15,13 @@
 
 import SwiftUI
 
-class TabIndex : ObservableObject
-{
-    var index : Int = 0
-}
 
 @main
 struct MammutApp: App
 {
     @StateObject private var mast = Mastodon()
     @StateObject var settings = Settings()
-    @StateObject var tabindex = TabIndex()
+    @StateObject var currenttabindex = CurrentTabIndex()
     
     var body: some Scene
     {
