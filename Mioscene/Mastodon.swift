@@ -305,31 +305,50 @@ class Mastodon : ObservableObject
     
     func post(newpost:String,spoiler:String?,visibility:Visibility,attachedURLS:[AttachmentURL]?)
     {
-        if let aa = attachedURLS
+        if let urls = attachedURLS
         {
             Task
             {
-                let waitcounttotal = aa.count
+                let waitcounttotal = urls.count
                 var waitcount = 0
+                var retrywait = 0
+                let maxwait = 10
                 
                 var mediaIDs = [String]()
                 
-                for index in aa.indices
+                for index in urls.indices
                 {
                     do
                     {
-                        let imageData = try Data(contentsOf: aa[index].url!)
-                        let media = MediaAttachment.png(imageData)
-                        
-                        let mediarequest = Media.upload(media: media)
-                        client.run(mediarequest)
-                        { result in
-                            print("media upload result \(result)")
+                        if let url = urls[index].url
+                        {
+                            let imageData = try Data(contentsOf: url)
+                            let imgFormat = imageData.imageFormat
                             
-                            if let attachment = try? result.get().value
+                            let media : MediaAttachment
+                            switch imgFormat
                             {
-                                mediaIDs.append(attachment.id)
-                                waitcount += 1
+                            case .gif:
+                                media = MediaAttachment.gif(imageData)
+                            case .jpeg:
+                                media = MediaAttachment.jpeg(imageData)
+                            case .png:
+                                media = MediaAttachment.png(imageData)
+                            default:
+                                print("unsupported media type")
+                                continue
+                            }
+                            
+                            let mediarequest = Media.upload(media: media)
+                            client.run(mediarequest)
+                            { result in
+                                print("media upload result \(result)")
+                                
+                                if let attachment = try? result.get().value
+                                {
+                                    mediaIDs.append(attachment.id)
+                                    waitcount += 1
+                                }
                             }
                         }
                     }
@@ -339,9 +358,10 @@ class Mastodon : ObservableObject
                     }
                 }
                 
-                while waitcount < waitcounttotal
+                while waitcount < waitcounttotal || retrywait > maxwait
                 {
                     try await Task.sleep(for: .seconds(3))
+                    retrywait += 1
                 }
                 
                 let request = Statuses.create(status:newpost,mediaIDs:mediaIDs,spoilerText:spoiler,visibility: visibility)
@@ -445,3 +465,44 @@ class MStatus : Identifiable,ObservableObject
     var id = UUID()
 }
 
+
+enum ImageFormat: RawRepresentable {
+  case unknown, png, jpeg, gif, tiff1, tiff2
+  
+  init?(rawValue: [UInt8]) {
+    switch rawValue {
+    case [0x89]: self = .png
+    case [0xFF]: self = .jpeg
+    case [0x47]: self = .gif
+    case [0x49]: self = .tiff1
+    case [0x4D]: self = .tiff2
+    default: return nil
+    }
+  }
+  
+  var rawValue: [UInt8] {
+    switch self {
+    case .png: return [0x89]
+    case .jpeg: return [0xFF]
+    case .gif: return [0x47]
+    case .tiff1: return [0x49]
+    case .tiff2: return [0x4D]
+    case .unknown: return []
+    }
+  }
+}
+
+
+extension NSData {
+  var imageFormat: ImageFormat {
+    var buffer = [UInt8](repeating: 0, count: 1)
+    self.getBytes(&buffer, range: NSRange(location: 0,length: 1))
+    return ImageFormat(rawValue: buffer) ?? .unknown
+  }
+}
+
+extension Data {
+  var imageFormat: ImageFormat {
+    (self as NSData?)?.imageFormat ?? .unknown
+  }
+}
