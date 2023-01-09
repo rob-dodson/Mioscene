@@ -1,6 +1,6 @@
 //
 //  ErrorSystem.swift
-//  Mammut
+//  Miocene
 //
 //  Created by Robert Dodson on 1/3/23.
 //
@@ -9,7 +9,7 @@ import SwiftUI
 
 
 
-enum MammutError : LocalizedError
+enum MioceneError : LocalizedError
 {
     case titleEmpty
 
@@ -54,7 +54,7 @@ struct LocalizedAlertError: LocalizedError
 
 extension View
 {
-    func errorAlert(error: Binding<MammutError?>, buttonTitle: String = "OK") -> some View
+    func errorAlert(error: Binding<MioceneError?>, buttonTitle: String = "OK") -> some View
     {
         let localizedAlertError = LocalizedAlertError(error: error.wrappedValue)
         

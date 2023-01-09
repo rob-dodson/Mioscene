@@ -1,6 +1,6 @@
 //
 //  SQLiteIO.swift
-//  Mammut
+//  Miocene
 //
 //  Created by Robert Dodson on 1/2/23.
 //
@@ -26,9 +26,9 @@ class SqliteDB
     static let ACCOUNT : String = "account"
     
     #if DEBUG
-    static let DATABASE_NAME : String = "mammut-v1-DEBUG.sqlite"
+    static let DATABASE_NAME : String = "miocene-v1-DEBUG.sqlite"
     #else
-    static let DATABASE_NAME : String = "mammut-v1.sqlite"
+    static let DATABASE_NAME : String = "miocene-v1.sqlite"
     #endif
     
     var dbqueue : DatabaseQueue!
@@ -43,7 +43,7 @@ class SqliteDB
                      in: .userDomainMask,
                      appropriateFor: nil,
                      create: true)
-                .appendingPathComponent("Mammut")
+                .appendingPathComponent("Miocene")
         
             try FileManager().createDirectory(at: databaseURL,
                                               withIntermediateDirectories: true,

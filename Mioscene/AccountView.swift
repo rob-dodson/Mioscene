@@ -1,6 +1,6 @@
 //
 //  AccountView.swift
-//  Mammut
+//  Miocene
 //
 //  Created by Robert Dodson on 12/28/22.
 //
@@ -14,7 +14,7 @@ struct AccountView: View
     @ObservedObject var mast : Mastodon
     @EnvironmentObject var settings: Settings
    
-   @State var error : MammutError?
+   @State var error : MioceneError?
 
     
     var body: some View

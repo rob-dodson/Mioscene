@@ -1,6 +1,6 @@
 //
 //  SettingsView.swift
-//  Mammut
+//  Miocene
 //
 //  Created by Robert Dodson on 1/3/23.
 //

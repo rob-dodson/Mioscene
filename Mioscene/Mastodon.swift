@@ -1,6 +1,6 @@
 //
 //  Mastodon.swift
-//  Mammut
+//  Miocene
 //
 //  Created by Robert Dodson on 12/16/22.
 //
@@ -32,7 +32,7 @@ enum TimeLine : String,CaseIterable, Identifiable,Equatable
 @MainActor
 class Mastodon : ObservableObject
 {
-    static let accessTokenKeyNamePrefix = "Mammut.mastodon.access.token"
+    static let accessTokenKeyNamePrefix = "Miocene.mastodon.access.token"
     
     var client : Client!
     var currentTimeline : TimeLine = .home
@@ -402,6 +402,11 @@ class Mastodon : ObservableObject
     
     func getTimeline(timeline:TimeLine,tag:String,done: @escaping ([MStatus]) -> Void)
     {
+        if client == nil
+        {
+            return
+        }
+        
         currentTimeline = timeline
         
         var request : Request<[Status]>
