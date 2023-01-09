@@ -23,7 +23,8 @@ enum TimeLine : String,CaseIterable, Identifiable,Equatable
          localTimeline = "Local Timeline",
          publicTimeline = "Public Timeline",
          tag = "Tag",
-         favorites = "Favorites"
+         favorites = "Favorites",
+         notifications = "Notifications"
     
     var id: Self { self }
 }
@@ -381,6 +382,16 @@ class Mastodon : ObservableObject
         }
     }
     
+    func deleteNotification(id:String)
+    {
+        
+    }
+    
+    func deleteAllNotifications()
+    {
+        
+    }
+    
     func getNotifications(done: @escaping ([MastodonKit.Notification]) -> Void)
     {
         let request  = MastodonKit.Notifications.all()
@@ -397,6 +408,29 @@ class Mastodon : ObservableObject
                     }
                     done(returnnotes)
                 }
+        }
+    }
+    
+    
+    func getNotifications(done: @escaping ([MNotification]) -> Void)
+    {
+        var returnnotes = [MNotification]()
+        
+        let request = Notifications.all()
+        client.run(request)
+        { result in
+            if let notifications = try? result.get().value
+            {
+                for note in notifications
+                {
+                    returnnotes.append(self.convert(notification: note))
+                }
+                done(returnnotes)
+            }
+            else
+            {
+                print("error getting notifications \(result)")
+            }
         }
     }
     
@@ -423,6 +457,9 @@ class Mastodon : ObservableObject
             request = Favourites.all()
         case .tag:
             request = Timelines.tag(tag)
+        case .notifications:
+            print("timeline error")
+            return
         }
         
         var returnstats = [MStatus]()
@@ -437,6 +474,10 @@ class Mastodon : ObservableObject
                     }
                     done(returnstats)
                 }
+            else
+            {
+                print("error getting statuses \(result)")
+            }
         }
        
     }
@@ -448,6 +489,23 @@ class Mastodon : ObservableObject
         return newmstatus
     }
 
+    func convert(notification:MastodonKit.Notification) -> MNotification
+    {
+        let newnote = MNotification(notification: notification)
+
+        return newnote
+    }
+}
+
+class MNotification : Identifiable,ObservableObject
+{
+    var notification : MastodonKit.Notification
+    
+    init(notification:MastodonKit.Notification)
+    {
+        self.notification = notification
+    }
+    var id = UUID()
 }
 
 class MStatus : Identifiable,ObservableObject

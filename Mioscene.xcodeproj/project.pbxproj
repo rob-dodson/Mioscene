@@ -28,6 +28,7 @@
 		AE28C5FD29648C2400C8C928 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5FC29648C2400C8C928 /* SettingsView.swift */; };
 		AE28C5FF296524AE00C8C928 /* ErrorSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5FE296524AE00C8C928 /* ErrorSystem.swift */; };
 		AE28C60329663A5B00C8C928 /* AccountLarge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C60229663A5B00C8C928 /* AccountLarge.swift */; };
+		AE28C609296CC65800C8C928 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C608296CC65800C8C928 /* NotificationView.swift */; };
 		AE9A85D6295629C100E8B193 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9A85D5295629C100E8B193 /* Settings.swift */; };
 /* End PBXBuildFile section */
 
@@ -54,6 +55,7 @@
 		AE28C5FC29648C2400C8C928 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		AE28C5FE296524AE00C8C928 /* ErrorSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorSystem.swift; sourceTree = "<group>"; };
 		AE28C60229663A5B00C8C928 /* AccountLarge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountLarge.swift; sourceTree = "<group>"; };
+		AE28C608296CC65800C8C928 /* NotificationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		AE9A85D5295629C100E8B193 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -101,6 +103,7 @@
 				AE28C5FC29648C2400C8C928 /* SettingsView.swift */,
 				AE9A85D5295629C100E8B193 /* Settings.swift */,
 				AE06EC01294D1D1D006CAB67 /* Post.swift */,
+				AE28C608296CC65800C8C928 /* NotificationView.swift */,
 				AE06EC03294D234D006CAB67 /* Mastodon.swift */,
 				AE28C5EF29635CAA00C8C928 /* Keys.swift */,
 				AE28C5D72953C8A500C8C928 /* NewPost.swift */,
@@ -153,7 +156,7 @@
 				AE28C5F329635DE600C8C928 /* KeychainSwift */,
 				AE28C5F62963717D00C8C928 /* GRDB */,
 			);
-			productName = Mammut;
+			productName = Miocene;
 			productReference = AE06EBEC294D16BB006CAB67 /* Mioscene.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -228,6 +231,7 @@
 				AE06EBF0294D16BB006CAB67 /* MiosceneApp.swift in Sources */,
 				AE28C5DA295A7ACE00C8C928 /* SearchView.swift in Sources */,
 				AE28C5FB2963727500C8C928 /* LocalAccountRecord.swift in Sources */,
+				AE28C609296CC65800C8C928 /* NotificationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

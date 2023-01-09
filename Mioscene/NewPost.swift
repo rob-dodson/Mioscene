@@ -135,14 +135,23 @@ struct NewPost: View
                     }
                 label:
                     {
-                        Image(systemName: "exclamationmark.triangle")
+                        if showContentWarning == true
+                        {
+                            Image(systemName: "exclamationmark.triangle")
+                                .foregroundColor(settings.theme.accentColor)
+                        }
+                        else
+                        {
+                            Image(systemName: "exclamationmark.triangle")
+                        }
+                        
                     }
                 }
                
                 
                 ToolbarItem
                 {
-                    Picker("Visibility", selection: $postVisibility)
+                    Picker("", selection: $postVisibility)
                     {
                         Text(MastodonKit.Visibility.public.rawValue).tag(MastodonKit.Visibility.public)
                         Text(MastodonKit.Visibility.unlisted.rawValue).tag(MastodonKit.Visibility.unlisted)

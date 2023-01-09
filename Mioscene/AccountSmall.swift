@@ -33,6 +33,10 @@ struct AccountSmall: View
                     }
                     .frame(width: 50, height: 50)
                     .cornerRadius(15)
+                    .onTapGesture
+                    {
+                        settings.showAccount(account:account)
+                    }
                     
                     VStack(alignment: .leading,spacing: 3)
                     {

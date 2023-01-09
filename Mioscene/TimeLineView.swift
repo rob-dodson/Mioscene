@@ -19,7 +19,7 @@ struct TimeLineView: View
     @State private var stats1 = [MStatus]()
     @State private var stats2 = [MStatus]()
     @State private var stats3 = [MStatus]()
-    @State private var notifications = [MStatus]()
+    @State private var notifications = [MNotification]()
     @State private var favorites = [MStatus]()
     @State private var tags = [MStatus]()
     @State private var showLoading = true
@@ -89,10 +89,21 @@ struct TimeLineView: View
 
             ScrollView
             {
-                ForEach(getstats(timeline: $selectedTimeline))
-                { mstat in
-                    Post(mast:mast,mstat:mstat)
-                        .padding([.horizontal,.top])
+                if selectedTimeline == .notifications
+                {
+                    ForEach(getnotifications())
+                    { note in
+                        NotificationView(mast:mast,mnotification:note)
+                            .padding([.horizontal,.top])
+                    }
+                }
+                else
+                {
+                    ForEach(getstats(timeline: $selectedTimeline))
+                    { mstat in
+                        Post(mast:mast,mstat:mstat)
+                            .padding([.horizontal,.top])
+                    }
                 }
             }
             .task
@@ -123,33 +134,55 @@ struct TimeLineView: View
             return favorites
         case .tag:
             return tags
+        case .notifications:
+            print("error 1")
+            return []
         }
     }
      
+    func getnotifications() -> [MNotification]
+    {
+        return notifications
+    }
     
     func fetchStatuses(timeline:TimeLine,tag:String)
     {
         showLoading = true
         
-        mast.getTimeline(timeline: timeline,tag:tag,done:
-        { newstats in
-            
-            showLoading = false
-            
-            switch timeline
-            {
-            case .home:
-                stats1 = newstats
-            case .localTimeline:
-                stats2 = newstats
-            case .publicTimeline:
-                stats3 = newstats
-            case .favorites:
-                favorites = newstats
-            case .tag:
-                tags = newstats
+        if timeline == .notifications
+        {
+            mast.getNotifications
+            { mnotes in
+                
+                showLoading = false
+                
+                notifications = mnotes
             }
-        })
+        }
+        else
+        {
+            mast.getTimeline(timeline: timeline,tag:tag,done:
+                                { newstats in
+                
+                showLoading = false
+                
+                switch timeline
+                {
+                case .home:
+                    stats1 = newstats
+                case .localTimeline:
+                    stats2 = newstats
+                case .publicTimeline:
+                    stats3 = newstats
+                case .favorites:
+                    favorites = newstats
+                case .tag:
+                    tags = newstats
+                case .notifications:
+                    print("error 2")
+                }
+            })
+        }
     }
 }
 
