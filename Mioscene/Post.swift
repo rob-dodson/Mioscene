@@ -69,6 +69,10 @@ struct Post: View
                         Text(status.account.displayName)
                             .font(.title)
                             .foregroundColor(settings.theme.nameColor)
+                            .onTapGesture
+                            {
+                                settings.showAccount(account:status.account)
+                            }
                         
                         let name = "@\(status.account.acct)"
                         Text(name)

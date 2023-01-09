@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AE06EBF0294D16BB006CAB67 /* MammutApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE06EBEF294D16BB006CAB67 /* MammutApp.swift */; };
+		AE06EBF0294D16BB006CAB67 /* MiosceneApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE06EBEF294D16BB006CAB67 /* MiosceneApp.swift */; };
 		AE06EBF2294D16BB006CAB67 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE06EBF1294D16BB006CAB67 /* ContentView.swift */; };
 		AE06EBF4294D16BC006CAB67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE06EBF3294D16BC006CAB67 /* Assets.xcassets */; };
 		AE06EBF8294D16BC006CAB67 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE06EBF7294D16BC006CAB67 /* Preview Assets.xcassets */; };
@@ -33,7 +33,7 @@
 
 /* Begin PBXFileReference section */
 		AE06EBEC294D16BB006CAB67 /* Mioscene.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Mioscene.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		AE06EBEF294D16BB006CAB67 /* MammutApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MammutApp.swift; sourceTree = "<group>"; };
+		AE06EBEF294D16BB006CAB67 /* MiosceneApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiosceneApp.swift; sourceTree = "<group>"; };
 		AE06EBF1294D16BB006CAB67 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		AE06EBF3294D16BC006CAB67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AE06EBF5294D16BC006CAB67 /* Mioscene.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Mioscene.entitlements; sourceTree = "<group>"; };
@@ -93,7 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				AE28C5FE296524AE00C8C928 /* ErrorSystem.swift */,
-				AE06EBEF294D16BB006CAB67 /* MammutApp.swift */,
+				AE06EBEF294D16BB006CAB67 /* MiosceneApp.swift */,
 				AE06EBF1294D16BB006CAB67 /* ContentView.swift */,
 				AE28C5E3295CE9F900C8C928 /* TimeLineView.swift */,
 				AE28C5E5295CEDCE00C8C928 /* AccountView.swift */,
@@ -225,7 +225,7 @@
 				AE28C5D82953C8A500C8C928 /* NewPost.swift in Sources */,
 				AE28C5FF296524AE00C8C928 /* ErrorSystem.swift in Sources */,
 				AE28C5E6295CEDCE00C8C928 /* AccountView.swift in Sources */,
-				AE06EBF0294D16BB006CAB67 /* MammutApp.swift in Sources */,
+				AE06EBF0294D16BB006CAB67 /* MiosceneApp.swift in Sources */,
 				AE28C5DA295A7ACE00C8C928 /* SearchView.swift in Sources */,
 				AE28C5FB2963727500C8C928 /* LocalAccountRecord.swift in Sources */,
 			);
@@ -356,7 +356,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Miocene;
+				INFOPLIST_KEY_CFBundleDisplayName = Mioscene;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -396,7 +396,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = Miocene;
+				INFOPLIST_KEY_CFBundleDisplayName = Mioscene;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;

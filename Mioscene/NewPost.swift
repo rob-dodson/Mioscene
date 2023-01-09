@@ -9,7 +9,6 @@ import SwiftUI
 import MastodonKit
 
 
-
 struct NewPost: View
 {
     @ObservedObject var mast : Mastodon
@@ -22,7 +21,7 @@ struct NewPost: View
     @State private var showContentWarning : Bool = false
     @State private var contentWarning : String = ""
     @State private var postVisibility : MastodonKit.Visibility = .public
-    
+    @State private var attachedurls = [AttachmentURL]()
     
     var body: some View
     {
@@ -45,6 +44,7 @@ struct NewPost: View
                 .font(.title)
                 .padding(.top)
             
+            
             VStack(alignment: .leading)
             {
                 if showContentWarning == true
@@ -60,6 +60,39 @@ struct NewPost: View
                     .font(.title)
                     .scrollIndicators(.automatic)
                 
+                
+                //
+                // Attachments
+                //
+                HStack
+                {
+                    ForEach($attachedurls)
+                    { attachment in
+                        AsyncImage(url: attachment.url.wrappedValue)
+                        { image in
+                            image.resizable()
+                        }
+                    placeholder:
+                        {
+                            Image(systemName: "photo")
+                        }
+                        .frame(width: 70, height: 70)
+                        .cornerRadius(5)
+                        .contextMenu
+                        {
+                            Button
+                            {
+                                attachedurls = attachedurls.filter { $0.id != attachment.id } // magic!
+                            }
+                        label:
+                            { Text("Delete Attachmnt") }
+                        }
+                    }
+                }
+                
+                Rectangle().frame(height: 1).foregroundColor(.gray)
+
+                
                 VStack
                 {
                     switch postVisibility
@@ -74,13 +107,26 @@ struct NewPost: View
                         Text("The post is direct.\nVisible on Profile: No.\nVisible on Public Timeline: No.\nFederates to other instances: Only remote @mentions.")
                     }
                 }
-                .padding(EdgeInsets(top: 1, leading: 10, bottom: 10, trailing: 10))
+                .padding(EdgeInsets(top: 2, leading: 10, bottom: 10, trailing: 10))
                 .font(.footnote).italic()
                 .foregroundColor(settings.theme.minorColor)
                 
             }
             .toolbar
             {
+                ToolbarItem
+                {
+                    Button
+                    {
+                        let url = showOpenPanel()
+                        attachedurls.append(AttachmentURL(url:url))
+                    }
+                label:
+                    {
+                        Image(systemName: "photo")
+                    }
+                }
+                
                 ToolbarItem
                 {
                     Button
@@ -132,7 +178,7 @@ struct NewPost: View
                 {
                     Button("Post")
                     {
-                        mast.post(newpost:newPost,spoiler:showContentWarning == true ? contentWarning : nil,visibility:postVisibility)
+                        mast.post(newpost:newPost,spoiler:showContentWarning == true ? contentWarning : nil,visibility:postVisibility,attachedURLS:attachedurls)
                         shouldPresentSheet = false
                     }
                 }
@@ -140,5 +186,16 @@ struct NewPost: View
             .frame(width: 400, height: 300)
         }
     }
+    
 }
 
+func showOpenPanel() -> URL?
+{
+    let openPanel = NSOpenPanel()
+    //openPanel.allowedContentTypes =
+    openPanel.allowsMultipleSelection = false
+    openPanel.canChooseDirectories = false
+    openPanel.canChooseFiles = true
+    let response = openPanel.runModal()
+    return response == .OK ? openPanel.url : nil
+}

@@ -109,7 +109,7 @@ class Settings: ObservableObject
                           Theme.colorName.minor.rawValue:Color("minor\(index)"),
                           Theme.colorName.link.rawValue:Color("link\(index)"),
                           Theme.colorName.date.rawValue:Color("date\(index)"),
-                          Theme.colorName.block.rawValue:Color("date\(index)"),
+                          Theme.colorName.block.rawValue:Color("block\(index)"),
                            ]
             
             let theme = Theme(name: themeNames[index], colors: colors)

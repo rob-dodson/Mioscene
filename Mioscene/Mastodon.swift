@@ -9,6 +9,14 @@ import Foundation
 import MastodonKit
 
 
+
+struct AttachmentURL : Identifiable
+{
+    var url : URL?
+    let id = UUID()
+}
+
+
 enum TimeLine : String,CaseIterable, Identifiable,Equatable
 {
     case home,
@@ -295,12 +303,61 @@ class Mastodon : ObservableObject
     }
     
     
-    func post(newpost:String,spoiler:String?,visibility:Visibility)
+    func post(newpost:String,spoiler:String?,visibility:Visibility,attachedURLS:[AttachmentURL]?)
     {
-        let request = Statuses.create(status:newpost,spoilerText:spoiler,visibility: visibility)
-        client.run(request)
-        { result in
-            print("result \(result)")
+        if let aa = attachedURLS
+        {
+            Task
+            {
+                let waitcounttotal = aa.count
+                var waitcount = 0
+                
+                var mediaIDs = [String]()
+                
+                for index in aa.indices
+                {
+                    do
+                    {
+                        let imageData = try Data(contentsOf: aa[index].url!)
+                        let media = MediaAttachment.png(imageData)
+                        
+                        let mediarequest = Media.upload(media: media)
+                        client.run(mediarequest)
+                        { result in
+                            print("media upload result \(result)")
+                            
+                            if let attachment = try? result.get().value
+                            {
+                                mediaIDs.append(attachment.id)
+                                waitcount += 1
+                            }
+                        }
+                    }
+                    catch
+                    {
+                        print("bad image url \(error)")
+                    }
+                }
+                
+                while waitcount < waitcounttotal
+                {
+                    try await Task.sleep(for: .seconds(3))
+                }
+                
+                let request = Statuses.create(status:newpost,mediaIDs:mediaIDs,spoilerText:spoiler,visibility: visibility)
+                client.run(request)
+                { result in
+                    print("post with media result \(result)")
+                }
+            }
+        }
+        else
+        {
+            let request = Statuses.create(status:newpost,spoilerText:spoiler,visibility: visibility)
+            client.run(request)
+            { result in
+                print("post result \(result)")
+            }
         }
     }
     

@@ -69,17 +69,17 @@ struct AccountLarge: View
                                 else
                                 {
                                     toggleButton(state: relationship!.following, truelabel: "Unfollow", falselabel: "Follow",
-                                                 truefunc: { mast.unfollow(account: account, done: { followingresult in relationship = followingresult }) },
-                                                 falsefunc: { mast.follow(account: account, done: { followingresult in relationship = followingresult }) })
+                                                 truefunc: { mast.unfollow(account: account, done: { result in relationship = result }) },
+                                                 falsefunc: { mast.follow(account: account, done: { result in relationship = result }) })
                                 }
                                 
-                                toggleButton(state: relationship!.following, truelabel: "Unmute", falselabel: "Mute",
-                            truefunc: { mast.unmute(account: account, done: { followingresult in relationship = followingresult }) },
-                            falsefunc: { mast.mute(account: account, done: { followingresult in relationship = followingresult }) })
+                                toggleButton(state: relationship!.muting, truelabel: "Unmute", falselabel: "Mute",
+                            truefunc: { mast.unmute(account: account, done: { result in relationship = result }) },
+                            falsefunc: { mast.mute(account: account, done: { result in relationship = result }) })
                                 
-                                toggleButton(state: relationship!.following, truelabel: "Unblock", falselabel: "Block",
-                            truefunc: { mast.unblock(account: account, done: { followingresult in relationship = followingresult }) },
-                            falsefunc: { mast.block(account: account, done: { followingresult in relationship = followingresult }) })
+                                toggleButton(state: relationship!.blocking, truelabel: "Unblock", falselabel: "Block",
+                            truefunc: { mast.unblock(account: account, done: { result in relationship = result }) },
+                            falsefunc: { mast.block(account: account, done: { result in relationship = result }) })
                             }
                         }
                         .onAppear()
