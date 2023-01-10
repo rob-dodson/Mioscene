@@ -164,6 +164,47 @@ struct Post: View
                         }
                     }
                     
+                    
+                    //
+                    // Poll
+                    //
+                    if let poll = status.poll
+                    {
+                        VStack(alignment:.leading)
+                        {
+                            VStack(alignment: .leading)
+                            {
+                                ForEach(poll.options.indices, id:\.self)
+                                { index in
+                                    Text("\(poll.options[index].title): \(poll.options[index].votesCount)")
+                                }
+                            }
+                            
+                            Rectangle().frame(width:100,height: 1).foregroundColor(settings.theme.minorColor)
+
+                            Text("Votes \(poll.votesCount)")
+                          
+                            HStack(spacing:2)
+                            {
+                                if poll.expired == true
+                                {
+                                    Text("Expired ")
+                                }
+                                else
+                                {
+                                    Text("Expires ")
+                                }
+                                
+                                Text("\(poll.expiresAt.formatted(date: .abbreviated, time: .shortened))")
+                            }
+                            .foregroundColor(settings.theme.minorColor)
+                            .font(.footnote).italic()
+                        }
+                        .padding()
+                        .foregroundColor(settings.theme.nameColor)
+                        .border(width: 1, edges: [.top,.bottom,.leading,.trailing], color: settings.theme.minorColor)
+
+                    }
                     //
                     // tags
                     //

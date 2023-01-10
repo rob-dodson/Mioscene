@@ -26,10 +26,30 @@ struct NotificationView: View
             {
                 HStack
                 {
-                    
-                    Text("\(note.type.rawValue) by")
-                        .font(.title)
-                        .foregroundColor(settings.theme.accentColor)
+                    HStack
+                    {
+                        switch note.type
+                        {
+                        case .favourite:
+                            Text("Favorited by")
+                        case .follow:
+                            Text("Followed by")
+                        case .mention:
+                            Text("Mentioned by")
+                        case .poll:
+                            Text("Poll by")
+                        case .reblog:
+                            Text("Reblogged by")
+                        case .follow_request:
+                            Text("Follow Requested by")
+                        case .status:
+                            Text("Notification of Status by")
+                        case .update:
+                            Text("Updated Status by:")
+                        }
+                    }
+                    .font(.title)
+                    .foregroundColor(settings.theme.accentColor)
                     
                     AccountSmall(account: note.account)
                 }

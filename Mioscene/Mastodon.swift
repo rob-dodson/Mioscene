@@ -384,11 +384,20 @@ class Mastodon : ObservableObject
     
     func deleteNotification(id:String)
     {
-        
+        let request = MastodonKit.Notifications.dismiss(id: id)
+        client.run(request)
+        { result in
+            print("deleteNotification result \(result)")
+        }
     }
     
     func deleteAllNotifications()
     {
+        let request = MastodonKit.Notifications.dismissAll()
+        client.run(request)
+        { result in
+            print("deleteAllNotifications result \(result)")
+        }
         
     }
     
