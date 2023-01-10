@@ -46,6 +46,8 @@ class Mastodon : ObservableObject
     {
         do
         {
+            Log.log(msg:"Starting up",rewindfile:true)
+            
             sql = SqliteDB()
             localAccountRecords = try sql.loadAccounts()
             
@@ -68,7 +70,7 @@ class Mastodon : ObservableObject
         }
         catch
         {
-            print("sql error \(error)")
+            Log.log(msg:"sql error \(error)")
         }
     }
     
@@ -86,10 +88,10 @@ class Mastodon : ObservableObject
         { result in
                 if let application = try? result.get().value
                 {
-                    print("id: \(application.id)")
-                    print("redirect uri: \(application.redirectURI)")
-                    print("client id: \(application.clientID)")
-                    print("client secret: \(application.clientSecret)")
+                    Log.log(msg:"id: \(application.id)")
+                    Log.log(msg:"redirect uri: \(application.redirectURI)")
+                    Log.log(msg:"client id: \(application.clientID)")
+                    Log.log(msg:"client secret: \(application.clientSecret)")
                 }
         }
         
@@ -101,7 +103,7 @@ class Mastodon : ObservableObject
             }
             catch
             {
-                print("Error getting user account \(error)")
+                Log.log(msg:"Error getting user account \(error)")
             }
         }
     }
@@ -144,22 +146,22 @@ class Mastodon : ObservableObject
                             let localaccount = LocalAccountRecord(username: email, email:email, server: server, lastViewed: true)
                             try self.sql.updateAccount(account: localaccount)
                             Keys.storeInKeychain(name: localaccount.makeKeyChainName(), value: loginsettings.accessToken)
-                            print("Account created OK")
+                            Log.log(msg:"Account created OK")
                         }
                         catch
                         {
-                            print("error saving account \(error)")
+                            Log.log(msg:"error saving account \(error)")
                         }
                     }
                     else
                     {
-                        print("failed to get login credentials \(result)")
+                        Log.log(msg:"failed to get login credentials \(result)")
                     }
                 }
             }
             else
             {
-                print("result error \(result)")
+                Log.log(msg:"result error \(result)")
             }
         }
     }
@@ -170,7 +172,7 @@ class Mastodon : ObservableObject
         let request = Accounts.relationships(ids: ids)
         client.run(request)
         { result in
-            print("getRelationships result \(result)")
+            Log.log(msg:"getRelationships result \(result)")
             if let relationships = try? result.get().value
             {
                 done(relationships)
@@ -188,7 +190,7 @@ class Mastodon : ObservableObject
         let request = Accounts.follow(id: account.id)
         client.run(request)
         { result in
-            print("follow result \(result)")
+            Log.log(msg:"follow result \(result)")
             if let relationship = try? result.get().value
             {
                 done(relationship)
@@ -201,7 +203,7 @@ class Mastodon : ObservableObject
         let request = Accounts.unfollow(id: account.id)
         client.run(request)
         { result in
-            print("unfollow result \(result)")
+            Log.log(msg:"unfollow result \(result)")
             if let relationship = try? result.get().value
             {
                 done(relationship)
@@ -215,7 +217,7 @@ class Mastodon : ObservableObject
         let request = Accounts.mute(id: account.id)
         client.run(request)
         { result in
-            print("mute result \(result)")
+            Log.log(msg:"mute result \(result)")
             if let relationship = try? result.get().value
             {
                 done(relationship)
@@ -228,7 +230,7 @@ class Mastodon : ObservableObject
         let request = Accounts.unmute(id: account.id)
         client.run(request)
         { result in
-            print("unmute result \(result)")
+            Log.log(msg:"unmute result \(result)")
             if let relationship = try? result.get().value
             {
                 done(relationship)
@@ -242,7 +244,7 @@ class Mastodon : ObservableObject
         let request = Accounts.block(id: account.id)
         client.run(request)
         { result in
-            print("block result \(result)")
+            Log.log(msg:"block result \(result)")
             if let relationship = try? result.get().value
             {
                 done(relationship)
@@ -255,7 +257,7 @@ class Mastodon : ObservableObject
         let request = Accounts.unblock(id: account.id)
         client.run(request)
         { result in
-            print("unblock result \(result)")
+            Log.log(msg:"unblock result \(result)")
             if let relationship = try? result.get().value
             {
                 done(relationship)
@@ -269,7 +271,7 @@ class Mastodon : ObservableObject
         let request = Statuses.unfavourite(id: status.id)
         client.run(request)
         { result in
-            print("unfavorite result \(result)")
+            Log.log(msg:"unfavorite result \(result)")
         }
     }
     
@@ -279,7 +281,7 @@ class Mastodon : ObservableObject
         let request = Statuses.favourite(id: status.id)
         client.run(request)
         { result in
-            print("favorite result \(result)")
+            Log.log(msg:"favorite result \(result)")
         }
     }
     
@@ -289,7 +291,7 @@ class Mastodon : ObservableObject
         let request = Statuses.reblog(id: status.id)
         client.run(request)
         { result in
-            print("reblog result \(result)")
+            Log.log(msg:"reblog result \(result)")
         }
     }
     
@@ -299,7 +301,7 @@ class Mastodon : ObservableObject
         let request = Statuses.unreblog(id: status.id)
         client.run(request)
         { result in
-            print("unreblog result \(result)")
+            Log.log(msg:"unreblog result \(result)")
         }
     }
     
@@ -336,14 +338,14 @@ class Mastodon : ObservableObject
                             case .png:
                                 media = MediaAttachment.png(imageData)
                             default:
-                                print("unsupported media type")
+                                Log.log(msg:"unsupported media type")
                                 continue
                             }
                             
                             let mediarequest = Media.upload(media: media)
                             client.run(mediarequest)
                             { result in
-                                print("media upload result \(result)")
+                                Log.log(msg:"media upload result \(result)")
                                 
                                 if let attachment = try? result.get().value
                                 {
@@ -355,7 +357,7 @@ class Mastodon : ObservableObject
                     }
                     catch
                     {
-                        print("bad image url \(error)")
+                        Log.log(msg:"bad image url \(error)")
                     }
                 }
                 
@@ -368,7 +370,7 @@ class Mastodon : ObservableObject
                 let request = Statuses.create(status:newpost,mediaIDs:mediaIDs,spoilerText:spoiler,visibility: visibility)
                 client.run(request)
                 { result in
-                    print("post with media result \(result)")
+                    Log.log(msg:"post with media result \(result)")
                 }
             }
         }
@@ -377,7 +379,7 @@ class Mastodon : ObservableObject
             let request = Statuses.create(status:newpost,spoilerText:spoiler,visibility: visibility)
             client.run(request)
             { result in
-                print("post result \(result)")
+                Log.log(msg:"post result \(result)")
             }
         }
     }
@@ -387,7 +389,7 @@ class Mastodon : ObservableObject
         let request = MastodonKit.Notifications.dismiss(id: id)
         client.run(request)
         { result in
-            print("deleteNotification result \(result)")
+            Log.log(msg:"deleteNotification result \(result)")
         }
     }
     
@@ -396,7 +398,7 @@ class Mastodon : ObservableObject
         let request = MastodonKit.Notifications.dismissAll()
         client.run(request)
         { result in
-            print("deleteAllNotifications result \(result)")
+            Log.log(msg:"deleteAllNotifications result \(result)")
         }
         
     }
@@ -438,7 +440,7 @@ class Mastodon : ObservableObject
             }
             else
             {
-                print("error getting notifications \(result)")
+                Log.log(msg:"error getting notifications \(result)")
             }
         }
     }
@@ -467,7 +469,7 @@ class Mastodon : ObservableObject
         case .tag:
             request = Timelines.tag(tag)
         case .notifications:
-            print("timeline error")
+            Log.log(msg:"timeline error")
             return
         }
         
@@ -485,7 +487,7 @@ class Mastodon : ObservableObject
                 }
             else
             {
-                print("error getting statuses \(result)")
+                Log.log(msg:"error getting statuses \(result)")
             }
         }
        
@@ -537,44 +539,3 @@ class MStatus : Identifiable,ObservableObject
     var id = UUID()
 }
 
-
-enum ImageFormat: RawRepresentable {
-  case unknown, png, jpeg, gif, tiff1, tiff2
-  
-  init?(rawValue: [UInt8]) {
-    switch rawValue {
-    case [0x89]: self = .png
-    case [0xFF]: self = .jpeg
-    case [0x47]: self = .gif
-    case [0x49]: self = .tiff1
-    case [0x4D]: self = .tiff2
-    default: return nil
-    }
-  }
-  
-  var rawValue: [UInt8] {
-    switch self {
-    case .png: return [0x89]
-    case .jpeg: return [0xFF]
-    case .gif: return [0x47]
-    case .tiff1: return [0x49]
-    case .tiff2: return [0x4D]
-    case .unknown: return []
-    }
-  }
-}
-
-
-extension NSData {
-  var imageFormat: ImageFormat {
-    var buffer = [UInt8](repeating: 0, count: 1)
-    self.getBytes(&buffer, range: NSRange(location: 0,length: 1))
-    return ImageFormat(rawValue: buffer) ?? .unknown
-  }
-}
-
-extension Data {
-  var imageFormat: ImageFormat {
-    (self as NSData?)?.imageFormat ?? .unknown
-  }
-}

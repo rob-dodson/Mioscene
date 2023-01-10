@@ -10,6 +10,9 @@ import SwiftUI
 import MastodonKit
 
 
+/**
+ Theme
+ */
 struct Theme : Identifiable
 {
     enum colorName : String
@@ -31,10 +34,10 @@ struct Theme : Identifiable
     var dateColor : Color
     var blockColor : Color
 
-    
     var name: String
     var colors : Dictionary<String,Color>
     var id : UUID
+    
     
     init(name: String, colors:Dictionary<String,Color>)
     {
@@ -52,7 +55,6 @@ struct Theme : Identifiable
     }
     
     
-    
     func color(name:colorName) -> Color
     {
         return colors[name.rawValue] ?? Color.white
@@ -68,12 +70,16 @@ enum TabIndex : Int
     case Settings
 }
 
+
 class CurrentTabIndex : ObservableObject
 {
     var index : TabIndex = .TimeLine
 }
 
 
+/*
+ Settings
+ */
 class Settings: ObservableObject
 {
     @Published var theme : Theme

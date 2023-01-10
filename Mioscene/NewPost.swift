@@ -35,7 +35,7 @@ struct NewPost: View
         }
         .sheet(isPresented: $shouldPresentSheet)
         {
-            print("Sheet dismissed!")
+            Log.log(msg:"Sheet dismissed!")
         }
         content:
         {
@@ -90,9 +90,12 @@ struct NewPost: View
                     }
                 }
                 
-                Rectangle().frame(height: 1).foregroundColor(.gray)
+                SpacerLine(color: settings.theme.minorColor)
 
                 
+                //
+                // help text
+                //
                 VStack
                 {
                     switch postVisibility
@@ -198,13 +201,3 @@ struct NewPost: View
     
 }
 
-func showOpenPanel() -> URL?
-{
-    let openPanel = NSOpenPanel()
-    //openPanel.allowedContentTypes =
-    openPanel.allowsMultipleSelection = false
-    openPanel.canChooseDirectories = false
-    openPanel.canChooseFiles = true
-    let response = openPanel.runModal()
-    return response == .OK ? openPanel.url : nil
-}

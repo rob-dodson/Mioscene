@@ -13,9 +13,9 @@ struct AccountView: View
 {
     @ObservedObject var mast : Mastodon
     @EnvironmentObject var settings: Settings
-   
-   @State var error : MioceneError?
-
+    
+    @State var error : MioceneError?
+    
     
     var body: some View
     {
@@ -33,7 +33,7 @@ struct AccountView: View
             }
             .padding()
             
-            Rectangle().frame(height: 1).foregroundColor(.gray)
+            SpacerLine(color: settings.theme.minorColor)
             
             if let account = settings.seeAccount
             {
@@ -44,8 +44,8 @@ struct AccountView: View
                 AccountLarge(mast:mast,account: account)
             }
         }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .padding()
     }
 }
 

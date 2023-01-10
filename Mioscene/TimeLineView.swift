@@ -62,7 +62,7 @@ struct TimeLineView: View
             }
             .padding()
             
-            Rectangle().frame(height: 1).foregroundColor(.gray)
+            SpacerLine(color: settings.theme.minorColor)
             
             if showTagAsk == true
             {
@@ -135,7 +135,7 @@ struct TimeLineView: View
         case .tag:
             return tags
         case .notifications:
-            print("error 1")
+            Log.log(msg:"error 1")
             return []
         }
     }
@@ -179,7 +179,7 @@ struct TimeLineView: View
                 case .tag:
                     tags = newstats
                 case .notifications:
-                    print("error 2")
+                    Log.log(msg:"error 2")
                 }
             })
         }

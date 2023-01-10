@@ -35,7 +35,7 @@ struct AddAccount: View
         }
         .sheet(isPresented: $shouldPresentSheet)
         {
-            print("Sheet dismissed!")
+            Log.log(msg:"Sheet dismissed!")
         }
         content:
         {

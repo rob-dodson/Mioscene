@@ -32,7 +32,7 @@ struct SettingsView: View
                     .font(.title)
                     .foregroundColor(settings.theme.accentColor)
                 
-                ForEach(0 ..< settings.themes.count)
+                ForEach(settings.themes.indices, id:\.self)
                 { index in
                     
                     HStack
@@ -87,7 +87,6 @@ struct SettingsView: View
         .padding()
     }
     
- 
    
     func pickTheme(index:Int)
     {

@@ -9,8 +9,6 @@ import SwiftUI
 import MastodonKit
 
 
-
-
 struct ContentView: View
 {
     @ObservedObject var mast : Mastodon
@@ -30,6 +28,7 @@ struct ContentView: View
             case .Search: SearchView(mast: mast)
             case .Settings: SettingsView(mast: mast)
             }
+            
             Spacer()
         }
         .frame(minWidth: 400, alignment: .center)
@@ -145,10 +144,4 @@ struct EdgeBorder: Shape
     }
 }
     
-extension View
-{
-    func border(width: CGFloat, edges: [Edge], color: SwiftUI.Color) -> some View
-    {
-            overlay(EdgeBorder(width: width, edges: edges).foregroundColor(color))
-    }
-}
+

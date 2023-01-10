@@ -43,12 +43,12 @@ struct SearchView: View
                             case .success:
                                 results = try result.get().value
                             case .failure(let error):
-                                print(error.localizedDescription)
+                                Log.log(msg:error.localizedDescription)
                             }
                         }
                         catch
                         {
-                            print("Error running search \(error)")
+                            Log.log(msg:"Error running search \(error)")
                         }
                     }
                 }
@@ -56,7 +56,7 @@ struct SearchView: View
                 .keyboardShortcut(.defaultAction)
             }
             
-            Rectangle().frame(height: 1).foregroundColor(.gray)
+            SpacerLine(color: settings.theme.minorColor)
             
             ScrollView
             {

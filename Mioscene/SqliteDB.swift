@@ -50,14 +50,14 @@ class SqliteDB
                                               attributes: nil)
             
             dbqueue = try DatabaseQueue(path:"\(databaseURL.path)/\(SqliteDB.DATABASE_NAME)")
-            print("DB opened: \(dbqueue.path)")
+            Log.log(msg:"DB opened: \(dbqueue.path)")
             
             try makeTables()
-            print("tables ok")
+            Log.log(msg:"tables ok")
         }
         catch
         {
-            print("sqlite error: \(error)")
+            Log.log(msg:"sqlite error: \(error)")
         }
     }
     
@@ -80,8 +80,6 @@ class SqliteDB
         }
     }
     
-
-    
     
     func loadAccounts() throws -> [LocalAccountRecord]
     {
@@ -102,16 +100,16 @@ class SqliteDB
         }
     }
     
+    
     func deleteAccount(account:LocalAccountRecord) throws
-      {
-          try dbqueue.write
-          { db in
-              
-              try account.delete(db)
-              print("account deleted: \(account.username)")
-          }
-      }
-      
+    {
+        try dbqueue.write
+        { db in
+            
+            try account.delete(db)
+            Log.log(msg:"account deleted: \(account.username)")
+        }
+    }
       
     
     func updateAccount(account:LocalAccountRecord) throws
@@ -120,9 +118,7 @@ class SqliteDB
        { db in
            
            try account.save(db)
-           print("account saved: \(account.username)")
+           Log.log(msg:"account saved: \(account.username)")
        }
     }
-    
-
 }

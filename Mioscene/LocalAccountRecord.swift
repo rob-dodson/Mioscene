@@ -10,6 +10,7 @@ import Foundation
 import MastodonKit
 import GRDB
 
+
 class LocalAccountRecord : Record,Codable,Identifiable
 {
     var uuid : UUID
