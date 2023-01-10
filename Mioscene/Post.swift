@@ -184,6 +184,8 @@ struct Post: View
 
                             Text("Votes \(poll.votesCount)")
                           
+                            Spacer()
+                            
                             HStack(spacing:2)
                             {
                                 if poll.expired == true
