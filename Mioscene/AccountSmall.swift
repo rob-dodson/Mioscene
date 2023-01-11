@@ -41,7 +41,7 @@ struct AccountSmall: View
                     VStack(alignment: .leading,spacing: 3)
                     {
                         Text(account.displayName)
-                            .font(.title)
+                            .font(settings.fonts.title)
                             .foregroundColor(settings.theme.nameColor)
                         
                         Text("@\(account.acct)")

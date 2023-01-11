@@ -67,7 +67,7 @@ struct Post: View
                     VStack(alignment: .leading)
                     {
                         Text(status.account.displayName)
-                            .font(.title)
+                            .font(settings.fonts.heading)
                             .foregroundColor(settings.theme.nameColor)
                             .onTapGesture
                             {
@@ -76,13 +76,13 @@ struct Post: View
                         
                         let name = "@\(status.account.acct)"
                         Text(name)
-                            .font(.title3)
+                            .font(settings.fonts.subheading)
                             .foregroundColor(settings.theme.minorColor)
                         
                         if let appname = status.application?.name
                         {
                             Text("posted with \(appname)")
-                                .font(.footnote).italic()
+                                .font(settings.fonts.small).italic()
                                 .foregroundColor(settings.theme.minorColor)
                         }
                         
@@ -112,10 +112,10 @@ struct Post: View
                         //
                         // html body of post
                         //
-                        if let nsAttrString = status.content.htmlAttributedString(color:settings.theme.bodyColor,linkColor: settings.theme.linkColor)
+                        if let nsAttrString = status.content.htmlAttributedString(fontSize: settings.fonts.html,color:settings.theme.bodyColor,linkColor: settings.theme.linkColor)
                         {
                             Text(AttributedString(nsAttrString))
-                                .font(.body)
+                                .font(settings.fonts.main)
                                 .foregroundColor(settings.theme.bodyColor)
                         }
                     }
@@ -164,49 +164,17 @@ struct Post: View
                         }
                     }
                     
+               
                     
                     //
                     // Poll
                     //
                     if let poll = status.poll
                     {
-                        VStack(alignment:.leading)
-                        {
-                            VStack(alignment: .leading)
-                            {
-                                ForEach(poll.options.indices, id:\.self)
-                                { index in
-                                    Text("\(poll.options[index].title): \(poll.options[index].votesCount)")
-                                }
-                            }
-                            
-                            Rectangle().frame(width:100,height: 1).foregroundColor(settings.theme.minorColor)
-
-                            Text("Votes \(poll.votesCount)")
-                          
-                            Spacer()
-                            
-                            HStack(spacing:2)
-                            {
-                                if poll.expired == true
-                                {
-                                    Text("Expired ")
-                                }
-                                else
-                                {
-                                    Text("Expires ")
-                                }
-                                
-                                Text("\(poll.expiresAt.formatted(date: .abbreviated, time: .shortened))")
-                            }
-                            .foregroundColor(settings.theme.minorColor)
-                            .font(.footnote).italic()
-                        }
-                        .padding()
-                        .foregroundColor(settings.theme.nameColor)
-                        .border(width: 1, edges: [.top,.bottom,.leading,.trailing], color: settings.theme.minorColor)
-
+                        PollView(poll:poll)
                     }
+                    
+                    
                     //
                     // tags
                     //
@@ -333,7 +301,7 @@ struct Post: View
                         //
                         let hoursstr = dateSinceNowToString(date: status.createdAt)
                         Text("\(hoursstr) · \(status.createdAt.formatted(date: .abbreviated, time: .omitted)) · \(status.createdAt.formatted(date: .omitted, time: .standard))")
-                            .font(.callout)
+                            .font(settings.fonts.small)
                             .foregroundColor(settings.theme.dateColor)
                     }
                 }

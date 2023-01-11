@@ -101,11 +101,11 @@ struct AccountLarge: View
                 {
                     Text("\(account.displayName)")
                         .foregroundColor(settings.theme.nameColor)
-                        .font(.title)
+                        .font(settings.fonts.title)
                     
                     Text("@\(account.acct)")
                         .foregroundColor(settings.theme.minorColor)
-                        .font(.title)
+                        .font(settings.fonts.title)
                     
                     Text("User since \(account.createdAt.formatted())")
                         .foregroundColor(settings.theme.minorColor)

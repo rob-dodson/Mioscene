@@ -48,7 +48,7 @@ struct NotificationView: View
                             Text("Updated Status by:")
                         }
                     }
-                    .font(.title)
+                    .font(settings.fonts.title)
                     .foregroundColor(settings.theme.accentColor)
                     
                     AccountSmall(account: note.account)

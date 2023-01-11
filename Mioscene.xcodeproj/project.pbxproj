@@ -30,6 +30,9 @@
 		AE28C60329663A5B00C8C928 /* AccountLarge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C60229663A5B00C8C928 /* AccountLarge.swift */; };
 		AE28C609296CC65800C8C928 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C608296CC65800C8C928 /* NotificationView.swift */; };
 		AE28C60B296E1CF200C8C928 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C60A296E1CF200C8C928 /* Utils.swift */; };
+		AE28C60D296EE9F800C8C928 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C60C296EE9F800C8C928 /* Fonts.swift */; };
+		AE28C60F296F25CD00C8C928 /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C60E296F25CD00C8C928 /* Themes.swift */; };
+		AE28C611296F48FD00C8C928 /* PollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C610296F48FD00C8C928 /* PollView.swift */; };
 		AE9A85D6295629C100E8B193 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9A85D5295629C100E8B193 /* Settings.swift */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +61,9 @@
 		AE28C60229663A5B00C8C928 /* AccountLarge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountLarge.swift; sourceTree = "<group>"; };
 		AE28C608296CC65800C8C928 /* NotificationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		AE28C60A296E1CF200C8C928 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		AE28C60C296EE9F800C8C928 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		AE28C60E296F25CD00C8C928 /* Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
+		AE28C610296F48FD00C8C928 /* PollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollView.swift; sourceTree = "<group>"; };
 		AE9A85D5295629C100E8B193 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -96,15 +102,18 @@
 		AE06EBEE294D16BB006CAB67 /* Mioscene */ = {
 			isa = PBXGroup;
 			children = (
+				AE28C610296F48FD00C8C928 /* PollView.swift */,
+				AE28C60E296F25CD00C8C928 /* Themes.swift */,
 				AE28C60A296E1CF200C8C928 /* Utils.swift */,
+				AE28C60C296EE9F800C8C928 /* Fonts.swift */,
+				AE9A85D5295629C100E8B193 /* Settings.swift */,
+				AE28C5FC29648C2400C8C928 /* SettingsView.swift */,
 				AE28C5FE296524AE00C8C928 /* ErrorSystem.swift */,
 				AE06EBEF294D16BB006CAB67 /* MiosceneApp.swift */,
 				AE06EBF1294D16BB006CAB67 /* ContentView.swift */,
 				AE28C5E3295CE9F900C8C928 /* TimeLineView.swift */,
 				AE28C5E5295CEDCE00C8C928 /* AccountView.swift */,
 				AE28C5D9295A7ACE00C8C928 /* SearchView.swift */,
-				AE28C5FC29648C2400C8C928 /* SettingsView.swift */,
-				AE9A85D5295629C100E8B193 /* Settings.swift */,
 				AE06EC01294D1D1D006CAB67 /* Post.swift */,
 				AE28C608296CC65800C8C928 /* NotificationView.swift */,
 				AE06EC03294D234D006CAB67 /* Mastodon.swift */,
@@ -218,12 +227,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE28C5FD29648C2400C8C928 /* SettingsView.swift in Sources */,
+				AE28C611296F48FD00C8C928 /* PollView.swift in Sources */,
 				AE28C5E4295CE9F900C8C928 /* TimeLineView.swift in Sources */,
 				AE28C60329663A5B00C8C928 /* AccountLarge.swift in Sources */,
 				AE28C5F029635CAA00C8C928 /* Keys.swift in Sources */,
 				AE9A85D6295629C100E8B193 /* Settings.swift in Sources */,
 				AE06EC02294D1D1D006CAB67 /* Post.swift in Sources */,
 				AE06EBF2294D16BB006CAB67 /* ContentView.swift in Sources */,
+				AE28C60F296F25CD00C8C928 /* Themes.swift in Sources */,
 				AE28C5EE29634C0B00C8C928 /* AddAccount.swift in Sources */,
 				AE06EC04294D234D006CAB67 /* Mastodon.swift in Sources */,
 				AE28C5F92963719B00C8C928 /* SqliteDB.swift in Sources */,
@@ -233,6 +244,7 @@
 				AE28C5E6295CEDCE00C8C928 /* AccountView.swift in Sources */,
 				AE06EBF0294D16BB006CAB67 /* MiosceneApp.swift in Sources */,
 				AE28C5DA295A7ACE00C8C928 /* SearchView.swift in Sources */,
+				AE28C60D296EE9F800C8C928 /* Fonts.swift in Sources */,
 				AE28C5FB2963727500C8C928 /* LocalAccountRecord.swift in Sources */,
 				AE28C60B296E1CF200C8C928 /* Utils.swift in Sources */,
 				AE28C609296CC65800C8C928 /* NotificationView.swift in Sources */,

@@ -29,12 +29,11 @@ struct SettingsView: View
             VStack
             {
                 Text("Themes")
-                    .font(.title)
+                    .font(settings.fonts.title)
                     .foregroundColor(settings.theme.accentColor)
                 
-                ForEach(settings.themes.indices, id:\.self)
+                ForEach($settings.themes.themeslist.indices, id:\.self)
                 { index in
-                    
                     HStack
                     {
                         Button()
@@ -43,7 +42,7 @@ struct SettingsView: View
                         }
                     label:
                         {
-                            if settings.themes[index].name == settings.theme.name
+                            if settings.themes.themeslist[index].name == settings.theme.name
                             {
                                 Image(systemName: "checkmark")
                             }
@@ -54,9 +53,9 @@ struct SettingsView: View
                         }
                         .buttonStyle(.plain)
                         
-                        Text(settings.themes[index].name)
+                        Text(settings.themes.themeslist[index].name)
                         
-                        let theme = settings.themes[index]
+                        let theme = settings.themes.themeslist[index]
                         HStack()
                         {
                             Rectangle().fill(theme.accentColor).frame(width: themesize, height: themesize)
@@ -69,18 +68,34 @@ struct SettingsView: View
             
             VStack
             {
-                Text("Stuff")
-                    .font(.title)
-                    .foregroundColor(settings.theme.accentColor)
+                Picker("Text Size", selection: $settings.fonts.textSize)
+                {
+                    ForEach(Fonts.TextSize.allCases, id: \.self)
+                    { text in
+                        Text(text.rawValue)
+                    }
+                }
+                .onChange(of: settings.fonts.textSize)
+                { newValue in
+                    settings.fonts.textSize = newValue
+                    settings.fonts.setFonts()
+                }
                 
-                Button("Setting 1") { }
-                Button("Setting 1") { }
-                Button("Setting 1") { }
-                Button("Setting 1") { }
-                Button("Setting 1") { }
-                Button("Setting 1") { }
-                Button("Setting 1") { }
-                Button("Setting 1") { }
+                
+                Text(".largeTitle").font(.largeTitle)
+                Text(".title").font(settings.fonts.title)
+                Text(".title2").font(.title2)
+                Text(".title3").font(.title3)
+                Text(".headline").font(.headline)
+            }
+            VStack
+            {
+                Text(".subheadline").font(.subheadline)
+                Text(".body").font(.body)
+                Text(".callout").font(.callout)
+                Text(".caption").font(.caption)
+                Text(".caption2").font(.caption2)
+               Text(".footnote").font(.footnote)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -90,7 +105,7 @@ struct SettingsView: View
    
     func pickTheme(index:Int)
     {
-        settings.theme = settings.themes[index]
+        settings.theme = settings.themes.themeslist[index]
     }
 }
 

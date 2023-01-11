@@ -41,7 +41,7 @@ struct NewPost: View
         {
             Text("New Post")
                 .foregroundColor(settings.theme.accentColor)
-                .font(.title)
+                .font(settings.fonts.title)
                 .padding(.top)
             
             
@@ -51,13 +51,13 @@ struct NewPost: View
                 {
                     TextField("Content Warning", text: $contentWarning)
                         .foregroundColor(settings.theme.bodyColor)
-                        .font(.title)
+                        .font(settings.fonts.title)
                         .padding()
                 }
                 
                 TextEditor(text: $newPost)
                     .foregroundColor(settings.theme.bodyColor)
-                    .font(.title)
+                    .font(settings.fonts.title)
                     .scrollIndicators(.automatic)
                 
                 

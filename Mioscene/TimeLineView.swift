@@ -70,7 +70,7 @@ struct TimeLineView: View
                 {
                     TextField("#tag", text: $settings.currentTag)
                         .padding()
-                        .font(.title)
+                        .font(settings.fonts.title)
                     
                     Button("Load")
                     {
@@ -84,7 +84,7 @@ struct TimeLineView: View
             {
                 Text("Loading...")
                     .foregroundColor(settings.theme.accentColor)
-                    .font(.title)
+                    .font(settings.fonts.title)
             }
 
             ScrollView

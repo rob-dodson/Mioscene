@@ -43,20 +43,20 @@ struct AddAccount: View
             {
                 Text("Add Account")
                     .foregroundColor(settings.theme.accentColor)
-                    .font(.title)
+                    .font(settings.fonts.title)
                     .padding(.top)
                 
                 TextField("Mastodon Server", text: $server)
                     .padding()
-                    .font(.title)
+                    .font(settings.fonts.title)
                 
                 TextField("Email", text: $email)
                     .padding()
-                    .font(.title)
+                    .font(settings.fonts.title)
                 
                     SecureField("Password", text: $password)
                         .padding()
-                        .font(.title)
+                        .font(settings.fonts.title)
             }
             .frame(width: 400, height: 300)
             .toolbar
