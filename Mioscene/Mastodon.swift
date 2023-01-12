@@ -265,6 +265,21 @@ class Mastodon : ObservableObject
         }
     }
     
+    func voteOnPoll(poll:Poll,choices:[Int],done: @escaping (Poll) -> Void)
+    {
+        let request = Polls.vote(id: poll.id, choices: choices)
+        
+        client.run(request)
+        { result in
+            switch result
+            {
+            case .success(let response):
+                done(response.value)
+            case .failure(let error):
+                Log.log(msg:"error in vote on poll \(error)")
+            }
+        }
+    }
     
     func unfavorite(status:Status)
     {

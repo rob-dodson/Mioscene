@@ -171,7 +171,7 @@ struct Post: View
                     //
                     if let poll = status.poll
                     {
-                        PollView(poll:poll)
+                        PollView(mast:mast,poll:poll)
                     }
                     
                     
