@@ -69,39 +69,15 @@ struct SearchView: View
                         //
                         if res.accounts.count > 0
                         {
-                            GroupBox(label: Label("Accounts", systemImage: "person.crop.circle")
-                                .foregroundColor(settings.theme.accentColor)
-                                .font(settings.fonts.title))
-                            {
-                                VStack(alignment: .leading)
-                                {
-                                    ForEach(res.accounts.indices, id:\.self)
-                                    { index in
-                                        AccountSmall(account: res.accounts[index])
-                                    }
-                                }
-                            }
+                            accountview(accounts: res.accounts)
                         }
                         
                         //
                         // statuses
                         //
                         if res.statuses.count > 0
-                        {/*
-                            GroupBox(label: Label("Statuses", systemImage: "square.and.pencil")
-                                .foregroundColor(settings.theme.accentColor)
-                                .font(settings.fonts.title))
-                            {
-                                VStack(alignment: .leading)
-                                {
-                                    ForEach(res.statuses.indices, id:\.self)
-                                    { index in
-                                        let mstat = mast.convert(status:res.statuses[index])
-                                        Post(mstat: mstat)
-                                    }
-                                }
-                            }
-                          */
+                        {
+                            statusview(statuses:res.statuses)
                         }
                         
                         //
@@ -109,20 +85,65 @@ struct SearchView: View
                         //
                         if res.hashtags.count > 0
                         {
-                            GroupBox(label: Label("Hashtags", systemImage: "number")
-                                .foregroundColor(settings.theme.accentColor)
-                                .font(settings.fonts.title))
-                            {
-                                VStack(alignment: .leading)
-                                {
-                                    ForEach(res.hashtags.indices, id:\.self)
-                                    { index in
-                                        Link("#\(res.hashtags[index].name)",destination: URL(string:res.hashtags[index].url)!)
-                                    }
-                                }
-                            }
+                            hashview(hashtags: res.hashtags)
                         }
                     }
+                }
+            }
+        }
+    }
+    
+    func accountview(accounts:[Account]) -> some View
+    {
+        return GroupBox(label: Label("Accounts", systemImage: "person.crop.circle")
+            .foregroundColor(settings.theme.accentColor)
+            .font(settings.fonts.title))
+        {
+            VStack(alignment: .leading)
+            {
+                ForEach(accounts.indices, id:\.self)
+                { index in
+                    AccountSmall(account: accounts[index])
+                }
+            }
+        }
+    }
+    
+    
+    func hashview(hashtags:[Tag]) -> some View
+    {
+        GroupBox(label: Label("Hashtags", systemImage: "number")
+            .foregroundColor(settings.theme.accentColor)
+            .font(settings.fonts.title))
+        {
+            VStack(alignment: .leading)
+            {
+                ForEach(hashtags.indices, id:\.self)
+                { index in
+                    Button
+                    {
+                        
+                    } label:
+                    {
+                        Text("#\(hashtags[index].name)")
+                             Text(hashtags[index].url)
+                    }
+                }
+            }
+        }
+    }
+    func statusview(statuses:[Status]) -> some View
+    {
+        return GroupBox(label: Label("Statuses", systemImage: "square.and.pencil")
+            .foregroundColor(settings.theme.accentColor)
+            .font(settings.fonts.title))
+        {
+            VStack(alignment: .leading)
+            {
+                ForEach(statuses.indices, id:\.self)
+                { index in
+                    let mstat = mast.convert(status:statuses[index])
+                    Post(mast: mast, mstat: mstat)
                 }
             }
         }
