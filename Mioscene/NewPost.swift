@@ -8,6 +8,27 @@
 import SwiftUI
 import MastodonKit
 
+enum PollType : String, Identifiable, CaseIterable
+{
+    case single = "Single Choice"
+    case muliple = "Multiple Choice"
+    
+    var id: Self { return self }
+}
+
+enum PollTimes : String, Identifiable, CaseIterable
+{
+    case fiveMinutes = "5 minutes"
+    case thirtyMinutes = "30 minutes"
+    case oneHour = "1 hour"
+    case sixHours = "6 hours"
+    case oneDay = "1 day"
+    case threeDays = "3 days"
+    case oneWeek = "1 week"
+
+    var id: Self { return self }
+}
+
 
 struct NewPost: View
 {
@@ -18,10 +39,15 @@ struct NewPost: View
     @State private var shouldPresentSheet = false
     @State private var newPost : String = ""
     @State private var countColor = Color.green
-    @State private var showContentWarning : Bool = false
+    @State private var showContentWarning = false
     @State private var contentWarning : String = ""
     @State private var postVisibility : MastodonKit.Visibility = .public
     @State private var attachedurls = [AttachmentURL]()
+    @State private var showPoll = false
+    @State private var pollOptionNames  = Array(repeating: "", count: 4)
+    @State private var pollType : PollType = .single
+    @State private var pollTime : PollTimes = .fiveMinutes
+    
     
     var body: some View
     {
@@ -59,6 +85,7 @@ struct NewPost: View
                     .foregroundColor(settings.theme.bodyColor)
                     .font(settings.fonts.title)
                     .scrollIndicators(.automatic)
+                    .frame(height:200)
                 
                 
                 //
@@ -96,24 +123,119 @@ struct NewPost: View
                 //
                 // help text
                 //
-                VStack
+                VStack(alignment: .leading)
                 {
-                    switch postVisibility
+                    HStack
                     {
-                    case .public:
-                        Text("The post is public.\nVisible on Profile: Anyone including anonymous viewers.\nVisible on Public Timeline: Yes.\nFederates to other instances: Yes.")
-                    case .unlisted:
-                        Text("The post is unlisted.\nVisible on Profile: Anyone including anonymous viewers.\nVisible on Public Timeline: No.\nFederates to other instances: Yes.")
-                    case .private:
-                        Text("The post is private.\nVisible on Profile: Followers only.\nVisible on Public Timeline: No.\nFederates to other instances: Only remote @mentions.")
-                    case .direct:
-                        Text("The post is direct.\nVisible on Profile: No.\nVisible on Public Timeline: No.\nFederates to other instances: Only remote @mentions.")
+                        if $newPost.wrappedValue.count <= 500
+                        {
+                            Text("\(500 - $newPost.wrappedValue.count)")
+                                .foregroundColor(.green)
+                        }
+                        else
+                        {
+                            Text("\(500 - $newPost.wrappedValue.count)")
+                                .foregroundColor(.red)
+                        }
                     }
+                    .font(settings.fonts.small)
+                    .padding(EdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 0))
+                
+                    
+                    VStack
+                    {
+                        switch postVisibility
+                        {
+                        case .public:
+                            Text("The post is public.\nVisible on Profile: Anyone including anonymous viewers.\nVisible on Public Timeline: Yes.\nFederates to other instances: Yes.")
+                        case .unlisted:
+                            Text("The post is unlisted.\nVisible on Profile: Anyone including anonymous viewers.\nVisible on Public Timeline: No.\nFederates to other instances: Yes.")
+                        case .private:
+                            Text("The post is private.\nVisible on Profile: Followers only.\nVisible on Public Timeline: No.\nFederates to other instances: Only remote @mentions.")
+                        case .direct:
+                            Text("The post is direct.\nVisible on Profile: No.\nVisible on Public Timeline: No.\nFederates to other instances: Only remote @mentions.")
+                        }
+                    }
+                    .font(.footnote).italic()
+                    .foregroundColor(settings.theme.minorColor)
+                    .frame(height: 65)
                 }
                 .padding(EdgeInsets(top: 2, leading: 10, bottom: 10, trailing: 10))
-                .font(.footnote).italic()
-                .foregroundColor(settings.theme.minorColor)
                 
+                
+                
+                //
+                // poll builder
+                //
+                if showPoll == true
+                {
+                    SpacerLine(color: settings.theme.minorColor)
+                    
+                    VStack(alignment: .center)
+                    {
+                        Text("Poll")
+                            .foregroundColor(settings.theme.accentColor)
+                            .font(settings.fonts.title)
+                        
+                        VStack(alignment: .leading,spacing: 10)
+                        {
+                            ForEach(pollOptionNames.indices, id:\.self)
+                            { index in
+                                HStack
+                                {
+                                    TextField("Poll Option Name", text: $pollOptionNames[index])
+                                    
+                                    Button
+                                    {
+                                        if pollOptionNames.count > 2
+                                        {
+                                            pollOptionNames.remove(at: index)
+                                        }
+                                    }
+                                label:
+                                    {
+                                        Text("- Remove")
+                                    }
+                                }
+                            }
+                        }
+
+                        HStack
+                        {
+                            Button
+                            {
+                                if pollOptionNames.count < 10 // WHAT IS MAX?
+                                {
+                                    pollOptionNames.append("")
+                                }
+                            }
+                        label:
+                            {
+                                Text("+ Add")
+                            }
+
+                       
+                            Picker("", selection: $pollType)
+                            {
+                                ForEach(PollType.allCases)
+                                { polltype in
+                                    Text(polltype.rawValue.capitalized)
+                                }
+                            }
+                            .frame(width: 150)
+                            
+                            Picker("", selection: $pollTime)
+                            {
+                                ForEach(PollTimes.allCases)
+                                { polltime in
+                                    Text(polltime.rawValue.capitalized)
+                                }
+                            }
+                            .frame(width: 150)
+                        }
+                    }
+                    .padding()
+                }
             }
             .toolbar
             {
@@ -147,10 +269,29 @@ struct NewPost: View
                         {
                             Image(systemName: "exclamationmark.triangle")
                         }
-                        
                     }
                 }
                
+                ToolbarItem
+                {
+                    Button
+                    {
+                        showPoll.toggle()
+                    }
+                label:
+                    {
+                        if showPoll == true
+                        {
+                            Image(systemName: "chart.bar.doc.horizontal")
+                                .foregroundColor(settings.theme.accentColor)
+                        }
+                        else
+                        {
+                            Image(systemName: "chart.bar.doc.horizontal")
+                        }
+                    }
+
+                }
                 
                 ToolbarItem
                 {
@@ -163,19 +304,6 @@ struct NewPost: View
                     }
                 }
                 
-                ToolbarItem
-                {
-                    if $newPost.wrappedValue.count <= 500
-                    {
-                        Text("\(500 - $newPost.wrappedValue.count)")
-                            .foregroundColor(.green)
-                    }
-                    else
-                    {
-                        Text("\(500 - $newPost.wrappedValue.count)")
-                            .foregroundColor(.red)
-                    }
-                }
                 
                 ToolbarItem
                 {
@@ -195,7 +323,7 @@ struct NewPost: View
                     }
                 }
             }
-            .frame(width: 400, height: 300)
+            .frame(width:400,height:.infinity)
         }
     }
     

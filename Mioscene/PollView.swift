@@ -16,7 +16,7 @@ struct PollView: View
     
     @EnvironmentObject var settings: Settings
     
-    @State private var votes : [Int] = Array(repeating: -1, count: 100)
+    @State private var votes : [Int] = Array(repeating: -1, count: 100) // what is the current poll limit?
     @State private var voted : Bool = false
     
    
@@ -147,6 +147,7 @@ struct PollView: View
 
     func clearvotes()
     {
+        votes.map { _ in return -1 }
         for index in 0..<votes.count
         {
             votes[index] = -1
