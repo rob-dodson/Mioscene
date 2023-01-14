@@ -40,12 +40,8 @@ struct NotificationView: View
                             Text("Poll by")
                         case .reblog:
                             Text("Reblogged by")
-                        case .follow_request:
-                            Text("Follow Requested by")
-                        case .status:
-                            Text("Notification of Status by")
-                        case .update:
-                            Text("Updated Status by:")
+                        case .other(let textstr):
+                            Text("\(textstr)")
                         }
                     }
                     .font(settings.fonts.title)

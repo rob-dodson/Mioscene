@@ -15,7 +15,6 @@
 		AE06EC04294D234D006CAB67 /* Mastodon.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE06EC03294D234D006CAB67 /* Mastodon.swift */; };
 		AE28C5D82953C8A500C8C928 /* NewPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5D72953C8A500C8C928 /* NewPost.swift */; };
 		AE28C5DA295A7ACE00C8C928 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5D9295A7ACE00C8C928 /* SearchView.swift */; };
-		AE28C5E2295B723A00C8C928 /* MastodonKit in Frameworks */ = {isa = PBXBuildFile; productRef = AE28C5E1295B723A00C8C928 /* MastodonKit */; };
 		AE28C5E4295CE9F900C8C928 /* TimeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5E3295CE9F900C8C928 /* TimeLineView.swift */; };
 		AE28C5E6295CEDCE00C8C928 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5E5295CEDCE00C8C928 /* AccountView.swift */; };
 		AE28C5EC295E4B1C00C8C928 /* AccountSmall.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5EB295E4B1C00C8C928 /* AccountSmall.swift */; };
@@ -33,6 +32,8 @@
 		AE28C60D296EE9F800C8C928 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C60C296EE9F800C8C928 /* Fonts.swift */; };
 		AE28C60F296F25CD00C8C928 /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C60E296F25CD00C8C928 /* Themes.swift */; };
 		AE28C611296F48FD00C8C928 /* PollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C610296F48FD00C8C928 /* PollView.swift */; };
+		AE28C6182972F68300C8C928 /* MastodonKit in Frameworks */ = {isa = PBXBuildFile; productRef = AE28C6172972F68300C8C928 /* MastodonKit */; };
+		AE28C61C297349C900C8C928 /* PollBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C61B297349C900C8C928 /* PollBuilder.swift */; };
 		AE9A85D6295629C100E8B193 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9A85D5295629C100E8B193 /* Settings.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,7 +48,6 @@
 		AE06EC03294D234D006CAB67 /* Mastodon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mastodon.swift; sourceTree = "<group>"; };
 		AE28C5D72953C8A500C8C928 /* NewPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPost.swift; sourceTree = "<group>"; };
 		AE28C5D9295A7ACE00C8C928 /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
-		AE28C5DC295B6EB400C8C928 /* MastodonKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MastodonKit; path = ../MastodonKit; sourceTree = "<group>"; };
 		AE28C5E0295B722F00C8C928 /* MastodonKit-2.0.0 */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "MastodonKit-2.0.0"; path = "../MastodonKit-2.0.0"; sourceTree = "<group>"; };
 		AE28C5E3295CE9F900C8C928 /* TimeLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineView.swift; sourceTree = "<group>"; };
 		AE28C5E5295CEDCE00C8C928 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
@@ -64,6 +64,8 @@
 		AE28C60C296EE9F800C8C928 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		AE28C60E296F25CD00C8C928 /* Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
 		AE28C610296F48FD00C8C928 /* PollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollView.swift; sourceTree = "<group>"; };
+		AE28C6162972F62500C8C928 /* MastodonKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MastodonKit; path = ../MastodonKit; sourceTree = "<group>"; };
+		AE28C61B297349C900C8C928 /* PollBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollBuilder.swift; sourceTree = "<group>"; };
 		AE9A85D5295629C100E8B193 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -72,9 +74,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE28C6182972F68300C8C928 /* MastodonKit in Frameworks */,
 				AE28C5F72963717D00C8C928 /* GRDB in Frameworks */,
 				AE28C5F429635DE600C8C928 /* KeychainSwift in Frameworks */,
-				AE28C5E2295B723A00C8C928 /* MastodonKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -84,7 +86,7 @@
 		AE06EBE3294D16BB006CAB67 = {
 			isa = PBXGroup;
 			children = (
-				AE28C5DC295B6EB400C8C928 /* MastodonKit */,
+				AE28C6162972F62500C8C928 /* MastodonKit */,
 				AE06EBEE294D16BB006CAB67 /* Mioscene */,
 				AE06EBED294D16BB006CAB67 /* Products */,
 				AE28C5DD295B6EEE00C8C928 /* Frameworks */,
@@ -103,6 +105,7 @@
 			isa = PBXGroup;
 			children = (
 				AE28C610296F48FD00C8C928 /* PollView.swift */,
+				AE28C61B297349C900C8C928 /* PollBuilder.swift */,
 				AE28C60E296F25CD00C8C928 /* Themes.swift */,
 				AE28C60A296E1CF200C8C928 /* Utils.swift */,
 				AE28C60C296EE9F800C8C928 /* Fonts.swift */,
@@ -164,9 +167,9 @@
 			);
 			name = Mioscene;
 			packageProductDependencies = (
-				AE28C5E1295B723A00C8C928 /* MastodonKit */,
 				AE28C5F329635DE600C8C928 /* KeychainSwift */,
 				AE28C5F62963717D00C8C928 /* GRDB */,
+				AE28C6172972F68300C8C928 /* MastodonKit */,
 			);
 			productName = Miocene;
 			productReference = AE06EBEC294D16BB006CAB67 /* Mioscene.app */;
@@ -233,6 +236,7 @@
 				AE28C5F029635CAA00C8C928 /* Keys.swift in Sources */,
 				AE9A85D6295629C100E8B193 /* Settings.swift in Sources */,
 				AE06EC02294D1D1D006CAB67 /* Post.swift in Sources */,
+				AE28C61C297349C900C8C928 /* PollBuilder.swift in Sources */,
 				AE06EBF2294D16BB006CAB67 /* ContentView.swift in Sources */,
 				AE28C60F296F25CD00C8C928 /* Themes.swift in Sources */,
 				AE28C5EE29634C0B00C8C928 /* AddAccount.swift in Sources */,
@@ -486,10 +490,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		AE28C5E1295B723A00C8C928 /* MastodonKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MastodonKit;
-		};
 		AE28C5F329635DE600C8C928 /* KeychainSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AE28C5F229635DE600C8C928 /* XCRemoteSwiftPackageReference "keychain-swift" */;
@@ -499,6 +499,10 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AE28C5F52963717D00C8C928 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
 			productName = GRDB;
+		};
+		AE28C6172972F68300C8C928 /* MastodonKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MastodonKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

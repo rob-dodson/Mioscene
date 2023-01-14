@@ -36,20 +36,13 @@ struct SearchView: View
                     mast.client.run(request)
                     { result in
                         
-                        do
-                        {
                             switch result
                             {
                             case .success:
-                                results = try result.get().value
+                                results = result.value
                             case .failure(let error):
                                 Log.log(msg:error.localizedDescription)
                             }
-                        }
-                        catch
-                        {
-                            Log.log(msg:"Error running search \(error)")
-                        }
                     }
                 }
                 .padding([.bottom,.trailing])
@@ -126,7 +119,7 @@ struct SearchView: View
                     } label:
                     {
                         Text("#\(hashtags[index].name)")
-                             Text(hashtags[index].url)
+                        Text(hashtags[index].url.path)
                     }
                 }
             }

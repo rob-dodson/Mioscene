@@ -43,19 +43,22 @@ struct Post: View
                 //
                 // Poster's avatar
                 //
-                AsyncImage(url: URL(string: status.account.avatar))
-                { image in
+                if let account = status.account
+                {
+                    AsyncImage(url: URL(string: account.avatar ?? ""))
+                    { image in
                         image.resizable()
-                }
-            placeholder:
-                {
-                    Image(systemName: "person.fill.questionmark")
-                }
-                .frame(width: 50, height: 50)
-                .cornerRadius(15)
-                .onTapGesture
-                {
-                    settings.showAccount(account:status.account)
+                    }
+                placeholder:
+                    {
+                        Image(systemName: "person.fill.questionmark")
+                    }
+                    .frame(width: 50, height: 50)
+                    .cornerRadius(15)
+                    .onTapGesture
+                    {
+                        settings.showAccount(account:account)
+                    }
                 }
               
                 

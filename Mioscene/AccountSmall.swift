@@ -23,7 +23,7 @@ struct AccountSmall: View
             {
                 HStack(alignment: .top)
                 {
-                    AsyncImage(url: URL(string: account.avatar))
+                    AsyncImage(url: URL(string: account.avatar ?? ""))
                     { image in
                         image.resizable()
                     }

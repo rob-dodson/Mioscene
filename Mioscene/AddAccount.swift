@@ -1,5 +1,5 @@
 //
-//  NewPost.swift
+//  AddAccount.swift
 //  Miocene
 //
 //  Created by Robert Dodson on 12/21/22.
@@ -12,6 +12,7 @@ import MastodonKit
 struct AddAccount: View
 {
     @ObservedObject var mast : Mastodon
+    
     @EnvironmentObject var settings: Settings
     
     @State private var shouldPresentSheet = false

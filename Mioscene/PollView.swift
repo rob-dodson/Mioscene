@@ -29,8 +29,9 @@ struct PollView: View
             {
                 ForEach(poll.options.indices, id:\.self)
                 { index in
+                    
                     let total = Double(poll.votesCount)
-                    let itemcount = Double(poll.options[index].votesCount)
+                    let itemcount = Double(poll.options[index].votesCount ?? 0)
                     let percent = max(0.0,trunc((itemcount / total) * 100.0))
                     
                   
@@ -133,7 +134,10 @@ struct PollView: View
                     Text("Expires")
                 }
                 
-                Text("\(poll.expiresAt.formatted(date: .abbreviated, time: .shortened))")
+                if let date = poll.expiresAt
+                {
+                    Text("\(date.formatted(date: .abbreviated, time: .shortened))")
+                }
             }
             .foregroundColor(settings.theme.minorColor)
             .font(settings.fonts.small).italic()
@@ -147,7 +151,7 @@ struct PollView: View
 
     func clearvotes()
     {
-        votes.map { _ in return -1 }
+        votes = votes.map { _ in return -1 }
         for index in 0..<votes.count
         {
             votes[index] = -1
@@ -159,7 +163,12 @@ struct PollView: View
         voted = true
         let choices = votes.compactMap {  $0 > 0 ? $0 : nil}
         
-        mast.voteOnPoll(poll: poll, choices: choices)
+        var choiceSet = IndexSet()
+        for val in choices
+        {
+            choiceSet.insert(val)
+        }
+        mast.voteOnPoll(poll: poll, choices: choiceSet)
         { updatedpoll in
             poll = updatedpoll
         }

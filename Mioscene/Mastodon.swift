@@ -76,7 +76,7 @@ class Mastodon : ObservableObject
     
     func connect(localaccount:LocalAccountRecord,serverurl:String,token:String)
     {
-        client = Client(baseURL: "https://\(serverurl)",accessToken: token)
+        client =  Client(baseURL: "https://\(serverurl)",accessToken: token)
         
         let request = Clients.register(
             clientName: "Mioscene",
@@ -86,24 +86,24 @@ class Mastodon : ObservableObject
 
         client.run(request)
         { result in
-                if let application = try? result.get().value
-                {
-                    Log.log(msg:"id: \(application.id)")
-                    Log.log(msg:"redirect uri: \(application.redirectURI)")
-                    Log.log(msg:"client id: \(application.clientID)")
-                    Log.log(msg:"client secret: \(application.clientSecret)")
-                }
+            if let application = result.value
+            {
+                Log.log(msg:"id: \(application.id)")
+                Log.log(msg:"redirect uri: \(application.redirectURI)")
+                Log.log(msg:"client id: \(application.clientID)")
+                Log.log(msg:"client secret: \(application.clientSecret)")
+            }
         }
         
         client.run(Accounts.currentUser())
         { result in
-            do
+            if let account = result.value
             {
-                localaccount.usersMastodonAccount = try result.get().value
+                localaccount.usersMastodonAccount = account
             }
-            catch
+            else if let error = result.error
             {
-                Log.log(msg:"Error getting user account \(error)")
+                Log.log(msg: "error gettting account \(error)")
             }
         }
     }
@@ -130,7 +130,7 @@ class Mastodon : ObservableObject
         
         newClient.run(request)
         { result in
-            if let application = try? result.get().value
+            if let application = result.value
             {
                 clientid = application.clientID
                 clientsecret = application.clientSecret
@@ -139,7 +139,7 @@ class Mastodon : ObservableObject
                 
                 newClient.run(loginrequest)
                 { result in
-                    if let loginsettings = try? result.get().value
+                    if let loginsettings = result.value
                     {
                         do
                         {
@@ -170,10 +170,11 @@ class Mastodon : ObservableObject
     func getRelationships(ids:[String],done: @escaping ([Relationship]) -> Void)
     {
         let request = Accounts.relationships(ids: ids)
+        
         client.run(request)
         { result in
             Log.log(msg:"getRelationships result \(result)")
-            if let relationships = try? result.get().value
+            if let relationships = result.value
             {
                 done(relationships)
             }
@@ -188,10 +189,11 @@ class Mastodon : ObservableObject
     func follow(account:Account,done: @escaping (Relationship) -> Void)
     {
         let request = Accounts.follow(id: account.id)
+        
         client.run(request)
         { result in
             Log.log(msg:"follow result \(result)")
-            if let relationship = try? result.get().value
+            if let relationship = result.value
             {
                 done(relationship)
             }
@@ -201,10 +203,11 @@ class Mastodon : ObservableObject
     func unfollow(account:Account,done: @escaping (Relationship) -> Void)
     {
         let request = Accounts.unfollow(id: account.id)
+        
         client.run(request)
         { result in
             Log.log(msg:"unfollow result \(result)")
-            if let relationship = try? result.get().value
+            if let relationship =  result.value
             {
                 done(relationship)
             }
@@ -215,10 +218,11 @@ class Mastodon : ObservableObject
     func mute(account:Account,done: @escaping (Relationship) -> Void)
     {
         let request = Accounts.mute(id: account.id)
+        
         client.run(request)
         { result in
             Log.log(msg:"mute result \(result)")
-            if let relationship = try? result.get().value
+            if let relationship = result.value
             {
                 done(relationship)
             }
@@ -228,10 +232,11 @@ class Mastodon : ObservableObject
     func unmute(account:Account,done: @escaping (Relationship) -> Void)
     {
         let request = Accounts.unmute(id: account.id)
+        
         client.run(request)
         { result in
             Log.log(msg:"unmute result \(result)")
-            if let relationship = try? result.get().value
+            if let relationship = result.value
             {
                 done(relationship)
             }
@@ -242,10 +247,11 @@ class Mastodon : ObservableObject
     func block(account:Account,done: @escaping (Relationship) -> Void)
     {
         let request = Accounts.block(id: account.id)
+        
         client.run(request)
         { result in
             Log.log(msg:"block result \(result)")
-            if let relationship = try? result.get().value
+            if let relationship = result.value
             {
                 done(relationship)
             }
@@ -255,26 +261,27 @@ class Mastodon : ObservableObject
     func unblock(account:Account,done: @escaping (Relationship) -> Void)
     {
         let request = Accounts.unblock(id: account.id)
+        
         client.run(request)
         { result in
             Log.log(msg:"unblock result \(result)")
-            if let relationship = try? result.get().value
+            if let relationship = result.value
             {
                 done(relationship)
             }
         }
     }
     
-    func voteOnPoll(poll:Poll,choices:[Int],done: @escaping (Poll) -> Void)
+    func voteOnPoll(poll:Poll,choices:IndexSet,done: @escaping (Poll) -> Void)
     {
-        let request = Polls.vote(id: poll.id, choices: choices)
+        let request = Polls.vote(pollID: poll.id, optionIndices: choices)
         
         client.run(request)
         { result in
             switch result
             {
-            case .success(let response):
-                done(response.value)
+            case .success(let poll, _):
+                done(poll)
             case .failure(let error):
                 Log.log(msg:"error in vote on poll \(error)")
             }
@@ -321,24 +328,25 @@ class Mastodon : ObservableObject
     }
     
     
-    func post(newpost:String,spoiler:String?,visibility:Visibility,attachedURLS:[AttachmentURL]?)
+    
+    func post(newpost:String,spoiler:String?,visibility:Visibility,attachedURLS:[AttachmentURL],pollpayload:PollPayload)
     {
-        if let urls = attachedURLS
+        if attachedURLS.count > 0
         {
             Task
             {
-                let waitcounttotal = urls.count
+                let waitcounttotal = attachedURLS.count
                 var waitcount = 0
                 var retrywait = 0
                 let maxwait = 10
                 
                 var mediaIDs = [String]()
                 
-                for index in urls.indices
+                for index in attachedURLS.indices
                 {
                     do
                     {
-                        if let url = urls[index].url
+                        if let url = attachedURLS[index].url
                         {
                             let imageData = try Data(contentsOf: url)
                             let imgFormat = imageData.imageFormat
@@ -362,7 +370,7 @@ class Mastodon : ObservableObject
                             { result in
                                 Log.log(msg:"media upload result \(result)")
                                 
-                                if let attachment = try? result.get().value
+                                if let attachment = result.value
                                 {
                                     mediaIDs.append(attachment.id)
                                     waitcount += 1
@@ -391,7 +399,9 @@ class Mastodon : ObservableObject
         }
         else
         {
-            let request = Statuses.create(status:newpost,spoilerText:spoiler,visibility: visibility)
+            let request = Statuses.create(status: newpost,spoilerText: spoiler,
+                                          poll:pollpayload,
+                                      visibility: visibility)
             client.run(request)
             { result in
                 Log.log(msg:"post result \(result)")
@@ -422,43 +432,45 @@ class Mastodon : ObservableObject
     {
         let request  = MastodonKit.Notifications.all()
         
-        var returnnotes = [MastodonKit.Notification]()
-        
         client.run(request)
         { result in
-                if let notes = try? result.get().value
+            if let notes = result.value
+            {
+                var returnnotes = [MastodonKit.Notification]()
+                for note in notes
                 {
-                    for note in notes
-                    {
-                        returnnotes.append(note)
-                    }
-                    done(returnnotes)
+                    returnnotes.append(note)
                 }
+                done(returnnotes)
+            }
         }
     }
     
     
     func getNotifications(done: @escaping ([MNotification]) -> Void)
     {
-        var returnnotes = [MNotification]()
-        
         let request = Notifications.all()
+        
         client.run(request)
         { result in
-            if let notifications = try? result.get().value
+            
+            if let notifications = result.value
             {
+                var returnnotes = [MNotification]()
                 for note in notifications
                 {
                     returnnotes.append(self.convert(notification: note))
                 }
                 done(returnnotes)
             }
-            else
+            else if let error = result.error
             {
-                Log.log(msg:"error getting notifications \(result)")
+                Log.log(msg:"error getting notifications \(error)")
+                done([MNotification]())
             }
         }
     }
+    
     
     func getTimeline(timeline:TimeLine,tag:String,done: @escaping ([MStatus]) -> Void)
     {
@@ -492,7 +504,7 @@ class Mastodon : ObservableObject
         
         client.run(request)
         { result in
-                if let statuses = try? result.get().value
+                if let statuses = result.value
                 {
                     for status in statuses
                     {

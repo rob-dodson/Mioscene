@@ -57,9 +57,10 @@ struct TimeLineView: View
                         fetchStatuses(timeline:newValue,tag:settings.currentTag)
                     }
                 }
-                
-                NewPost(mast: mast, selectedTimeline: $selectedTimeline)
-            }
+                 
+                NewPost(selectedTimeline:$selectedTimeline,mast:mast)
+                        
+             }
             .padding()
             
             SpacerLine(color: settings.theme.minorColor)

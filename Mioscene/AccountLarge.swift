@@ -25,7 +25,7 @@ struct AccountLarge: View
         {
                 HStack(alignment: .top)
                 {
-                    AsyncImage(url: URL(string:account.avatar))
+                    AsyncImage(url: URL(string:account.avatar ?? ""))
                     { image in
                         image.resizable()
                     }
@@ -38,9 +38,9 @@ struct AccountLarge: View
                     
                     VStack
                     {
-                        if !account.header.hasSuffix("missing.png")
+                        if let header = account.header
                         {
-                            AsyncImage(url: URL(string: account.header))
+                            AsyncImage(url: URL(string: header))
                             { image in
                                 image.resizable()
                                     .aspectRatio(contentMode: .fit)
@@ -142,7 +142,7 @@ struct AccountLarge: View
                 }
                 
                 
-                Link(account.url,destination: URL(string:account.url)!)
+                Link(account.url.path,destination: account.url)
                     .foregroundColor(settings.theme.linkColor)
                     .font(.headline)
                 }

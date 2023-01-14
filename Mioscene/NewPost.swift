@@ -8,33 +8,14 @@
 import SwiftUI
 import MastodonKit
 
-enum PollType : String, Identifiable, CaseIterable
-{
-    case single = "Single Choice"
-    case muliple = "Multiple Choice"
-    
-    var id: Self { return self }
-}
-
-enum PollTimes : String, Identifiable, CaseIterable
-{
-    case fiveMinutes = "5 minutes"
-    case thirtyMinutes = "30 minutes"
-    case oneHour = "1 hour"
-    case sixHours = "6 hours"
-    case oneDay = "1 day"
-    case threeDays = "3 days"
-    case oneWeek = "1 week"
-
-    var id: Self { return self }
-}
 
 
 struct NewPost: View
 {
-    @ObservedObject var mast : Mastodon
-    @EnvironmentObject var settings: Settings
     @State var selectedTimeline : Binding<TimeLine>
+    @ObservedObject var mast : Mastodon
+    
+    @EnvironmentObject var settings: Settings
     
     @State private var shouldPresentSheet = false
     @State private var newPost : String = ""
@@ -44,10 +25,11 @@ struct NewPost: View
     @State private var postVisibility : MastodonKit.Visibility = .public
     @State private var attachedurls = [AttachmentURL]()
     @State private var showPoll = false
-    @State private var pollOptionNames  = Array(repeating: "", count: 4)
     @State private var pollType : PollType = .single
     @State private var pollTime : PollTimes = .fiveMinutes
+    @State private var pollOptions = Array<String>(repeating: String(), count: 4)
     
+    @StateObject private var pollState = PollState()
     
     var body: some View
     {
@@ -171,70 +153,8 @@ struct NewPost: View
                 {
                     SpacerLine(color: settings.theme.minorColor)
                     
-                    VStack(alignment: .center)
-                    {
-                        Text("Poll")
-                            .foregroundColor(settings.theme.accentColor)
-                            .font(settings.fonts.title)
-                        
-                        VStack(alignment: .leading,spacing: 10)
-                        {
-                            ForEach(pollOptionNames.indices, id:\.self)
-                            { index in
-                                HStack
-                                {
-                                    TextField("Poll Option Name", text: $pollOptionNames[index])
-                                    
-                                    Button
-                                    {
-                                        if pollOptionNames.count > 2
-                                        {
-                                            pollOptionNames.remove(at: index)
-                                        }
-                                    }
-                                label:
-                                    {
-                                        Text("- Remove")
-                                    }
-                                }
-                            }
-                        }
-
-                        HStack
-                        {
-                            Button
-                            {
-                                if pollOptionNames.count < 10 // WHAT IS MAX?
-                                {
-                                    pollOptionNames.append("")
-                                }
-                            }
-                        label:
-                            {
-                                Text("+ Add")
-                            }
-
-                       
-                            Picker("", selection: $pollType)
-                            {
-                                ForEach(PollType.allCases)
-                                { polltype in
-                                    Text(polltype.rawValue.capitalized)
-                                }
-                            }
-                            .frame(width: 150)
-                            
-                            Picker("", selection: $pollTime)
-                            {
-                                ForEach(PollTimes.allCases)
-                                { polltime in
-                                    Text(polltime.rawValue.capitalized)
-                                }
-                            }
-                            .frame(width: 150)
-                        }
-                    }
-                    .padding()
+                    PollBuilder(pollState:pollState)
+                                
                 }
             }
             .toolbar
@@ -318,14 +238,20 @@ struct NewPost: View
                 {
                     Button("Post")
                     {
-                        mast.post(newpost:newPost,spoiler:showContentWarning == true ? contentWarning : nil,visibility:postVisibility,attachedURLS:attachedurls)
+                        let pollpayload = PollBuilder.getPollPayLoad(pollState: pollState)
+                        
+                        
+                        mast.post(newpost:newPost,
+                                  spoiler:showContentWarning == true ? contentWarning : nil,
+                                  visibility:postVisibility,
+                                  attachedURLS:attachedurls,
+                                  pollpayload:pollpayload)
+                        
                         shouldPresentSheet = false
                     }
                 }
             }
-            .frame(width:400,height:.infinity)
         }
     }
-    
 }
 
