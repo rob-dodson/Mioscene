@@ -18,7 +18,7 @@ struct PollView: View
     
     @State private var votes : [Int] = Array(repeating: -1, count: 100) // what is the current poll limit?
     @State private var voted : Bool = false
-    
+    @State private var votedFor : Int = 0
    
     
     var body: some View
@@ -48,6 +48,7 @@ struct PollView: View
                                         clearvotes()
                                     }
                                     votes[index] = index
+                                    votedFor = index
                                 }
                                 else
                                 {
@@ -56,7 +57,7 @@ struct PollView: View
                             }
                         label:
                             {
-                            if votes[index] != -1
+                                if votes[index] != -1
                                 {
                                     Image(systemName: "checkmark")
                                 }
@@ -110,15 +111,30 @@ struct PollView: View
             }
             else
             {
-                HStack
+                if poll.ownVotes.count > 0 || voted == true
                 {
-                    Text("You voted for")
-                    ForEach(poll.ownVotes.indices, id:\.self)
-                    { index in
-                        Text("#\(poll.ownVotes[index] + 1)")
+                    HStack
+                    {
+                        Text("You voted for")
+                        if poll.ownVotes.count > 0
+                        {
+                            ForEach(poll.ownVotes.indices, id:\.self)
+                            { index in
+                                Text("#\(poll.ownVotes[index] + 1)")
+                            }
+                        }
+                        else
+                        {
+                            Text("#\(votedFor + 1)")
+                        }
                     }
+                    .foregroundColor(settings.theme.minorColor)
                 }
-                .foregroundColor(settings.theme.minorColor)
+                else if poll.voted == true
+                {
+                    Text("This your poll")
+                        .foregroundColor(settings.theme.minorColor)
+                }
             }
             
             Spacer()
