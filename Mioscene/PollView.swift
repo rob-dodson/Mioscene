@@ -18,7 +18,6 @@ struct PollView: View
     
     @State private var votes : [Int] = Array(repeating: -1, count: 100) // what is the current poll limit?
     @State private var voted : Bool = false
-    @State private var votedFor : Int = 0
    
     
     var body: some View
@@ -48,7 +47,6 @@ struct PollView: View
                                         clearvotes()
                                     }
                                     votes[index] = index
-                                    votedFor = index
                                 }
                                 else
                                 {
@@ -120,12 +118,15 @@ struct PollView: View
                         {
                             ForEach(poll.ownVotes.indices, id:\.self)
                             { index in
-                                Text("#\(poll.ownVotes[index] + 1)")
+                                Text("#\(poll.ownVotes[index] + 1) ")
                             }
                         }
                         else
                         {
-                            Text("#\(votedFor + 1)")
+                            ForEach(votes.indices, id:\.self)
+                            { index in
+                                Text("#\(votes[index] + 1) ")
+                            }
                         }
                     }
                     .foregroundColor(settings.theme.minorColor)
@@ -184,6 +185,7 @@ struct PollView: View
         {
             choiceSet.insert(val)
         }
+        
         mast.voteOnPoll(poll: poll, choices: choiceSet)
         { updatedpoll in
             poll = updatedpoll
