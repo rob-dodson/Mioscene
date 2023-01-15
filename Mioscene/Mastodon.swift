@@ -166,6 +166,24 @@ class Mastodon : ObservableObject
         }
     }
    
+    func getStatusesForAccount(account:Account,done: @escaping ([MStatus]) -> Void)
+    {
+        var returnstats = [MStatus]()
+        
+        let request = Accounts.statuses(id: account.id)
+        client.run(request)
+        { result in
+            if let statuses = result.value
+            {
+                for status in statuses
+                {
+                    returnstats.append(self.convert(status: status))
+                }
+                done(returnstats)
+            }
+        }
+    }
+    
     
     func getRelationships(ids:[String],done: @escaping ([Relationship]) -> Void)
     {
@@ -472,7 +490,7 @@ class Mastodon : ObservableObject
         }
     }
     
-    
+
     func getTimeline(timeline:TimeLine,tag:String,done: @escaping ([MStatus]) -> Void)
     {
         if client == nil

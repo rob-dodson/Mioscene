@@ -8,6 +8,26 @@
 import SwiftUI
 import MastodonKit
 
+/*
+Image(systemName: "checkmark.circle")
+    .font(.system(size: 16, weight: .ultraLight))
+Image(systemName: "checkmark.circle")
+    .font(.system(size: 16, weight: .thin))
+Image(systemName: "checkmark.circle")
+    .font(.system(size: 16, weight: .light))
+Image(systemName: "checkmark.circle")
+    .font(.system(size: 16, weight: .regular))
+Image(systemName: "checkmark.circle")
+    .font(.system(size: 16, weight: .medium))
+Image(systemName: "checkmark.circle")
+    .font(.system(size: 16, weight: .semibold))
+Image(systemName: "checkmark.circle")
+    .font(.system(size: 16, weight: .bold))
+Image(systemName: "checkmark.circle")
+    .font(.system(size: 16, weight: .heavy))
+Image(systemName: "checkmark.circle")
+    .font(.system(size: 16, weight: .black))
+*/
 
 struct ContentView: View
 {
@@ -45,7 +65,7 @@ struct CustomTopTabBar: View
     {
         Spacer()
         
-        HStack(alignment: .center,spacing: 30)
+        HStack(alignment: .center,spacing: 50)
         {
             Spacer()
             
@@ -73,6 +93,7 @@ struct CustomTopTabBar: View
 }
 
 
+
 struct TabBarButton: View
 {
     @EnvironmentObject var settings: Settings
@@ -84,20 +105,21 @@ struct TabBarButton: View
     
     var body: some View
     {
-        HStack
+        VStack
         {
             Image(systemName:icon)
-                .scaleEffect(x:1.25,y:1.25)
+                .font(.system(size: 24, weight: .thin))
                 .foregroundColor(isSelected ? settings.theme.accentColor : settings.theme.minorColor)
-                .padding(.trailing,-2)
-            
+            //    .padding(.trailing,-2)
+                //.padding(.bottom,10)
+           
             Text(text)
-                .baselineOffset(-10)
                 .fontWeight(isSelected ? .bold : .regular)
-                .font(settings.fonts.subheading)
+                .font(settings.fonts.small)
                 .foregroundColor(isSelected ? settings.theme.accentColor : settings.theme.minorColor)
-                .padding(.bottom,10)
-                .border(width: isSelected ? 3 : 1, edges: [.bottom], color: .black)
+                .padding(.bottom,5)
+                //  .border(width: isSelected ? 3 : 1, edges: [.bottom], color: .black)
+        
         }
     }
 }

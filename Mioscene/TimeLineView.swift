@@ -90,7 +90,6 @@ struct TimeLineView: View
 
             ScrollView
             {
-               
                 if selectedTimeline == .notifications
                 {
                     ForEach(getnotifications())

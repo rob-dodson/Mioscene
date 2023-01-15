@@ -69,13 +69,23 @@ struct Post: View
                     //
                     VStack(alignment: .leading)
                     {
-                        Text(status.account.displayName)
-                            .font(settings.fonts.heading)
-                            .foregroundColor(settings.theme.nameColor)
-                            .onTapGesture
+                        HStack
+                        {
+                            Text(status.account.displayName)
+                                .font(settings.fonts.heading)
+                                .foregroundColor(settings.theme.nameColor)
+                                .onTapGesture
                             {
                                 settings.showAccount(account:status.account)
                             }
+                            
+                            if status.account.bot == true
+                            {
+                                Text("[BOT]")
+                                    .foregroundColor(settings.theme.accentColor)
+                                    .font(settings.fonts.heading)
+                            }
+                        }
                         
                         let name = "@\(status.account.acct)"
                         Text(name)
@@ -310,6 +320,7 @@ struct Post: View
                 }
                 .frame(maxWidth:.infinity, alignment: .leading)  // .infinity
            }
+            .padding(.bottom,5)
         }
         .textSelection(.enabled)
         .contextMenu

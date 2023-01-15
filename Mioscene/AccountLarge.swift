@@ -8,7 +8,6 @@
 import SwiftUI
 import MastodonKit
 
-
 struct AccountLarge: View
 {
     @EnvironmentObject var settings: Settings
@@ -17,171 +16,214 @@ struct AccountLarge: View
     @State var account : Account
     
     @State private var relationship : Relationship?
-    
+    @State private var accountStatuses = [MStatus]()
+
     
     var body: some View
     {
-        VStack(alignment:.leading)
+        GroupBox
         {
-            HStack(alignment: .top)
+            VStack(alignment:.leading)
             {
-                AsyncImage(url: URL(string:account.avatar ?? ""))
-                { image in
-                    image.resizable()
-                }
-            placeholder:
+                HStack(alignment: .top)
                 {
-                    Image(systemName: "person.fill.questionmark")
-                }
-                .frame(width: 100, height: 100)
-                .cornerRadius(15)
-                
-                VStack
-                {
-                    if let header = account.header
-                    {
-                        AsyncImage(url: URL(string: header))
-                        { image in
-                            image.resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(maxWidth:300)
-                        }
-                    placeholder:
-                        {
-                            Image(systemName: "person.fill.questionmark")
-                        }
-                        .cornerRadius(15)
+                    AsyncImage(url: URL(string:account.avatar ?? ""))
+                    { image in
+                        image.resizable()
                     }
-                    else
+                placeholder:
                     {
-                        Image(systemName: "photo.fill").imageScale(.large)
+                        Image(systemName: "person.fill.questionmark")
                     }
+                    .frame(width: 100, height: 100)
+                    .cornerRadius(15)
                     
-                    
-                    HStack
+                    VStack
                     {
-                        if relationship != nil
+                        if let header = account.header
                         {
-                            if relationship?.requested == true
-                            {
-                                Text("Follow Requested") // Need to add: withdraw request button
+                            AsyncImage(url: URL(string: header))
+                            { image in
+                                image.resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(maxWidth:300)
                             }
-                            else
+                        placeholder:
                             {
-                                toggleButton(state: relationship!.following, truelabel: "Unfollow", falselabel: "Follow",
-                                             truefunc: { mast.unfollow(account: account, done: { result in relationship = result }) },
-                                             falsefunc: { mast.follow(account: account, done: { result in relationship = result }) })
+                                Image(systemName: "person.fill.questionmark")
                             }
-                            
-                            toggleButton(state: relationship!.muting, truelabel: "Unmute", falselabel: "Mute",
-                                         truefunc: { mast.unmute(account: account, done: { result in relationship = result }) },
-                                         falsefunc: { mast.mute(account: account, done: { result in relationship = result }) })
-                            
-                            toggleButton(state: relationship!.blocking, truelabel: "Unblock", falselabel: "Block",
-                                         truefunc: { mast.unblock(account: account, done: { result in relationship = result }) },
-                                         falsefunc: { mast.block(account: account, done: { result in relationship = result }) })
+                            .cornerRadius(15)
                         }
+                        else
+                        {
+                            Image(systemName: "photo.fill").imageScale(.large)
+                        }
+                        
+                        
+                        HStack
+                        {
+                            if relationship != nil
+                            {
+                                if relationship?.requested == true
+                                {
+                                    Text("Follow Requested") // Need to add: withdraw request button
+                                }
+                                else
+                                {
+                                    toggleButton(state: relationship!.following, truelabel: "Unfollow", falselabel: "Follow",
+                                                 truefunc: { mast.unfollow(account: account, done: { result in relationship = result }) },
+                                                 falsefunc: { mast.follow(account: account, done: { result in relationship = result }) })
+                                }
+                                
+                                toggleButton(state: relationship!.muting, truelabel: "Unmute", falselabel: "Mute",
+                                             truefunc: { mast.unmute(account: account, done: { result in relationship = result }) },
+                                             falsefunc: { mast.mute(account: account, done: { result in relationship = result }) })
+                                
+                                toggleButton(state: relationship!.blocking, truelabel: "Unblock", falselabel: "Block",
+                                             truefunc: { mast.unblock(account: account, done: { result in relationship = result }) },
+                                             falsefunc: { mast.block(account: account, done: { result in relationship = result }) })
+                            }
+                        }
+                        .onAppear()
+                        {
+                            if account.id != mast.currentlocalAccountRecord?.usersMastodonAccount?.id
+                            {
+                                getRelationship(account: account)
+                            }
+                        }
+                        
+                        Text(relationship?.followedBy == true ? "Is following you" : "Is not following you")
+                            .foregroundColor(settings.theme.minorColor).italic()
                     }
-                    .onAppear()
-                    {
-                        if account.id != mast.currentlocalAccountRecord?.usersMastodonAccount?.id
-                        {
-                            getRelationship(account: account)
-                        }
-                    }
-                    
-                    Text(relationship?.followedBy == true ? "Is following you" : "Is not following you")
-                        .foregroundColor(settings.theme.accentColor).italic()
-                }
-            }
-            
-            VStack(alignment: .leading,spacing: 2)
-            {
-                VStack(alignment:.leading)
-                {
-                    Text("\(account.displayName)")
-                        .foregroundColor(settings.theme.nameColor)
-                        .font(settings.fonts.title)
-                    
-                    Text("@\(account.acct)")
-                        .foregroundColor(settings.theme.minorColor)
-                        .font(settings.fonts.title)
-                    
-                    Text("User since \(account.createdAt.formatted())")
-                        .foregroundColor(settings.theme.minorColor)
-                        .font(.footnote).italic()
-                    
-                    Link(account.url.path,destination: account.url)
-                        .foregroundColor(settings.theme.linkColor)
-                        .font(.headline)
-                    
-                    HStack
-                    {
-                        VStack
-                        {
-                            Text("\(account.statusesCount)")
-                            Text("Posts")
-                        }
-                        VStack
-                        {
-                            Text("\(account.followersCount)")
-                            Text("Followers")
-                        }
-                        VStack
-                        {
-                            Text("\(account.followingCount)")
-                            Text("Following")
-                        }
-                    }
-                    .font(.subheadline)
-                    .foregroundColor(settings.theme.minorColor)
-                }
-                .padding()
-                
-                
-                
-                
-                if let nsAttrString = account.note.htmlAttributedString(fontSize:16,color:settings.theme.bodyColor)
-                {
-                    Text(AttributedString(nsAttrString))
                 }
                 
-                if let fields = account.fields
+                VStack(alignment: .leading,spacing: 2)
                 {
                     VStack(alignment:.leading)
                     {
-                        ForEach(fields.indices, id:\.self)
-                        { index in
-                            ZStack
+                        HStack
+                        {
+                            Text("\(account.displayName)")
+                                .foregroundColor(settings.theme.nameColor)
+                                .font(settings.fonts.heading)
+                            
+                            if account.bot == true
                             {
-                                HStack
-                                {
-                                    Text("\(fields[index].name):")
-                                        .foregroundColor(settings.theme.minorColor)
-                                        .font(settings.fonts.main)
-                                    
-                                    if let nsAttrString = fields[index].value.htmlAttributedString(fontSize: settings.fonts.html,color:settings.theme.bodyColor,linkColor: settings.theme.linkColor)
-                                    {
-                                        Text(AttributedString(nsAttrString))
-                                            .font(settings.fonts.main)
-                                            .foregroundColor(settings.theme.bodyColor)
-                                    }
-                                    
-                                    if fields[index].verification != nil
-                                    {
-                                        Image(systemName: "checkmark").foregroundColor(.green)
-                                    }
-                                }
+                                Text("[BOT]")
+                                    .foregroundColor(settings.theme.accentColor)
+                                    .font(settings.fonts.heading)
+                            }
+                        }
+                        Text("@\(account.acct)")
+                            .foregroundColor(settings.theme.minorColor)
+                            .font(settings.fonts.main)
+                        
+                        Text("User since \(account.createdAt.formatted())")
+                            .foregroundColor(settings.theme.minorColor)
+                            .font(.footnote).italic()
+                        
+                        Link(account.url.path,destination: account.url)
+                            .foregroundColor(settings.theme.linkColor)
+                            .font(.headline)
+                        
+                        HStack
+                        {
+                            VStack
+                            {
+                                Text("\(account.statusesCount)")
+                                Text("Posts")
+                            }
+                            VStack
+                            {
+                                Text("\(account.followersCount)")
+                                Text("Followers")
+                            }
+                            VStack
+                            {
+                                Text("\(account.followingCount)")
+                                Text("Following")
+                            }
+                        }
+                        .font(settings.fonts.main)
+                        .foregroundColor(settings.theme.minorColor)
+                        
+                        VStack(alignment: .leading)
+                        {
+                            if let nsAttrString = account.note.htmlAttributedString(fontSize:16,color:settings.theme.bodyColor)
+                            {
+                                Text(AttributedString(nsAttrString))
+                            }
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(settings.theme.blockColor)
+                        
+                        
+                        if let fields = account.fields
+                        {
+                            if fields.count > 0
+                            {
+                                fieldsView(fields:fields)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(settings.theme.blockColor)
                             }
                         }
                     }
-                    .padding()
-                    .background(settings.theme.blockColor)
+                }
+            }
+        }
+            
+        
+        ScrollView
+        {
+            ForEach(accountStatuses)
+            { mstatus in
+                Post(mast:mast,mstat:mstatus)
+                    .padding([.horizontal,.top])
+            }
+        }
+        .task
+        {
+            Task
+            {
+                mast.getStatusesForAccount(account: account)
+                { mstatus in
+                    accountStatuses = mstatus
                 }
             }
         }
     }
     
+    func fieldsView(fields:[VerifiableMetadataField]) -> some View
+    {
+        VStack(alignment: .leading)
+        {
+            ForEach(fields.indices, id:\.self)
+            { index in
+                HStack
+                {
+                    Text("\(fields[index].name):")
+                        .foregroundColor(settings.theme.minorColor)
+                        .font(settings.fonts.subheading)
+                    
+                    if let nsAttrString = fields[index].value.htmlAttributedString(fontSize:settings.fonts.html,color:settings.theme.bodyColor)
+                    {
+                        Text(AttributedString(nsAttrString))
+                        
+                        if fields[index].verification != nil
+                        {
+                            Image(systemName: "checkmark").foregroundColor(.green)
+                        }
+                    }
+                    else
+                    {
+                        Text(fields[index].value)
+                    }
+                }
+            }
+        }
+    }
     
     func getRelationship(account:Account)
     {
