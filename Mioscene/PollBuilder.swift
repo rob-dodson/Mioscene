@@ -8,6 +8,7 @@
 import SwiftUI
 import MastodonKit
 
+
 enum PollType : String, Identifiable, CaseIterable
 {
     case single = "Single Choice"
@@ -15,6 +16,7 @@ enum PollType : String, Identifiable, CaseIterable
     
     var id: Self { return self }
 }
+
 
 enum PollTimes : String, Identifiable, CaseIterable
 {
@@ -36,6 +38,7 @@ class PollState : ObservableObject
     @Published var pollType = PollType.single
     @Published var pollOptions = [String](repeating: String(), count:4)
 }
+
 
 struct PollBuilder: View
 {
@@ -68,7 +71,7 @@ struct PollBuilder: View
                         }
                     label:
                         {
-                            Text("- Remove")
+                            Text("-")
                         }
                     }
                 }
@@ -85,7 +88,7 @@ struct PollBuilder: View
                 }
             label:
                 {
-                    Text("+ Add")
+                    Text("+")
                 }
 
           

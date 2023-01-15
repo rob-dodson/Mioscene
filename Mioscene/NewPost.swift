@@ -240,7 +240,6 @@ struct NewPost: View
                     {
                         let pollpayload = PollBuilder.getPollPayLoad(pollState: pollState)
                         
-                        
                         mast.post(newpost:newPost,
                                   spoiler:showContentWarning == true ? contentWarning : nil,
                                   visibility:postVisibility,

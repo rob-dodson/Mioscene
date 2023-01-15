@@ -92,7 +92,7 @@ struct PollView: View
                     }
                 }
             }
-            .frame(width: 300)
+            //.frame(width: 300)
             
             Rectangle().frame(width:100,height: 1).foregroundColor(settings.theme.minorColor)
 
@@ -125,7 +125,10 @@ struct PollView: View
                         {
                             ForEach(votes.indices, id:\.self)
                             { index in
-                                Text("#\(votes[index] + 1) ")
+                                if (votes[index] != -1)
+                                {
+                                    Text("#\(votes[index] + 1) ")
+                                }
                             }
                         }
                     }
@@ -178,7 +181,7 @@ struct PollView: View
     func vote()
     {
         voted = true
-        let choices = votes.compactMap {  $0 > 0 ? $0 : nil}
+        let choices = votes.compactMap {  $0 > -1 ? $0 : nil}
         
         var choiceSet = IndexSet()
         for val in choices

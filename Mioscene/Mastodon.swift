@@ -281,6 +281,7 @@ class Mastodon : ObservableObject
             switch result
             {
             case .success(let poll, _):
+                Log.log(msg:"success voting \(result)")
                 done(poll)
             case .failure(let error):
                 Log.log(msg:"error in vote on poll \(error)")
