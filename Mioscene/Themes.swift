@@ -23,15 +23,29 @@ struct Theme : Identifiable
     
     var name: String
     var colors : Dictionary<String,Color>
-    var id : UUID = UUID()
+    var id : UUID
+    var bodyColor : Color
+    var accentColor : Color
+    var nameColor : Color
+    var minorColor : Color
+    var linkColor : Color
+    var dateColor : Color
+    var blockColor : Color
     
-    var bodyColor : Color = Color.white
-    var accentColor : Color = Color.orange
-    var nameColor : Color = Color.white
-    var minorColor : Color = Color.gray
-    var linkColor : Color = Color.blue
-    var dateColor : Color = Color.gray
-    var blockColor : Color = Color.black
+    init(name: String, colors: Dictionary<String, Color>, id: UUID = UUID())
+    {
+        self.name = name
+        self.colors = colors
+        self.id = id
+        
+        bodyColor = colors[colorName.body.rawValue] ?? Color.white
+        accentColor = colors[colorName.accent.rawValue] ?? Color.orange
+        nameColor = colors[colorName.name.rawValue] ?? Color.white
+        minorColor = colors[colorName.minor.rawValue] ?? Color.gray
+        linkColor = colors[colorName.link.rawValue] ?? Color.blue
+        dateColor = colors[colorName.date.rawValue] ?? Color.gray
+        blockColor = colors[colorName.block.rawValue] ?? Color.init(red: 0.2, green: 0.2, blue: 0.2)
+    }
 }
 
 class Themes

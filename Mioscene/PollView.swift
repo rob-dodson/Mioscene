@@ -92,7 +92,6 @@ struct PollView: View
                     }
                 }
             }
-            //.frame(width: 300)
             
             Rectangle().frame(width:100,height: 1).foregroundColor(settings.theme.minorColor)
 
