@@ -34,7 +34,7 @@ enum PollTimes : String, Identifiable, CaseIterable
 
 class PollState : ObservableObject
 {
-    @Published var pollTime = PollTimes.fiveMinutes
+    @Published var pollTime = PollTimes.oneHour
     @Published var pollType = PollType.single
     @Published var pollOptions = [String](repeating: String(), count:4)
 }

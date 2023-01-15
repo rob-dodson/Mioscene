@@ -16,7 +16,7 @@ struct PollView: View
     
     @EnvironmentObject var settings: Settings
     
-    @State private var votes : [Int] = Array(repeating: -1, count: 100) // what is the current poll limit?
+    @State private var votes : [Int] = Array(repeating: -1, count: 10) // what is the current poll limit?
     @State private var voted : Bool = false
    
     

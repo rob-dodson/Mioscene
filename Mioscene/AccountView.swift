@@ -46,6 +46,8 @@ struct AccountView: View
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .padding()
+        .textSelection(.enabled)
+
     }
 }
 

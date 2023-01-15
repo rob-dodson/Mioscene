@@ -311,6 +311,7 @@ struct Post: View
                 .frame(maxWidth:.infinity, alignment: .leading)  // .infinity
            }
         }
+        .textSelection(.enabled)
         .contextMenu
         {
             VStack

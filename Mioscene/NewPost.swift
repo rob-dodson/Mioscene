@@ -27,8 +27,6 @@ struct NewPost: View
     @State private var showPoll = false
     @State private var pollType : PollType = .single
     @State private var pollTime : PollTimes = .fiveMinutes
-    @State private var pollOptions = Array<String>(repeating: String(), count: 4)
-    
     @StateObject private var pollState = PollState()
     
     var body: some View
@@ -250,7 +248,13 @@ struct NewPost: View
                     }
                 }
             }
+            .frame(height: showPoll == true ? pollViewSize() : 375)
         }
+    }
+    
+    func  pollViewSize() -> CGFloat
+    {
+        return CGFloat(625 + (pollState.pollOptions.count * 12))
     }
 }
 
