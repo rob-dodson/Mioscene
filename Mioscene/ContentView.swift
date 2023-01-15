@@ -45,20 +45,20 @@ struct CustomTopTabBar: View
     {
         Spacer()
         
-        HStack(alignment: .center,spacing: 20)
+        HStack(alignment: .center,spacing: 30)
         {
             Spacer()
             
-            TabBarButton(text: "Timelines", isSelected: .constant(settings.tabIndex == .TimeLine))
+            TabBarButton(text: "Timelines",icon:"house", isSelected: .constant(settings.tabIndex == .TimeLine))
                 .onTapGesture { onButtonTapped(index: .TimeLine) }
             
-            TabBarButton(text: "Accounts", isSelected: .constant(settings.tabIndex == .Accounts))
+            TabBarButton(text: "Accounts",icon:"person", isSelected: .constant(settings.tabIndex == .Accounts))
                 .onTapGesture { onButtonTapped(index: .Accounts) }
             
-            TabBarButton(text: "Search", isSelected: .constant(settings.tabIndex == .Search))
+            TabBarButton(text: "Search", icon:"magnifyingglass",isSelected: .constant(settings.tabIndex == .Search))
                 .onTapGesture { onButtonTapped(index: .Search) }
             
-            TabBarButton(text: "Settings", isSelected: .constant(settings.tabIndex == .Settings))
+            TabBarButton(text: "Settings",icon:"gear", isSelected: .constant(settings.tabIndex == .Settings))
                 .onTapGesture { onButtonTapped(index: .Settings) }
                          
            Spacer()
@@ -78,17 +78,27 @@ struct TabBarButton: View
     @EnvironmentObject var settings: Settings
     
     let text : String
+    let icon : String
     
     @Binding var isSelected: Bool
     
     var body: some View
     {
-        Text(text)
-            .fontWeight(isSelected ? .bold : .regular)
-            .font(.title2)
-            .foregroundColor(isSelected ? settings.theme.accentColor : settings.theme.minorColor)
-            .padding(.bottom,10)
-            .border(width: isSelected ? 3 : 1, edges: [.bottom], color: .black)
+        HStack
+        {
+            Image(systemName:icon)
+                .scaleEffect(x:1.25,y:1.25)
+                .foregroundColor(isSelected ? settings.theme.accentColor : settings.theme.minorColor)
+                .padding(.trailing,-2)
+            
+            Text(text)
+                .baselineOffset(-10)
+                .fontWeight(isSelected ? .bold : .regular)
+                .font(settings.fonts.subheading)
+                .foregroundColor(isSelected ? settings.theme.accentColor : settings.theme.minorColor)
+                .padding(.bottom,10)
+                .border(width: isSelected ? 3 : 1, edges: [.bottom], color: .black)
+        }
     }
 }
 
