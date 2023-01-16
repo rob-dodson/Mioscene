@@ -27,6 +27,9 @@ struct AccountLarge: View
             {
                 HStack(alignment: .top)
                 {
+                    //
+                    // User's avatar image
+                    //
                     AsyncImage(url: URL(string:account.avatar ?? ""))
                     { image in
                         image.resizable()
@@ -38,6 +41,10 @@ struct AccountLarge: View
                     .frame(width: 100, height: 100)
                     .cornerRadius(15)
                     
+                    
+                    //
+                    // background header image
+                    //
                     VStack
                     {
                         if let header = account.header
@@ -59,7 +66,9 @@ struct AccountLarge: View
                             Image(systemName: "photo.fill").imageScale(.large)
                         }
                         
-                        
+                        //
+                        // Follow actions
+                        //
                         HStack
                         {
                             if relationship != nil
@@ -101,6 +110,9 @@ struct AccountLarge: View
                 {
                     VStack(alignment:.leading)
                     {
+                        //
+                        // Names
+                        //
                         HStack
                         {
                             Text("\(account.displayName)")
@@ -122,10 +134,17 @@ struct AccountLarge: View
                             .foregroundColor(settings.theme.minorColor)
                             .font(.footnote).italic()
                         
-                        Link(account.url.path,destination: account.url)
-                            .foregroundColor(settings.theme.linkColor)
-                            .font(.headline)
+                        if let url = account.url
+                        {
+                            let name = url.absoluteString.replacing(/http[s]*:\/\//, with:"")
+                            Link(name,destination: url)
+                                .foregroundColor(settings.theme.linkColor)
+                                .font(.headline)
+                        }
                         
+                        //
+                        // stats
+                        //
                         HStack
                         {
                             VStack
@@ -147,34 +166,47 @@ struct AccountLarge: View
                         .font(settings.fonts.main)
                         .foregroundColor(settings.theme.minorColor)
                         
+                        
+                        //
+                        // note
+                        //
                         VStack(alignment: .leading)
                         {
                             if let nsAttrString = account.note.htmlAttributedString(fontSize:settings.fonts.html,color:settings.theme.bodyColor)
                             {
                                 Text(AttributedString(nsAttrString))
-                                    .multilineTextAlignment(.leading)
+                                    .textSelection(.enabled)
+                                    .fixedSize(horizontal: false, vertical: true) // make the text wrap
+
+                            }
+                            
+                            //
+                            // fields
+                            //
+                            if let fields = account.fields
+                            {
+                                if fields.count > 0
+                                {
+                                    fieldsView(fields:fields)
+                                        .padding()
+                                        .frame(maxWidth: .infinity)
+                                        .background(settings.theme.blockColor)
+                                }
                             }
                         }
                         .padding()
+                        
                         .frame(maxWidth: .infinity,maxHeight:.infinity)
                         .background(settings.theme.blockColor)
+                        .cornerRadius(5)
                         
-                        
-                        if let fields = account.fields
-                        {
-                            if fields.count > 0
-                            {
-                                fieldsView(fields:fields)
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(settings.theme.blockColor)
-                            }
-                        }
+
                     }
                 }
             }
         }
             
+        SpacerLine(color: settings.theme.minorColor)
         
         ScrollView
         {
