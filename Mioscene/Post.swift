@@ -72,12 +72,14 @@ struct Post: View
                         HStack
                         {
                             Text(status.account.displayName)
+                                .contentShape(Rectangle())
                                 .font(settings.fonts.heading)
                                 .foregroundColor(settings.theme.nameColor)
                                 .onTapGesture
-                            {
-                                settings.showAccount(account:status.account)
-                            }
+                                {
+                                    settings.showAccount(account:status.account)
+                                }
+                                
                             
                             if status.account.bot == true
                             {
@@ -87,10 +89,13 @@ struct Post: View
                             }
                         }
                         
-                        let name = "@\(status.account.acct)"
-                        Text(name)
+                        Text("@\(status.account.acct)")
                             .font(settings.fonts.subheading)
                             .foregroundColor(settings.theme.minorColor)
+                            .onTapGesture
+                            {
+                                settings.showAccount(account:status.account)
+                            }
                         
                         if let appname = status.application?.name
                         {
@@ -130,6 +135,7 @@ struct Post: View
                             Text(AttributedString(nsAttrString))
                                 .font(settings.fonts.main)
                                 .foregroundColor(settings.theme.bodyColor)
+                                .textSelection(.enabled)
                         }
                     }
                   
@@ -322,7 +328,6 @@ struct Post: View
            }
             .padding(.bottom,5)
         }
-        .textSelection(.enabled)
         .contextMenu
         {
             VStack

@@ -135,7 +135,7 @@ struct PollView: View
                 }
                 else if poll.voted == true
                 {
-                    Text("This your poll")
+                    Text("This is your poll")
                         .foregroundColor(settings.theme.minorColor)
                 }
             }

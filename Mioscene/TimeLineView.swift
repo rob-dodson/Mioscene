@@ -24,12 +24,12 @@ struct TimeLineView: View
     @State private var tags = [MStatus]()
     @State private var showLoading = true
     @State private var showTagAsk = false
+    @State private var taskRunning = false
     
     var body: some View
     {
         VStack
         {
-            
             HStack
             {
                 Picker(selection: .constant(1),label: Text("Account"),content:
@@ -109,14 +109,29 @@ struct TimeLineView: View
             }
             .task
             {
-                Task
-                {
-                    while(true)
-                    {
-                        fetchStatuses(timeline: selectedTimeline,tag:settings.currentTag)
-                        try await Task.sleep(nanoseconds: 60 * 15 * NSEC_PER_SEC)
-                    }
-                }
+                loadStatuses()
+            }
+        }
+    }
+    
+   
+    
+    func loadStatuses()
+    {
+        print("TASK \(taskRunning)")
+        if taskRunning == true
+        {
+            return
+        }
+        
+        Task
+        {
+            taskRunning = true
+            
+            while(true)
+            {
+                fetchStatuses(timeline: selectedTimeline,tag:settings.currentTag)
+                try await Task.sleep(nanoseconds: 60 * 15 * NSEC_PER_SEC)
             }
         }
     }

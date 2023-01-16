@@ -116,7 +116,7 @@ struct AccountLarge: View
                         }
                         Text("@\(account.acct)")
                             .foregroundColor(settings.theme.minorColor)
-                            .font(settings.fonts.main)
+                            .font(settings.fonts.subheading)
                         
                         Text("User since \(account.createdAt.formatted())")
                             .foregroundColor(settings.theme.minorColor)
@@ -149,13 +149,14 @@ struct AccountLarge: View
                         
                         VStack(alignment: .leading)
                         {
-                            if let nsAttrString = account.note.htmlAttributedString(fontSize:16,color:settings.theme.bodyColor)
+                            if let nsAttrString = account.note.htmlAttributedString(fontSize:settings.fonts.html,color:settings.theme.bodyColor)
                             {
                                 Text(AttributedString(nsAttrString))
+                                    .multilineTextAlignment(.leading)
                             }
                         }
                         .padding()
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity,maxHeight:.infinity)
                         .background(settings.theme.blockColor)
                         
                         
