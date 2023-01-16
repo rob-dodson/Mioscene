@@ -83,9 +83,14 @@ struct TimeLineView: View
             
             if showLoading
             {
+                
+                ProgressView("Loading...")
+                    .foregroundColor(settings.theme.accentColor)
+               /*
                 Text("Loading...")
                     .foregroundColor(settings.theme.accentColor)
-                    .font(settings.fonts.title)
+                    .font(settings.fonts.heading)
+                */
             }
 
             ScrollView

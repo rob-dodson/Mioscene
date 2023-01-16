@@ -243,6 +243,9 @@ struct AccountLarge: View
                     if let nsAttrString = fields[index].value.htmlAttributedString(fontSize:settings.fonts.html,color:settings.theme.bodyColor)
                     {
                         Text(AttributedString(nsAttrString))
+                            .textSelection(.enabled)
+                            .fixedSize(horizontal: false, vertical: true) // make the text wrap
+
                         
                         if fields[index].verification != nil
                         {
