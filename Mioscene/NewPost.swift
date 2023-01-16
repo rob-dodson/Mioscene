@@ -236,7 +236,7 @@ struct NewPost: View
                 {
                     Button("Post")
                     {
-                        let pollpayload = PollBuilder.getPollPayLoad(pollState: pollState)
+                        let pollpayload = showPoll == true ? PollBuilder.getPollPayLoad(pollState: pollState) : nil
                         
                         mast.post(newpost:newPost,
                                   spoiler:showContentWarning == true ? contentWarning : nil,

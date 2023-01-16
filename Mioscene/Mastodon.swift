@@ -348,7 +348,7 @@ class Mastodon : ObservableObject
     
     
     
-    func post(newpost:String,spoiler:String?,visibility:Visibility,attachedURLS:[AttachmentURL],pollpayload:PollPayload)
+    func post(newpost:String,spoiler:String?,visibility:Visibility,attachedURLS:[AttachmentURL],pollpayload:PollPayload?)
     {
         if attachedURLS.count > 0
         {
