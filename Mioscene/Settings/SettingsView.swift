@@ -16,21 +16,21 @@ import SwiftUI
 
 struct SettingsView: View
 {
-    @ObservedObject var mast : Mastodon
-    
     @EnvironmentObject var settings: Settings
     
-    let themesize = 20.0
+    let colorBlockSize = 20.0
     
     var body: some View
     {
-        VStack
+        VStack(alignment: .center)
         {
-            VStack
-            {
+            
                 Text("Themes")
                     .font(settings.fonts.title)
                     .foregroundColor(settings.theme.accentColor)
+            
+            VStack(alignment:.leading)
+            {
                 
                 ForEach($settings.themes.themeslist.indices, id:\.self)
                 { index in
@@ -54,13 +54,15 @@ struct SettingsView: View
                         .buttonStyle(.plain)
                         
                         Text(settings.themes.themeslist[index].name)
+                            .font(settings.fonts.heading)
                         
                         let theme = settings.themes.themeslist[index]
                         HStack()
                         {
-                            Rectangle().fill(theme.accentColor).frame(width: themesize, height: themesize)
-                            Rectangle().fill(theme.bodyColor).frame(width: themesize, height: themesize)
-                            Rectangle().fill(theme.nameColor).frame(width: themesize, height: themesize)
+                            ForEach(Theme.colorName.allCases)
+                            {name in
+                                Rectangle().fill(theme.colors[name.rawValue]!).frame(width: colorBlockSize, height: colorBlockSize)
+                            }
                         }
                     }
                 }
@@ -75,15 +77,19 @@ struct SettingsView: View
                         Text(text.rawValue)
                     }
                 }
+                .frame(width:200)
                 .onChange(of: settings.fonts.textSize)
                 { newValue in
                     settings.fonts.textSize = newValue
                     settings.fonts.setFonts()
                 }
                 
-                
+            }
+            
+            VStack
+            {
                 Text(".largeTitle").font(.largeTitle)
-                Text(".title").font(settings.fonts.title)
+                Text(".title").font(.title)
                 Text(".title2").font(.title2)
                 Text(".title3").font(.title3)
                 Text(".headline").font(.headline)
@@ -95,7 +101,7 @@ struct SettingsView: View
                 Text(".callout").font(.callout)
                 Text(".caption").font(.caption)
                 Text(".caption2").font(.caption2)
-               Text(".footnote").font(.footnote)
+                Text(".footnote").font(.footnote)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)

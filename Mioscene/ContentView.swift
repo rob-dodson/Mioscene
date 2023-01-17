@@ -46,7 +46,7 @@ struct ContentView: View
             case .TimeLine: TimeLineView(mast: mast)
             case .Accounts: AccountView(mast: mast)
             case .Search: SearchView(mast: mast)
-            case .Settings: SettingsView(mast: mast)
+            case .Settings: SettingsView()
             }
             
             Spacer()
@@ -108,18 +108,9 @@ struct TabBarButton: View
         VStack
         {
             Image(systemName:icon)
-                .font(.system(size: 24, weight: .thin))
+                .font(.system(size: CGFloat(settings.fonts.iconsize), weight: .light))
                 .foregroundColor(isSelected ? settings.theme.accentColor : settings.theme.minorColor)
-            //    .padding(.trailing,-2)
-                //.padding(.bottom,10)
-           
-            Text(text)
-                .fontWeight(isSelected ? .bold : .regular)
-                .font(settings.fonts.small)
-                .foregroundColor(isSelected ? settings.theme.accentColor : settings.theme.minorColor)
-                .padding(.bottom,5)
-                //  .border(width: isSelected ? 3 : 1, edges: [.bottom], color: .black)
-        
+                .padding(.bottom,10)
         }
     }
 }

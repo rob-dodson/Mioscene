@@ -80,23 +80,23 @@ struct Post: View
                                     settings.showAccount(account:status.account)
                                 }
                                 
-                            
                             if status.account.bot == true
                             {
                                 Text("[BOT]")
                                     .foregroundColor(settings.theme.accentColor)
                                     .font(settings.fonts.heading)
                             }
+                            
+                            Text("@\(status.account.acct)")
+                                .font(settings.fonts.subheading)
+                                .foregroundColor(settings.theme.minorColor)
+                                .onTapGesture
+                                {
+                                    settings.showAccount(account:status.account)
+                                }
                         }
                         
-                        Text("@\(status.account.acct)")
-                            .font(settings.fonts.subheading)
-                            .foregroundColor(settings.theme.minorColor)
-                            .onTapGesture
-                            {
-                                settings.showAccount(account:status.account)
-                            }
-                        
+                      
                         if let appname = status.application?.name
                         {
                             Text("posted with \(appname)")
@@ -314,20 +314,21 @@ struct Post: View
                             }
                         }
                         
-                        
                         //
                         // created Date
                         //
                         let hoursstr = dateSinceNowToString(date: status.createdAt)
                         Text("\(hoursstr) · \(status.createdAt.formatted(date: .abbreviated, time: .omitted)) · \(status.createdAt.formatted(date: .omitted, time: .standard))")
                             .font(settings.fonts.small)
-                            .foregroundColor(settings.theme.dateColor)
+                            .foregroundColor(settings.theme.minorColor)
                     }
                 }
                 .frame(maxWidth:.infinity, alignment: .leading)  // .infinity
            }
             .padding(.bottom,5)
         }
+        .background(settings.theme.blockColor)
+        .cornerRadius(5)
         .contextMenu
         {
             VStack

@@ -20,7 +20,7 @@ class Fonts
         case small
     }
     
-    @Published var textSize : TextSize = .normal
+    var textSize : TextSize = .small
     
     var title = Font.system(.largeTitle)
     var heading = Font.system(.title)
@@ -28,6 +28,7 @@ class Fonts
     var main = Font.system(.body)
     var small = Font.system(.footnote)
     var html = 16.0
+    var iconsize = 20.0
     
     init()
     {
@@ -38,6 +39,15 @@ class Fonts
     {
         switch textSize
         {
+        case .small:
+            title = Font.system(.title)
+            heading = Font.system(.title2)
+            subheading = Font.system(.subheadline)
+            main = Font.system(.callout)
+            small = Font.system(.footnote)
+            html = 12.0
+            iconsize = 18.0
+            
         case .normal:
             title = Font.system(.largeTitle)
             heading = Font.system(.title)
@@ -45,6 +55,7 @@ class Fonts
             main = Font.system(.body)
             small = Font.system(.footnote)
             html = 16.0
+            iconsize = 22.0
             
         case .large:
             title = Font.system(.largeTitle)
@@ -53,14 +64,9 @@ class Fonts
             main = Font.system(.body)
             small = Font.system(.footnote)
             html = 16.0
+            iconsize = 26.0
             
-        case .small:
-            title = Font.system(.largeTitle)
-            heading = Font.system(.title)
-            subheading = Font.system(.title3)
-            main = Font.system(.body)
-            small = Font.system(.footnote)
-            html = 16.0
+       
         }
     }
 }

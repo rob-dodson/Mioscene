@@ -10,15 +10,16 @@ import SwiftUI
 
 struct Theme : Identifiable
 {
-    enum colorName : String
+    enum colorName : String,Equatable,CaseIterable,Identifiable
     {
-        case body = "body"
         case accent = "accent"
+        case body = "body"
         case name = "name"
         case minor = "minor"
         case link = "link"
-        case date = "date"
         case block = "block"
+        
+        var id: Self { return self }
     }
     
     var name: String
@@ -29,7 +30,6 @@ struct Theme : Identifiable
     var nameColor : Color
     var minorColor : Color
     var linkColor : Color
-    var dateColor : Color
     var blockColor : Color
     
     init(name: String, colors: Dictionary<String, Color>, id: UUID = UUID())
@@ -43,10 +43,10 @@ struct Theme : Identifiable
         nameColor = colors[colorName.name.rawValue] ?? Color.white
         minorColor = colors[colorName.minor.rawValue] ?? Color.gray
         linkColor = colors[colorName.link.rawValue] ?? Color.blue
-        dateColor = colors[colorName.date.rawValue] ?? Color.gray
         blockColor = colors[colorName.block.rawValue] ?? Color.init(red: 0.2, green: 0.2, blue: 0.2)
     }
 }
+
 
 class Themes
 {
@@ -67,7 +67,6 @@ class Themes
                           Theme.colorName.name.rawValue:Color("name\(index)"),
                           Theme.colorName.minor.rawValue:Color("minor\(index)"),
                           Theme.colorName.link.rawValue:Color("link\(index)"),
-                          Theme.colorName.date.rawValue:Color("date\(index)"),
                           Theme.colorName.block.rawValue:Color("block\(index)"),
                            ]
             

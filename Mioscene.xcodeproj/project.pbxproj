@@ -104,13 +104,10 @@
 		AE06EBEE294D16BB006CAB67 /* Mioscene */ = {
 			isa = PBXGroup;
 			children = (
+				AED7E182297716250053D0C9 /* Settings */,
+				AED7E1812976436A0053D0C9 /* Utils */,
 				AE28C610296F48FD00C8C928 /* PollView.swift */,
 				AE28C61B297349C900C8C928 /* PollBuilder.swift */,
-				AE28C60E296F25CD00C8C928 /* Themes.swift */,
-				AE28C60A296E1CF200C8C928 /* Utils.swift */,
-				AE28C60C296EE9F800C8C928 /* Fonts.swift */,
-				AE9A85D5295629C100E8B193 /* Settings.swift */,
-				AE28C5FC29648C2400C8C928 /* SettingsView.swift */,
 				AE28C5FE296524AE00C8C928 /* ErrorSystem.swift */,
 				AE06EBEF294D16BB006CAB67 /* MiosceneApp.swift */,
 				AE06EBF1294D16BB006CAB67 /* ContentView.swift */,
@@ -120,12 +117,10 @@
 				AE06EC01294D1D1D006CAB67 /* Post.swift */,
 				AE28C608296CC65800C8C928 /* NotificationView.swift */,
 				AE06EC03294D234D006CAB67 /* Mastodon.swift */,
-				AE28C5EF29635CAA00C8C928 /* Keys.swift */,
 				AE28C5D72953C8A500C8C928 /* NewPost.swift */,
 				AE28C5ED29634C0B00C8C928 /* AddAccount.swift */,
 				AE28C60229663A5B00C8C928 /* AccountLarge.swift */,
 				AE28C5EB295E4B1C00C8C928 /* AccountSmall.swift */,
-				AE28C5F82963719B00C8C928 /* SqliteDB.swift */,
 				AE28C5FA2963727500C8C928 /* LocalAccountRecord.swift */,
 				AE06EBF3294D16BC006CAB67 /* Assets.xcassets */,
 				AE06EBF5294D16BC006CAB67 /* Mioscene.entitlements */,
@@ -148,6 +143,27 @@
 				AE28C5E0295B722F00C8C928 /* MastodonKit-2.0.0 */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		AED7E1812976436A0053D0C9 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				AE28C5F82963719B00C8C928 /* SqliteDB.swift */,
+				AE28C5EF29635CAA00C8C928 /* Keys.swift */,
+				AE28C60A296E1CF200C8C928 /* Utils.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		AED7E182297716250053D0C9 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				AE28C60E296F25CD00C8C928 /* Themes.swift */,
+				AE28C60C296EE9F800C8C928 /* Fonts.swift */,
+				AE9A85D5295629C100E8B193 /* Settings.swift */,
+				AE28C5FC29648C2400C8C928 /* SettingsView.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

@@ -37,7 +37,8 @@ class Settings: ObservableObject
     @Published var seeAccount : MastodonKit.Account?
     @Published var currentTag = String()
     @Published var fonts = Fonts()
-   
+    
+    
     var themes = Themes()
     
     init()
