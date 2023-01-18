@@ -29,7 +29,7 @@
 		AE28C60329663A5B00C8C928 /* AccountLarge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C60229663A5B00C8C928 /* AccountLarge.swift */; };
 		AE28C609296CC65800C8C928 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C608296CC65800C8C928 /* NotificationView.swift */; };
 		AE28C60B296E1CF200C8C928 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C60A296E1CF200C8C928 /* Utils.swift */; };
-		AE28C60D296EE9F800C8C928 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C60C296EE9F800C8C928 /* Fonts.swift */; };
+		AE28C60D296EE9F800C8C928 /* MFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C60C296EE9F800C8C928 /* MFont.swift */; };
 		AE28C60F296F25CD00C8C928 /* Themes.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C60E296F25CD00C8C928 /* Themes.swift */; };
 		AE28C611296F48FD00C8C928 /* PollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C610296F48FD00C8C928 /* PollView.swift */; };
 		AE28C6182972F68300C8C928 /* MastodonKit in Frameworks */ = {isa = PBXBuildFile; productRef = AE28C6172972F68300C8C928 /* MastodonKit */; };
@@ -61,7 +61,7 @@
 		AE28C60229663A5B00C8C928 /* AccountLarge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountLarge.swift; sourceTree = "<group>"; };
 		AE28C608296CC65800C8C928 /* NotificationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		AE28C60A296E1CF200C8C928 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		AE28C60C296EE9F800C8C928 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
+		AE28C60C296EE9F800C8C928 /* MFont.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MFont.swift; sourceTree = "<group>"; };
 		AE28C60E296F25CD00C8C928 /* Themes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Themes.swift; sourceTree = "<group>"; };
 		AE28C610296F48FD00C8C928 /* PollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollView.swift; sourceTree = "<group>"; };
 		AE28C6162972F62500C8C928 /* MastodonKit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = MastodonKit; path = ../MastodonKit; sourceTree = "<group>"; };
@@ -159,7 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				AE28C60E296F25CD00C8C928 /* Themes.swift */,
-				AE28C60C296EE9F800C8C928 /* Fonts.swift */,
+				AE28C60C296EE9F800C8C928 /* MFont.swift */,
 				AE9A85D5295629C100E8B193 /* Settings.swift */,
 				AE28C5FC29648C2400C8C928 /* SettingsView.swift */,
 			);
@@ -264,7 +264,7 @@
 				AE28C5E6295CEDCE00C8C928 /* AccountView.swift in Sources */,
 				AE06EBF0294D16BB006CAB67 /* MiosceneApp.swift in Sources */,
 				AE28C5DA295A7ACE00C8C928 /* SearchView.swift in Sources */,
-				AE28C60D296EE9F800C8C928 /* Fonts.swift in Sources */,
+				AE28C60D296EE9F800C8C928 /* MFont.swift in Sources */,
 				AE28C5FB2963727500C8C928 /* LocalAccountRecord.swift in Sources */,
 				AE28C60B296E1CF200C8C928 /* Utils.swift in Sources */,
 				AE28C609296CC65800C8C928 /* NotificationView.swift in Sources */,

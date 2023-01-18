@@ -73,7 +73,7 @@ struct Post: View
                         {
                             Text(status.account.displayName)
                                 .contentShape(Rectangle())
-                                .font(settings.fonts.heading)
+                                .font(settings.font.headline)
                                 .foregroundColor(settings.theme.nameColor)
                                 .onTapGesture
                                 {
@@ -84,11 +84,11 @@ struct Post: View
                             {
                                 Text("[BOT]")
                                     .foregroundColor(settings.theme.accentColor)
-                                    .font(settings.fonts.heading)
+                                    .font(settings.font.subheadline)
                             }
                             
                             Text("@\(status.account.acct)")
-                                .font(settings.fonts.subheading)
+                                .font(settings.font.subheadline)
                                 .foregroundColor(settings.theme.minorColor)
                                 .onTapGesture
                                 {
@@ -100,7 +100,7 @@ struct Post: View
                         if let appname = status.application?.name
                         {
                             Text("posted with \(appname)")
-                                .font(settings.fonts.small).italic()
+                                .font(settings.font.footnote).italic()
                                 .foregroundColor(settings.theme.minorColor)
                         }
                         
@@ -130,10 +130,10 @@ struct Post: View
                         //
                         // html body of post
                         //
-                        if let nsAttrString = status.content.htmlAttributedString(fontSize: settings.fonts.html,color:settings.theme.bodyColor,linkColor: settings.theme.linkColor)
+                        if let nsAttrString = status.content.htmlAttributedString(fontSize: settings.font.html,color:settings.theme.bodyColor,linkColor: settings.theme.linkColor,fontFamily: settings.font.name)
                         {
                             Text(AttributedString(nsAttrString))
-                                .font(settings.fonts.main)
+                                .font(settings.font.body)
                                 .foregroundColor(settings.theme.bodyColor)
                                 .textSelection(.enabled)
                         }
@@ -319,7 +319,7 @@ struct Post: View
                         //
                         let hoursstr = dateSinceNowToString(date: status.createdAt)
                         Text("\(hoursstr) · \(status.createdAt.formatted(date: .abbreviated, time: .omitted)) · \(status.createdAt.formatted(date: .omitted, time: .standard))")
-                            .font(settings.fonts.small)
+                            .font(settings.font.footnote)
                             .foregroundColor(settings.theme.minorColor)
                     }
                 }

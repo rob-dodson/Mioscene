@@ -27,7 +27,7 @@ struct SearchView: View
             {
                 TextField("Search", text: $searchTerm)
                     .padding()
-                    .font(settings.fonts.title)
+                    .font(settings.font.title)
                 
                 Button("Search")
                 {
@@ -90,7 +90,7 @@ struct SearchView: View
     {
         return GroupBox(label: Label("Accounts", systemImage: "person.crop.circle")
             .foregroundColor(settings.theme.accentColor)
-            .font(settings.fonts.title))
+            .font(settings.font.title))
         {
             VStack(alignment: .leading)
             {
@@ -107,7 +107,7 @@ struct SearchView: View
     {
         GroupBox(label: Label("Hashtags", systemImage: "number")
             .foregroundColor(settings.theme.accentColor)
-            .font(settings.fonts.title))
+            .font(settings.font.title))
         {
             VStack(alignment: .leading)
             {
@@ -129,7 +129,7 @@ struct SearchView: View
     {
         return GroupBox(label: Label("Statuses", systemImage: "square.and.pencil")
             .foregroundColor(settings.theme.accentColor)
-            .font(settings.fonts.title))
+            .font(settings.font.title))
         {
             VStack(alignment: .leading)
             {

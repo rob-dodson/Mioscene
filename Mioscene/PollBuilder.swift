@@ -52,7 +52,7 @@ struct PollBuilder: View
         {
             Text("Poll")
                 .foregroundColor(settings.theme.accentColor)
-                .font(settings.fonts.title)
+                .font(settings.font.title)
             
             VStack(alignment: .leading,spacing: 10)
             {

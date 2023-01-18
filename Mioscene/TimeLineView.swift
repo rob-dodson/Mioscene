@@ -71,7 +71,7 @@ struct TimeLineView: View
                 {
                     TextField("#tag", text: $settings.currentTag)
                         .padding()
-                        .font(settings.fonts.title)
+                        .font(settings.font.title)
                     
                     Button("Load")
                     {

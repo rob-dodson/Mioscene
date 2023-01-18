@@ -117,18 +117,18 @@ struct AccountLarge: View
                         {
                             Text("\(account.displayName)")
                                 .foregroundColor(settings.theme.nameColor)
-                                .font(settings.fonts.heading)
+                                .font(settings.font.headline)
                             
                             if account.bot == true
                             {
                                 Text("[BOT]")
                                     .foregroundColor(settings.theme.accentColor)
-                                    .font(settings.fonts.heading)
+                                    .font(settings.font.headline)
                             }
                         }
                         Text("@\(account.acct)")
                             .foregroundColor(settings.theme.minorColor)
-                            .font(settings.fonts.subheading)
+                            .font(settings.font.subheadline)
                         
                         Text("User since \(account.createdAt.formatted())")
                             .foregroundColor(settings.theme.minorColor)
@@ -163,7 +163,7 @@ struct AccountLarge: View
                                 Text("Following")
                             }
                         }
-                        .font(settings.fonts.main)
+                        .font(settings.font.body)
                         .foregroundColor(settings.theme.minorColor)
                         
                         
@@ -172,7 +172,7 @@ struct AccountLarge: View
                         //
                         VStack(alignment: .leading)
                         {
-                            if let nsAttrString = account.note.htmlAttributedString(fontSize:settings.fonts.html,color:settings.theme.bodyColor)
+                            if let nsAttrString = account.note.htmlAttributedString(fontSize:settings.font.html,color:settings.theme.bodyColor)
                             {
                                 Text(AttributedString(nsAttrString))
                                     .textSelection(.enabled)
@@ -238,9 +238,9 @@ struct AccountLarge: View
                 {
                     Text("\(fields[index].name):")
                         .foregroundColor(settings.theme.minorColor)
-                        .font(settings.fonts.subheading)
+                        .font(settings.font.subheadline)
                     
-                    if let nsAttrString = fields[index].value.htmlAttributedString(fontSize:settings.fonts.html,color:settings.theme.bodyColor)
+                    if let nsAttrString = fields[index].value.htmlAttributedString(fontSize:settings.font.html,color:settings.theme.bodyColor)
                     {
                         Text(AttributedString(nsAttrString))
                             .textSelection(.enabled)

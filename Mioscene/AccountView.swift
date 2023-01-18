@@ -35,7 +35,7 @@ struct AccountView: View
             
             SpacerLine(color: settings.theme.minorColor)
             
-            if let account = settings.seeAccount
+            if let account = settings.currentAccount
             {
                 AccountLarge(mast:mast,account: account)
             }

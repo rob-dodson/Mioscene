@@ -18,14 +18,10 @@ enum TabIndex : Int
     case Settings
 }
 
-
 class CurrentTabIndex : ObservableObject
 {
     var index : TabIndex = .TimeLine
 }
-
-
-
 
 /**
  Settings
@@ -34,16 +30,20 @@ class Settings: ObservableObject
 {
     @Published var theme : Theme
     @Published var tabIndex : TabIndex = .TimeLine
-    @Published var seeAccount : MastodonKit.Account?
+    @Published var currentAccount : MastodonKit.Account?
     @Published var currentTag = String()
-    @Published var fonts = Fonts()
     
+    @Published var currentTextSize : MFont.TextSize
+    @Published var font : MFont
+   
     
     var themes = Themes()
     
     init()
     {
         theme = themes.themeslist[0]
+        currentTextSize = MFont.TextSize.normal
+        font = MFont(fontName: "Georgia",size: MFont.TextSize.normal)
     }
    
     func showTag(tag:String)
@@ -54,7 +54,7 @@ class Settings: ObservableObject
     
     func showAccount(account:Account)
     {
-        seeAccount = account
+        currentAccount = account
         tabIndex = .Accounts
     }
 }

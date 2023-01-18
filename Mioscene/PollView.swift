@@ -159,7 +159,7 @@ struct PollView: View
                 }
             }
             .foregroundColor(settings.theme.minorColor)
-            .font(settings.fonts.small).italic()
+            .font(settings.font.footnote).italic()
         }
         .padding()
         .foregroundColor(settings.theme.nameColor)

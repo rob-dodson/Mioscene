@@ -44,7 +44,7 @@ struct NotificationView: View
                             Text("\(textstr)")
                         }
                     }
-                    .font(settings.fonts.title)
+                    .font(settings.font.title)
                     .foregroundColor(settings.theme.accentColor)
                     
                     AccountSmall(account: note.account)
