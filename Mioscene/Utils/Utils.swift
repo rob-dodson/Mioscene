@@ -148,7 +148,7 @@ extension String
             ) else {
             return nil
         }
-
+        
         return attributedString
     }
 }

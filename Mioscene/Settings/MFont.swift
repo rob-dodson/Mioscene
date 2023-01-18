@@ -13,6 +13,7 @@ class MFont : ObservableObject
 {
     enum TextSize : String,Identifiable,CaseIterable
     {
+        case tiny = "Tiny"
         case small = "Small"
         case normal = "Normal"
         case large = "Large"
@@ -36,23 +37,28 @@ class MFont : ObservableObject
     init(fontName:String,size:TextSize)
     {
         name = fontName
-        var newsize : CGFloat
+        var newsize = MFont.getSizeFromName(size:size)
         
-        switch size
-        {
-        case .small:
-            newsize = 18.0
-        case .normal :
-            newsize = 16.0
-        case .large:
-            newsize = 26.0
-        }
-    
         title = Font.custom(name, size:newsize * 2.0)
-        headline = Font.custom(name, size:newsize * 1.5)
+        headline = Font.custom(name, size:newsize * 1.25)
         subheadline = Font.custom(name, size:newsize * 0.80)
         body = Font.custom(name, size:newsize * 1.0)
-        footnote = Font.custom(name, size:newsize * 0.75)
+        footnote = Font.custom(name, size:newsize * 0.85)
+    }
+    
+    static func getSizeFromName(size: TextSize) -> CGFloat
+    {
+        switch size
+        {
+        case .tiny:
+            return 8.0
+        case .small:
+            return 12.0
+        case .normal :
+            return 18.0
+        case .large:
+            return 26.0
+        }
     }
 }
 

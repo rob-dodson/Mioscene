@@ -43,7 +43,7 @@ class Settings: ObservableObject
     {
         theme = themes.themeslist[0]
         currentTextSize = MFont.TextSize.normal
-        font = MFont(fontName: "Georgia",size: MFont.TextSize.normal)
+        font = MFont(fontName: "SF Pro",size: MFont.TextSize.normal)
     }
    
     func showTag(tag:String)
