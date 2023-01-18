@@ -17,13 +17,11 @@ class MFont : ObservableObject
         case small = "Small"
         case normal = "Normal"
         case large = "Large"
-        
+    
         var id: Self { return self }
     }
     
-    var html = 16.0
-    var iconsize = 20.0
-    
+    @Published var currentSizeName = TextSize.normal
     @Published var name : String
     
     var title : Font!
@@ -34,16 +32,24 @@ class MFont : ObservableObject
     
     static var fontList = ["System","SF Pro","Avenir","Helvetica Neue","Georgia","Menlo","Myriad","Futura","Gill Sans"]
     
-    init(fontName:String,size:TextSize)
+    init(fontName:String,sizeName:TextSize)
     {
         name = fontName
-        var newsize = MFont.getSizeFromName(size:size)
+        
+        currentSizeName = sizeName
+        
+        let newsize = MFont.getSizeFromName(size:currentSizeName)
         
         title = Font.custom(name, size:newsize * 2.0)
         headline = Font.custom(name, size:newsize * 1.25)
-        subheadline = Font.custom(name, size:newsize * 0.80)
+        subheadline = Font.custom(name, size:newsize * 0.90)
         body = Font.custom(name, size:newsize * 1.0)
         footnote = Font.custom(name, size:newsize * 0.85)
+    }
+    
+    func getSize() -> CGFloat
+    {
+        return MFont.getSizeFromName(size: currentSizeName)
     }
     
     static func getSizeFromName(size: TextSize) -> CGFloat
@@ -51,13 +57,30 @@ class MFont : ObservableObject
         switch size
         {
         case .tiny:
-            return 8.0
+            return 10.0
         case .small:
-            return 12.0
+            return 14.0
         case .normal :
             return 18.0
         case .large:
             return 26.0
+        }
+    }
+    
+    static func getEnumFromString(string:String) -> TextSize
+    {
+        switch string
+        {
+        case "Tiny":
+            return TextSize.tiny
+        case "Small":
+            return TextSize.small
+        case "Normal":
+            return TextSize.normal
+        case "Large":
+            return TextSize.large
+        default:
+            return TextSize.normal
         }
     }
 }

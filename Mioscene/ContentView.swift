@@ -108,7 +108,7 @@ struct TabBarButton: View
         VStack
         {
             Image(systemName:icon)
-                .font(.system(size: CGFloat(settings.font.iconsize), weight: .light))
+                .font(.system(size: CGFloat(settings.iconSize), weight: .light))
                 .foregroundColor(isSelected ? settings.theme.accentColor : settings.theme.minorColor)
                 .padding(.bottom,10)
         }

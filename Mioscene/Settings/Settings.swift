@@ -33,17 +33,24 @@ class Settings: ObservableObject
     @Published var currentAccount : MastodonKit.Account?
     @Published var currentTag = String()
     
-    @Published var currentTextSize : MFont.TextSize
     @Published var font : MFont
    
+    var iconSize = 20
     
     var themes = Themes()
     
     init()
     {
+        let defaults = UserDefaults.standard
+        
         theme = themes.themeslist[0]
-        currentTextSize = MFont.TextSize.normal
-        font = MFont(fontName: "SF Pro",size: MFont.TextSize.normal)
+        
+        var fontName = "SF Pro"
+        var fontSize = MFont.TextSize.normal
+        
+        if let userfont = defaults.string(forKey: "font") { fontName = userfont }
+        if let userfontsizename = defaults.string(forKey: "fontsizename") { fontSize = MFont.getEnumFromString(string: userfontsizename) }
+        font = MFont(fontName: fontName,sizeName: fontSize)
     }
    
     func showTag(tag:String)

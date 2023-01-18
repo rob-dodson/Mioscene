@@ -69,7 +69,7 @@ struct SettingsView: View
             
             VStack
             {
-                Picker("Text Size", selection: $settings.currentTextSize)
+                Picker("Text Size", selection: $settings.font.currentSizeName)
                 {
                     ForEach(MFont.TextSize.allCases)
                     { text in
@@ -77,9 +77,11 @@ struct SettingsView: View
                     }
                 }
                 .frame(width:200)
-                .onChange(of: settings.currentTextSize)
+                .onChange(of: settings.font.currentSizeName)
                 { newValue in
-                    settings.font = MFont(fontName: settings.font.name, size: newValue)
+                    settings.font = MFont(fontName: settings.font.name, sizeName: newValue)
+                    let defaults = UserDefaults.standard
+                    defaults.set(newValue.rawValue, forKey: "fontsizename")
                 }
             }
             
@@ -95,7 +97,9 @@ struct SettingsView: View
                 .frame(width:200)
                 .onChange(of: settings.font.name)
                 { newValue in
-                    settings.font = MFont(fontName: newValue, size: settings.currentTextSize)
+                    settings.font = MFont(fontName: newValue, sizeName: settings.font.currentSizeName)
+                    let defaults = UserDefaults.standard
+                    defaults.set(settings.font.name, forKey: "font")
                 }
             }
              

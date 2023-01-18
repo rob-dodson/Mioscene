@@ -110,10 +110,11 @@ extension View
         overlay(EdgeBorder(width: width, edges: edges).foregroundColor(color))
     }
 }
-
+//ont-family: \(fontFamily);
+//font-size: \(fontSize)px;
 extension String
 {
-    func htmlAttributedString(fontSize: CGFloat = 16, color : Color = Color.black,linkColor : Color = Color.blue,fontFamily: String = "SF Pro") -> NSAttributedString?
+    func htmlAttributedString(color : Color = Color.black,linkColor : Color = Color.blue,font:Font) -> NSAttributedString?
     {
         let htmlTemplate = """
         <!doctype html>
@@ -122,8 +123,6 @@ extension String
             <style>
                 body {
                     color: \(color);
-                    font-family: \(fontFamily);
-                    font-size: \(fontSize)px;
                 }
                 a {
                     color: \(linkColor);
@@ -140,15 +139,21 @@ extension String
         {
             return nil
         }
+        
 
-        guard let attributedString = try? NSAttributedString(
+        
+        guard let attributedString = try? NSMutableAttributedString(
             data: data,
             options: [.documentType: NSAttributedString.DocumentType.html],
-            documentAttributes: nil
-            ) else {
+            documentAttributes:  nil
+            )
+        else
+        {
             return nil
         }
         
+        attributedString.addAttribute(NSAttributedString.Key.font, value:font, range:NSRange(location: 0, length: attributedString.length))
+
         return attributedString
     }
 }

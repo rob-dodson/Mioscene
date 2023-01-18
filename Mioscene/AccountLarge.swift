@@ -172,7 +172,7 @@ struct AccountLarge: View
                         //
                         VStack(alignment: .leading)
                         {
-                            if let nsAttrString = account.note.htmlAttributedString(fontSize:settings.font.html,color:settings.theme.bodyColor)
+                            if let nsAttrString = account.note.htmlAttributedString(color:settings.theme.bodyColor,font:settings.font.body)
                             {
                                 Text(AttributedString(nsAttrString))
                                     .textSelection(.enabled)
@@ -240,7 +240,7 @@ struct AccountLarge: View
                         .foregroundColor(settings.theme.minorColor)
                         .font(settings.font.subheadline)
                     
-                    if let nsAttrString = fields[index].value.htmlAttributedString(fontSize:settings.font.html,color:settings.theme.bodyColor)
+                    if let nsAttrString = fields[index].value.htmlAttributedString(color:settings.theme.bodyColor,font:settings.font.body)
                     {
                         Text(AttributedString(nsAttrString))
                             .textSelection(.enabled)

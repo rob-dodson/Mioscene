@@ -130,7 +130,9 @@ struct Post: View
                         //
                         // html body of post
                         //
-                        if let nsAttrString = status.content.htmlAttributedString(fontSize: MFont.getSizeFromName(size:settings.currentTextSize),color:settings.theme.bodyColor,linkColor: settings.theme.linkColor,fontFamily: settings.font.name)
+                        if let nsAttrString = status.content.htmlAttributedString(color:settings.theme.bodyColor,
+                                                                                  linkColor:settings.theme.linkColor,
+                                                                                  font: settings.font.body)
                         {
                             Text(AttributedString(nsAttrString))
                                 .font(settings.font.body)
