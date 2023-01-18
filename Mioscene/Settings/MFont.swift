@@ -30,7 +30,7 @@ class MFont : ObservableObject
     var body : Font!
     var footnote : Font!
     
-    static var fontList = ["System","SF Pro","Avenir","Helvetica Neue","Georgia","Menlo","Myriad","Futura","Gill Sans"]
+    static var fontList = ["System","SF Pro","SF Pro Rounded","Avenir","Helvetica Neue","Georgia","Menlo","Myriad","Times New Roman","Gill Sans","Baskerville"]
     
     init(fontName:String,sizeName:TextSize)
     {

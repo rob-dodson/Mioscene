@@ -92,8 +92,10 @@ struct SettingsView: View
                     ForEach(MFont.fontList.indices, id: \.self)
                     { index in
                         Text(MFont.fontList[index]).tag(MFont.fontList[index])
+                            .font(Font.custom(MFont.fontList[index],size:15))
                     }
                 }
+                .pickerStyle(RadioGroupPickerStyle())    
                 .frame(width:200)
                 .onChange(of: settings.font.name)
                 { newValue in
