@@ -14,10 +14,10 @@ struct Post: View
 {
     @ObservedObject var mast : Mastodon
     @ObservedObject var mstat : MStatus
-    
     @EnvironmentObject var settings: Settings
     
-    @State var showSensitiveContent : Bool = false
+    @State private var showSensitiveContent : Bool = false
+    @State private var shouldPresentSheet = false
     
     var body: some View
     {
@@ -185,8 +185,6 @@ struct Post: View
                         }
                     }
                     
-               
-                    
                     //
                     // Poll
                     //
@@ -234,12 +232,23 @@ struct Post: View
                         //
                         Button
                         {
-                        
+                            shouldPresentSheet.toggle()
                         }
                     label:
                         {
                             Image(systemName: "arrowshape.turn.up.left.fill")
                                 .foregroundColor(settings.theme.minorColor)
+                        }
+                        .sheet(isPresented: $shouldPresentSheet)
+                        {
+                            Log.log(msg:"Sheet dismissed!")
+                        }
+                        content:
+                        {
+                            EditPost(mast: mast,newPost: "@\(status.account.acct): ",title:"Reply")
+                            {
+                                shouldPresentSheet = false
+                            }
                         }
                         
                         
@@ -335,7 +344,6 @@ struct Post: View
         {
             VStack
             {
-                Button { } label: { Image(systemName: "mail"); Text("Mail Author") }
                 Button { } label: { Image(systemName: "speaker.slash.fill"); Text("Mute Author") }
                 Button { } label: { Image(systemName: "mail"); Text("Unfollow Author") }
             }

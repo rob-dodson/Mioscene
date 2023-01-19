@@ -62,7 +62,7 @@ struct TimeLineView: View
                     }
                 }
                  
-                NewPost(mast:mast)
+                NewPostButton(mast:mast)
                         
              }
             .padding()
@@ -89,6 +89,7 @@ struct TimeLineView: View
             {
                 
                 ProgressView("Loading...")
+                    .font(settings.font.title)
                     .foregroundColor(settings.theme.accentColor)
             }
 
