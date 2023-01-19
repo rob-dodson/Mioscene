@@ -87,7 +87,7 @@
 			isa = PBXGroup;
 			children = (
 				AE28C6162972F62500C8C928 /* MastodonKit */,
-				AE06EBEE294D16BB006CAB67 /* Mioscene */,
+				AE06EBEE294D16BB006CAB67 /* Miocene */,
 				AE06EBED294D16BB006CAB67 /* Products */,
 				AE28C5DD295B6EEE00C8C928 /* Frameworks */,
 			);
@@ -101,7 +101,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		AE06EBEE294D16BB006CAB67 /* Mioscene */ = {
+		AE06EBEE294D16BB006CAB67 /* Miocene */ = {
 			isa = PBXGroup;
 			children = (
 				AED7E182297716250053D0C9 /* Settings */,
@@ -126,7 +126,7 @@
 				AE06EBF5294D16BC006CAB67 /* Mioscene.entitlements */,
 				AE06EBF6294D16BC006CAB67 /* Preview Content */,
 			);
-			path = Mioscene;
+			path = Miocene;
 			sourceTree = "<group>";
 		};
 		AE06EBF6294D16BC006CAB67 /* Preview Content */ = {

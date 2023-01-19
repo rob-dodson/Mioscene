@@ -1,6 +1,5 @@
 //
 //  MioceneApp.swift
-//  Miocene
 //
 //  Created by Robert Dodson on 12/16/22.
 //
@@ -17,7 +16,7 @@ import SwiftUI
 
 
 @main
-struct MiosceneApp: App
+struct MioceneApp: App
 {
     @StateObject private var mast = Mastodon()
     @StateObject var settings = Settings()

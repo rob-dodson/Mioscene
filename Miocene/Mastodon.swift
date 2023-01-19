@@ -79,7 +79,7 @@ class Mastodon : ObservableObject
         client =  Client(baseURL: "https://\(serverurl)",accessToken: token)
         
         let request = Clients.register(
-            clientName: "Mioscene",
+            clientName: "Miocene",
             scopes: [.read, .write, .follow],
             website: "https://shyfrogproductions.com"
         )
@@ -120,7 +120,7 @@ class Mastodon : ObservableObject
         let newClient = Client(baseURL: serverurl)
         
         let request = Clients.register(
-            clientName: "Mioscene",
+            clientName: "Miocene",
             scopes: [.read, .write, .follow],  // follow depricated? .push?
             website: "https://shyfrogproductions.com"
         )

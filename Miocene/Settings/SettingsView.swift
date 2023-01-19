@@ -76,6 +76,7 @@ struct SettingsView: View
                         Text("\(text.rawValue)")
                     }
                 }
+                .font(settings.font.headline)
                 .frame(width:200)
                 .onChange(of: settings.font.currentSizeName)
                 { newValue in
@@ -95,6 +96,7 @@ struct SettingsView: View
                             .font(Font.custom(MFont.fontList[index],size:15))
                     }
                 }
+                .font(settings.font.headline)
                 .pickerStyle(RadioGroupPickerStyle())    
                 .frame(width:200)
                 .onChange(of: settings.font.name)
