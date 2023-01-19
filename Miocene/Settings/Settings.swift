@@ -32,7 +32,7 @@ class Settings: ObservableObject
     @Published var tabIndex : TabIndex = .TimeLine
     @Published var currentAccount : MastodonKit.Account?
     @Published var currentTag = String()
-    
+    @Published var selectedTimeline : TimeLine = .home
     @Published var font : MFont
    
     var iconSize = 20
@@ -56,7 +56,10 @@ class Settings: ObservableObject
     func showTag(tag:String)
     {
         currentTag = tag
+        selectedTimeline = .tag
         tabIndex = .TimeLine
+        
+        
     }
     
     func showAccount(account:Account)

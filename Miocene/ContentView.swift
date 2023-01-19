@@ -8,26 +8,6 @@
 import SwiftUI
 import MastodonKit
 
-/*
-Image(systemName: "checkmark.circle")
-    .font(.system(size: 16, weight: .ultraLight))
-Image(systemName: "checkmark.circle")
-    .font(.system(size: 16, weight: .thin))
-Image(systemName: "checkmark.circle")
-    .font(.system(size: 16, weight: .light))
-Image(systemName: "checkmark.circle")
-    .font(.system(size: 16, weight: .regular))
-Image(systemName: "checkmark.circle")
-    .font(.system(size: 16, weight: .medium))
-Image(systemName: "checkmark.circle")
-    .font(.system(size: 16, weight: .semibold))
-Image(systemName: "checkmark.circle")
-    .font(.system(size: 16, weight: .bold))
-Image(systemName: "checkmark.circle")
-    .font(.system(size: 16, weight: .heavy))
-Image(systemName: "checkmark.circle")
-    .font(.system(size: 16, weight: .black))
-*/
 
 struct ContentView: View
 {

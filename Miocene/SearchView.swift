@@ -17,11 +17,11 @@ struct SearchView: View
     
     @State private var searchTerm : String = ""
     @State private var results : Results?
-    
+    @State private var showLoading = false
     
     var body: some View
     {
-        VStack(alignment: .leading)
+        VStack(alignment: .center)
         {
             VStack(alignment: .trailing)
             {
@@ -31,11 +31,12 @@ struct SearchView: View
                 
                 Button("Search")
                 {
+                    showLoading = true
                     results = nil
                     let request =  MastodonKit.Search.search(query:searchTerm,resolve:false)
                     mast.client.run(request)
                     { result in
-                        
+                            showLoading = false
                             switch result
                             {
                             case .success:
@@ -50,6 +51,13 @@ struct SearchView: View
             }
             
             SpacerLine(color: settings.theme.minorColor)
+            
+            if showLoading
+            {
+                
+                ProgressView("Loading...")
+                    .foregroundColor(settings.theme.accentColor)
+            }
             
             ScrollView
             {
@@ -113,18 +121,20 @@ struct SearchView: View
             {
                 ForEach(hashtags.indices, id:\.self)
                 { index in
-                    Button
-                    {
-                        
-                    } label:
-                    {
-                        Text("#\(hashtags[index].name)")
-                        Text(hashtags[index].url.path)
-                    }
+                    
+                    Text("#\(hashtags[index].name)")
+                        .font(settings.font.body)
+                        .foregroundColor(settings.theme.bodyColor)
+                        .onTapGesture
+                        {
+                            settings.showTag(tag: "#\(hashtags[index].name)")
+                        }
                 }
             }
         }
     }
+    
+    
     func statusview(statuses:[Status]) -> some View
     {
         return GroupBox(label: Label("Statuses", systemImage: "square.and.pencil")

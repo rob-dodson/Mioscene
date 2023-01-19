@@ -110,8 +110,8 @@ extension View
         overlay(EdgeBorder(width: width, edges: edges).foregroundColor(color))
     }
 }
-//ont-family: \(fontFamily);
-//font-size: \(fontSize)px;
+
+
 extension String
 {
     func htmlAttributedString(color : Color = Color.black,linkColor : Color = Color.blue,font:Font) -> NSAttributedString?

@@ -15,7 +15,7 @@ struct TimeLineView: View
     
     @EnvironmentObject var settings: Settings
 
-    @State private var selectedTimeline : TimeLine = .home
+    
     @State private var stats1 = [MStatus]()
     @State private var stats2 = [MStatus]()
     @State private var stats3 = [MStatus]()
@@ -38,18 +38,22 @@ struct TimeLineView: View
                     Text("@FrogradioHQ").tag(2)
                 })
                 
-                Picker("Timeline",selection: $selectedTimeline)
+                Picker("Timeline",selection: $settings.selectedTimeline)
                 {
                     ForEach(TimeLine.allCases)
                     { timeline in
                         Text(timeline.rawValue.capitalized)
                     }
                 }
-                .onChange(of: selectedTimeline)
+                .onChange(of: settings.selectedTimeline)
                 { newValue in
-                    if selectedTimeline == .tag
+                    if settings.selectedTimeline == .tag
                     {
                         showTagAsk = true
+                        if settings.currentTag.count > 0
+                        {
+                            fetchStatuses(timeline:newValue,tag:settings.currentTag)
+                        }
                     }
                     else
                     {
@@ -58,7 +62,7 @@ struct TimeLineView: View
                     }
                 }
                  
-                NewPost(selectedTimeline:$selectedTimeline,mast:mast)
+                NewPost(mast:mast)
                         
              }
             .padding()
@@ -90,7 +94,7 @@ struct TimeLineView: View
 
             ScrollView
             {
-                if selectedTimeline == .notifications
+                if settings.selectedTimeline == .notifications
                 {
                     ForEach(getnotifications())
                     { note in
@@ -100,7 +104,7 @@ struct TimeLineView: View
                 }
                 else
                 {
-                    ForEach(getstats(timeline: $selectedTimeline))
+                    ForEach(getstats(timeline: $settings.selectedTimeline))
                     { mstat in
                         Post(mast:mast,mstat:mstat)
                             .padding([.horizontal,.top])
@@ -130,7 +134,7 @@ struct TimeLineView: View
             
             while(true)
             {
-                fetchStatuses(timeline: selectedTimeline,tag:settings.currentTag)
+                fetchStatuses(timeline: settings.selectedTimeline,tag:settings.currentTag)
                 try await Task.sleep(nanoseconds: 60 * 15 * NSEC_PER_SEC)
             }
         }
