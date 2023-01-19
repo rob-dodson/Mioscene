@@ -11,14 +11,14 @@ import SwiftUI
 
 enum MioceneError : LocalizedError
 {
-    case titleEmpty
+    case postingError
 
     var errorDescription: String?
     {
         switch self
         {
-        case .titleEmpty:
-            return "Missing title"
+        case .postingError:
+            return "Posting Error"
         }
     }
 
@@ -26,8 +26,8 @@ enum MioceneError : LocalizedError
     {
         switch self
         {
-        case .titleEmpty:
-            return "Article publishing failed due to missing title"
+        case .postingError:
+            return "Article publishing failed due to missing text"
         }
     }
 
@@ -54,12 +54,13 @@ struct LocalizedAlertError: LocalizedError
 
 extension View
 {
-    func errorAlert(error: Binding<MioceneError?>, buttonTitle: String = "OK") -> some View
+    func errorAlert(error: Binding<MioceneError?>,msg:String, buttonTitle: String = "OK") -> some View
     {
         let localizedAlertError = LocalizedAlertError(error: error.wrappedValue)
         
-        return alert(isPresented: .constant(localizedAlertError != nil), error: localizedAlertError)
+        return alert(isPresented: .constant(localizedAlertError != nil ), error: localizedAlertError)
         { _ in
+           
             Button(buttonTitle)
             {
                 error.wrappedValue = nil
@@ -67,7 +68,7 @@ extension View
         }
     message:
         { error in
-            Text(error.recoverySuggestion ?? "")
+            Text(msg)
         }
     }
 }

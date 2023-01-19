@@ -348,7 +348,7 @@ class Mastodon : ObservableObject
     
     
     
-    func post(newpost:String,spoiler:String?,visibility:Visibility,attachedURLS:[AttachmentURL],pollpayload:PollPayload?)
+    func post(newpost:String,spoiler:String?,visibility:Visibility,attachedURLS:[AttachmentURL],pollpayload:PollPayload?,done: @escaping (Result<Status>) -> Void)
     {
         if attachedURLS.count > 0
         {
@@ -413,6 +413,7 @@ class Mastodon : ObservableObject
                 client.run(request)
                 { result in
                     Log.log(msg:"post with media result \(result)")
+                    done(result)
                 }
             }
         }
@@ -424,6 +425,7 @@ class Mastodon : ObservableObject
             client.run(request)
             { result in
                 Log.log(msg:"post result \(result)")
+                done(result)
             }
         }
     }

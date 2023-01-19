@@ -8,12 +8,7 @@
 import SwiftUI
 import MastodonKit
 
-/*
-func editPost(mast:Mastodon,newPost:String,done:@escaping () -> Void) -> some View
-{
-    return EditPost(mast: mast,newPost:newPost,title:title,done: done)
-}
-*/
+
 struct EditPost: View
 {
     @ObservedObject var mast : Mastodon
@@ -34,6 +29,8 @@ struct EditPost: View
     @State private var pollType : PollType = .single
     @State private var pollTime : PollTimes = .fiveMinutes
     @StateObject private var pollState = PollState()
+    @State private var errorSystem : MioceneError?
+    @State private var errorMessage : String?
     
     var body: some View
     {
@@ -57,7 +54,6 @@ struct EditPost: View
                 .foregroundColor(settings.theme.bodyColor)
                 .font(settings.font.body)
                 .scrollIndicators(.automatic)
-                .frame(height:200)
             
             
             //
@@ -93,6 +89,7 @@ struct EditPost: View
                             
             }
         }
+        .errorAlert(error: $errorSystem,msg:errorMessage ?? "unknow error")
         .toolbar
         {
             ToolbarItem
@@ -177,14 +174,23 @@ struct EditPost: View
                 {
                     let pollpayload = showPoll == true ? PollBuilder.getPollPayLoad(pollState: pollState) : nil
                     
-                    mast.post(newpost:newPost,
-                              spoiler:showContentWarning == true ? contentWarning : nil,
-                              visibility:postVisibility,
-                              attachedURLS:attachedurls,
-                              pollpayload:pollpayload)
-                    
-                    shouldPresentSheet = false
-                    done()
+                     mast.post(newpost:newPost,
+                               spoiler:showContentWarning == true ? contentWarning : nil,
+                               visibility:postVisibility,
+                               attachedURLS:attachedurls,
+                               pollpayload:pollpayload)
+                               { result in
+                                    
+                                     switch result
+                                     {
+                                     case .success:
+                                        shouldPresentSheet = false
+                                        done()
+                                     case .failure(let error):
+                                        errorMessage = error.localizedDescription
+                                        errorSystem = .postingError
+                                     }
+                               }
                 }
             }
         }
@@ -262,7 +268,6 @@ struct EditPost: View
             }
             .font(.footnote).italic()
             .foregroundColor(settings.theme.minorColor)
-            .frame(height: 65)
         }
     }
 

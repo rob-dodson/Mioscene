@@ -35,9 +35,10 @@ struct NewPostButton: View
         }
         content:
         {
-            EditPost(mast: mast,newPost:"",title: "New Post") {
+            EditPost(mast: mast,newPost:"",title: "New Post",done:
+            {
                 shouldPresentSheet = false
-            }
+            })
         }
     }
     

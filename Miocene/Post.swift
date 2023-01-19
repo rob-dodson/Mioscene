@@ -245,10 +245,10 @@ struct Post: View
                         }
                         content:
                         {
-                            EditPost(mast: mast,newPost: "@\(status.account.acct): ",title:"Reply")
+                            EditPost(mast: mast,newPost: "@\(status.account.acct): ",title:"Reply",done:
                             {
                                 shouldPresentSheet = false
-                            }
+                            })
                         }
                         
                         
