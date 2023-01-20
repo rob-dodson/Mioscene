@@ -41,11 +41,11 @@ struct AccountSmall: View
                     VStack(alignment: .leading,spacing: 3)
                     {
                         Text(account.displayName)
-                            .font(settings.font.title)
+                            .font(settings.font.headline)
                             .foregroundColor(settings.theme.nameColor)
                         
                         Text("@\(account.acct)")
-                            .font(.title3)
+                            .font(settings.font.subheadline)
                             .foregroundColor(settings.theme.minorColor)
                     }
                     .onTapGesture
@@ -53,27 +53,6 @@ struct AccountSmall: View
                         settings.showAccount(account:account)
                     }
                 }
-                
-                HStack(alignment: .top)
-                {
-                    VStack
-                    {
-                        Text("\(account.statusesCount)")
-                        Text("Posts")
-                    }
-                    VStack
-                    {
-                        Text("\(account.followersCount)")
-                        Text("Followers")
-                    }
-                    VStack
-                    {
-                        Text("\(account.followingCount)")
-                        Text("Following")
-                    }
-                }
-                .foregroundColor(settings.theme.minorColor)
-                .font(.footnote)
             }
         }
     }
