@@ -10,7 +10,7 @@ import SwiftUI
 
 class ErrorSystem : ObservableObject
 {
-    @Published var errorType : MioceneError = .unknownError
+    @Published var errorType : MioceneError?
     @Published var errorMessage : String = "Unknown Error"
 
     func reportError(type:MioceneError,msg:String)
