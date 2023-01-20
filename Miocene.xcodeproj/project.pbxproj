@@ -36,6 +36,7 @@
 		AE28C61C297349C900C8C928 /* PollBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C61B297349C900C8C928 /* PollBuilder.swift */; };
 		AE9A85D6295629C100E8B193 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9A85D5295629C100E8B193 /* Settings.swift */; };
 		AEAFA2D72979D2E300970F40 /* EditPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2D62979D2DD00970F40 /* EditPost.swift */; };
+		AEAFA2DC297A3FD900970F40 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AEAFA2DE297A3FD900970F40 /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -68,6 +69,7 @@
 		AE28C61B297349C900C8C928 /* PollBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollBuilder.swift; sourceTree = "<group>"; };
 		AE9A85D5295629C100E8B193 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		AEAFA2D62979D2DD00970F40 /* EditPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPost.swift; sourceTree = "<group>"; };
+		AEAFA2DD297A3FD900970F40 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +89,7 @@
 		AE06EBE3294D16BB006CAB67 = {
 			isa = PBXGroup;
 			children = (
+				AEAFA2DE297A3FD900970F40 /* Localizable.strings */,
 				AE28C6162972F62500C8C928 /* MastodonKit */,
 				AE06EBEE294D16BB006CAB67 /* Miocene */,
 				AE06EBED294D16BB006CAB67 /* Products */,
@@ -214,7 +217,6 @@
 			knownRegions = (
 				en,
 				Base,
-				de,
 			);
 			mainGroup = AE06EBE3294D16BB006CAB67;
 			packageReferences = (
@@ -236,6 +238,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE06EBF8294D16BC006CAB67 /* Preview Assets.xcassets in Resources */,
+				AEAFA2DC297A3FD900970F40 /* Localizable.strings in Resources */,
 				AE06EBF4294D16BC006CAB67 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -275,6 +278,17 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		AEAFA2DE297A3FD900970F40 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				AEAFA2DD297A3FD900970F40 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		AE06EBF9294D16BC006CAB67 /* Debug */ = {

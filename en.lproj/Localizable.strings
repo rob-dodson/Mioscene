@@ -1,0 +1,20 @@
+/* 
+  Localizable.strings
+  Miocene
+
+  Created by Robert Dodson on 1/19/23.
+  
+*/
+
+//
+// From MastodonKit
+//
+"error.mastodonkit.malformedURL" = "Malformed URL.";
+"error.mastodonkit.malformedJSON" = "Malformed JSON response.";
+"error.mastodonkit.invalidModel" = "Could not decode response as apecified response type.";
+"error.mastodonkit.genericError" = "Networking error: %@";
+"error.mastodonkit.unauthorized" = "Unauthorized.";
+"error.mastodonkit.badStatus" = "Bad status: %@";
+"error.mastodonkit.mastodonError" = "Mastodon error: %@";
+
+
