@@ -34,8 +34,13 @@ struct TimeLineView: View
             {
                 Picker(selection: .constant(1),label: Text("Account"),content:
                 {
-                    Text("@rdodson").tag(1)
-                    Text("@FrogradioHQ").tag(2)
+                    if let accounts = mast.localAccountRecords
+                    {
+                        ForEach(accounts.indices, id:\.self)
+                        { index in
+                            Text("@\(accounts[index].username)").tag(1)
+                        }
+                    }
                 })
                 
                 Picker("Timeline",selection: $settings.selectedTimeline)

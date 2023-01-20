@@ -63,8 +63,25 @@ class Mastodon : ObservableObject
                         let token = Keys.getFromKeychain(name: currentlocalAccountRecord!.makeKeyChainName())
                         if let token
                         {
-                            connect(localaccount:localrec,serverurl: currentlocalAccountRecord!.server, token: token)
+                            connect(serverurl: localrec.server, token: token, done:
+                            { result in
+                                
+                                if let account = result.value
+                                {
+                                    self.currentlocalAccountRecord = localrec
+                                    Log.log(msg: "Account \(account.username) is logged in!")
+                                }
+                                else if let error = result.error
+                                {
+                                    Log.log(msg: "error getting account \(error)")
+                                }
+                            })
                         }
+                        else
+                        {
+                            Log.log(msg: "Error getting token from Keychain")
+                        }
+                            
                     }
                 }
             }
@@ -75,13 +92,13 @@ class Mastodon : ObservableObject
         }
     }
     
-    func connect(localaccount:LocalAccountRecord,serverurl:String,token:String)
+    func connect(serverurl:String,token:String,done:@escaping (Result<Account>) -> Void)
     {
         client =  Client(baseURL: "https://\(serverurl)",accessToken: token)
         
         let request = Clients.register(
             clientName: "Miocene",
-            scopes: [.read, .write, .follow],
+            scopes: [.read, .write, .push],
             website: "https://shyfrogproductions.com"
         )
 
@@ -98,16 +115,10 @@ class Mastodon : ObservableObject
         
         client.run(Accounts.currentUser())
         { result in
-            if let account = result.value
-            {
-                localaccount.usersMastodonAccount = account
-            }
-            else if let error = result.error
-            {
-                Log.log(msg: "error getting account \(error)")
-            }
+            done(result)
         }
     }
+    
     
     func getCurrentMastodonAccount() -> Account?
     {
@@ -115,14 +126,14 @@ class Mastodon : ObservableObject
     }
 
     
-    func newAccount(server:String,email:String,password:String)
+    func newAccount(server:String,email:String,password:String,done:@escaping (MioceneError,String) -> Void)
     {
         let serverurl = "https://\(server)"
         let newClient = Client(baseURL: serverurl)
         
         let request = Clients.register(
             clientName: "Miocene",
-            scopes: [.read, .write, .follow],  // follow depricated? .push?
+            scopes: [.read, .write, .push],
             website: "https://shyfrogproductions.com"
         )
         
@@ -136,33 +147,48 @@ class Mastodon : ObservableObject
                 clientid = application.clientID
                 clientsecret = application.clientSecret
                 
-                let loginrequest = Login.silent(clientID: clientid, clientSecret: clientsecret, scopes: [.read, .write, .follow], username: email, password: password)
+                let loginrequest = Login.silent(clientID: clientid, clientSecret: clientsecret, scopes: [.read, .write, .push], username: email, password: password)
                 
                 newClient.run(loginrequest)
                 { result in
+                    
                     if let loginsettings = result.value
                     {
-                        do
-                        {
                             let localaccount = LocalAccountRecord(username: email, email:email, server: server, lastViewed: true)
-                            try self.sql.updateAccount(account: localaccount)
+                            
                             Keys.storeInKeychain(name: localaccount.makeKeyChainName(), value: loginsettings.accessToken)
-                            Log.log(msg:"Account created OK")
-                        }
-                        catch
-                        {
-                            Log.log(msg:"error saving account \(error)")
-                        }
+                            
+                            self.connect(serverurl: server, token: loginsettings.accessToken, done:
+                            { result in
+                                
+                                if let account = result.value
+                                {
+                                    localaccount.username = account.username
+                                    do
+                                    {
+                                        try self.sql.updateAccount(account: localaccount)
+                                        done(.ok,"Account logged in OK")
+                                    }
+                                    catch
+                                    {
+                                        done(.sqlError,"Sql error storing account \(error)")
+                                    }
+                                }
+                                else if let error = result.error
+                                {
+                                    done(.accountError,"error getting account \(error)")
+                                }
+                            })
                     }
                     else
                     {
-                        Log.log(msg:"failed to get login credentials \(result)")
+                        done(.loginError,"failed to get login credentials \(result)")
                     }
                 }
             }
             else
             {
-                Log.log(msg:"result error \(result)")
+                done(.registrationError,"registration error \(result)")
             }
         }
     }

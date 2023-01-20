@@ -14,10 +14,11 @@ struct AddAccount: View
     @ObservedObject var mast : Mastodon
     
     @EnvironmentObject var settings: Settings
-    
+    @EnvironmentObject private var errorSystem : ErrorSystem
+
     @State private var shouldPresentSheet = false
-    @State private var server : String = ""
-    @State private var email : String = ""
+    @State private var server : String = "mastodon.social" // ""
+    @State private var email : String = "robdod@gmail.com" // ""
     @State private var password : String = ""
 
     var body: some View
@@ -59,6 +60,14 @@ struct AddAccount: View
                         .padding()
                         .font(settings.font.title)
             }
+            .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage,done:
+            {
+                if errorSystem.errorType == .ok
+                {
+                    shouldPresentSheet = false
+                    settings.showHome()
+                }
+            })
             .frame(width: 400, height: 300)
             .toolbar
             {
@@ -75,7 +84,11 @@ struct AddAccount: View
                     Button("Submit")
                     {
                         mast.newAccount(server: server, email: email, password: password)
-                        shouldPresentSheet = false
+                        { mioceneerror,msg in
+                            
+                            Log.log(msg: msg)
+                            errorSystem.reportError(type: mioceneerror,msg: msg)
+                        }
                     }
                 }
             }

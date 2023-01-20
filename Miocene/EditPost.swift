@@ -89,7 +89,9 @@ struct EditPost: View
                             
             }
         }
-        .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage)
+        .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage,done: {
+            shouldPresentSheet = false
+        })
         .toolbar
         {
             ToolbarItem

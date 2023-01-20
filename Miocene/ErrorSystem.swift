@@ -25,17 +25,32 @@ class ErrorSystem : ObservableObject
 
 enum MioceneError : LocalizedError
 {
+    case ok
     case unknownError
     case postingError
-
+    case sqlError
+    case accountError
+    case loginError
+    case registrationError
+    
     var errorDescription: String?
     {
         switch self
         {
+        case .ok:
+            return "Ok"
         case .unknownError:
             return "Unknown Error"
         case .postingError:
             return "Posting Error"
+        case .sqlError:
+            return "Sql Error"
+        case .accountError:
+            return "Account Error"
+        case .loginError:
+            return "Logi Error"
+        case .registrationError:
+            return "Registration Error"
         }
     }
 
@@ -43,10 +58,20 @@ enum MioceneError : LocalizedError
     {
         switch self
         {
+        case .ok:
+            return "Ok"
         case .unknownError:
             return "Something's not working"
         case .postingError:
             return "Article publishing failed due to missing text"
+        case .sqlError:
+            return "Sql Error"
+        case .accountError:
+            return "Account Error"
+        case .loginError:
+            return "Logi Error"
+        case .registrationError:
+            return "Registration Error"
         }
     }
 
@@ -73,7 +98,7 @@ struct LocalizedAlertError: LocalizedError
 
 extension View
 {
-    func errorAlert(error: Binding<MioceneError?>,msg:String, buttonTitle: String = "OK") -> some View
+    func errorAlert(error: Binding<MioceneError?>,msg:String, buttonTitle: String = "OK",done:@escaping () -> Void) -> some View
     {
         let localizedAlertError = LocalizedAlertError(error: error.wrappedValue)
         
@@ -82,7 +107,8 @@ extension View
            
             Button(buttonTitle)
             {
-                error.wrappedValue = nil
+               // error.wrappedValue = nil
+                done()
             }
         }
     message:

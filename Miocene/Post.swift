@@ -84,7 +84,7 @@ struct Post: View
                             {
                                 Text("[BOT]")
                                     .foregroundColor(settings.theme.accentColor)
-                                    .font(settings.font.subheadline)
+                                    .font(settings.font.footnote)
                             }
                             
                             Text("@\(status.account.acct)")

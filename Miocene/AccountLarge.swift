@@ -66,6 +66,7 @@ struct AccountLarge: View
                             Image(systemName: "photo.fill").imageScale(.large)
                         }
                         
+                        
                         //
                         // Follow actions
                         //
@@ -91,6 +92,16 @@ struct AccountLarge: View
                                 toggleButton(state: relationship!.blocking, truelabel: "Unblock", falselabel: "Block",
                                              truefunc: { mast.unblock(account: account, done: { result in relationship = result }) },
                                              falsefunc: { mast.block(account: account, done: { result in relationship = result }) })
+                            }
+                            else
+                            {
+                                Button("Edit Profile")
+                                {
+                                    if let myurl = mast.getCurrentMastodonAccount()?.url
+                                    {
+                                        NSWorkspace.shared.open(myurl)
+                                    }
+                                }
                             }
                         }
                         .onAppear()

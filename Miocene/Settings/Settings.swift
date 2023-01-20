@@ -58,8 +58,12 @@ class Settings: ObservableObject
         currentTag = tag
         selectedTimeline = .tag
         tabIndex = .TimeLine
-        
-        
+    }
+    
+    func showHome()
+    {
+        selectedTimeline = .home
+        tabIndex = .TimeLine
     }
     
     func showAccount(account:Account)
