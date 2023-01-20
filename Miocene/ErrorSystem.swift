@@ -8,15 +8,32 @@
 import SwiftUI
 
 
+class ErrorSystem : ObservableObject
+{
+    @Published var errorType : MioceneError = .unknownError
+    @Published var errorMessage : String = "Unknown Error"
+
+    func reportError(type:MioceneError,msg:String)
+    {
+        DispatchQueue.main.async
+        {
+            self.errorMessage = msg
+            self.errorType = type
+        }
+    }
+}
 
 enum MioceneError : LocalizedError
 {
+    case unknownError
     case postingError
 
     var errorDescription: String?
     {
         switch self
         {
+        case .unknownError:
+            return "Unknown Error"
         case .postingError:
             return "Posting Error"
         }
@@ -26,6 +43,8 @@ enum MioceneError : LocalizedError
     {
         switch self
         {
+        case .unknownError:
+            return "Something's not working"
         case .postingError:
             return "Article publishing failed due to missing text"
         }

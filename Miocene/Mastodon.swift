@@ -103,7 +103,7 @@ class Mastodon : ObservableObject
             }
             else if let error = result.error
             {
-                Log.log(msg: "error gettting account \(error)")
+                Log.log(msg: "error getting account \(error)")
             }
         }
     }

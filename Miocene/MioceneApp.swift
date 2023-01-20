@@ -21,12 +21,13 @@ struct MioceneApp: App
     @StateObject private var mast = Mastodon()
     @StateObject var settings = Settings()
     @StateObject var currenttabindex = CurrentTabIndex()
+    @StateObject var errorSystem = ErrorSystem()
     
     var body: some Scene
     {
         WindowGroup
         {
-            ContentView(mast: mast).environmentObject(settings)
+            ContentView(mast: mast).environmentObject(settings).environmentObject(errorSystem)
         }
     }
 }

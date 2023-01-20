@@ -17,6 +17,7 @@ struct EditPost: View
     var done: () -> Void
     
     @EnvironmentObject var settings: Settings
+    @EnvironmentObject private var errorSystem : ErrorSystem
     
     @State private var shouldPresentSheet = false
     
@@ -29,8 +30,7 @@ struct EditPost: View
     @State private var pollType : PollType = .single
     @State private var pollTime : PollTimes = .fiveMinutes
     @StateObject private var pollState = PollState()
-    @State private var errorSystem : MioceneError?
-    @State private var errorMessage : String?
+    
     
     var body: some View
     {
@@ -89,7 +89,7 @@ struct EditPost: View
                             
             }
         }
-        .errorAlert(error: $errorSystem,msg:errorMessage ?? "unknow error")
+        .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage)
         .toolbar
         {
             ToolbarItem
@@ -187,8 +187,8 @@ struct EditPost: View
                                         shouldPresentSheet = false
                                         done()
                                      case .failure(let error):
-                                        errorMessage = error.localizedDescription
-                                        errorSystem = .postingError
+                                         errorSystem.reportError(type: .postingError,
+                                                                msg: error.localizedDescription)
                                      }
                                }
                 }
