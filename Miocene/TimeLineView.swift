@@ -95,7 +95,7 @@ struct TimeLineView: View
 
             ScrollView
             {
-                if settings.selectedTimeline == .notifications
+                if settings.selectedTimeline == .notifications || settings.selectedTimeline == .mentions
                 {
                     ForEach(getnotifications())
                     { note in
@@ -158,8 +158,12 @@ struct TimeLineView: View
         case .notifications:
             Log.log(msg:"error 1")
             return []
+        case .mentions:
+            Log.log(msg:"error mentions 1")
+            return []
         }
     }
+    
      
     func getnotifications() -> [MNotification]
     {
@@ -170,9 +174,9 @@ struct TimeLineView: View
     {
         showLoading = true
         
-        if timeline == .notifications
+        if timeline == .notifications || timeline == .mentions
         {
-            mast.getNotifications
+            mast.getNotifications(mentionsOnly:timeline == .mentions ? true : false)
             { mnotes in
                 
                 showLoading = false
@@ -201,6 +205,8 @@ struct TimeLineView: View
                     tags = newstats
                 case .notifications:
                     Log.log(msg:"error 2")
+                case .mentions:
+                    Log.log(msg:"error 3")
                 }
             })
         }

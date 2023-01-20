@@ -24,7 +24,8 @@ enum TimeLine : String,CaseIterable, Identifiable,Equatable
          publicTimeline = "Public Timeline",
          tag = "Tag",
          favorites = "Favorites",
-         notifications = "Notifications"
+         notifications = "Notifications",
+         mentions = "Mentions"
     
     var id: Self { self }
 }
@@ -449,26 +450,8 @@ class Mastodon : ObservableObject
         
     }
     
-    func getNotifications(done: @escaping ([MastodonKit.Notification]) -> Void)
-    {
-        let request  = MastodonKit.Notifications.all()
-        
-        client.run(request)
-        { result in
-            if let notes = result.value
-            {
-                var returnnotes = [MastodonKit.Notification]()
-                for note in notes
-                {
-                    returnnotes.append(note)
-                }
-                done(returnnotes)
-            }
-        }
-    }
     
-    
-    func getNotifications(done: @escaping ([MNotification]) -> Void)
+    func getNotifications(mentionsOnly:Bool,done: @escaping ([MNotification]) -> Void)
     {
         let request = Notifications.all()
         
@@ -480,7 +463,10 @@ class Mastodon : ObservableObject
                 var returnnotes = [MNotification]()
                 for note in notifications
                 {
-                    returnnotes.append(self.convert(notification: note))
+                    if (mentionsOnly == true && note.type == .mention) || mentionsOnly == false
+                    {
+                        returnnotes.append(self.convert(notification: note))
+                    }
                 }
                 done(returnnotes)
             }
@@ -518,6 +504,9 @@ class Mastodon : ObservableObject
             request = Timelines.tag(tag)
         case .notifications:
             Log.log(msg:"timeline error")
+            return
+        case .mentions:
+            Log.log(msg:"timeline mentions error")
             return
         }
         
