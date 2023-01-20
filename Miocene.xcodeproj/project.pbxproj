@@ -49,7 +49,6 @@
 		AE06EC03294D234D006CAB67 /* Mastodon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mastodon.swift; sourceTree = "<group>"; };
 		AE28C5D72953C8A500C8C928 /* NewPostButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostButton.swift; sourceTree = "<group>"; };
 		AE28C5D9295A7ACE00C8C928 /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
-		AE28C5E0295B722F00C8C928 /* MastodonKit-2.0.0 */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "MastodonKit-2.0.0"; path = "../MastodonKit-2.0.0"; sourceTree = "<group>"; };
 		AE28C5E3295CE9F900C8C928 /* TimeLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineView.swift; sourceTree = "<group>"; };
 		AE28C5E5295CEDCE00C8C928 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		AE28C5EB295E4B1C00C8C928 /* AccountSmall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSmall.swift; sourceTree = "<group>"; };
@@ -143,7 +142,6 @@
 		AE28C5DD295B6EEE00C8C928 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				AE28C5E0295B722F00C8C928 /* MastodonKit-2.0.0 */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -216,6 +214,7 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
 			);
 			mainGroup = AE06EBE3294D16BB006CAB67;
 			packageReferences = (
