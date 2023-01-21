@@ -37,6 +37,7 @@
 		AE9A85D6295629C100E8B193 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE9A85D5295629C100E8B193 /* Settings.swift */; };
 		AEAFA2D72979D2E300970F40 /* EditPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2D62979D2DD00970F40 /* EditPost.swift */; };
 		AEAFA2DC297A3FD900970F40 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AEAFA2DE297A3FD900970F40 /* Localizable.strings */; };
+		AEAFA2E1297C261700970F40 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2E0297C261700970F40 /* AppState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +71,7 @@
 		AE9A85D5295629C100E8B193 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		AEAFA2D62979D2DD00970F40 /* EditPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPost.swift; sourceTree = "<group>"; };
 		AEAFA2DD297A3FD900970F40 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		AEAFA2E0297C261700970F40 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 				AEAFA2D62979D2DD00970F40 /* EditPost.swift */,
 				AE28C5FE296524AE00C8C928 /* ErrorSystem.swift */,
 				AE06EBEF294D16BB006CAB67 /* MioceneApp.swift */,
+				AEAFA2E0297C261700970F40 /* AppState.swift */,
 				AE06EC01294D1D1D006CAB67 /* Post.swift */,
 				AE28C608296CC65800C8C928 /* NotificationView.swift */,
 				AE06EC03294D234D006CAB67 /* Mastodon.swift */,
@@ -274,6 +277,7 @@
 				AEAFA2D72979D2E300970F40 /* EditPost.swift in Sources */,
 				AE28C5EC295E4B1C00C8C928 /* AccountSmall.swift in Sources */,
 				AE28C5D82953C8A500C8C928 /* NewPostButton.swift in Sources */,
+				AEAFA2E1297C261700970F40 /* AppState.swift in Sources */,
 				AE28C5FF296524AE00C8C928 /* ErrorSystem.swift in Sources */,
 				AE28C5E6295CEDCE00C8C928 /* AccountView.swift in Sources */,
 				AE06EBF0294D16BB006CAB67 /* MioceneApp.swift in Sources */,

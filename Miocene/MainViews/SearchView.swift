@@ -14,6 +14,7 @@ struct SearchView: View
     @ObservedObject var mast : Mastodon
     
     @EnvironmentObject var settings: Settings
+    @EnvironmentObject var appState: AppState
     
     @State private var searchTerm : String = ""
     @State private var results : Results?
@@ -104,7 +105,7 @@ struct SearchView: View
             {
                 ForEach(accounts.indices, id:\.self)
                 { index in
-                    AccountSmall(account: accounts[index])
+                    AccountSmall(mast:mast,account: accounts[index])
                 }
             }
         }
@@ -127,7 +128,7 @@ struct SearchView: View
                         .foregroundColor(settings.theme.bodyColor)
                         .onTapGesture
                         {
-                            settings.showTag(tag: "#\(hashtags[index].name)")
+                            appState.showTag(tag: "#\(hashtags[index].name)")
                         }
                 }
             }

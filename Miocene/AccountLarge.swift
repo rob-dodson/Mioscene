@@ -10,10 +10,11 @@ import MastodonKit
 
 struct AccountLarge: View
 {
-    @EnvironmentObject var settings: Settings
-    
     @ObservedObject var mast : Mastodon
     @State var account : Account
+    
+    @EnvironmentObject var settings: Settings
+    @EnvironmentObject var appState: AppState
     
     @State private var relationship : Relationship?
     @State private var accountStatuses = [MStatus]()
@@ -106,7 +107,7 @@ struct AccountLarge: View
                         }
                         .onAppear()
                         {
-                            if account.id != mast.currentlocalAccountRecord?.usersMastodonAccount?.id
+                            if account.id != appState.currentUserMastAccount?.id
                             {
                                 getRelationship(account: account)
                             }

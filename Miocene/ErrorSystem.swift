@@ -107,7 +107,7 @@ extension View
            
             Button(buttonTitle)
             {
-               // error.wrappedValue = nil
+                error.wrappedValue = nil
                 done()
             }
         }

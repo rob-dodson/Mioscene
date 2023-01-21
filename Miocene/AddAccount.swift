@@ -14,7 +14,9 @@ struct AddAccount: View
     @ObservedObject var mast : Mastodon
     
     @EnvironmentObject var settings: Settings
-    @EnvironmentObject private var errorSystem : ErrorSystem
+    @EnvironmentObject var errorSystem : ErrorSystem
+    @EnvironmentObject var appState : AppState
+
 
     @State private var shouldPresentSheet = false
     @State private var server : String = "mastodon.social" // ""
@@ -65,7 +67,7 @@ struct AddAccount: View
                 if errorSystem.errorType == .ok
                 {
                     shouldPresentSheet = false
-                    settings.showHome()
+                    appState.showHome()
                 }
             })
             .frame(width: 400, height: 300)

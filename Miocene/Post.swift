@@ -14,7 +14,9 @@ struct Post: View
 {
     @ObservedObject var mast : Mastodon
     @ObservedObject var mstat : MStatus
+   
     @EnvironmentObject var settings: Settings
+    @EnvironmentObject var appState: AppState
     
     @State private var showSensitiveContent : Bool = false
     @State private var shouldPresentSheet = false
@@ -57,7 +59,7 @@ struct Post: View
                     .cornerRadius(15)
                     .onTapGesture
                     {
-                        settings.showAccount(account:account)
+                        appState.showAccount(account:account)
                     }
                 }
               
@@ -77,7 +79,7 @@ struct Post: View
                                 .foregroundColor(settings.theme.nameColor)
                                 .onTapGesture
                                 {
-                                    settings.showAccount(account:status.account)
+                                    appState.showAccount(account:status.account)
                                 }
                                 
                             if status.account.bot == true
@@ -92,7 +94,7 @@ struct Post: View
                                 .foregroundColor(settings.theme.minorColor)
                                 .onTapGesture
                                 {
-                                    settings.showAccount(account:status.account)
+                                    appState.showAccount(account:status.account)
                                 }
                         }
                         
@@ -216,7 +218,7 @@ struct Post: View
                                 .foregroundColor(settings.theme.linkColor)
                                 .onTapGesture
                                 {
-                                    settings.showAccount(account:mstatus.status.account)
+                                    appState.showAccount(account:mstatus.status.account)
                                 }
                         }
                     }
@@ -344,6 +346,14 @@ struct Post: View
         {
             VStack
             {
+                if status.account.id == appState.currentUserMastAccount?.id
+                {
+                    Button
+                    {
+                        mast.deletePost(id:status.id)
+                    } label: { Image(systemName: "speaker.slash.fill"); Text("Delete Post") }
+                }
+                
                 Button { } label: { Image(systemName: "speaker.slash.fill"); Text("Mute Author") }
                 Button { } label: { Image(systemName: "mail"); Text("Unfollow Author") }
             }
@@ -370,7 +380,7 @@ struct Post: View
                     let name = "#\(tags[index].name)"
                     Button(name, action:
                     {
-                        settings.showTag(tag: name)
+                        appState.showTag(tag: name)
                     }).help(name)
                 }
             }

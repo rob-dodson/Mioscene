@@ -14,14 +14,17 @@ struct ContentView: View
     @ObservedObject var mast : Mastodon
     
     @EnvironmentObject var settings : Settings
+    @EnvironmentObject var errorSystem : ErrorSystem
+    @EnvironmentObject var appState: AppState
+    
     
     var body: some View
     {
         VStack
         {
-            CustomTopTabBar(tabIndex: $settings.tabIndex)
+            CustomTopTabBar(tabIndex: $appState.tabIndex)
             
-            switch settings.tabIndex
+            switch appState.tabIndex
             {
             case .TimeLine: TimeLineView(mast: mast)
             case .Accounts: AccountView(mast: mast)
@@ -39,7 +42,9 @@ struct ContentView: View
 struct CustomTopTabBar: View
 {
     @Binding var tabIndex: TabIndex
+    
     @EnvironmentObject var settings : Settings
+    @EnvironmentObject var appState: AppState
     
     var body: some View
     {
@@ -49,16 +54,16 @@ struct CustomTopTabBar: View
         {
             Spacer()
             
-            TabBarButton(text: "Timelines",icon:"house", isSelected: .constant(settings.tabIndex == .TimeLine))
+            TabBarButton(text: "Timelines",icon:"house", isSelected: .constant(tabIndex == .TimeLine))
                 .onTapGesture { onButtonTapped(index: .TimeLine) }
             
-            TabBarButton(text: "Accounts",icon:"person", isSelected: .constant(settings.tabIndex == .Accounts))
+            TabBarButton(text: "Accounts",icon:"person", isSelected: .constant(tabIndex == .Accounts))
                 .onTapGesture { onButtonTapped(index: .Accounts) }
             
-            TabBarButton(text: "Search", icon:"magnifyingglass",isSelected: .constant(settings.tabIndex == .Search))
+            TabBarButton(text: "Search", icon:"magnifyingglass",isSelected: .constant(tabIndex == .Search))
                 .onTapGesture { onButtonTapped(index: .Search) }
             
-            TabBarButton(text: "Settings",icon:"gear", isSelected: .constant(settings.tabIndex == .Settings))
+            TabBarButton(text: "Settings",icon:"gear", isSelected: .constant(tabIndex == .Settings))
                 .onTapGesture { onButtonTapped(index: .Settings) }
                          
            Spacer()
@@ -68,7 +73,7 @@ struct CustomTopTabBar: View
     
     private func onButtonTapped(index: TabIndex)
     {
-        settings.tabIndex = index
+        appState.tabIndex = index
     }
 }
 

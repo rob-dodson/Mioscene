@@ -24,8 +24,8 @@ enum TimeLine : String,CaseIterable, Identifiable,Equatable
          publicTimeline = "Public Timeline",
          tag = "Tag",
          favorites = "Favorites",
-         notifications = "Notifications",
-         mentions = "Mentions"
+         notifications = "All Notifications",
+         mentions = "Mentions Only"
     
     var id: Self { self }
 }
@@ -39,10 +39,9 @@ class Mastodon : ObservableObject
     var client : Client!
     var currentTimeline : TimeLine = .home
     var sql : SqliteDB
-    var currentlocalAccountRecord : LocalAccountRecord?
     var localAccountRecords : [LocalAccountRecord]?
-    
-    
+    private var appState = AppState.shared
+
     init()
     {
         do
@@ -58,9 +57,9 @@ class Mastodon : ObservableObject
                 {
                     if localrec.lastViewed == true
                     {
-                        currentlocalAccountRecord = localrec
+                        appState.currentlocalAccountRecord = localrec
                         
-                        let token = Keys.getFromKeychain(name: currentlocalAccountRecord!.makeKeyChainName())
+                        let token = Keys.getFromKeychain(name: appState.currentlocalAccountRecord!.makeKeyChainName())
                         if let token
                         {
                             connect(serverurl: localrec.server, token: token, done:
@@ -68,7 +67,9 @@ class Mastodon : ObservableObject
                                 
                                 if let account = result.value
                                 {
-                                    self.currentlocalAccountRecord = localrec
+                                    self.appState.currentUserMastAccount = account
+                                    self.appState.currentlocalAccountRecord = localrec
+                                    
                                     Log.log(msg: "Account \(account.username) is logged in!")
                                 }
                                 else if let error = result.error
@@ -98,7 +99,7 @@ class Mastodon : ObservableObject
         
         let request = Clients.register(
             clientName: "Miocene",
-            scopes: [.read, .write, .push],
+            scopes: [.read, .write,.follow],
             website: "https://shyfrogproductions.com"
         )
 
@@ -119,10 +120,9 @@ class Mastodon : ObservableObject
         }
     }
     
-    
     func getCurrentMastodonAccount() -> Account?
     {
-        return currentlocalAccountRecord?.usersMastodonAccount ?? nil
+        return appState.currentlocalAccountRecord?.usersMastodonAccount ?? nil
     }
 
     
@@ -133,7 +133,7 @@ class Mastodon : ObservableObject
         
         let request = Clients.register(
             clientName: "Miocene",
-            scopes: [.read, .write, .push],
+            scopes: [.read, .write,.follow],
             website: "https://shyfrogproductions.com"
         )
         
@@ -147,7 +147,7 @@ class Mastodon : ObservableObject
                 clientid = application.clientID
                 clientsecret = application.clientSecret
                 
-                let loginrequest = Login.silent(clientID: clientid, clientSecret: clientsecret, scopes: [.read, .write, .push], username: email, password: password)
+                let loginrequest = Login.silent(clientID: clientid, clientSecret: clientsecret, scopes: [.read, .write,.follow], username: email, password: password)
                 
                 newClient.run(loginrequest)
                 { result in
@@ -164,6 +164,7 @@ class Mastodon : ObservableObject
                                 if let account = result.value
                                 {
                                     localaccount.username = account.username
+                                    self.appState.currentUserMastAccount = account
                                     do
                                     {
                                         try self.sql.updateAccount(account: localaccount)
@@ -473,9 +474,16 @@ class Mastodon : ObservableObject
         { result in
             Log.log(msg:"deleteAllNotifications result \(result)")
         }
-        
     }
     
+    func deletePost(id:String)
+    {
+        let request = MastodonKit.Statuses.delete(id: id)
+        client.run(request)
+        { result in
+            Log.log(msg:"deletePost result \(result)")
+        }
+    }
     
     func getNotifications(mentionsOnly:Bool,done: @escaping ([MNotification]) -> Void)
     {

@@ -10,18 +10,8 @@ import SwiftUI
 import MastodonKit
 
 
-enum TabIndex : Int
-{
-    case TimeLine = 0
-    case Accounts
-    case Search
-    case Settings
-}
 
-class CurrentTabIndex : ObservableObject
-{
-    var index : TabIndex = .TimeLine
-}
+
 
 /**
  Settings
@@ -29,10 +19,7 @@ class CurrentTabIndex : ObservableObject
 class Settings: ObservableObject
 {
     @Published var theme : Theme
-    @Published var tabIndex : TabIndex = .TimeLine
-    @Published var currentAccount : MastodonKit.Account?
-    @Published var currentTag = String()
-    @Published var selectedTimeline : TimeLine = .home
+    
     @Published var font : MFont
    
     var iconSize = 20
@@ -53,24 +40,7 @@ class Settings: ObservableObject
         font = MFont(fontName: fontName,sizeName: fontSize)
     }
    
-    func showTag(tag:String)
-    {
-        currentTag = tag
-        selectedTimeline = .tag
-        tabIndex = .TimeLine
-    }
-    
-    func showHome()
-    {
-        selectedTimeline = .home
-        tabIndex = .TimeLine
-    }
-    
-    func showAccount(account:Account)
-    {
-        currentAccount = account
-        tabIndex = .Accounts
-    }
+  
 }
 
  

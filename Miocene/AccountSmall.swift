@@ -11,7 +11,10 @@ import MastodonKit
 
 struct AccountSmall: View
 {
+    @ObservedObject var mast : Mastodon
+    
     @EnvironmentObject var settings: Settings
+    @EnvironmentObject var appState: AppState
     
     @State var account : Account
     
@@ -35,7 +38,7 @@ struct AccountSmall: View
                     .cornerRadius(15)
                     .onTapGesture
                     {
-                        settings.showAccount(account:account)
+                        appState.showAccount(account:account)
                     }
                     
                     VStack(alignment: .leading,spacing: 3)
@@ -50,7 +53,7 @@ struct AccountSmall: View
                     }
                     .onTapGesture
                     {
-                        settings.showAccount(account:account)
+                        appState.showAccount(account:account)
                     }
                 }
             }

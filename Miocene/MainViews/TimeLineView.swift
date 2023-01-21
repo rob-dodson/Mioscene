@@ -14,7 +14,7 @@ struct TimeLineView: View
     @ObservedObject var mast : Mastodon
     
     @EnvironmentObject var settings: Settings
-
+    @EnvironmentObject var appState: AppState
     
     @State private var stats1 = [MStatus]()
     @State private var stats2 = [MStatus]()
@@ -43,27 +43,27 @@ struct TimeLineView: View
                     }
                 })
                 
-                Picker("Timeline",selection: $settings.selectedTimeline)
+                Picker("Timeline",selection: $appState.selectedTimeline)
                 {
                     ForEach(TimeLine.allCases)
                     { timeline in
                         Text(timeline.rawValue.capitalized)
                     }
                 }
-                .onChange(of: settings.selectedTimeline)
+                .onChange(of: appState.selectedTimeline)
                 { newValue in
-                    if settings.selectedTimeline == .tag
+                    if appState.selectedTimeline == .tag
                     {
                         showTagAsk = true
-                        if settings.currentTag.count > 0
+                        if appState.currentTag.count > 0
                         {
-                            fetchStatuses(timeline:newValue,tag:settings.currentTag)
+                            fetchStatuses(timeline:newValue,tag:appState.currentTag)
                         }
                     }
                     else
                     {
                         showTagAsk = false
-                        fetchStatuses(timeline:newValue,tag:settings.currentTag)
+                        fetchStatuses(timeline:newValue,tag:appState.currentTag)
                     }
                 }
                  
@@ -78,13 +78,13 @@ struct TimeLineView: View
             {
                 HStack
                 {
-                    TextField("#tag", text: $settings.currentTag)
+                    TextField("#tag", text: $appState.currentTag)
                         .padding()
                         .font(settings.font.title)
                     
                     Button("Load")
                     {
-                        fetchStatuses(timeline:.tag,tag:settings.currentTag)
+                        fetchStatuses(timeline:.tag,tag:appState.currentTag)
                     }
                     .keyboardShortcut(.defaultAction)
                 }
@@ -100,7 +100,7 @@ struct TimeLineView: View
 
             ScrollView
             {
-                if settings.selectedTimeline == .notifications || settings.selectedTimeline == .mentions
+                if appState.selectedTimeline == .notifications || appState.selectedTimeline == .mentions
                 {
                     ForEach(getnotifications())
                     { note in
@@ -110,7 +110,7 @@ struct TimeLineView: View
                 }
                 else
                 {
-                    ForEach(getstats(timeline: $settings.selectedTimeline))
+                    ForEach(getstats(timeline: $appState.selectedTimeline))
                     { mstat in
                         Post(mast:mast,mstat:mstat)
                             .padding([.horizontal,.top])
@@ -140,7 +140,7 @@ struct TimeLineView: View
             
             while(true)
             {
-                fetchStatuses(timeline: settings.selectedTimeline,tag:settings.currentTag)
+                fetchStatuses(timeline: appState.selectedTimeline,tag:appState.currentTag)
                 try await Task.sleep(nanoseconds: 60 * 15 * NSEC_PER_SEC)
             }
         }

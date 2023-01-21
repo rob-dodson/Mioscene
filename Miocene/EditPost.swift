@@ -17,8 +17,9 @@ struct EditPost: View
     var done: () -> Void
     
     @EnvironmentObject var settings: Settings
-    @EnvironmentObject private var errorSystem : ErrorSystem
-    
+    @EnvironmentObject var errorSystem : ErrorSystem
+    @EnvironmentObject var appState: AppState
+
     @State private var shouldPresentSheet = false
     
     @State private var countColor = Color.green

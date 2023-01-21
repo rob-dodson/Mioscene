@@ -47,7 +47,7 @@ struct NotificationView: View
                     .font(settings.font.headline)
                     .foregroundColor(settings.theme.accentColor)
                     
-                    AccountSmall(account: note.account)
+                    AccountSmall(mast:mast,account: note.account)
                 }
                 
                 if let status = mnotification.notification.status

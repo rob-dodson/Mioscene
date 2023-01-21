@@ -8,13 +8,12 @@
 import SwiftUI
 
 
-
 struct AccountView: View
 {
     @ObservedObject var mast : Mastodon
-    @EnvironmentObject var settings: Settings
     
-    @State var error : MioceneError?
+    @EnvironmentObject var settings: Settings
+    @EnvironmentObject var appState: AppState
     
     
     var body: some View
@@ -40,11 +39,11 @@ struct AccountView: View
             
             SpacerLine(color: settings.theme.minorColor)
             
-            if let account = settings.currentAccount
+            if let account = appState.currentUserMastAccount
             {
                 AccountLarge(mast:mast,account: account)
             }
-            else if let account = mast.currentlocalAccountRecord?.usersMastodonAccount
+            else if let account = appState.currentlocalAccountRecord?.usersMastodonAccount
             {
                 AccountLarge(mast:mast,account: account)
             }
