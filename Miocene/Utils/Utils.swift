@@ -116,11 +116,13 @@ extension String
 {
     func htmlAttributedString(color : Color = Color.black,linkColor : Color = Color.blue,font:Font) -> NSAttributedString?
     {
+        
         let htmlTemplate = """
         <!doctype html>
         <html>
           <head>
             <style>
+        p { padding:5em; }
                 body {
                     color: \(color);
                 }

@@ -26,10 +26,10 @@ struct ContentView: View
             
             switch appState.tabIndex
             {
-            case .TimeLine: TimeLineView(mast: mast)
-            case .Accounts: AccountView(mast: mast)
-            case .Search: SearchView(mast: mast)
-            case .Settings: SettingsView()
+                case .TimeLine: TimeLineView(mast: mast)
+                case .Accounts: AccountView(mast: mast,maccount: MAccount(displayname: appState.currentUserMastAccount!.displayName, acct: appState.currentUserMastAccount!))
+                case .Search: SearchView(mast: mast)
+                case .Settings: SettingsView()
             }
             
             Spacer()

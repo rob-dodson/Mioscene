@@ -16,7 +16,7 @@ struct AccountSmall: View
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
     
-    @State var account : Account
+    @State var maccount : MAccount
     
     var body: some View
     {
@@ -26,7 +26,7 @@ struct AccountSmall: View
             {
                 HStack(alignment: .top)
                 {
-                    AsyncImage(url: URL(string: account.avatar ?? ""))
+                    AsyncImage(url: URL(string: maccount.account.avatar ?? ""))
                     { image in
                         image.resizable()
                     }
@@ -38,22 +38,22 @@ struct AccountSmall: View
                     .cornerRadius(15)
                     .onTapGesture
                     {
-                        appState.showAccount(account:account)
+                        appState.showAccount(maccount:maccount)
                     }
                     
                     VStack(alignment: .leading,spacing: 3)
                     {
-                        Text(account.displayName)
+                        Text(maccount.displayName)
                             .font(settings.font.headline)
                             .foregroundColor(settings.theme.nameColor)
                         
-                        Text("@\(account.acct)")
+                        Text("@\(maccount.account.acct)")
                             .font(settings.font.subheadline)
                             .foregroundColor(settings.theme.minorColor)
                     }
                     .onTapGesture
                     {
-                        appState.showAccount(account:account)
+                        appState.showAccount(maccount:maccount)
                     }
                 }
             }

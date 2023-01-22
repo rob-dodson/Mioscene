@@ -11,14 +11,16 @@ import MastodonKit
 struct AccountLarge: View
 {
     @ObservedObject var mast : Mastodon
-    @State var account : Account
+    @ObservedObject var maccount : MAccount
     
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
     
+    
     @State private var relationship : Relationship?
     @State private var accountStatuses = [MStatus]()
-
+    
+    static private var lastStatusesID = String()
     
     var body: some View
     {
@@ -31,7 +33,7 @@ struct AccountLarge: View
                     //
                     // User's avatar image
                     //
-                    AsyncImage(url: URL(string:account.avatar ?? ""))
+                    AsyncImage(url: URL(string:maccount.account.avatar ?? ""))
                     { image in
                         image.resizable()
                     }
@@ -48,7 +50,7 @@ struct AccountLarge: View
                     //
                     VStack
                     {
-                        if let header = account.header
+                        if let header = maccount.account.header
                         {
                             AsyncImage(url: URL(string: header))
                             { image in
@@ -71,50 +73,8 @@ struct AccountLarge: View
                         //
                         // Follow actions
                         //
-                        HStack
-                        {
-                            if relationship != nil
-                            {
-                                if relationship?.requested == true
-                                {
-                                    Text("Follow Requested") // Need to add: withdraw request button
-                                }
-                                else
-                                {
-                                    toggleButton(state: relationship!.following, truelabel: "Unfollow", falselabel: "Follow",
-                                                 truefunc: { mast.unfollow(account: account, done: { result in relationship = result }) },
-                                                 falsefunc: { mast.follow(account: account, done: { result in relationship = result }) })
-                                }
-                                
-                                toggleButton(state: relationship!.muting, truelabel: "Unmute", falselabel: "Mute",
-                                             truefunc: { mast.unmute(account: account, done: { result in relationship = result }) },
-                                             falsefunc: { mast.mute(account: account, done: { result in relationship = result }) })
-                                
-                                toggleButton(state: relationship!.blocking, truelabel: "Unblock", falselabel: "Block",
-                                             truefunc: { mast.unblock(account: account, done: { result in relationship = result }) },
-                                             falsefunc: { mast.block(account: account, done: { result in relationship = result }) })
-                            }
-                            else
-                            {
-                                Button("Edit Profile")
-                                {
-                                    if let myurl = mast.getCurrentMastodonAccount()?.url
-                                    {
-                                        NSWorkspace.shared.open(myurl)
-                                    }
-                                }
-                            }
-                        }
-                        .onAppear()
-                        {
-                            if account.id != appState.currentUserMastAccount?.id
-                            {
-                                getRelationship(account: account)
-                            }
-                        }
-                        
-                        Text(relationship?.followedBy == true ? "Is following you" : "Is not following you")
-                            .foregroundColor(settings.theme.minorColor).italic()
+                        getRelationship(maccount:maccount)
+                   
                     }
                 }
                 
@@ -127,26 +87,26 @@ struct AccountLarge: View
                         //
                         HStack
                         {
-                            Text("\(account.displayName)")
+                            Text("\(maccount.account.displayName)")
                                 .foregroundColor(settings.theme.nameColor)
                                 .font(settings.font.headline)
                             
-                            if account.bot == true
+                            if maccount.account.bot == true
                             {
                                 Text("[BOT]")
                                     .foregroundColor(settings.theme.accentColor)
                                     .font(settings.font.headline)
                             }
                         }
-                        Text("@\(account.acct)")
+                        Text("@\(maccount.account.acct)")
                             .foregroundColor(settings.theme.minorColor)
                             .font(settings.font.subheadline)
                         
-                        Text("User since \(account.createdAt.formatted())")
+                        Text("User since \(maccount.account.createdAt.formatted())")
                             .foregroundColor(settings.theme.minorColor)
                             .font(.footnote).italic()
                         
-                        if let url = account.url
+                        if let url = maccount.account.url
                         {
                             let name = url.absoluteString.replacing(/http[s]*:\/\//, with:"")
                             Link(name,destination: url)
@@ -161,17 +121,17 @@ struct AccountLarge: View
                         {
                             VStack
                             {
-                                Text("\(account.statusesCount)")
+                                Text("\(maccount.account.statusesCount)")
                                 Text("Posts")
                             }
                             VStack
                             {
-                                Text("\(account.followersCount)")
+                                Text("\(maccount.account.followersCount)")
                                 Text("Followers")
                             }
                             VStack
                             {
-                                Text("\(account.followingCount)")
+                                Text("\(maccount.account.followingCount)")
                                 Text("Following")
                             }
                         }
@@ -184,18 +144,17 @@ struct AccountLarge: View
                         //
                         VStack(alignment: .leading)
                         {
-                            if let nsAttrString = account.note.htmlAttributedString(color:settings.theme.bodyColor,font:settings.font.body)
+                            if let nsAttrString = maccount.account.note.htmlAttributedString(color:settings.theme.bodyColor,font:settings.font.body)
                             {
                                 Text(AttributedString(nsAttrString))
                                     .textSelection(.enabled)
                                     .fixedSize(horizontal: false, vertical: true) // make the text wrap
-
                             }
                             
                             //
                             // fields
                             //
-                            if let fields = account.fields
+                            if let fields = maccount.account.fields
                             {
                                 if fields.count > 0
                                 {
@@ -207,7 +166,6 @@ struct AccountLarge: View
                             }
                         }
                         .padding()
-                        
                         .frame(maxWidth: .infinity,maxHeight:.infinity)
                         .background(settings.theme.blockColor)
                         .cornerRadius(5)
@@ -220,22 +178,28 @@ struct AccountLarge: View
             
         SpacerLine(color: settings.theme.minorColor)
         
-        ScrollView
+        getStatuses(maccount: maccount)
+    }
+    
+    
+    func getStatuses(maccount:MAccount) -> some View
+    {
+        if AccountLarge.lastStatusesID != maccount.account.id
+        {
+            AccountLarge.lastStatusesID = maccount.account.id
+            mast.getStatusesForAccount(account:maccount.account)
+            { mstatus in
+                accountStatuses = mstatus
+                
+            }
+        }
+        
+        return ScrollView
         {
             ForEach(accountStatuses)
             { mstatus in
                 Post(mast:mast,mstat:mstatus)
                     .padding([.horizontal,.top])
-            }
-        }
-        .task
-        {
-            Task
-            {
-                mast.getStatusesForAccount(account: account)
-                { mstatus in
-                    accountStatuses = mstatus
-                }
             }
         }
     }
@@ -273,11 +237,60 @@ struct AccountLarge: View
         }
     }
     
-    func getRelationship(account:Account)
+    func getRelationship(maccount:MAccount) -> some View
     {
-        mast.getRelationships(ids: [account.id])
-        { relationships in
-            relationship = relationships[0]
+        if maccount.account.id != relationship?.id
+        {
+            let id : String = String(maccount.account.id)
+            mast.getRelationships(ids: [id])
+            { relationships in
+                relationship = relationships[0]
+            }
+        }
+        
+        return HStack
+        {
+            if maccount.account.id == appState.currentUserMastAccount?.id
+            {
+                Button("Edit Profile")
+                {
+                    if let myurl = mast.getCurrentMastodonAccount()?.url
+                    {
+                        NSWorkspace.shared.open(myurl)
+                    }
+                }
+                
+            }
+            else if relationship != nil
+            {
+                VStack
+                {
+                    HStack
+                    {
+                        if relationship?.requested == true
+                        {
+                            Text("Follow Requested") // Need to add: withdraw request button
+                        }
+                        else
+                        {
+                            toggleButton(state: relationship!.following, truelabel: "Unfollow", falselabel: "Follow",
+                                         truefunc: { mast.unfollow(account: maccount.account, done: { result in relationship = result }) },
+                                         falsefunc: { mast.follow(account: maccount.account, done: { result in relationship = result }) })
+                        }
+                        
+                        toggleButton(state: relationship!.muting, truelabel: "Unmute", falselabel: "Mute",
+                                     truefunc: { mast.unmute(account: maccount.account, done: { result in relationship = result }) },
+                                     falsefunc: { mast.mute(account: maccount.account, done: { result in relationship = result }) })
+                        
+                        toggleButton(state: relationship!.blocking, truelabel: "Unblock", falselabel: "Block",
+                                     truefunc: { mast.unblock(account: maccount.account, done: { result in relationship = result }) },
+                                     falsefunc: { mast.block(account: maccount.account, done: { result in relationship = result }) })
+                    }
+                    
+                    Text(relationship?.followedBy == true ? "Is following you" : "Is not following you")
+                        .foregroundColor(settings.theme.minorColor).italic()
+                }
+            }
         }
     }
     

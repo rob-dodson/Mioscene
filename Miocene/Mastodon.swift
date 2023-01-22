@@ -67,10 +67,14 @@ class Mastodon : ObservableObject
                                 
                                 if let account = result.value
                                 {
-                                    self.appState.currentUserMastAccount = account
-                                    self.appState.currentlocalAccountRecord = localrec
-                                    
-                                    Log.log(msg: "Account \(account.username) is logged in!")
+                                    DispatchQueue.main.async {
+                                        
+                                        self.appState.currentUserMastAccount = account
+                                        self.appState.currentViewingMastAccount = MAccount(displayname: account.displayName, acct: account)
+                                        self.appState.currentlocalAccountRecord = localrec
+                                        
+                                        Log.log(msg: "Account \(account.username) is logged in!")
+                                    }
                                 }
                                 else if let error = result.error
                                 {
@@ -165,6 +169,7 @@ class Mastodon : ObservableObject
                                 {
                                     localaccount.username = account.username
                                     self.appState.currentUserMastAccount = account
+                                    self.appState.currentViewingMastAccount = MAccount(displayname: account.displayName, acct: account)
                                     do
                                     {
                                         try self.sql.updateAccount(account: localaccount)

@@ -25,16 +25,15 @@ enum TabIndex : Int
 
 class AppState : ObservableObject
 {
-    var currentlocalAccountRecord : LocalAccountRecord?
-    var currentUserMastAccount : MastodonKit.Account?
-    var currentViewingMastAccount : MastodonKit.Account?
-
+    @Published var currentlocalAccountRecord : LocalAccountRecord?
+    @Published var currentUserMastAccount : MastodonKit.Account?
+    @Published var currentViewingMastAccount : MAccount?
     @Published var currenttabindex = CurrentTabIndex()
     @Published var tabIndex : TabIndex = .TimeLine
     @Published var currentTag = String()
     @Published var selectedTimeline : TimeLine = .home
     
-    static var shared = AppState()
+    static let shared = AppState()
     
     
     func showTag(tag:String)
@@ -50,9 +49,9 @@ class AppState : ObservableObject
         tabIndex = .TimeLine
     }
     
-    func showAccount(account:Account)
+    func showAccount(maccount:MAccount)
     {
-        currentViewingMastAccount = account
+        currentViewingMastAccount = maccount
         tabIndex = .Accounts
     }
 }

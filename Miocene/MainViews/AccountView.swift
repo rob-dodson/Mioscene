@@ -6,11 +6,12 @@
 //
 
 import SwiftUI
-
+import MastodonKit
 
 struct AccountView: View
 {
     @ObservedObject var mast : Mastodon
+    @ObservedObject var maccount : MAccount
     
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
@@ -18,39 +19,39 @@ struct AccountView: View
     
     var body: some View
     {
-        VStack
-        {
-            HStack
+            VStack
             {
-                Picker(selection: .constant(1),label: Text("Accounts"),content:
+                HStack
                 {
-                    if let accounts = mast.localAccountRecords
-                    {
-                        ForEach(accounts.indices, id:\.self)
-                        { index in
-                            Text("@\(accounts[index].username)").tag(1)
+                    Picker(selection: .constant(1),label: Text("Accounts"),content:
+                            {
+                        if let accounts = mast.localAccountRecords
+                        {
+                            ForEach(accounts.indices, id:\.self)
+                            { index in
+                                Text("@\(accounts[index].username)").tag(1)
+                            }
                         }
+                    })
+                    
+                    Button("My Account")
+                    {
+                        appState.showAccount(maccount: MAccount(displayname: appState.currentUserMastAccount!.displayName, acct: appState.currentUserMastAccount!))
                     }
-                })
+
+                    
+                    AddAccount(mast: mast)
+                    
+                }
+                .padding()
                 
-                AddAccount(mast: mast)
+                SpacerLine(color: settings.theme.minorColor)
+                
+                AccountLarge(mast:mast,maccount: appState.currentViewingMastAccount!)
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .padding()
-            
-            SpacerLine(color: settings.theme.minorColor)
-            
-            if let account = appState.currentUserMastAccount
-            {
-                AccountLarge(mast:mast,account: account)
-            }
-            else if let account = appState.currentlocalAccountRecord?.usersMastodonAccount
-            {
-                AccountLarge(mast:mast,account: account)
-            }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-        .padding()
-        .textSelection(.enabled)
+            .textSelection(.enabled)
 
     }
 }

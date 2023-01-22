@@ -38,6 +38,7 @@
 		AEAFA2D72979D2E300970F40 /* EditPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2D62979D2DD00970F40 /* EditPost.swift */; };
 		AEAFA2DC297A3FD900970F40 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AEAFA2DE297A3FD900970F40 /* Localizable.strings */; };
 		AEAFA2E1297C261700970F40 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2E0297C261700970F40 /* AppState.swift */; };
+		AEAFA2E3297DACE300970F40 /* MAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2E2297DACE300970F40 /* MAccount.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,7 @@
 		AEAFA2D62979D2DD00970F40 /* EditPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPost.swift; sourceTree = "<group>"; };
 		AEAFA2DD297A3FD900970F40 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AEAFA2E0297C261700970F40 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		AEAFA2E2297DACE300970F40 /* MAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MAccount.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,6 +116,7 @@
 				AED7E1812976436A0053D0C9 /* Utils */,
 				AEAFA2DF297B279E00970F40 /* MainViews */,
 				AE28C610296F48FD00C8C928 /* PollView.swift */,
+				AEAFA2E2297DACE300970F40 /* MAccount.swift */,
 				AE28C61B297349C900C8C928 /* PollBuilder.swift */,
 				AEAFA2D62979D2DD00970F40 /* EditPost.swift */,
 				AE28C5FE296524AE00C8C928 /* ErrorSystem.swift */,
@@ -272,6 +275,7 @@
 				AE06EBF2294D16BB006CAB67 /* ContentView.swift in Sources */,
 				AE28C60F296F25CD00C8C928 /* Themes.swift in Sources */,
 				AE28C5EE29634C0B00C8C928 /* AddAccount.swift in Sources */,
+				AEAFA2E3297DACE300970F40 /* MAccount.swift in Sources */,
 				AE06EC04294D234D006CAB67 /* Mastodon.swift in Sources */,
 				AE28C5F92963719B00C8C928 /* SqliteDB.swift in Sources */,
 				AEAFA2D72979D2E300970F40 /* EditPost.swift in Sources */,
@@ -440,7 +444,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = shyfrogproductions.com.Miocene;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -480,7 +484,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 13.1;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = shyfrogproductions.com.Miocene;
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -105,7 +105,7 @@ struct SearchView: View
             {
                 ForEach(accounts.indices, id:\.self)
                 { index in
-                    AccountSmall(mast:mast,account: accounts[index])
+                    AccountSmall(mast:mast,maccount: MAccount(displayname: accounts[index].displayName, acct:accounts[index]))
                 }
             }
         }

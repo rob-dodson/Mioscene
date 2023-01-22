@@ -59,7 +59,7 @@ struct Post: View
                     .cornerRadius(15)
                     .onTapGesture
                     {
-                        appState.showAccount(account:account)
+                        appState.showAccount(maccount:MAccount(displayname: account.displayName, acct: account))
                     }
                 }
               
@@ -79,7 +79,7 @@ struct Post: View
                                 .foregroundColor(settings.theme.nameColor)
                                 .onTapGesture
                                 {
-                                    appState.showAccount(account:status.account)
+                                    appState.showAccount(maccount:MAccount(displayname: status.account.displayName, acct: status.account))
                                 }
                                 
                             if status.account.bot == true
@@ -94,7 +94,7 @@ struct Post: View
                                 .foregroundColor(settings.theme.minorColor)
                                 .onTapGesture
                                 {
-                                    appState.showAccount(account:status.account)
+                                    appState.showAccount(maccount:MAccount(displayname: status.account.displayName, acct: status.account))
                                 }
                         }
                         
@@ -132,7 +132,8 @@ struct Post: View
                         //
                         // html body of post
                         //
-                        if let nsAttrString = status.content.htmlAttributedString(color:settings.theme.bodyColor,
+                        let betterPSpaceing = status.content.replacingOccurrences(of: "</p>", with: "</p><br />")
+                        if let nsAttrString = betterPSpaceing.htmlAttributedString(color:settings.theme.bodyColor,
                                                                                   linkColor:settings.theme.linkColor,
                                                                                   font: settings.font.body)
                         {
@@ -218,7 +219,7 @@ struct Post: View
                                 .foregroundColor(settings.theme.linkColor)
                                 .onTapGesture
                                 {
-                                    appState.showAccount(account:mstatus.status.account)
+                                    appState.showAccount(maccount:MAccount(displayname: status.account.displayName, acct: status.account))
                                 }
                         }
                     }
@@ -354,8 +355,12 @@ struct Post: View
                     } label: { Image(systemName: "speaker.slash.fill"); Text("Delete Post") }
                 }
                 
-                Button { } label: { Image(systemName: "speaker.slash.fill"); Text("Mute Author") }
-                Button { } label: { Image(systemName: "mail"); Text("Unfollow Author") }
+                Button { } label: {  Text("Direct Message @\(status.account.acct)") }
+                Button { } label: {  Text("Mute Author") }
+                Button { } label: {  Text("Unfollow Author") }
+                Button { } label: {  Text("Copy Post Text") }
+                Button { } label: {  Text("Copy Link to Post") }
+                
             }
         }
     }

@@ -106,7 +106,7 @@ struct SettingsView: View
                     defaults.set(settings.font.name, forKey: "font")
                 }
             }
-             
+
         }
        .frame(maxHeight: .infinity, alignment: .topLeading)
         .padding()

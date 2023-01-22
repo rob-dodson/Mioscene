@@ -21,7 +21,7 @@ struct MioceneApp: App
     @StateObject private var mast = Mastodon()
     @StateObject var settings = Settings()
     @StateObject var errorSystem = ErrorSystem()
-    @StateObject var appState = AppState()
+    @StateObject var appState = AppState.shared // So mastodon class can acccess appState
     
     var body: some Scene
     {
