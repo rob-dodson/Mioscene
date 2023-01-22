@@ -121,7 +121,7 @@ struct SettingsView: View
             
 
         }
-       .frame(maxHeight: .infinity, alignment: .topLeading)
+        .frame(maxHeight: .infinity, alignment: .topLeading)
         .padding()
     }
     

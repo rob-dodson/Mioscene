@@ -116,24 +116,15 @@
 		AE06EBEE294D16BB006CAB67 /* Miocene */ = {
 			isa = PBXGroup;
 			children = (
+				AEAFA2EA297DDA5200970F40 /* Posts */,
+				AEAFA2E9297DDA3900970F40 /* Accounts */,
 				AEAFA2E4297DD53800970F40 /* Models */,
 				AED7E182297716250053D0C9 /* Settings */,
 				AED7E1812976436A0053D0C9 /* Utils */,
 				AEAFA2DF297B279E00970F40 /* MainViews */,
-				AE28C610296F48FD00C8C928 /* PollView.swift */,
-				AE28C61B297349C900C8C928 /* PollBuilder.swift */,
-				AEAFA2D62979D2DD00970F40 /* EditPost.swift */,
-				AE28C5FE296524AE00C8C928 /* ErrorSystem.swift */,
 				AE06EBEF294D16BB006CAB67 /* MioceneApp.swift */,
 				AEAFA2E0297C261700970F40 /* AppState.swift */,
-				AE06EC01294D1D1D006CAB67 /* Post.swift */,
-				AE28C608296CC65800C8C928 /* NotificationView.swift */,
 				AE06EC03294D234D006CAB67 /* Mastodon.swift */,
-				AE28C5D72953C8A500C8C928 /* NewPostButton.swift */,
-				AE28C5ED29634C0B00C8C928 /* AddAccount.swift */,
-				AE28C60229663A5B00C8C928 /* AccountLarge.swift */,
-				AE28C5EB295E4B1C00C8C928 /* AccountSmall.swift */,
-				AE28C5FA2963727500C8C928 /* LocalAccountRecord.swift */,
 				AE06EBF3294D16BC006CAB67 /* Assets.xcassets */,
 				AE06EBF5294D16BC006CAB67 /* Miocene.entitlements */,
 				AE06EBF6294D16BC006CAB67 /* Preview Content */,
@@ -159,6 +150,7 @@
 		AEAFA2DF297B279E00970F40 /* MainViews */ = {
 			isa = PBXGroup;
 			children = (
+				AE28C608296CC65800C8C928 /* NotificationView.swift */,
 				AE06EBF1294D16BB006CAB67 /* ContentView.swift */,
 				AE28C5E3295CE9F900C8C928 /* TimeLineView.swift */,
 				AE28C5E5295CEDCE00C8C928 /* AccountView.swift */,
@@ -177,9 +169,33 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
+		AEAFA2E9297DDA3900970F40 /* Accounts */ = {
+			isa = PBXGroup;
+			children = (
+				AE28C5ED29634C0B00C8C928 /* AddAccount.swift */,
+				AE28C60229663A5B00C8C928 /* AccountLarge.swift */,
+				AE28C5EB295E4B1C00C8C928 /* AccountSmall.swift */,
+				AE28C5FA2963727500C8C928 /* LocalAccountRecord.swift */,
+			);
+			path = Accounts;
+			sourceTree = "<group>";
+		};
+		AEAFA2EA297DDA5200970F40 /* Posts */ = {
+			isa = PBXGroup;
+			children = (
+				AE28C610296F48FD00C8C928 /* PollView.swift */,
+				AE28C61B297349C900C8C928 /* PollBuilder.swift */,
+				AEAFA2D62979D2DD00970F40 /* EditPost.swift */,
+				AE06EC01294D1D1D006CAB67 /* Post.swift */,
+				AE28C5D72953C8A500C8C928 /* NewPostButton.swift */,
+			);
+			path = Posts;
+			sourceTree = "<group>";
+		};
 		AED7E1812976436A0053D0C9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				AE28C5FE296524AE00C8C928 /* ErrorSystem.swift */,
 				AE28C5F82963719B00C8C928 /* SqliteDB.swift */,
 				AE28C5EF29635CAA00C8C928 /* Keys.swift */,
 				AE28C60A296E1CF200C8C928 /* Utils.swift */,

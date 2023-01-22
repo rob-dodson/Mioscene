@@ -112,6 +112,15 @@ struct AccountLarge: View
                             Link(name,destination: url)
                                 .foregroundColor(settings.theme.linkColor)
                                 .font(.headline)
+                                .onHover
+                                { inside in
+                                    if inside
+                                    {
+                                        NSCursor.pointingHand.push()
+                                    } else {
+                                        NSCursor.pop()
+                                    }
+                                }
                         }
                         
                         //

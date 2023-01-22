@@ -221,6 +221,15 @@ struct Post: View
                                 {
                                     appState.showAccount(maccount:MAccount(displayname: status.account.displayName, acct: status.account))
                                 }
+                                .onHover
+                                { inside in
+                                    if inside
+                                    {
+                                        NSCursor.pointingHand.push()
+                                    } else {
+                                        NSCursor.pop()
+                                    }
+                                }
                         }
                     }
                 
