@@ -104,7 +104,7 @@ struct SettingsView: View
             }
             
             
-            VStack
+            VStack(alignment: .leading)
             {
                 Text("Behaviors")
                     .font(settings.font.title)
@@ -115,6 +115,13 @@ struct SettingsView: View
                 { newValue in
                     let defaults = UserDefaults.standard
                     defaults.set(settings.hideStatusButtons, forKey: "hidestatusbuttons")
+                }
+                
+                Toggle("Show Cards", isOn: $settings.showCards)
+                .onChange(of: settings.showCards)
+                { newValue in
+                    let defaults = UserDefaults.standard
+                    defaults.set(settings.showCards, forKey: "showcards")
                 }
             }
             .padding()

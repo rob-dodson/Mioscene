@@ -35,7 +35,7 @@ struct AccountSmall: View
                         Image(systemName: "person.fill.questionmark")
                     }
                     .frame(width: 50, height: 50)
-                    .cornerRadius(15)
+                    .cornerRadius(5)
                     .onTapGesture
                     {
                         appState.showAccount(maccount:maccount)

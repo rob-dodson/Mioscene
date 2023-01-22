@@ -34,7 +34,7 @@ struct ContentView: View
             
             Spacer()
         }
-        .frame(minWidth: 400, alignment: .center)
+        .frame(minWidth: 200, alignment: .center)
         .padding(.horizontal, 12)
     }
 }

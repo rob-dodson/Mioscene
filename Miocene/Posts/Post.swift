@@ -56,7 +56,7 @@ struct Post: View
                         Image(systemName: "person.fill.questionmark")
                     }
                     .frame(width: 50, height: 50)
-                    .cornerRadius(15)
+                    .cornerRadius(5)
                     .onTapGesture
                     {
                         appState.showAccount(maccount:MAccount(displayname: account.displayName, acct: account))
@@ -177,7 +177,7 @@ struct Post: View
                             {
                                 Image(systemName: "photo")
                             }
-                            .cornerRadius(15)
+                            .cornerRadius(5)
                             .onTapGesture
                             {
                                 if let url = URL(string:attachment.url)
@@ -187,6 +187,42 @@ struct Post: View
                             }
                         }
                     }
+                    
+                    //
+                    // Cards
+                    //
+                    if let card = status.card
+                    {
+                        if settings.showCards == true
+                        {
+                            HStack
+                            {
+                                AsyncImage(url: card.imageUrl)
+                                { image in
+                                    image.resizable()
+                                }
+                            placeholder:
+                                {
+                                    Image(systemName: "person.fill.questionmark")
+                                }
+                                .frame(width: CGFloat(card.width ?? 50) / 3.0, height: CGFloat(card.height ?? 50) / 3.0)
+                                
+                                VStack
+                                {
+                                    Text(card.title)
+                                }
+                                .padding(3)
+                            }
+                            .onTapGesture
+                            {
+                                NSWorkspace.shared.open(card.url)
+                            }
+                            .background(settings.theme.blockColor)
+                            .border(width: 1, edges: [.leading,.top,.bottom,.trailing], color: settings.theme.minorColor)
+                            
+                        }
+                    }
+                    
                     
                     //
                     // Poll

@@ -42,7 +42,7 @@ struct AccountLarge: View
                         Image(systemName: "person.fill.questionmark")
                     }
                     .frame(width: 100, height: 100)
-                    .cornerRadius(15)
+                    .cornerRadius(5)
                     
                     
                     //
@@ -62,7 +62,7 @@ struct AccountLarge: View
                             {
                                 Image(systemName: "person.fill.questionmark")
                             }
-                            .cornerRadius(15)
+                            .cornerRadius(5)
                         }
                         else
                         {
@@ -178,8 +178,6 @@ struct AccountLarge: View
                         .frame(maxWidth: .infinity,maxHeight:.infinity)
                         .background(settings.theme.blockColor)
                         .cornerRadius(5)
-                        
-
                     }
                 }
             }

@@ -21,7 +21,8 @@ class Settings: ObservableObject
     @Published var theme : Theme
     @Published var font : MFont
     @Published var hideStatusButtons : Bool = false
-   
+    @Published var showCards : Bool = false
+    
     var iconSize = 20
     
     var themes = Themes()
@@ -49,6 +50,7 @@ class Settings: ObservableObject
         font = MFont(fontName: fontName,sizeName: fontSize)
         
         hideStatusButtons = defaults.bool(forKey: "hidestatusbuttons")
+        showCards = defaults.bool(forKey: "showcards")
     }
    
   
