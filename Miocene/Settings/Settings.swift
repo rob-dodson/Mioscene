@@ -31,7 +31,16 @@ class Settings: ObservableObject
         let defaults = UserDefaults.standard
         
         theme = themes.themeslist[0]
-        
+        if let themename = defaults.string(forKey: "theme")
+        {
+            for tmptheme in themes.themeslist
+            {
+                if tmptheme.name == themename
+                {
+                    theme = tmptheme
+                }
+            }
+        }
         var fontName = "SF Pro"
         var fontSize = MFont.TextSize.normal
         

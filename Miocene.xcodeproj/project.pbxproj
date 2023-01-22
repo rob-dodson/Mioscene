@@ -39,6 +39,8 @@
 		AEAFA2DC297A3FD900970F40 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = AEAFA2DE297A3FD900970F40 /* Localizable.strings */; };
 		AEAFA2E1297C261700970F40 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2E0297C261700970F40 /* AppState.swift */; };
 		AEAFA2E3297DACE300970F40 /* MAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2E2297DACE300970F40 /* MAccount.swift */; };
+		AEAFA2E6297DD54600970F40 /* MStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2E5297DD54600970F40 /* MStatus.swift */; };
+		AEAFA2E8297DD59200970F40 /* MNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2E7297DD59200970F40 /* MNotification.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,6 +76,8 @@
 		AEAFA2DD297A3FD900970F40 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		AEAFA2E0297C261700970F40 /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		AEAFA2E2297DACE300970F40 /* MAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MAccount.swift; sourceTree = "<group>"; };
+		AEAFA2E5297DD54600970F40 /* MStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MStatus.swift; sourceTree = "<group>"; };
+		AEAFA2E7297DD59200970F40 /* MNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNotification.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,11 +116,11 @@
 		AE06EBEE294D16BB006CAB67 /* Miocene */ = {
 			isa = PBXGroup;
 			children = (
+				AEAFA2E4297DD53800970F40 /* Models */,
 				AED7E182297716250053D0C9 /* Settings */,
 				AED7E1812976436A0053D0C9 /* Utils */,
 				AEAFA2DF297B279E00970F40 /* MainViews */,
 				AE28C610296F48FD00C8C928 /* PollView.swift */,
-				AEAFA2E2297DACE300970F40 /* MAccount.swift */,
 				AE28C61B297349C900C8C928 /* PollBuilder.swift */,
 				AEAFA2D62979D2DD00970F40 /* EditPost.swift */,
 				AE28C5FE296524AE00C8C928 /* ErrorSystem.swift */,
@@ -161,6 +165,16 @@
 				AE28C5D9295A7ACE00C8C928 /* SearchView.swift */,
 			);
 			path = MainViews;
+			sourceTree = "<group>";
+		};
+		AEAFA2E4297DD53800970F40 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				AEAFA2E5297DD54600970F40 /* MStatus.swift */,
+				AEAFA2E7297DD59200970F40 /* MNotification.swift */,
+				AEAFA2E2297DACE300970F40 /* MAccount.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		AED7E1812976436A0053D0C9 /* Utils */ = {
@@ -275,6 +289,7 @@
 				AE06EBF2294D16BB006CAB67 /* ContentView.swift in Sources */,
 				AE28C60F296F25CD00C8C928 /* Themes.swift in Sources */,
 				AE28C5EE29634C0B00C8C928 /* AddAccount.swift in Sources */,
+				AEAFA2E6297DD54600970F40 /* MStatus.swift in Sources */,
 				AEAFA2E3297DACE300970F40 /* MAccount.swift in Sources */,
 				AE06EC04294D234D006CAB67 /* Mastodon.swift in Sources */,
 				AE28C5F92963719B00C8C928 /* SqliteDB.swift in Sources */,
@@ -285,6 +300,7 @@
 				AE28C5FF296524AE00C8C928 /* ErrorSystem.swift in Sources */,
 				AE28C5E6295CEDCE00C8C928 /* AccountView.swift in Sources */,
 				AE06EBF0294D16BB006CAB67 /* MioceneApp.swift in Sources */,
+				AEAFA2E8297DD59200970F40 /* MNotification.swift in Sources */,
 				AE28C5DA295A7ACE00C8C928 /* SearchView.swift in Sources */,
 				AE28C60D296EE9F800C8C928 /* MFont.swift in Sources */,
 				AE28C5FB2963727500C8C928 /* LocalAccountRecord.swift in Sources */,

@@ -9,7 +9,6 @@ import Foundation
 import MastodonKit
 
 
-
 struct AttachmentURL : Identifiable
 {
     var url : URL?
@@ -584,34 +583,4 @@ class Mastodon : ObservableObject
     }
 }
 
-class MNotification : Identifiable,ObservableObject
-{
-    var notification : MastodonKit.Notification
-    
-    init(notification:MastodonKit.Notification)
-    {
-        self.notification = notification
-    }
-    var id = UUID()
-}
-
-class MStatus : Identifiable,ObservableObject
-{
-    var status : Status
-    @Published var favorited : Bool = false
-    @Published var favoritesCount : Int = 0
-    @Published var reblogged : Bool = false
-    @Published var reblogsCount: Int = 0
-
-    init(status:Status)
-    {
-        self.status = status
-        self.favorited = status.favourited ?? false
-        self.favoritesCount = status.favouritesCount
-        self.reblogged = status.reblogged ?? false
-        self.reblogsCount = status.reblogsCount
-    }
-    
-    var id = UUID()
-}
 

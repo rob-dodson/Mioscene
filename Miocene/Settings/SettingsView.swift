@@ -129,6 +129,7 @@ struct SettingsView: View
     func pickTheme(index:Int)
     {
         settings.theme = settings.themes.themeslist[index]
+        UserDefaults.standard.set(settings.theme.name, forKey: "theme")
     }
 }
 

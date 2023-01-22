@@ -94,7 +94,6 @@ struct TimeLineView: View
             
             if showLoading
             {
-                
                 ProgressView("Loading...")
                     .font(settings.font.title)
                     .foregroundColor(settings.theme.accentColor)
