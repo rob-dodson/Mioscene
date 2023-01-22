@@ -219,7 +219,7 @@ struct Post: View
                                 .foregroundColor(settings.theme.linkColor)
                                 .onTapGesture
                                 {
-                                    appState.showAccount(maccount:MAccount(displayname: status.account.displayName, acct: status.account))
+                                        appState.showAccount(maccount:MAccount(displayname: mstatus.status.account.displayName, acct: mstatus.status.account))
                                 }
                                 .onHover
                                 { inside in
