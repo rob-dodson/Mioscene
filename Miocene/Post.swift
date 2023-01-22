@@ -230,101 +230,104 @@ struct Post: View
                     //
                     HStack(spacing: 10)
                     {
-                        //
-                        // reply
-                        //
-                        Button
+                        if settings.hideStatusButtons == false
                         {
-                            shouldPresentSheet.toggle()
-                        }
-                    label:
-                        {
-                            Image(systemName: "arrowshape.turn.up.left.fill")
-                                .foregroundColor(settings.theme.minorColor)
-                        }
-                        .sheet(isPresented: $shouldPresentSheet)
-                        {
-                            Log.log(msg:"Sheet dismissed!")
-                        }
+                            //
+                            // reply
+                            //
+                            Button
+                            {
+                                shouldPresentSheet.toggle()
+                            }
+                        label:
+                            {
+                                Image(systemName: "arrowshape.turn.up.left.fill")
+                                    .foregroundColor(settings.theme.minorColor)
+                            }
+                            .sheet(isPresented: $shouldPresentSheet)
+                            {
+                                Log.log(msg:"Sheet dismissed!")
+                            }
                         content:
-                        {
-                            EditPost(mast: mast,newPost: "@\(status.account.acct): ",title:"Reply",done:
                             {
-                                shouldPresentSheet = false
-                            })
-                        }
-                        
-                        
-                        //
-                        // favorite
-                        //
-                        Button
-                        {
-                            if mstatus.favorited == true
-                            {
-                                mast.unfavorite(status: status)
-                                mstatus.favoritesCount -= 1
+                                EditPost(mast: mast,newPost: "@\(status.account.acct): ",title:"Reply",done:
+                                            {
+                                    shouldPresentSheet = false
+                                })
                             }
-                            else
-                            {
-                                mast.favorite(status: status)
-                                mstatus.favoritesCount += 1
-
-                            }
-                            mstatus.favorited.toggle()
-                        }
-                    label:
-                        {
-                            HStack
+                            
+                            
+                            //
+                            // favorite
+                            //
+                            Button
                             {
                                 if mstatus.favorited == true
                                 {
-                                    Image(systemName: "star.fill")
-                                        .foregroundColor(Color("AccentColor"))
+                                    mast.unfavorite(status: status)
+                                    mstatus.favoritesCount -= 1
                                 }
                                 else
                                 {
-                                    Image(systemName: "star.fill")
-                                        .foregroundColor(settings.theme.minorColor)
+                                    mast.favorite(status: status)
+                                    mstatus.favoritesCount += 1
+                                    
                                 }
-                                Text("\(mstatus.favoritesCount)")
+                                mstatus.favorited.toggle()
                             }
-                        }
-                       
-                        
-                        //
-                        // reblog
-                        //
-                        Button
-                        {
-                            if mstatus.reblogged == true
+                        label:
                             {
-                                mast.unreblog(status: status)
-                                mstatus.reblogsCount -= 1
+                                HStack
+                                {
+                                    if mstatus.favorited == true
+                                    {
+                                        Image(systemName: "star.fill")
+                                            .foregroundColor(Color("AccentColor"))
+                                    }
+                                    else
+                                    {
+                                        Image(systemName: "star.fill")
+                                            .foregroundColor(settings.theme.minorColor)
+                                    }
+                                    Text("\(mstatus.favoritesCount)")
+                                }
                             }
-                            else
-                            {
-                                mast.reblog(status: status)
-                                mstatus.reblogsCount += 1
-
-                            }
-                            mstatus.reblogged.toggle()
-                        }
-                    label:
-                        {
-                            HStack
+                            
+                            
+                            //
+                            // reblog
+                            //
+                            Button
                             {
                                 if mstatus.reblogged == true
                                 {
-                                    Image(systemName: "arrow.2.squarepath")
-                                        .foregroundColor(Color("AccentColor"))
+                                    mast.unreblog(status: status)
+                                    mstatus.reblogsCount -= 1
                                 }
                                 else
                                 {
-                                    Image(systemName: "arrow.2.squarepath")
-                                        .foregroundColor(settings.theme.minorColor)
+                                    mast.reblog(status: status)
+                                    mstatus.reblogsCount += 1
+                                    
                                 }
-                                Text("\(mstatus.reblogsCount)")
+                                mstatus.reblogged.toggle()
+                            }
+                        label:
+                            {
+                                HStack
+                                {
+                                    if mstatus.reblogged == true
+                                    {
+                                        Image(systemName: "arrow.2.squarepath")
+                                            .foregroundColor(Color("AccentColor"))
+                                    }
+                                    else
+                                    {
+                                        Image(systemName: "arrow.2.squarepath")
+                                            .foregroundColor(settings.theme.minorColor)
+                                    }
+                                    Text("\(mstatus.reblogsCount)")
+                                }
                             }
                         }
                         

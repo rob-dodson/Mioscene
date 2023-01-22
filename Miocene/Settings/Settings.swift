@@ -19,8 +19,8 @@ import MastodonKit
 class Settings: ObservableObject
 {
     @Published var theme : Theme
-    
     @Published var font : MFont
+    @Published var hideStatusButtons : Bool = false
    
     var iconSize = 20
     
@@ -38,6 +38,8 @@ class Settings: ObservableObject
         if let userfont = defaults.string(forKey: "font") { fontName = userfont }
         if let userfontsizename = defaults.string(forKey: "fontsizename") { fontSize = MFont.getEnumFromString(string: userfontsizename) }
         font = MFont(fontName: fontName,sizeName: fontSize)
+        
+        hideStatusButtons = defaults.bool(forKey: "hidestatusbuttons")
     }
    
   

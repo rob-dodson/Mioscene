@@ -63,10 +63,6 @@ struct SettingsView: View
                 }
             }
             
-            //
-            // Text and icon size
-            //TextSize
-            
             VStack
             {
                 Picker("Text Size", selection: $settings.font.currentSizeName)
@@ -106,6 +102,23 @@ struct SettingsView: View
                     defaults.set(settings.font.name, forKey: "font")
                 }
             }
+            
+            
+            VStack
+            {
+                Text("Behaviors")
+                    .font(settings.font.title)
+                    .foregroundColor(settings.theme.accentColor)
+                
+                Toggle("Hide Status Buttons", isOn: $settings.hideStatusButtons)
+                .onChange(of: settings.hideStatusButtons)
+                { newValue in
+                    let defaults = UserDefaults.standard
+                    defaults.set(settings.hideStatusButtons, forKey: "hidestatusbuttons")
+                }
+            }
+            .padding()
+            
 
         }
        .frame(maxHeight: .infinity, alignment: .topLeading)
