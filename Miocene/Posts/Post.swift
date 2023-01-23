@@ -193,13 +193,14 @@ struct Post: View
                     //
                     if let card = status.card
                     {
-                        if settings.showCards == true
+                        if settings.showCards == true && card.imageUrl != nil
                         {
                             HStack
                             {
                                 AsyncImage(url: card.imageUrl)
                                 { image in
                                     image.resizable()
+                                        .aspectRatio(contentMode: .fit)
                                 }
                             placeholder:
                                 {
@@ -217,9 +218,9 @@ struct Post: View
                             {
                                 NSWorkspace.shared.open(card.url)
                             }
+                            .frame(minWidth: 300,minHeight: 75)
                             .background(settings.theme.blockColor)
                             .border(width: 1, edges: [.leading,.top,.bottom,.trailing], color: settings.theme.minorColor)
-                            
                         }
                     }
                     
