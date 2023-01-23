@@ -175,7 +175,7 @@ struct AccountLarge: View
                             }
                         }
                         .padding()
-                        .frame(maxWidth: .infinity,maxHeight:.infinity)
+                       // .frame(maxWidth: .infinity,maxHeight:.infinity)
                         .background(settings.theme.blockColor)
                         .cornerRadius(5)
                     }

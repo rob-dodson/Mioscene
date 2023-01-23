@@ -151,7 +151,7 @@ struct Post: View
                     ForEach(status.mediaAttachments.indices, id:\.self)
                     { index in
                         let attachment = status.mediaAttachments[index]
-                        
+
                         //
                         // video
                         //
@@ -165,7 +165,10 @@ struct Post: View
                         //
                         // image
                         //
-                        else if attachment.type == .image || attachment.type == .gifv
+                        else if attachment.type == .gifv
+                        {
+                        }
+                        else if attachment.type == .image
                         {
                             AsyncImage(url: URL(string:attachment.url))
                             { image in
@@ -182,9 +185,14 @@ struct Post: View
                             {
                                 if let url = URL(string:attachment.url)
                                 {
+                                   
                                     NSWorkspace.shared.open(url)
                                 }
                             }
+                        }
+                        else
+                        {
+                            Text("IMAGE TYPE NOT SUPPORTED \(attachment.type.rawValue)")
                         }
                     }
                     
@@ -441,5 +449,7 @@ struct Post: View
         }
     }
 }
+
+
 
 

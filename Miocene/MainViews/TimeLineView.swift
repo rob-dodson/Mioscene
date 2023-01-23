@@ -32,8 +32,9 @@ struct TimeLineView: View
         {
             HStack
             {
-                Picker(selection: .constant(1),label: Text("Account"),content:
-                {
+                
+                Picker(selection: .constant(1),label: Text(""),content:
+                        {
                     if let accounts = mast.localAccountRecords
                     {
                         ForEach(accounts.indices, id:\.self)
@@ -43,9 +44,9 @@ struct TimeLineView: View
                     }
                 })
                 
-               
                 
-                Picker("Timeline",selection: $appState.selectedTimeline)
+                
+                Picker("",selection: $appState.selectedTimeline)
                 {
                     ForEach(TimeLine.allCases)
                     { timeline in
@@ -68,9 +69,13 @@ struct TimeLineView: View
                         fetchStatuses(timeline:newValue,tag:appState.currentTag)
                     }
                 }
-                 
+                
                 NewPostButton(mast:mast)
-                        
+            }
+            
+            HStack
+            {
+                Filters()
              }
             .padding()
             

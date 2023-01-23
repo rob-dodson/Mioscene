@@ -41,6 +41,7 @@
 		AEAFA2E3297DACE300970F40 /* MAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2E2297DACE300970F40 /* MAccount.swift */; };
 		AEAFA2E6297DD54600970F40 /* MStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2E5297DD54600970F40 /* MStatus.swift */; };
 		AEAFA2E8297DD59200970F40 /* MNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2E7297DD59200970F40 /* MNotification.swift */; };
+		AEAFA2EC297EED5B00970F40 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2EB297EED5B00970F40 /* Filters.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +79,7 @@
 		AEAFA2E2297DACE300970F40 /* MAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MAccount.swift; sourceTree = "<group>"; };
 		AEAFA2E5297DD54600970F40 /* MStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MStatus.swift; sourceTree = "<group>"; };
 		AEAFA2E7297DD59200970F40 /* MNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNotification.swift; sourceTree = "<group>"; };
+		AEAFA2EB297EED5B00970F40 /* Filters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				AE28C5ED29634C0B00C8C928 /* AddAccount.swift */,
+				AEAFA2EB297EED5B00970F40 /* Filters.swift */,
 				AE28C60229663A5B00C8C928 /* AccountLarge.swift */,
 				AE28C5EB295E4B1C00C8C928 /* AccountSmall.swift */,
 				AE28C5FA2963727500C8C928 /* LocalAccountRecord.swift */,
@@ -312,6 +315,7 @@
 				AEAFA2D72979D2E300970F40 /* EditPost.swift in Sources */,
 				AE28C5EC295E4B1C00C8C928 /* AccountSmall.swift in Sources */,
 				AE28C5D82953C8A500C8C928 /* NewPostButton.swift in Sources */,
+				AEAFA2EC297EED5B00970F40 /* Filters.swift in Sources */,
 				AEAFA2E1297C261700970F40 /* AppState.swift in Sources */,
 				AE28C5FF296524AE00C8C928 /* ErrorSystem.swift in Sources */,
 				AE28C5E6295CEDCE00C8C928 /* AccountView.swift in Sources */,
