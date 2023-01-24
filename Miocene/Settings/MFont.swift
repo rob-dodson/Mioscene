@@ -57,7 +57,7 @@ class MFont : ObservableObject
         switch size
         {
         case .tiny:
-            return 10.0
+            return 12.0
         case .small:
             return 14.0
         case .normal :

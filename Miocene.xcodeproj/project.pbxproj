@@ -42,6 +42,7 @@
 		AEAFA2E6297DD54600970F40 /* MStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2E5297DD54600970F40 /* MStatus.swift */; };
 		AEAFA2E8297DD59200970F40 /* MNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2E7297DD59200970F40 /* MNotification.swift */; };
 		AEAFA2EC297EED5B00970F40 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2EB297EED5B00970F40 /* Filters.swift */; };
+		AEAFA2EF297F4BBF00970F40 /* SwiftyGif in Frameworks */ = {isa = PBXBuildFile; productRef = AEAFA2EE297F4BBF00970F40 /* SwiftyGif */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +89,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AE28C6182972F68300C8C928 /* MastodonKit in Frameworks */,
+				AEAFA2EF297F4BBF00970F40 /* SwiftyGif in Frameworks */,
 				AE28C5F72963717D00C8C928 /* GRDB in Frameworks */,
 				AE28C5F429635DE600C8C928 /* KeychainSwift in Frameworks */,
 			);
@@ -237,6 +239,7 @@
 				AE28C5F329635DE600C8C928 /* KeychainSwift */,
 				AE28C5F62963717D00C8C928 /* GRDB */,
 				AE28C6172972F68300C8C928 /* MastodonKit */,
+				AEAFA2EE297F4BBF00970F40 /* SwiftyGif */,
 			);
 			productName = Miocene;
 			productReference = AE06EBEC294D16BB006CAB67 /* Miocene.app */;
@@ -269,6 +272,7 @@
 			packageReferences = (
 				AE28C5F229635DE600C8C928 /* XCRemoteSwiftPackageReference "keychain-swift" */,
 				AE28C5F52963717D00C8C928 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
+				AEAFA2ED297F4BBF00970F40 /* XCRemoteSwiftPackageReference "SwiftyGif" */,
 			);
 			productRefGroup = AE06EBED294D16BB006CAB67 /* Products */;
 			projectDirPath = "";
@@ -572,6 +576,14 @@
 				kind = branch;
 			};
 		};
+		AEAFA2ED297F4BBF00970F40 /* XCRemoteSwiftPackageReference "SwiftyGif" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kirualex/SwiftyGif.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -588,6 +600,11 @@
 		AE28C6172972F68300C8C928 /* MastodonKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = MastodonKit;
+		};
+		AEAFA2EE297F4BBF00970F40 /* SwiftyGif */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AEAFA2ED297F4BBF00970F40 /* XCRemoteSwiftPackageReference "SwiftyGif" */;
+			productName = SwiftyGif;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

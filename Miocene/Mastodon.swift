@@ -582,5 +582,3 @@ class Mastodon : ObservableObject
         return newnote
     }
 }
-
-

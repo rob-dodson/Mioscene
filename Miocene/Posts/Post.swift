@@ -8,7 +8,7 @@
 import SwiftUI
 import MastodonKit
 import AVKit
-
+import SwiftyGif
 
 struct Post: View
 {
@@ -155,19 +155,31 @@ struct Post: View
                         //
                         // video
                         //
-                        if attachment.type == .video
+                        if attachment.type == .video || attachment.type == .gifv
                         {
-                            let player = AVPlayer(url: URL(string:attachment.url)!)
-                            VideoPlayer(player: player)
-                                .frame(width: 400, height: 300, alignment: .center)
                             
+                           if  let player = AVPlayer(url: URL(string:attachment.url)!)
+                            {
+                               VideoPlayer(player: player)
+                                   .frame(width: 400, height: 300, alignment: .center)
+                           }
+                            else
+                            {
+                                Image(systemName: "video.slash.fill")
+                            }
                         }
                         //
                         // image
                         //
+                        /*
                         else if attachment.type == .gifv
                         {
-                        }
+                            Text(".gifv")
+                            gifimage(urlstring:attachment.url)
+                            { image in
+                                image.resizable()
+                            }
+                        }*/
                         else if attachment.type == .image
                         {
                             AsyncImage(url: URL(string:attachment.url))
@@ -450,6 +462,21 @@ struct Post: View
     }
 }
 
-
+func gifimage(urlstring:String,done: @escaping (Image) -> some View) -> some View
+{
+        if let url = URL(string:urlstring)
+        {
+            DispatchQueue.global().async {
+                if let data = try? Data(contentsOf: url)
+                {
+                    if let nsimage = try? NSImage(gifData: data)
+                    {
+                       done(Image(nsImage: nsimage))
+                    }
+                }
+            }
+        }
+    return Image(systemName: "gear")
+}
 
 

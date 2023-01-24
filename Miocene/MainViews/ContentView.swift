@@ -34,8 +34,8 @@ struct ContentView: View
             
             Spacer()
         }
-      //  .frame(minWidth: 200, alignment: .center)
-        .padding(.horizontal, 12)
+        //.frame(minWidth: 200, alignment: .center)
+        .padding(.horizontal, 20)
     }
 }
        
@@ -50,7 +50,7 @@ struct CustomTopTabBar: View
     {
         Spacer()
         
-        HStack(alignment: .center,spacing: 50)
+        HStack(alignment: .center,spacing: 70)
         {
             Spacer()
             

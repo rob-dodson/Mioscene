@@ -1,23 +1,34 @@
 {
-  "pins" : [
-    {
-      "identity" : "grdb.swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/groue/GRDB.swift.git",
-      "state" : {
-        "branch" : "master",
-        "revision" : "c3cc998fc14efa356259e5d01d8910e82de080ad"
+  "object": {
+    "pins": [
+      {
+        "package": "GRDB",
+        "repositoryURL": "https://github.com/groue/GRDB.swift.git",
+        "state": {
+          "branch": "master",
+          "revision": "c3cc998fc14efa356259e5d01d8910e82de080ad",
+          "version": null
+        }
+      },
+      {
+        "package": "KeychainSwift",
+        "repositoryURL": "https://github.com/evgenyneu/keychain-swift.git",
+        "state": {
+          "branch": "master",
+          "revision": "e43f9b99b172ae6a7253047f8ba95c7a0b05b99f",
+          "version": null
+        }
+      },
+      {
+        "package": "SwiftyGif",
+        "repositoryURL": "https://github.com/kirualex/SwiftyGif.git",
+        "state": {
+          "branch": null,
+          "revision": "d6d26061d6553a493781ad3df4a8e275c43fc373",
+          "version": "5.4.4"
+        }
       }
-    },
-    {
-      "identity" : "keychain-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/evgenyneu/keychain-swift.git",
-      "state" : {
-        "branch" : "master",
-        "revision" : "e43f9b99b172ae6a7253047f8ba95c7a0b05b99f"
-      }
-    }
-  ],
-  "version" : 2
+    ]
+  },
+  "version": 1
 }

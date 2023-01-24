@@ -25,8 +25,28 @@ struct TimeLineView: View
     @State private var showLoading = true
     @State private var showTagAsk = false
     @State private var taskRunning = false
+    @State private var numTabs = 3
     
     var body: some View
+    {
+        TabView
+        {
+            mainView()
+            .tabItem
+            {
+                Text("Home")
+            }
+            
+            mainView()
+            .tabItem
+            {
+                Text("Local")
+            }
+        }
+    }
+    
+    
+    func mainView() -> some View
     {
         VStack
         {
@@ -34,7 +54,7 @@ struct TimeLineView: View
             {
                 
                 Picker(selection: .constant(1),label: Text(""),content:
-                        {
+                {
                     if let accounts = mast.localAccountRecords
                     {
                         ForEach(accounts.indices, id:\.self)
@@ -111,7 +131,7 @@ struct TimeLineView: View
                     ForEach(getnotifications())
                     { note in
                         NotificationView(mast:mast,mnotification:note)
-                            .padding([.horizontal,.top])
+                            .padding([.horizontal,.top],5)
                     }
                 }
                 else
@@ -119,7 +139,7 @@ struct TimeLineView: View
                     ForEach(getstats(timeline: $appState.selectedTimeline))
                     { mstat in
                         Post(mast:mast,mstat:mstat)
-                            .padding([.horizontal,.top])
+                            .padding([.horizontal,.top],5)
                     }
                 }
             }

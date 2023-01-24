@@ -26,10 +26,19 @@ enum FilterType : String,Identifiable,CaseIterable
     var id: Self { return self }
 }
 
+enum FilterSetType : String,Identifiable,CaseIterable,Equatable
+{
+    case AnyFilter = "Match Any"
+    case AllFilters = "Match All"
+    
+    var id: Self { return self }
+}
+
 struct FilterSet : Hashable,Identifiable
 {
     var name : String
     var filters : [Filter]
+    var setType : FilterSetType
     
     var id = UUID()
 }
@@ -48,18 +57,22 @@ struct Filter : Hashable,Identifiable
 
 func getFilters() -> [FilterSet]
 {
+    let filter000 = Filter(name: "All Are Good", isOn: true, keepOrReject: .keep, isRegex: false, filterString: "", type: .body)
+    let filterset0 = FilterSet(name: "No Filter", filters: [filter000],setType: .AnyFilter)
+    
     let filter1 = Filter(name: "BMW", isOn: true, keepOrReject: .keep, isRegex: false, filterString: "BMW", type: .body)
     let filter2 = Filter(name: "BMW Hashtag", isOn: true, keepOrReject: .keep, isRegex: false, filterString: "#bmw", type: .hashtag)
     let filter3 = Filter(name: "No Audi", isOn: true, keepOrReject: .reject, isRegex: true, filterString: ".*Audi.*", type: .body)
-    let filterset1 = FilterSet(name: "BMW Filters", filters: [filter1,filter2,filter3])
+    let filterset1 = FilterSet(name: "BMW", filters: [filter1,filter2,filter3],setType: .AnyFilter)
 
     let filter00 = Filter(name: "macOS name", isOn: true, keepOrReject: .keep, isRegex: true, filterString: ".*macos.*", type: .displayName)
     let filter01 = Filter(name: "macOS", isOn: true, keepOrReject: .keep, isRegex: false, filterString: "MacOS", type: .body)
     let filter02 = Filter(name: "macOS Hashtag", isOn: true, keepOrReject: .keep, isRegex: false, filterString: "#bmw", type: .hashtag)
     let filter03 = Filter(name: "No Windows", isOn: true, keepOrReject: .reject, isRegex: false, filterString: "Windows", type: .body)
-    let filterset2 = FilterSet(name: "macOS Filters", filters: [filter00,filter01,filter02,filter03])
+    let filterset2 = FilterSet(name: "macOS", filters: [filter00,filter01,filter02,filter03],setType: .AnyFilter)
 
     var filtersets = [FilterSet]()
+    filtersets.append(filterset0)
     filtersets.append(filterset1)
     filtersets.append(filterset2)
     
@@ -74,8 +87,7 @@ struct Filters: View
     
     @State private var shouldPresentSheet = false
     @State private var filterSets = [FilterSet]()
-    @State private var currentFilterSet : FilterSet?
-    
+    @State private var currentFilterSetIndex : Int = 0
     
     var body: some View
     {
@@ -83,18 +95,15 @@ struct Filters: View
         {
             if filterSets.count > 0
             {
-                Picker("", selection: $currentFilterSet)
+                
+                Picker("", selection: $currentFilterSetIndex)
                 {
                     ForEach(filterSets.indices, id:\.self)
                     { idx in
-                        Text(filterSets[idx].name)
+                        Text(filterSets[idx].name).tag(filterSets[idx].id)
                     }
                 }
                 .frame(maxWidth: 200)
-                .onChange(of: currentFilterSet)
-                { newValue in
-                 print("FILTER \(newValue)")
-                }
             }
         }
         
@@ -113,7 +122,7 @@ struct Filters: View
         .onAppear()
         {
             filterSets = getFilters()
-            currentFilterSet = filterSets[0]
+            currentFilterSetIndex = 0
         }
         .sheet(isPresented: $shouldPresentSheet)
         {
@@ -188,9 +197,21 @@ struct Filters: View
                     .font(settings.font.subheadline)
                     .padding(.top)
                 
-                ForEach(filterset.filters.indices, id:\.self)
-                { idx in
-                    showFilter(setIndex:setindex,filterIndex: idx)
+                VStack(alignment:.leading)
+                {
+                    Picker("", selection: $filterSets[setindex].setType)
+                    {
+                        ForEach(FilterSetType.allCases)
+                        { t in
+                            Text(t.rawValue ).tag(t)
+                        }
+                    }
+                    .frame(maxWidth: 150)
+                    
+                    ForEach(filterset.filters.indices, id:\.self)
+                    { idx in
+                        showFilter(setIndex:setindex,filterIndex: idx)
+                    }
                 }
             }
         }
@@ -239,7 +260,7 @@ struct Filters: View
                 {
                 }
         }
-        .padding(10)
+        .padding(5)
         .background(settings.theme.blockColor)
     }
 }
