@@ -25,7 +25,6 @@ struct TimeLineView: View
     @State private var showLoading = true
     @State private var showTagAsk = false
     @State private var taskRunning = false
-    @State private var numTabs = 3
     @State private var showingpopup : Bool = false
     
     var body: some View
@@ -44,7 +43,7 @@ struct TimeLineView: View
                 if let accounts = mast.localAccountRecords
                 {
                     PopMenu(icon: "person.crop.circle",
-                            menuItems: [PopMenuItem(text: accounts[0].username),
+                            menuItems: [PopMenuItem(text: "@\(accounts[0].username)"),
                                        ])
                     { item in
                     }
@@ -59,25 +58,25 @@ struct TimeLineView: View
                                     PopMenuItem(text: TimeLine.favorites.rawValue),
                                     PopMenuItem(text: TimeLine.mentions.rawValue),
                                    ])
-                { item in
-                    if item.text == TimeLine.tag.rawValue
-                    {
-                        appState.selectedTimeline = TimeLine.tag
-                        showTagAsk = true
-                        if appState.currentTag.count > 0
+                    { item in
+                        if item.text == TimeLine.tag.rawValue
                         {
-                            fetchStatuses(timeline:.tag,tag:appState.currentTag)
+                            appState.selectedTimeline = TimeLine.tag
+                            showTagAsk = true
+                            if appState.currentTag.count > 0
+                            {
+                                fetchStatuses(timeline:.tag,tag:appState.currentTag)
+                            }
                         }
-                    }
-                    else
-                    {
-                        showTagAsk = false
-                        if let timeline = TimeLine(rawValue: item.text)
+                        else
                         {
-                            appState.selectedTimeline = timeline
-                            fetchStatuses(timeline:timeline,tag:appState.currentTag)
+                            showTagAsk = false
+                            if let timeline = TimeLine(rawValue: item.text)
+                            {
+                                appState.selectedTimeline = timeline
+                                fetchStatuses(timeline:timeline,tag:appState.currentTag)
+                            }
                         }
-                    }
                 }
                 
                 Filters()

@@ -42,33 +42,44 @@ struct PopMenu : View
     
     func menu(food:[PopMenuItem]) -> some View
     {
-        VStack(alignment: .leading)
+        HStack(alignment:.top)
         {
-            ForEach(food.indices,id:\.self)
-            { idx in
-                HStack
-                {
-                    if idx == currentItem
-                    {
-                        Image(systemName: "checkmark")
-                            .foregroundColor(settings.theme.accentColor)
-                    }
+            VStack(alignment: .leading)
+            {
+                ForEach(food.indices,id:\.self)
+                { idx in
+                        if idx == currentItem
+                        {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(settings.theme.accentColor)
+                                .padding(EdgeInsets(top: 2, leading: 4, bottom: 0, trailing: 0))
+                        }
+                        else
+                        {
+                            Text(" ")
+                                .padding(EdgeInsets(top: 2, leading: 4, bottom: 0, trailing: 0))
+                        }
                     
-                    Text(food[idx].text)
-                        .onTapGesture
-                    {
-                        showMenu = false
-                        currentItem = idx
-                        picked(food[idx])
-                    }
                 }
             }
+            
+            VStack(alignment: .leading)
+            {
+                ForEach(food.indices,id:\.self)
+                { idx in
+                        Text(food[idx].text)
+                            .onTapGesture
+                        {
+                            showMenu = false
+                            currentItem = idx
+                            picked(food[idx])
+                        }
+                        .padding(EdgeInsets(top: 2, leading: 0, bottom: 0, trailing: 2))
+                }
+            }
+            
         }
-        .padding()
-        .font(settings.font.body)
-        .foregroundColor(settings.theme.bodyColor)
-        .background(settings.theme.blockColor)
-        .opacity(60.0)
+        .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
     }
     
 }
