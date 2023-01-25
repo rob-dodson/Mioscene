@@ -79,6 +79,20 @@ func getFilters() -> [FilterSet]
     return filtersets
 }
 
+func makeItems(filtersets:[FilterSet]) -> [PopMenuItem]
+{
+    var items = [PopMenuItem]()
+    
+    for index in 0..<filtersets.count
+    {
+        let menuitem = PopMenuItem(text: filtersets[index].name)
+        items.append(menuitem)
+    }
+    items.append(PopMenuItem(text: "Edit Filters"))
+    
+    return items
+}
+
 struct Filters: View
 {
     @EnvironmentObject var settings: Settings
@@ -95,28 +109,10 @@ struct Filters: View
         {
             if filterSets.count > 0
             {
-                
-                Picker("", selection: $currentFilterSetIndex)
-                {
-                    ForEach(filterSets.indices, id:\.self)
-                    { idx in
-                        Text(filterSets[idx].name).tag(filterSets[idx].id)
-                    }
+                PopMenu(icon: "camera.filters",menuItems:makeItems(filtersets: filterSets))
+                { item in
+                    print("FILTER \(item.text)")
                 }
-                .frame(maxWidth: 200)
-            }
-        }
-        
-        Button()
-        {
-            shouldPresentSheet.toggle()
-        }
-    label:
-        {
-            HStack
-            {
-                Image(systemName: "camera.filters")
-                Text("Edit Filters")
             }
         }
         .onAppear()

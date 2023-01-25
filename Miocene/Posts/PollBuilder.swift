@@ -108,7 +108,7 @@ struct PollBuilder: View
                         Text(polltime.rawValue.capitalized)
                     }
                 }
-                .frame(width: 150)
+                .frame(minWidth: 150)
             }
         }
         .padding()

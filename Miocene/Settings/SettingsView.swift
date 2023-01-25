@@ -25,7 +25,6 @@ struct SettingsView: View
         
             VStack(alignment:.leading)
             {
-                
                 ForEach($settings.themes.themeslist.indices, id:\.self)
                 { index in
                     HStack

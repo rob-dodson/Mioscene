@@ -26,23 +26,11 @@ struct TimeLineView: View
     @State private var showTagAsk = false
     @State private var taskRunning = false
     @State private var numTabs = 3
+    @State private var showingpopup : Bool = false
     
     var body: some View
     {
-        TabView
-        {
             mainView()
-            .tabItem
-            {
-                Text("Home")
-            }
-            
-            mainView()
-            .tabItem
-            {
-                Text("Local")
-            }
-        }
     }
     
     
@@ -50,54 +38,54 @@ struct TimeLineView: View
     {
         VStack
         {
-            HStack
+            HStack(spacing: 20)
             {
                 
-                Picker(selection: .constant(1),label: Text(""),content:
+                if let accounts = mast.localAccountRecords
                 {
-                    if let accounts = mast.localAccountRecords
-                    {
-                        ForEach(accounts.indices, id:\.self)
-                        { index in
-                            Text("@\(accounts[index].username)").tag(1)
-                        }
-                    }
-                })
-                
-                
-                
-                Picker("",selection: $appState.selectedTimeline)
-                {
-                    ForEach(TimeLine.allCases)
-                    { timeline in
-                        Text(timeline.rawValue.capitalized)
+                    PopMenu(icon: "person.crop.circle",
+                            menuItems: [PopMenuItem(text: accounts[0].username),
+                                       ])
+                    { item in
                     }
                 }
-                .onChange(of: appState.selectedTimeline)
-                { newValue in
-                    if appState.selectedTimeline == .tag
+                
+             
+                PopMenu(icon: "clock.arrow.circlepath",
+                        menuItems: [PopMenuItem(text: TimeLine.home.rawValue),
+                                    PopMenuItem(text: TimeLine.localTimeline.rawValue),
+                                    PopMenuItem(text: TimeLine.publicTimeline.rawValue),
+                                    PopMenuItem(text: TimeLine.tag.rawValue),
+                                    PopMenuItem(text: TimeLine.favorites.rawValue),
+                                    PopMenuItem(text: TimeLine.mentions.rawValue),
+                                   ])
+                { item in
+                    if item.text == TimeLine.tag.rawValue
                     {
+                        appState.selectedTimeline = TimeLine.tag
                         showTagAsk = true
                         if appState.currentTag.count > 0
                         {
-                            fetchStatuses(timeline:newValue,tag:appState.currentTag)
+                            fetchStatuses(timeline:.tag,tag:appState.currentTag)
                         }
                     }
                     else
                     {
                         showTagAsk = false
-                        fetchStatuses(timeline:newValue,tag:appState.currentTag)
+                        if let timeline = TimeLine(rawValue: item.text)
+                        {
+                            appState.selectedTimeline = timeline
+                            fetchStatuses(timeline:timeline,tag:appState.currentTag)
+                        }
                     }
                 }
+                
+                Filters()
                 
                 NewPostButton(mast:mast)
             }
             
-            HStack
-            {
-                Filters()
-             }
-            .padding()
+           
             
             SpacerLine(color: settings.theme.minorColor)
             
@@ -154,7 +142,6 @@ struct TimeLineView: View
     
     func loadStatuses()
     {
-        print("TASK \(taskRunning)")
         if taskRunning == true
         {
             return

@@ -20,22 +20,28 @@ struct ContentView: View
     
     var body: some View
     {
-        VStack
-        {
-            CustomTopTabBar(tabIndex: $appState.tabIndex)
-            
-            switch appState.tabIndex
-            {
-                case .TimeLine: TimeLineView(mast: mast)
-                case .Accounts: AccountView(mast: mast,maccount: MAccount(displayname: appState.currentUserMastAccount!.displayName, acct: appState.currentUserMastAccount!))
-                case .Search: SearchView(mast: mast)
-                case .Settings: SettingsView()
+                VStack
+                {
+                    GeometryReader
+                    { geo in
+                        VStack
+                        {
+                            CustomTopTabBar(tabIndex: $appState.tabIndex)
+                            
+                            switch appState.tabIndex
+                            {
+                                case .TimeLine: TimeLineView(mast: mast)
+                                case .Accounts: AccountView(mast: mast,maccount: MAccount(displayname: appState.currentUserMastAccount!.displayName, acct: appState.currentUserMastAccount!))
+                                case .Search: SearchView(mast: mast)
+                                case .Settings: SettingsView()
+                            }
+                            
+                            Spacer()
+                        }
+                        .frame(minWidth:100,maxHeight: geo.size.height * 1.0)
+                    }
             }
-            
-            Spacer()
-        }
-        //.frame(minWidth: 200, alignment: .center)
-        .padding(.horizontal, 20)
+            .padding(.horizontal, 20)
     }
 }
        

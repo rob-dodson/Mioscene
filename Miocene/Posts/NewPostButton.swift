@@ -21,13 +21,13 @@ struct NewPostButton: View
     
     var body: some View
     {
-        Button()
+        HStack
         {
-            shouldPresentSheet.toggle()
-        }
-        label:
-        {
-            Image(systemName: "square.and.pencil")
+            PopButton(text: "New Post", icon: "square.and.pencil")
+                .onTapGesture
+            {
+                shouldPresentSheet.toggle()
+            }
         }
         .sheet(isPresented: $shouldPresentSheet)
         {
@@ -41,6 +41,5 @@ struct NewPostButton: View
             })
         }
     }
-    
 }
 

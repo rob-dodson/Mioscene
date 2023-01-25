@@ -18,7 +18,7 @@ struct AttachmentURL : Identifiable
 
 enum TimeLine : String,CaseIterable, Identifiable,Equatable
 {
-    case home,
+    case home = "Home",
          localTimeline = "Local Timeline",
          publicTimeline = "Public Timeline",
          tag = "Tag",

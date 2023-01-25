@@ -49,7 +49,7 @@ struct AccountView: View
                 
                 AccountLarge(mast:mast,maccount: appState.currentViewingMastAccount!)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .frame(alignment: .topLeading)
             .padding()
             .textSelection(.enabled)
 

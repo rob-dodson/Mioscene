@@ -238,7 +238,7 @@ struct Post: View
                             {
                                 NSWorkspace.shared.open(card.url)
                             }
-                            .frame(minWidth: 300,minHeight: 75)
+                           // .frame(minWidth: 150,minHeight: 75)
                             .background(settings.theme.blockColor)
                             .border(width: 1, edges: [.leading,.top,.bottom,.trailing], color: settings.theme.minorColor)
                         }
@@ -406,7 +406,7 @@ struct Post: View
                             .foregroundColor(settings.theme.minorColor)
                     }
                 }
-                .frame(maxWidth:.infinity, alignment: .leading)  // .infinity
+               .frame(minWidth:150,maxWidth:.infinity, alignment: .leading)  // .infinity
            }
             .padding(.bottom,5)
         }
@@ -471,7 +471,7 @@ func gifimage(urlstring:String,done: @escaping (Image) -> some View) -> some Vie
                 {
                     if let nsimage = try? NSImage(gifData: data)
                     {
-                       done(Image(nsImage: nsimage))
+                       _ = done(Image(nsImage: nsimage))
                     }
                 }
             }

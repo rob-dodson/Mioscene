@@ -43,6 +43,7 @@
 		AEAFA2E8297DD59200970F40 /* MNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2E7297DD59200970F40 /* MNotification.swift */; };
 		AEAFA2EC297EED5B00970F40 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2EB297EED5B00970F40 /* Filters.swift */; };
 		AEAFA2EF297F4BBF00970F40 /* SwiftyGif in Frameworks */ = {isa = PBXBuildFile; productRef = AEAFA2EE297F4BBF00970F40 /* SwiftyGif */; };
+		AEAFA2F129807C9B00970F40 /* PopMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2F029807C9B00970F40 /* PopMenuButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -81,6 +82,7 @@
 		AEAFA2E5297DD54600970F40 /* MStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MStatus.swift; sourceTree = "<group>"; };
 		AEAFA2E7297DD59200970F40 /* MNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNotification.swift; sourceTree = "<group>"; };
 		AEAFA2EB297EED5B00970F40 /* Filters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
+		AEAFA2F029807C9B00970F40 /* PopMenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopMenuButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,7 +129,6 @@
 				AED7E1812976436A0053D0C9 /* Utils */,
 				AEAFA2DF297B279E00970F40 /* MainViews */,
 				AE06EBEF294D16BB006CAB67 /* MioceneApp.swift */,
-				AEAFA2E0297C261700970F40 /* AppState.swift */,
 				AE06EC03294D234D006CAB67 /* Mastodon.swift */,
 				AE06EBF3294D16BC006CAB67 /* Assets.xcassets */,
 				AE06EBF5294D16BC006CAB67 /* Miocene.entitlements */,
@@ -200,10 +201,12 @@
 		AED7E1812976436A0053D0C9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				AEAFA2E0297C261700970F40 /* AppState.swift */,
 				AE28C5FE296524AE00C8C928 /* ErrorSystem.swift */,
 				AE28C5F82963719B00C8C928 /* SqliteDB.swift */,
 				AE28C5EF29635CAA00C8C928 /* Keys.swift */,
 				AE28C60A296E1CF200C8C928 /* Utils.swift */,
+				AEAFA2F029807C9B00970F40 /* PopMenuButton.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 				AE28C60F296F25CD00C8C928 /* Themes.swift in Sources */,
 				AE28C5EE29634C0B00C8C928 /* AddAccount.swift in Sources */,
 				AEAFA2E6297DD54600970F40 /* MStatus.swift in Sources */,
+				AEAFA2F129807C9B00970F40 /* PopMenuButton.swift in Sources */,
 				AEAFA2E3297DACE300970F40 /* MAccount.swift in Sources */,
 				AE06EC04294D234D006CAB67 /* Mastodon.swift in Sources */,
 				AE28C5F92963719B00C8C928 /* SqliteDB.swift in Sources */,

@@ -58,9 +58,15 @@ struct AddAccount: View
                     .padding()
                     .font(settings.font.title)
                 
-                    SecureField("Password", text: $password)
-                        .padding()
-                        .font(settings.font.title)
+                SecureField("Password", text: $password)
+                    .padding()
+                    .font(settings.font.title)
+                
+                VStack(spacing:2)
+                {
+                    Text("If you need an account go to:")
+                    Link("List of Mastodon Servers", destination: URL(string:"https://joinmastodon.org/servers")!)
+                }
             }
             .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage,done:
             {
@@ -70,7 +76,7 @@ struct AddAccount: View
                     appState.showHome()
                 }
             })
-            .frame(width: 400, height: 300)
+            .frame(width: 400)
             .toolbar
             {
                 ToolbarItem
