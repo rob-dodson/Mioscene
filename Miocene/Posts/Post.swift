@@ -10,16 +10,22 @@ import MastodonKit
 import AVKit
 import SwiftyGif
 
+
 struct Post: View
 {
     @ObservedObject var mast : Mastodon
     @ObservedObject var mstat : MStatus
    
     @EnvironmentObject var settings: Settings
-    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var appState: AppState    //  FIX to vary timer for time of post 1s 1m, 1h
+
     
     @State private var showSensitiveContent : Bool = false
     @State private var shouldPresentSheet = false
+    @State var datePublished = ""
+    @State var hoursstr : String = ""
+    
+    static var timer : Timer.TimerPublisher?
     
     var body: some View
     {
@@ -400,10 +406,8 @@ struct Post: View
                         //
                         // created Date
                         //
-                        let hoursstr = dateSinceNowToString(date: status.createdAt)
-                        Text("\(hoursstr) · \(status.createdAt.formatted(date: .abbreviated, time: .omitted)) · \(status.createdAt.formatted(date: .omitted, time: .standard))")
-                            .font(settings.font.footnote)
-                            .foregroundColor(settings.theme.minorColor)
+                        makeDateView(status: status)
+
                     }
                 }
                .frame(minWidth:150,maxWidth:.infinity, alignment: .leading)  // .infinity
@@ -433,6 +437,39 @@ struct Post: View
             }
         }
     }
+    
+    
+    func makeDateView(status:Status) -> some View
+    {
+        if Post.timer == nil
+        {
+            Post.timer = Timer.TimerPublisher.init(interval: 60, runLoop: .main, mode: .common)
+            _ = Post.timer!.connect() // do we need to keep this around?
+        }
+        
+        return Text(datePublished)
+            .font(settings.font.footnote)
+            .foregroundColor(settings.theme.minorColor)
+            .onAppear(perform:
+            {
+                calcDate(status: status)
+            })
+            .onReceive(Post.timer!)
+            { input in
+               calcDate(status: status)
+            }
+    }
+    
+    func calcDate(status:Status)
+    {
+        let tmp_hoursstr = dateSinceNowToString(date: status.createdAt)
+        if tmp_hoursstr != hoursstr
+        {
+            hoursstr = tmp_hoursstr
+            datePublished = "\(hoursstr) · \(status.createdAt.formatted(date: .abbreviated, time: .omitted)) · \(status.createdAt.formatted(date: .omitted, time: .standard))"
+        }
+    }
+    
     
     func makeTagStack(tags:[Tag]) -> some View
     {

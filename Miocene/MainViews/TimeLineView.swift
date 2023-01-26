@@ -145,14 +145,20 @@ struct TimeLineView: View
                 }
                 .task
                 {
-                    loadStatuses()
+                    runTasks()
                 }
         }
     }
     
     
-    func loadStatuses()
-    {
+    func runTasks()
+    {/*
+        let timelineTimer = Timer(timeInterval: 60 * 60 * 5, repeats: true)
+        { timer in
+            fetchNewerStatuses(timeline: appState.selectedTimeline,tag:appState.currentTag)
+        }
+        
+        */
         if TimeLineView.taskRunning == true
         {
             return
@@ -166,7 +172,7 @@ struct TimeLineView: View
             
             while(true)
             {
-                try await Task.sleep(nanoseconds: 30 * NSEC_PER_SEC)
+                try await Task.sleep(nanoseconds: 60 * 5 * NSEC_PER_SEC)
                 fetchNewerStatuses(timeline: appState.selectedTimeline,tag:appState.currentTag)
             }
         }
@@ -194,6 +200,11 @@ struct TimeLineView: View
             mast.getNewerStatuses(timeline: timeline, id:newerThanID, tag: tag, done:
            { newerstats in
                 stats = newerstats + stats
+                if stats.count > 150
+                {
+                    print("removing last 25 from stats")
+                    stats.removeLast(25)
+                }
                 loadingStats = false
             })
         }
