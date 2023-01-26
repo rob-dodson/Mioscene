@@ -16,16 +16,16 @@ struct TimeLineView: View
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
     
-    @State private var stats1 = [MStatus]()
-    @State private var stats2 = [MStatus]()
-    @State private var stats3 = [MStatus]()
+    @State private var stats = [MStatus]()
     @State private var notifications = [MNotification]()
     @State private var favorites = [MStatus]()
     @State private var tags = [MStatus]()
     @State private var showLoading = true
     @State private var showTagAsk = false
-    @State private var taskRunning = false
+    @State private var loadingStats = false
     @State private var showingpopup : Bool = false
+    
+    static var taskRunning = false
     
     var body: some View
     {
@@ -35,29 +35,29 @@ struct TimeLineView: View
     
     func mainView() -> some View
     {
-        VStack
-        {
-            HStack(spacing: 20)
+            VStack
             {
-                
-                if let accounts = mast.localAccountRecords
+                HStack(spacing: 20)
                 {
-                    PopMenu(icon: "person.crop.circle",
-                            menuItems: [PopMenuItem(text: "@\(accounts[0].username)"),
-                                       ])
-                    { item in
+                    
+                    if let accounts = mast.localAccountRecords
+                    {
+                        PopMenu(icon: "person.crop.circle",
+                                menuItems: [PopMenuItem(text: "@\(accounts[0].username)"),
+                                           ])
+                        { item in
+                        }
                     }
-                }
-                
-             
-                PopMenu(icon: "clock.arrow.circlepath",
-                        menuItems: [PopMenuItem(text: TimeLine.home.rawValue),
-                                    PopMenuItem(text: TimeLine.localTimeline.rawValue),
-                                    PopMenuItem(text: TimeLine.publicTimeline.rawValue),
-                                    PopMenuItem(text: TimeLine.tag.rawValue),
-                                    PopMenuItem(text: TimeLine.favorites.rawValue),
-                                    PopMenuItem(text: TimeLine.mentions.rawValue),
-                                   ])
+                    
+                    
+                    PopMenu(icon: "clock.arrow.circlepath",
+                            menuItems: [PopMenuItem(text: TimeLine.home.rawValue),
+                                        PopMenuItem(text: TimeLine.localTimeline.rawValue),
+                                        PopMenuItem(text: TimeLine.publicTimeline.rawValue),
+                                        PopMenuItem(text: TimeLine.tag.rawValue),
+                                        PopMenuItem(text: TimeLine.favorites.rawValue),
+                                        PopMenuItem(text: TimeLine.mentions.rawValue),
+                                       ])
                     { item in
                         if item.text == TimeLine.tag.rawValue
                         {
@@ -65,7 +65,7 @@ struct TimeLineView: View
                             showTagAsk = true
                             if appState.currentTag.count > 0
                             {
-                                fetchStatuses(timeline:.tag,tag:appState.currentTag)
+                                fetchSomeStatuses(timeline:.tag,tag:appState.currentTag)
                             }
                         }
                         else
@@ -74,111 +74,107 @@ struct TimeLineView: View
                             if let timeline = TimeLine(rawValue: item.text)
                             {
                                 appState.selectedTimeline = timeline
-                                fetchStatuses(timeline:timeline,tag:appState.currentTag)
+                                fetchSomeStatuses(timeline:timeline,tag:appState.currentTag)
                             }
                         }
-                }
-                
-                Filters()
-                
-                NewPostButton(mast:mast)
-            }
-            
-           
-            
-            SpacerLine(color: settings.theme.minorColor)
-            
-            if showTagAsk == true
-            {
-                HStack
-                {
-                    TextField("#tag", text: $appState.currentTag)
-                        .padding()
-                        .font(settings.font.title)
+                    }
                     
-                    Button("Load")
+                    Filters()
+                    
+                    NewPostButton(mast:mast)
+                    
+                    //RefreshButton
+                }
+                
+                
+                SpacerLine(color: settings.theme.minorColor)
+                
+                if showTagAsk == true
+                {
+                    HStack
                     {
-                        fetchStatuses(timeline:.tag,tag:appState.currentTag)
+                        TextField("#tag", text: $appState.currentTag)
+                            .padding()
+                            .font(settings.font.title)
+                        
+                        Button("Load")
+                        {
+                            fetchSomeStatuses(timeline:.tag,tag:appState.currentTag)
+                        }
+                        .keyboardShortcut(.defaultAction)
                     }
-                    .keyboardShortcut(.defaultAction)
                 }
-            }
-            
-            if showLoading
-            {
-                ProgressView("Loading...")
-                    .font(settings.font.title)
-                    .foregroundColor(settings.theme.accentColor)
-            }
-
-            ScrollView
-            {
-                if appState.selectedTimeline == .notifications || appState.selectedTimeline == .mentions
+                
+                if showLoading
                 {
-                    ForEach(getnotifications())
-                    { note in
-                        NotificationView(mast:mast,mnotification:note)
-                            .padding([.horizontal,.top],5)
-                    }
+                    ProgressView("Loading...")
+                        .font(settings.font.title)
+                        .foregroundColor(settings.theme.accentColor)
                 }
-                else
+                
+                
+                ScrollView
                 {
-                    ForEach(getstats(timeline: $appState.selectedTimeline))
-                    { mstat in
-                        Post(mast:mast,mstat:mstat)
-                            .padding([.horizontal,.top],5)
+                    LazyVStack
+                    {
+                        if appState.selectedTimeline == .notifications || appState.selectedTimeline == .mentions
+                        {
+                            ForEach(getnotifications())
+                            { note in
+                                NotificationView(mast:mast,mnotification:note)
+                                    .padding([.horizontal,.top],5)
+                            }
+                        }
+                        else
+                        {
+                            ForEach(getstats())
+                            { mstat in
+                                
+                                Post(mast:mast,mstat:mstat)
+                                    .padding([.horizontal,.top],5)
+                                    .onAppear
+                                    {
+                                        if mstat.id == stats[stats.count - 1].id
+                                        {
+                                            fetchOlderStatuses(timeline: appState.selectedTimeline, tag: appState.currentTag)
+                                        }
+                                    }
+                            }
+                        }
                     }
                 }
-            }
-            .task
-            {
-                loadStatuses()
-            }
+                .task
+                {
+                    loadStatuses()
+                }
         }
     }
     
-   
     
     func loadStatuses()
     {
-        if taskRunning == true
+        if TimeLineView.taskRunning == true
         {
             return
         }
         
         Task
         {
-            taskRunning = true
+            TimeLineView.taskRunning = true
+            
+            fetchSomeStatuses(timeline: appState.selectedTimeline, tag: appState.currentTag)
             
             while(true)
             {
-                fetchStatuses(timeline: appState.selectedTimeline,tag:appState.currentTag)
-                try await Task.sleep(nanoseconds: 60 * 15 * NSEC_PER_SEC)
+                try await Task.sleep(nanoseconds: 30 * NSEC_PER_SEC)
+                fetchNewerStatuses(timeline: appState.selectedTimeline,tag:appState.currentTag)
             }
         }
     }
     
-    func getstats(timeline:Binding<TimeLine>) -> [MStatus]
+    func getstats() -> [MStatus]
     {
-        switch timeline.wrappedValue
-        {
-        case .home:
-            return stats1
-        case .localTimeline:
-            return stats2
-        case .publicTimeline:
-            return stats3
-        case .favorites:
-            return favorites
-        case .tag:
-            return tags
-        case .notifications:
-            Log.log(msg:"error 1")
-            return []
-        case .mentions:
-            Log.log(msg:"error mentions 1")
-            return []
-        }
+        return stats
     }
     
      
@@ -187,7 +183,53 @@ struct TimeLineView: View
         return notifications
     }
     
-    func fetchStatuses(timeline:TimeLine,tag:String)
+    func fetchNewerStatuses(timeline:TimeLine,tag:String)
+    {
+        if loadingStats == true { return }
+        
+        loadingStats = true
+        if let first = stats.first
+        {
+            let newerThanID = first.status.id
+            mast.getNewerStatuses(timeline: timeline, id:newerThanID, tag: tag, done:
+           { newerstats in
+                stats = newerstats + stats
+                loadingStats = false
+            })
+        }
+    }
+    
+    func fetchOlderStatuses(timeline:TimeLine,tag:String)
+    {
+        if loadingStats == true { return }
+        
+        loadingStats = true
+        if let last = stats.last
+        {
+            let olderThanID = last.status.id
+            mast.getOlderStatuses(timeline: timeline, id:olderThanID, tag: tag, done:
+           { olderstats in
+                stats = stats + olderstats
+                loadingStats = false
+            })
+        }
+    }
+    
+    func fetchSomeStatuses(timeline:TimeLine,tag:String)
+    {
+        if loadingStats == true { return }
+        
+        loadingStats = true
+        mast.getSomeStatuses(timeline: timeline, tag: tag, done:
+        { somestats in
+            showLoading = false
+            stats = somestats
+            loadingStats = false
+        })
+    }
+    
+    /*
+    func fetchSomeStatuses(timeline:TimeLine,tag:String)
     {
         showLoading = true
         
@@ -197,36 +239,19 @@ struct TimeLineView: View
             { mnotes in
                 
                 showLoading = false
-                
                 notifications = mnotes
             }
         }
         else
         {
             mast.getTimeline(timeline: timeline,tag:tag,done:
-                                { newstats in
+            { newstats in
                 
                 showLoading = false
-                
-                switch timeline
-                {
-                case .home:
-                    stats1 = newstats
-                case .localTimeline:
-                    stats2 = newstats
-                case .publicTimeline:
-                    stats3 = newstats
-                case .favorites:
-                    favorites = newstats
-                case .tag:
-                    tags = newstats
-                case .notifications:
-                    Log.log(msg:"error 2")
-                case .mentions:
-                    Log.log(msg:"error 3")
-                }
+                stats = stats + newstats
             })
         }
     }
+     */
 }
 

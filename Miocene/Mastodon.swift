@@ -40,7 +40,8 @@ class Mastodon : ObservableObject
     var sql : SqliteDB
     var localAccountRecords : [LocalAccountRecord]?
     private var appState = AppState.shared
-
+    
+    
     init()
     {
         do
@@ -516,65 +517,71 @@ class Mastodon : ObservableObject
         }
     }
     
-
-    func getTimeline(timeline:TimeLine,tag:String,done: @escaping ([MStatus]) -> Void)
+    
+    func getSomeStatuses(timeline:TimeLine,tag:String,done: @escaping ([MStatus]) -> Void)
     {
-        if client == nil
-        {
-            return
+        let request = Timelines.home(range:.limit(40))
+        
+        getTimeline(request: request)
+        { statuses, pagination in
+            done(statuses)
         }
+    }
+    
+    func getOlderStatuses(timeline:TimeLine,id:String,tag:String,done: @escaping ([MStatus]) -> Void)
+    {
+        let  request = Timelines.home(range: .max(id: id, limit: 40))
         
-        currentTimeline = timeline
-        
-        var request : Request<[Status]>
-        
-        switch timeline
-        {
-        case .home:
-            request = Timelines.home(range: .limit(50))
-        case .localTimeline:
-            request = Timelines.public(local:true,range: .limit(50))
-        case .publicTimeline:
-            request = Timelines.public(local:false,range: .limit(50))
-        case .favorites:
-            request = Favourites.all()
-        case .tag:
-            request = Timelines.tag(tag)
-        case .notifications:
-            Log.log(msg:"timeline error")
-            return
-        case .mentions:
-            Log.log(msg:"timeline mentions error")
-            return
+        getTimeline(request: request)
+        { statuses, pagination in
+            done(statuses)
         }
+    }
+    
+    
+    func getNewerStatuses(timeline:TimeLine,id:String,tag:String,done: @escaping ([MStatus]) -> Void)
+    {
+        let  request = Timelines.home(range: .min(id: id, limit: 40))
         
-        var returnstats = [MStatus]()
-        
+        getTimeline(request: request)
+        { statuses, pagination in
+            done(statuses)
+        }
+    }
+    
+    
+    func getTimeline(request: Request<[Status]>,done: @escaping ([MStatus],Pagination?) -> Void)
+    {
         client.run(request)
         { result in
-                if let statuses = result.value
-                {
-                    for status in statuses
-                    {
-                        returnstats.append(self.convert(status: status))
-                    }
-                    done(returnstats)
-                }
-            else
+            
+            var returnstats = [MStatus]()
+
+            switch result
             {
-                Log.log(msg:"error getting statuses \(result)")
+                case .success(let statuses,let pagination):
+                    
+                    returnstats = statuses.map(
+                    { status in
+                        self.convert(status: status)
+                    })
+                    
+                    done(returnstats,pagination)
+                    
+                case .failure(let error):
+                    Log.log(msg:"error getting statuses \(error)")
             }
         }
-       
     }
+    
     
     func convert(status:Status) -> MStatus
     {
         let newmstatus = MStatus(status: status)
-
         return newmstatus
     }
 
+      
     func convert(notification:MastodonKit.Notification) -> MNotification
     {
         let newnote = MNotification(notification: notification)
