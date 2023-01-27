@@ -22,6 +22,7 @@ class Settings: ObservableObject
     @Published var font : MFont
     @Published var hideStatusButtons : Bool = false
     @Published var showCards : Bool = false
+    @Published var hideIconText : Bool = false
     
     var iconSize = 20
     

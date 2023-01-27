@@ -178,7 +178,6 @@
 			isa = PBXGroup;
 			children = (
 				AE28C5ED29634C0B00C8C928 /* AddAccount.swift */,
-				AEAFA2EB297EED5B00970F40 /* Filters.swift */,
 				AE28C60229663A5B00C8C928 /* AccountLarge.swift */,
 				AE28C5EB295E4B1C00C8C928 /* AccountSmall.swift */,
 				AE28C5FA2963727500C8C928 /* LocalAccountRecord.swift */,
@@ -206,6 +205,7 @@
 				AE28C5F82963719B00C8C928 /* SqliteDB.swift */,
 				AE28C5EF29635CAA00C8C928 /* Keys.swift */,
 				AE28C60A296E1CF200C8C928 /* Utils.swift */,
+				AEAFA2EB297EED5B00970F40 /* Filters.swift */,
 				AEAFA2F029807C9B00970F40 /* PopMenuButton.swift */,
 			);
 			path = Utils;

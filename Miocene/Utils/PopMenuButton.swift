@@ -29,10 +29,9 @@ struct PopMenu : View
         HStack
         {
             PopButton(text: menuItems[currentItem].text,icon:icon)
-                .onTapGesture
-            {
-                showMenu = true
-            }
+                {
+                    showMenu = true
+                }
         }
         .popover(isPresented: $showMenu,arrowEdge:.bottom)
         {
@@ -84,10 +83,6 @@ struct PopMenu : View
     
 }
 
-func foo()
-{
-    
-}
 
 struct PopButton: View
 {
@@ -95,6 +90,9 @@ struct PopButton: View
     
     let text : String
     let icon : String
+    var ontap: () -> Void
+    
+    @State var tap = false
     
     var body: some View
     {
@@ -102,9 +100,21 @@ struct PopButton: View
         {
             Image(systemName:icon)
                 .font(.system(size: CGFloat(settings.iconSize), weight: .light))
-                .foregroundColor(settings.theme.minorColor)
-
-            Text(text)
+                .foregroundColor(tap ? settings.theme.accentColor : settings.theme.minorColor)
+                .scaleEffect(tap ? 1.2 : 1)
+                .animation(.spring(response: 0.4, dampingFraction: 0.6),value: tap)
+                .onTapGesture
+                {
+                    tap = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { tap = false }
+                    ontap()
+                }
+            
+                if settings.hideIconText == false
+                {
+                    Text(text)
+                }
         }
     }
 }
+

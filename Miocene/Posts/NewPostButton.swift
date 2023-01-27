@@ -24,10 +24,9 @@ struct NewPostButton: View
         HStack
         {
             PopButton(text: "New Post", icon: "square.and.pencil")
-                .onTapGesture
-            {
-                shouldPresentSheet.toggle()
-            }
+                {
+                    shouldPresentSheet.toggle()
+                }
         }
         .sheet(isPresented: $shouldPresentSheet)
         {

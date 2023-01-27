@@ -517,10 +517,30 @@ class Mastodon : ObservableObject
         }
     }
     
+    func makeRequest(timeline:TimeLine) -> Request<[Status]>
+    {
+        switch timeline
+        {
+            case .home:
+                return Timelines.home(range:.limit(40))
+            case .publicTimeline:
+                return Timelines.public(local: false,range:.limit(40))
+            case .localTimeline:
+                return Timelines.public(local: true,range:.limit(40))
+            case .tag:
+                return Timelines.public(local: true,range:.limit(40))
+            case .favorites:
+                return Favourites.all(range:.limit(40))
+            case .notifications:
+                return Timelines.public(local: false,range:.limit(40))
+            case .mentions:
+                return Timelines.public(local: true,range:.limit(40))
+        }
+    }
     
     func getSomeStatuses(timeline:TimeLine,tag:String,done: @escaping ([MStatus]) -> Void)
     {
-        let request = Timelines.home(range:.limit(40))
+        let request = makeRequest(timeline: timeline)
         
         getTimeline(request: request)
         { statuses, pagination in
@@ -530,7 +550,7 @@ class Mastodon : ObservableObject
     
     func getOlderStatuses(timeline:TimeLine,id:String,tag:String,done: @escaping ([MStatus]) -> Void)
     {
-        let  request = Timelines.home(range: .max(id: id, limit: 40))
+        let request = makeRequest(timeline: timeline)
         
         getTimeline(request: request)
         { statuses, pagination in
@@ -541,7 +561,7 @@ class Mastodon : ObservableObject
     
     func getNewerStatuses(timeline:TimeLine,id:String,tag:String,done: @escaping ([MStatus]) -> Void)
     {
-        let  request = Timelines.home(range: .min(id: id, limit: 40))
+        let request = makeRequest(timeline: timeline)
         
         getTimeline(request: request)
         { statuses, pagination in

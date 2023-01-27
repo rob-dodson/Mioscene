@@ -24,6 +24,7 @@ struct TimeLineView: View
     @State private var showTagAsk = false
     @State private var loadingStats = false
     @State private var showingpopup : Bool = false
+    @State private var timelineTimer : Timer?
     
     static var taskRunning = false
     
@@ -56,6 +57,7 @@ struct TimeLineView: View
                                         PopMenuItem(text: TimeLine.publicTimeline.rawValue),
                                         PopMenuItem(text: TimeLine.tag.rawValue),
                                         PopMenuItem(text: TimeLine.favorites.rawValue),
+                                        PopMenuItem(text: TimeLine.notifications.rawValue),
                                         PopMenuItem(text: TimeLine.mentions.rawValue),
                                        ])
                     { item in
@@ -65,6 +67,7 @@ struct TimeLineView: View
                             showTagAsk = true
                             if appState.currentTag.count > 0
                             {
+                                showLoading = true
                                 fetchSomeStatuses(timeline:.tag,tag:appState.currentTag)
                             }
                         }
@@ -73,6 +76,7 @@ struct TimeLineView: View
                             showTagAsk = false
                             if let timeline = TimeLine(rawValue: item.text)
                             {
+                                showLoading = true
                                 appState.selectedTimeline = timeline
                                 fetchSomeStatuses(timeline:timeline,tag:appState.currentTag)
                             }
@@ -81,9 +85,12 @@ struct TimeLineView: View
                     
                     Filters()
                     
-                    NewPostButton(mast:mast)
+                    PopButton(text: "Refresh", icon: "arrow.triangle.2.circlepath")
+                    {
+                        fetchNewerStatuses(timeline: appState.selectedTimeline, tag: appState.currentTag)
+                    }
                     
-                    //RefreshButton
+                    NewPostButton(mast:mast)
                 }
                 
                 
@@ -152,58 +159,44 @@ struct TimeLineView: View
     
     
     func runTasks()
-    {/*
-        let timelineTimer = Timer(timeInterval: 60 * 60 * 5, repeats: true)
+    {
+        print("runTasks")
+        fetchSomeStatuses(timeline: appState.selectedTimeline, tag: appState.currentTag)
+        
+        timelineTimer = Timer.scheduledTimer(withTimeInterval: 60 * 5, repeats: true)
         { timer in
+            print("fetching newer")
             fetchNewerStatuses(timeline: appState.selectedTimeline,tag:appState.currentTag)
         }
-        
-        */
-        if TimeLineView.taskRunning == true
-        {
-            return
-        }
-        
-        Task
-        {
-            TimeLineView.taskRunning = true
-            
-            fetchSomeStatuses(timeline: appState.selectedTimeline, tag: appState.currentTag)
-            
-            while(true)
-            {
-                try await Task.sleep(nanoseconds: 60 * 5 * NSEC_PER_SEC)
-                fetchNewerStatuses(timeline: appState.selectedTimeline,tag:appState.currentTag)
-            }
-        }
     }
+    
     
     func getstats() -> [MStatus]
     {
         return stats
     }
-    
      
     func getnotifications() -> [MNotification]
     {
         return notifications
     }
     
+    
     func fetchNewerStatuses(timeline:TimeLine,tag:String)
     {
         if loadingStats == true { return }
-        
         loadingStats = true
+        
         if let first = stats.first
         {
             let newerThanID = first.status.id
             mast.getNewerStatuses(timeline: timeline, id:newerThanID, tag: tag, done:
            { newerstats in
-                stats = newerstats + stats
+                stats.insert(contentsOf: newerstats, at: 0)
                 if stats.count > 150
                 {
-                    print("removing last 25 from stats")
-                    stats.removeLast(25)
+                    print("removing last 50 from stats")
+                    stats.removeLast(50)
                 }
                 loadingStats = false
             })
@@ -213,8 +206,8 @@ struct TimeLineView: View
     func fetchOlderStatuses(timeline:TimeLine,tag:String)
     {
         if loadingStats == true { return }
-        
         loadingStats = true
+        
         if let last = stats.last
         {
             let olderThanID = last.status.id
@@ -229,40 +222,32 @@ struct TimeLineView: View
     func fetchSomeStatuses(timeline:TimeLine,tag:String)
     {
         if loadingStats == true { return }
-        
         loadingStats = true
-        mast.getSomeStatuses(timeline: timeline, tag: tag, done:
-        { somestats in
-            showLoading = false
-            stats = somestats
-            loadingStats = false
-        })
-    }
-    
-    /*
-    func fetchSomeStatuses(timeline:TimeLine,tag:String)
-    {
-        showLoading = true
         
         if timeline == .notifications || timeline == .mentions
         {
-            mast.getNotifications(mentionsOnly:timeline == .mentions ? true : false)
-            { mnotes in
-                
-                showLoading = false
-                notifications = mnotes
-            }
+            getSomeNotifications(timeline: timeline)
         }
         else
         {
-            mast.getTimeline(timeline: timeline,tag:tag,done:
-            { newstats in
-                
+            mast.getSomeStatuses(timeline: timeline, tag: tag, done:
+                                    { somestats in
                 showLoading = false
-                stats = stats + newstats
+                stats = somestats
+                loadingStats = false
             })
         }
     }
-     */
+    
+    func getSomeNotifications(timeline:TimeLine)
+    {
+        mast.getNotifications(mentionsOnly:timeline == .mentions ? true : false)
+        { mnotes in
+            showLoading = false
+            notifications = mnotes
+            loadingStats = false
+        }
+    }
+    
 }
 

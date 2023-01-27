@@ -122,6 +122,13 @@ struct SettingsView: View
                     let defaults = UserDefaults.standard
                     defaults.set(settings.showCards, forKey: "showcards")
                 }
+                
+                Toggle("Hide Icon Text", isOn: $settings.hideIconText)
+                .onChange(of: settings.hideIconText)
+                { newValue in
+                    let defaults = UserDefaults.standard
+                    defaults.set(settings.hideIconText, forKey: "hideicontext")
+                }
             }
             .padding()
             

@@ -203,7 +203,6 @@ struct Post: View
                             {
                                 if let url = URL(string:attachment.url)
                                 {
-                                   
                                     NSWorkspace.shared.open(url)
                                 }
                             }
