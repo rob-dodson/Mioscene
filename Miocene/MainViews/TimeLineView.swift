@@ -160,12 +160,12 @@ struct TimeLineView: View
     
     func runTasks()
     {
-        print("runTasks")
         fetchSomeStatuses(timeline: appState.selectedTimeline, tag: appState.currentTag)
+        
+        if timelineTimer != nil { timelineTimer?.invalidate() }
         
         timelineTimer = Timer.scheduledTimer(withTimeInterval: 60 * 5, repeats: true)
         { timer in
-            print("fetching newer")
             fetchNewerStatuses(timeline: appState.selectedTimeline,tag:appState.currentTag)
         }
     }
