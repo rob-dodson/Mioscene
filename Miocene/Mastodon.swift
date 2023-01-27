@@ -40,7 +40,7 @@ class Mastodon : ObservableObject
     var sql : SqliteDB
     var localAccountRecords : [LocalAccountRecord]?
     private var appState = AppState.shared
-    
+    private var requestSize = 10
     
     init()
     {
@@ -517,30 +517,30 @@ class Mastodon : ObservableObject
         }
     }
     
-    func makeRequest(timeline:TimeLine) -> Request<[Status]>
+    func makeRequest(timeline:TimeLine,range:RequestRange) -> Request<[Status]>
     {
         switch timeline
         {
             case .home:
-                return Timelines.home(range:.limit(40))
+                return Timelines.home(range:range)
             case .publicTimeline:
-                return Timelines.public(local: false,range:.limit(40))
+                return Timelines.public(local: false,range:range)
             case .localTimeline:
-                return Timelines.public(local: true,range:.limit(40))
+                return Timelines.public(local: true,range:range)
             case .tag:
-                return Timelines.public(local: true,range:.limit(40))
+                return Timelines.public(local: true,range:range)
             case .favorites:
-                return Favourites.all(range:.limit(40))
+                return Favourites.all(range:range)
             case .notifications:
-                return Timelines.public(local: false,range:.limit(40))
+                return Timelines.public(local: false,range:range)
             case .mentions:
-                return Timelines.public(local: true,range:.limit(40))
+                return Timelines.public(local: true,range:range)
         }
     }
     
     func getSomeStatuses(timeline:TimeLine,tag:String,done: @escaping ([MStatus]) -> Void)
     {
-        let request = makeRequest(timeline: timeline)
+        let request = makeRequest(timeline: timeline,range: .limit(requestSize))
         
         getTimeline(request: request)
         { statuses, pagination in
@@ -550,7 +550,7 @@ class Mastodon : ObservableObject
     
     func getOlderStatuses(timeline:TimeLine,id:String,tag:String,done: @escaping ([MStatus]) -> Void)
     {
-        let request = makeRequest(timeline: timeline)
+        let request = makeRequest(timeline: timeline,range:.max(id: id, limit: requestSize))
         
         getTimeline(request: request)
         { statuses, pagination in
@@ -561,7 +561,7 @@ class Mastodon : ObservableObject
     
     func getNewerStatuses(timeline:TimeLine,id:String,tag:String,done: @escaping ([MStatus]) -> Void)
     {
-        let request = makeRequest(timeline: timeline)
+        let request = makeRequest(timeline: timeline,range:.min(id: id, limit: requestSize))
         
         getTimeline(request: request)
         { statuses, pagination in

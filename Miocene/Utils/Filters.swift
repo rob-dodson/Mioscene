@@ -112,7 +112,7 @@ struct Filters: View
             {
                 PopMenu(icon: "camera.filters",menuItems:makeItems(filtersets: filterSets))
                 { item in
-                    print("FILTER \(item.text)")
+                    shouldPresentSheet = true
                 }
             }
         }

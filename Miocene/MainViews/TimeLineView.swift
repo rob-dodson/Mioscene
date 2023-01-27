@@ -192,7 +192,9 @@ struct TimeLineView: View
             let newerThanID = first.status.id
             mast.getNewerStatuses(timeline: timeline, id:newerThanID, tag: tag, done:
            { newerstats in
-                stats.insert(contentsOf: newerstats, at: 0)
+                
+                stats = newerstats + stats
+                
                 if stats.count > 150
                 {
                     print("removing last 50 from stats")
