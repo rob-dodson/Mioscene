@@ -7,17 +7,20 @@
 
 import SwiftUI
 
-struct PopMenuItem
+
+
+struct PopMenuItem<UserType>
 {
     let text : String
+    let userData : UserType?
 }
 
 
-struct PopMenu : View
+struct PopMenu<UserType> : View
 {
     let icon : String
-    let menuItems : [PopMenuItem]
-    let picked: (PopMenuItem) -> Void
+    let menuItems : [PopMenuItem<UserType>]
+    let picked: (PopMenuItem<UserType>) -> Void
     
     @State private var showMenu = false
     @State private var currentItem : Int = 0
@@ -29,9 +32,9 @@ struct PopMenu : View
         HStack
         {
             PopButton(text: menuItems[currentItem].text,icon:icon)
-                {
-                    showMenu = true
-                }
+            {
+                showMenu = true
+            }
         }
         .popover(isPresented: $showMenu,arrowEdge:.bottom)
         {
@@ -39,7 +42,7 @@ struct PopMenu : View
         }
     }
     
-    func menu(food:[PopMenuItem]) -> some View
+    func menu(food:[PopMenuItem<UserType>]) -> some View
     {
         HStack(alignment:.top)
         {
@@ -106,13 +109,19 @@ struct PopButton: View
                 .onTapGesture
                 {
                     tap = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { tap = false }
-                    ontap()
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2)
+                    { tap = false
+                        ontap()
+                    }
+                    
                 }
             
                 if settings.hideIconText == false
                 {
                     Text(text)
+                        .font(settings.font.footnote)
+                        .foregroundColor(settings.theme.minorColor)
+
                 }
         }
     }

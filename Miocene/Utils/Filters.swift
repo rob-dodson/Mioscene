@@ -79,16 +79,16 @@ func getFilters() -> [FilterSet]
     return filtersets
 }
 
-func makeItems(filtersets:[FilterSet]) -> [PopMenuItem]
+func makeItems(filtersets:[FilterSet]) -> [PopMenuItem<FilterSet>]
 {
-    var items = [PopMenuItem]()
+    var items = [PopMenuItem<FilterSet>]()
     
     for index in 0..<filtersets.count
     {
-        let menuitem = PopMenuItem(text: filtersets[index].name)
+        let menuitem = PopMenuItem(text: filtersets[index].name, userData:filtersets[index] )
         items.append(menuitem)
     }
-    items.append(PopMenuItem(text: "Edit Filters"))
+    items.append(PopMenuItem(text: "Edit Filters", userData: nil))
     
     return items
 }

@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-
-
 struct TimeLineView: View
 {
     @ObservedObject var mast : Mastodon
@@ -44,7 +42,7 @@ struct TimeLineView: View
                     if let accounts = mast.localAccountRecords
                     {
                         PopMenu(icon: "person.crop.circle",
-                                menuItems: [PopMenuItem(text: "@\(accounts[0].username)"),
+                                menuItems: [PopMenuItem(text: "@\(accounts[0].username)",userData: accounts[0]),
                                            ])
                         { item in
                         }
@@ -52,16 +50,16 @@ struct TimeLineView: View
                     
                     
                     PopMenu(icon: "clock.arrow.circlepath",
-                            menuItems: [PopMenuItem(text: TimeLine.home.rawValue),
-                                        PopMenuItem(text: TimeLine.localTimeline.rawValue),
-                                        PopMenuItem(text: TimeLine.publicTimeline.rawValue),
-                                        PopMenuItem(text: TimeLine.tag.rawValue),
-                                        PopMenuItem(text: TimeLine.favorites.rawValue),
-                                        PopMenuItem(text: TimeLine.notifications.rawValue),
-                                        PopMenuItem(text: TimeLine.mentions.rawValue),
+                            menuItems: [PopMenuItem(text: TimeLine.home.rawValue,userData:TimeLine.home),
+                                        PopMenuItem(text: TimeLine.localTimeline.rawValue,userData:TimeLine.localTimeline),
+                                        PopMenuItem(text: TimeLine.publicTimeline.rawValue,userData:TimeLine.publicTimeline),
+                                        PopMenuItem(text: TimeLine.tag.rawValue,userData:TimeLine.tag),
+                                        PopMenuItem(text: TimeLine.favorites.rawValue,userData:TimeLine.favorites),
+                                        PopMenuItem(text: TimeLine.notifications.rawValue,userData:TimeLine.notifications),
+                                        PopMenuItem(text: TimeLine.mentions.rawValue,userData:TimeLine.mentions),
                                        ])
                     { item in
-                        if item.text == TimeLine.tag.rawValue
+                        if item.userData == TimeLine.tag
                         {
                             appState.selectedTimeline = TimeLine.tag
                             showTagAsk = true
@@ -250,6 +248,5 @@ struct TimeLineView: View
             loadingStats = false
         }
     }
-    
 }
 

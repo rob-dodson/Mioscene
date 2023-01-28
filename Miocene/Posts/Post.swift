@@ -17,7 +17,7 @@ struct Post: View
     @ObservedObject var mstat : MStatus
    
     @EnvironmentObject var settings: Settings
-    @EnvironmentObject var appState: AppState    //  FIX to vary timer for time of post 1s 1m, 1h
+    @EnvironmentObject var appState: AppState
 
     
     @State private var showSensitiveContent : Bool = false
@@ -472,7 +472,7 @@ struct Post: View
     
     func makeTagStack(tags:[Tag]) -> some View
     {
-        let min = 50.0
+        let min = 150.0
         let max = 400.0
         let columns = [
             GridItem(.flexible(minimum: min, maximum: max)),
@@ -491,7 +491,13 @@ struct Post: View
                     Button(name, action:
                     {
                         appState.showTag(tag: name)
-                    }).help(name)
+                    })
+                    .help(name)
+                    .onTapGesture
+                    {
+                        appState.showTag(tag: name)
+                    }
+                    
                 }
             }
         }

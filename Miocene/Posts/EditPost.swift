@@ -97,73 +97,49 @@ struct EditPost: View
         {
             ToolbarItem
             {
-                Button
+                PopButton(text: "Photo", icon: "photo")
                 {
-                    let url = showOpenPanel()
-                    attachedurls.append(AttachmentURL(url:url))
-                }
-            label:
-                {
-                    Image(systemName: "photo")
+                    if let url = showOpenPanel()
+                    {
+                        attachedurls.append(AttachmentURL(url:url))
+                    }
                 }
             }
             
             ToolbarItem
             {
-                Button
+                PopButton(text: "Warning", icon: "exclamationmark.triangle")
                 {
                     showContentWarning.toggle()
-                }
-            label:
-                {
-                    if showContentWarning == true
-                    {
-                        Image(systemName: "exclamationmark.triangle")
-                            .foregroundColor(settings.theme.accentColor)
-                    }
-                    else
-                    {
-                        Image(systemName: "exclamationmark.triangle")
-                    }
                 }
             }
            
             ToolbarItem
             {
-                Button
+                PopButton(text: "Poll", icon: "chart.bar.doc.horizontal")
                 {
                     showPoll.toggle()
                 }
-            label:
-                {
-                    if showPoll == true
-                    {
-                        Image(systemName: "chart.bar.doc.horizontal")
-                            .foregroundColor(settings.theme.accentColor)
-                    }
-                    else
-                    {
-                        Image(systemName: "chart.bar.doc.horizontal")
-                    }
-                }
-
             }
             
             ToolbarItem
             {
-                Picker("", selection: $postVisibility)
-                {
-                    Text(MastodonKit.Visibility.public.rawValue).tag(MastodonKit.Visibility.public)
-                    Text(MastodonKit.Visibility.unlisted.rawValue).tag(MastodonKit.Visibility.unlisted)
-                    Text(MastodonKit.Visibility.private.rawValue).tag(MastodonKit.Visibility.private)
-                    Text(MastodonKit.Visibility.direct.rawValue).tag(MastodonKit.Visibility.direct)
+                PopMenu(icon: "eye", menuItems: [PopMenuItem(text: MastodonKit.Visibility.public.rawValue,userData:MastodonKit.Visibility.public),
+                                                 PopMenuItem(text: MastodonKit.Visibility.unlisted.rawValue,userData:MastodonKit.Visibility.unlisted),
+                                                 PopMenuItem(text: MastodonKit.Visibility.private.rawValue,userData:MastodonKit.Visibility.private),
+                                                 PopMenuItem(text: MastodonKit.Visibility.direct.rawValue,userData:MastodonKit.Visibility.direct)
+                                                 ])
+                { item in
+                    if let userdata = item.userData
+                    {
+                        postVisibility = userdata
+                    }
                 }
             }
             
-            
             ToolbarItem
             {
-                Button("Cancel")
+                PopButton(text: "Cancel", icon: "trash.slash")
                 {
                     shouldPresentSheet = false
                     done()
@@ -173,7 +149,7 @@ struct EditPost: View
             
             ToolbarItem
             {
-                Button("Post")
+                PopButton(text: "Post", icon: "paperplane")
                 {
                     let pollpayload = showPoll == true ? PollBuilder.getPollPayLoad(pollState: pollState) : nil
                     
