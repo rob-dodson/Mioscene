@@ -276,20 +276,29 @@ struct AccountLarge: View
                     {
                         if relationship?.requested == true
                         {
-                            Text("Follow Requested") // Need to add: withdraw request button
+                            VStack
+                            {
+                                Text("Follow")
+                                    .font(settings.font.footnote) // Need to add: withdraw request button
+                                Text("Requested")
+                                    .font(settings.font.footnote)
+                            }
                         }
                         else
                         {
-                            toggleButton(state: relationship!.following, truelabel: "Unfollow", falselabel: "Follow",
+                            toggleButton(state: relationship!.following, truelabel: "Following", falselabel: "Not Following",
+                                         trueicon:"person.line.dotted.person.fill",falseicon:"person.2.slash",
                                          truefunc: { mast.unfollow(account: maccount.account, done: { result in relationship = result }) },
                                          falsefunc: { mast.follow(account: maccount.account, done: { result in relationship = result }) })
                         }
                         
-                        toggleButton(state: relationship!.muting, truelabel: "Unmute", falselabel: "Mute",
+                        toggleButton(state: relationship!.muting, truelabel: "Muted", falselabel: "Not Muted",
+                                     trueicon:"ear.trianglebadge.exclamationmark",falseicon:"ear.badge.checkmark",
                                      truefunc: { mast.unmute(account: maccount.account, done: { result in relationship = result }) },
                                      falsefunc: { mast.mute(account: maccount.account, done: { result in relationship = result }) })
                         
-                        toggleButton(state: relationship!.blocking, truelabel: "Unblock", falselabel: "Block",
+                        toggleButton(state: relationship!.blocking, truelabel: "Blocked", falselabel: "Not Blocked",
+                                     trueicon:"hand.raised",falseicon:"hand.thumbsup",
                                      truefunc: { mast.unblock(account: maccount.account, done: { result in relationship = result }) },
                                      falsefunc: { mast.block(account: maccount.account, done: { result in relationship = result }) })
                     }
@@ -302,9 +311,10 @@ struct AccountLarge: View
     }
     
     
-    func toggleButton(state:Bool,truelabel:String,falselabel:String,truefunc: @escaping () -> Void,falsefunc:@escaping () -> Void) -> some View
+    func toggleButton(state:Bool,truelabel:String,falselabel:String,trueicon:String,falseicon:String,truefunc: @escaping () -> Void,falsefunc:@escaping () -> Void) -> some View
     {
-        return Button(state == true ? truelabel : falselabel)
+        return PopButton(text: state == true ? truelabel : falselabel,
+                         icon: state == true ? trueicon : falseicon)
         {
             if state == true
             {

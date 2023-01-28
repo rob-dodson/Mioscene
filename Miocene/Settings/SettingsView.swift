@@ -85,10 +85,10 @@ struct SettingsView: View
             {
                 Picker("Font", selection: $settings.font.name)
                 {
-                    ForEach(MFont.fontList.indices, id: \.self)
+                    ForEach(settings.font.fontList.indices, id: \.self)
                     { index in
-                        Text(MFont.fontList[index]).tag(MFont.fontList[index])
-                            .font(Font.custom(MFont.fontList[index],size:15))
+                        Text(settings.font.fontList[index]).tag(settings.font.fontList[index])
+                            .font(Font.custom(settings.font.fontList[index],size:15))
                     }
                 }
                 .font(settings.font.headline)

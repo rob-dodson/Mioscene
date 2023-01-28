@@ -83,6 +83,7 @@
 		AEAFA2E7297DD59200970F40 /* MNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNotification.swift; sourceTree = "<group>"; };
 		AEAFA2EB297EED5B00970F40 /* Filters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 		AEAFA2F029807C9B00970F40 /* PopMenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopMenuButton.swift; sourceTree = "<group>"; };
+		AEE6EB772985CBC300463A71 /* Notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +104,7 @@
 		AE06EBE3294D16BB006CAB67 = {
 			isa = PBXGroup;
 			children = (
+				AEE6EB772985CBC300463A71 /* Notes.txt */,
 				AEAFA2DE297A3FD900970F40 /* Localizable.strings */,
 				AE28C6162972F62500C8C928 /* MastodonKit */,
 				AE06EBEE294D16BB006CAB67 /* Miocene */,

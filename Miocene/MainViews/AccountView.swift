@@ -21,20 +21,18 @@ struct AccountView: View
     {
             VStack
             {
-                HStack
+                HStack(alignment: .bottom, spacing: settings.hideIconText == true ? 80 : 40)
                 {
-                    Picker(selection: .constant(1),label: Text("Accounts"),content:
-                            {
-                        if let accounts = mast.localAccountRecords
-                        {
-                            ForEach(accounts.indices, id:\.self)
-                            { index in
-                                Text("@\(accounts[index].username)").tag(1)
-                            }
+                    if let accounts = mast.localAccountRecords
+                    {
+                        PopMenu(icon: "person.crop.circle",
+                                menuItems: [PopMenuItem(text: "@\(accounts[0].username)",userData: accounts[0]),
+                                           ])
+                        { item in
                         }
-                    })
+                    }
                     
-                    Button("My Account")
+                    PopButton(text:"My Account", icon:"person")
                     {
                         appState.showAccount(maccount: MAccount(displayname: appState.currentUserMastAccount!.displayName, acct: appState.currentUserMastAccount!))
                     }
@@ -49,10 +47,8 @@ struct AccountView: View
                 
                 AccountLarge(mast:mast,maccount: appState.currentViewingMastAccount!)
             }
-            .frame(alignment: .topLeading)
-            .padding()
+            .padding(EdgeInsets(top: 2, leading: 5, bottom: 2, trailing: 5))
             .textSelection(.enabled)
-
     }
 }
 

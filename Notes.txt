@@ -1,0 +1,4 @@
+
+# add additional fonts
+defaults write shyfrogproductions.com.Miocene addfonts -array Myriad Courier
+

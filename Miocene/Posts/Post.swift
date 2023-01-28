@@ -306,14 +306,10 @@ struct Post: View
                             //
                             // reply
                             //
-                            Button
+                            PopButton(text: "",
+                                      icon: "arrowshape.turn.up.left")
                             {
                                 shouldPresentSheet.toggle()
-                            }
-                        label:
-                            {
-                                Image(systemName: "arrowshape.turn.up.left.fill")
-                                    .foregroundColor(settings.theme.minorColor)
                             }
                             .sheet(isPresented: $shouldPresentSheet)
                             {
@@ -322,7 +318,7 @@ struct Post: View
                         content:
                             {
                                 EditPost(mast: mast,newPost: "@\(status.account.acct): ",title:"Reply",done:
-                                            {
+                                {
                                     shouldPresentSheet = false
                                 })
                             }
@@ -331,7 +327,10 @@ struct Post: View
                             //
                             // favorite
                             //
-                            Button
+                            PopButtonColor(text: "\(mstatus.favoritesCount)",
+                                    icon: "star",
+                                    textColor:settings.theme.minorColor,
+                                    iconColor:mstatus.favorited == true ? settings.theme.accentColor : settings.theme.bodyColor)
                             {
                                 if mstatus.favorited == true
                                 {
@@ -346,29 +345,15 @@ struct Post: View
                                 }
                                 mstatus.favorited.toggle()
                             }
-                        label:
-                            {
-                                HStack
-                                {
-                                    if mstatus.favorited == true
-                                    {
-                                        Image(systemName: "star.fill")
-                                            .foregroundColor(Color("AccentColor"))
-                                    }
-                                    else
-                                    {
-                                        Image(systemName: "star.fill")
-                                            .foregroundColor(settings.theme.minorColor)
-                                    }
-                                    Text("\(mstatus.favoritesCount)")
-                                }
-                            }
                             
                             
                             //
                             // reblog
                             //
-                            Button
+                            PopButtonColor(text: "\(mstatus.reblogsCount)",
+                                    icon: "arrow.2.squarepath",
+                                    textColor:settings.theme.minorColor,
+                                    iconColor:mstatus.reblogged == true ? settings.theme.accentColor : settings.theme.bodyColor)
                             {
                                 if mstatus.reblogged == true
                                 {
@@ -382,23 +367,6 @@ struct Post: View
                                     
                                 }
                                 mstatus.reblogged.toggle()
-                            }
-                        label:
-                            {
-                                HStack
-                                {
-                                    if mstatus.reblogged == true
-                                    {
-                                        Image(systemName: "arrow.2.squarepath")
-                                            .foregroundColor(Color("AccentColor"))
-                                    }
-                                    else
-                                    {
-                                        Image(systemName: "arrow.2.squarepath")
-                                            .foregroundColor(settings.theme.minorColor)
-                                    }
-                                    Text("\(mstatus.reblogsCount)")
-                                }
                             }
                         }
                         

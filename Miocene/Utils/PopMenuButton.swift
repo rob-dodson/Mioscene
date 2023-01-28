@@ -86,7 +86,6 @@ struct PopMenu<UserType> : View
     
 }
 
-
 struct PopButton: View
 {
     @EnvironmentObject var settings: Settings
@@ -95,7 +94,28 @@ struct PopButton: View
     let icon : String
     var ontap: () -> Void
     
-    @State var tap = false
+    var body : some View
+    {
+        PopButtonColor(text: text,
+                       icon: icon,
+                       textColor: settings.theme.minorColor,
+                       iconColor: settings.theme.bodyColor,
+                       ontap: ontap)
+    }
+}
+
+struct PopButtonColor: View
+{
+    @EnvironmentObject var settings: Settings
+    
+    let text : String
+    let icon : String
+    let textColor : Color
+    let iconColor : Color
+    var ontap: () -> Void
+    
+    @State private var tap = false
+    
     
     var body: some View
     {
@@ -103,7 +123,7 @@ struct PopButton: View
         {
             Image(systemName:icon)
                 .font(.system(size: CGFloat(settings.iconSize), weight: .light))
-                .foregroundColor(tap ? settings.theme.accentColor : settings.theme.minorColor)
+                .foregroundColor(tap ? settings.theme.accentColor : iconColor)
                 .scaleEffect(tap ? 1.2 : 1)
                 .animation(.spring(response: 0.4, dampingFraction: 0.6),value: tap)
                 .onTapGesture
@@ -120,7 +140,7 @@ struct PopButton: View
                 {
                     Text(text)
                         .font(settings.font.footnote)
-                        .foregroundColor(settings.theme.minorColor)
+                        .foregroundColor(textColor)
 
                 }
         }

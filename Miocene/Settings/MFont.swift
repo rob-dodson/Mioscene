@@ -29,8 +29,9 @@ class MFont : ObservableObject
     var subheadline : Font!
     var body : Font!
     var footnote : Font!
+    var fontList = [String]()
     
-    static var fontList = ["System","SF Pro","SF Pro Rounded","Avenir","Helvetica Neue","Georgia","Menlo","Myriad","Times New Roman","Gill Sans","Baskerville"]
+    private var defaultFonts : [String] = ["System","SF Pro","SF Pro Thin","Avenir","Helvetica Neue","Georgia","Menlo","Times New Roman","Gill Sans","Baskerville"]
     
     init(fontName:String,sizeName:TextSize)
     {
@@ -45,6 +46,14 @@ class MFont : ObservableObject
         subheadline = Font.custom(name, size:newsize * 0.90)
         body = Font.custom(name, size:newsize * 1.0)
         footnote = Font.custom(name, size:newsize * 0.85)
+        
+        
+        fontList.append(contentsOf: defaultFonts)
+        let defaults = UserDefaults.standard
+        if let addfonts = defaults.stringArray(forKey:"addfonts")
+        {
+            fontList.append(contentsOf: addfonts)
+        }
     }
     
     func getSize() -> CGFloat

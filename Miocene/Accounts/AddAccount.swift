@@ -25,17 +25,9 @@ struct AddAccount: View
 
     var body: some View
     {
-        Button()
+        PopButton(text: "Add Account", icon: "person.badge.plus")
         {
-            shouldPresentSheet.toggle()
-        }
-        label:
-        {
-            HStack
-            {
-                Image(systemName: "person.crop.circle")
-                Text("Add Account")
-            }
+            shouldPresentSheet = true
         }
         .sheet(isPresented: $shouldPresentSheet)
         {
@@ -81,7 +73,7 @@ struct AddAccount: View
             {
                 ToolbarItem
                 {
-                    Button("Cancel")
+                    PopButton(text: "Cancel", icon: "trash.slash")
                     {
                         shouldPresentSheet = false
                     }
@@ -89,7 +81,7 @@ struct AddAccount: View
                 
                 ToolbarItem
                 {
-                    Button("Submit")
+                    PopButton(text: "Save", icon: "square.and.arrow.down")
                     {
                         mast.newAccount(server: server, email: email, password: password)
                         { mioceneerror,msg in
