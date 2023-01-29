@@ -9,6 +9,9 @@ import SwiftUI
 
 
 
+//
+// Return to called when A menu item is selected
+//
 struct PopMenuItem<UserType>
 {
     let text : String
@@ -16,6 +19,9 @@ struct PopMenuItem<UserType>
 }
 
 
+//
+// A custom pop down menu where the button is PopButton
+//
 struct PopMenu<UserType> : View
 {
     let icon : String
@@ -86,6 +92,10 @@ struct PopMenu<UserType> : View
     
 }
 
+
+//
+// interface to PopButtonColor that can override the theme colors
+//
 struct PopButton: View
 {
     @EnvironmentObject var settings: Settings
@@ -104,6 +114,10 @@ struct PopButton: View
     }
 }
 
+
+//
+// icon button that glows accent color for bit when clicked
+//
 struct PopButtonColor: View
 {
     @EnvironmentObject var settings: Settings
@@ -133,16 +147,14 @@ struct PopButtonColor: View
                     { tap = false
                         ontap()
                     }
-                    
                 }
             
-                if settings.hideIconText == false
-                {
-                    Text(text)
-                        .font(settings.font.footnote)
-                        .foregroundColor(textColor)
-
-                }
+            if settings.hideIconText == false
+            {
+                Text(text)
+                    .font(settings.font.footnote)
+                    .foregroundColor(textColor)
+            }
         }
     }
 }
