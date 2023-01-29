@@ -10,7 +10,7 @@ import SwiftUI
 
 
 //
-// Return to called when A menu item is selected
+// Returned to caller when a menu item is selected
 //
 struct PopMenuItem<UserType>
 {
@@ -116,7 +116,7 @@ struct PopButton: View
 
 
 //
-// icon button that glows accent color for bit when clicked
+// icon button that glows accent color for a bit when clicked
 //
 struct PopButtonColor: View
 {
@@ -126,7 +126,7 @@ struct PopButtonColor: View
     let icon : String
     let textColor : Color
     let iconColor : Color
-    var ontap: () -> Void
+    var ontap: () -> Void // called when user clicks on this button
     
     @State private var tap = false
     
@@ -160,6 +160,9 @@ struct PopButtonColor: View
     }
 }
 
+//
+// a text only pop button
+//
 struct PopTextButton: View
 {
     @EnvironmentObject var settings: Settings

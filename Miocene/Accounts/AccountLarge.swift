@@ -28,55 +28,59 @@ struct AccountLarge: View
         {
             VStack(alignment:.leading)
             {
-                HStack(alignment: .top)
+                Grid
                 {
-                    //
-                    // User's avatar image
-                    //
-                    AsyncImage(url: URL(string:maccount.account.avatar ?? ""))
-                    { image in
-                        image.resizable()
-                    }
-                placeholder:
+                    GridRow
                     {
-                        Image(systemName: "person.fill.questionmark")
-                    }
-                    .frame(width: 100, height: 100)
-                    .cornerRadius(5)
-                    
-                    
-                    //
-                    // background header image
-                    //
-                    VStack
-                    {
+                        //
+                        // User's avatar image
+                        //
+                        AsyncImage(url: URL(string:maccount.account.avatar ?? ""))
+                        { image in
+                            image.resizable()
+                        }
+                    placeholder:
+                        {
+                            Image(systemName: "person.fill.questionmark")
+                        }
+                        .offset(x:5,y:5)
+                        .frame(width: 100, height: 100)
+                        .cornerRadius(5)
+                        
+                        
                         if let header = maccount.account.header
                         {
-                            AsyncImage(url: URL(string: header))
-                            { image in
-                                image.resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(maxWidth:300)
-                            }
-                        placeholder:
+                            if let url = URL(string: header)
                             {
-                                Image(systemName: "person.fill.questionmark")
+                                AsyncImage(url: url)
+                                { image in
+                                    image.resizable()
+                                     .aspectRatio(contentMode: .fit)
+                                }
+                            placeholder:
+                                {
+                                    
+                                }
+                                .frame(maxWidth: 300, maxHeight: 200)
+                                .cornerRadius(5)
                             }
-                            .cornerRadius(5)
+                            else
+                            {
+                                Rectangle().frame(width:300,height:200).foregroundColor(settings.theme.minorColor)
+                            }
                         }
-                        else
-                        {
-                            Image(systemName: "photo.fill").imageScale(.large)
-                        }
-                        
-                        
+                    }
+                    
+                    GridRow
+                    {
+                        Spacer()
                         //
                         // Follow actions
                         //
                         getRelationship(maccount:maccount)
-                   
                     }
                 }
+                
                 
                 VStack(alignment: .leading,spacing: 2)
                 {
@@ -259,7 +263,7 @@ struct AccountLarge: View
         {
             if maccount.account.id == appState.currentUserMastAccount?.id
             {
-                Button("Edit Profile")
+                PopButton(text: "Edit Profile", icon: "pencil")
                 {
                     if let myurl = mast.getCurrentMastodonAccount()?.url
                     {
@@ -272,7 +276,7 @@ struct AccountLarge: View
             {
                 VStack
                 {
-                    HStack
+                    HStack(alignment: .bottom)
                     {
                         if relationship?.requested == true
                         {
@@ -302,6 +306,7 @@ struct AccountLarge: View
                                      truefunc: { mast.unblock(account: maccount.account, done: { result in relationship = result }) },
                                      falsefunc: { mast.block(account: maccount.account, done: { result in relationship = result }) })
                     }
+                    .padding(EdgeInsets(top: 2, leading: 0, bottom: 1, trailing: 0))
                     
                     Text(relationship?.followedBy == true ? "Is following you" : "Is not following you")
                         .foregroundColor(settings.theme.minorColor).italic()

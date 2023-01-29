@@ -458,7 +458,6 @@ struct Post: View
 
                     let name = "#\(tags[index].name)"
                     
-                    
                     PopTextButton(text: name, font: settings.font.footnote, ontap:
                     {
                         appState.showTag(tag: name)

@@ -160,7 +160,6 @@
 				AE28C608296CC65800C8C928 /* NotificationView.swift */,
 				AE06EBF1294D16BB006CAB67 /* ContentView.swift */,
 				AE28C5E3295CE9F900C8C928 /* TimeLineView.swift */,
-				AE28C5E5295CEDCE00C8C928 /* AccountView.swift */,
 				AE28C5D9295A7ACE00C8C928 /* SearchView.swift */,
 			);
 			path = MainViews;
@@ -179,6 +178,7 @@
 		AEAFA2E9297DDA3900970F40 /* Accounts */ = {
 			isa = PBXGroup;
 			children = (
+				AE28C5E5295CEDCE00C8C928 /* AccountView.swift */,
 				AE28C5ED29634C0B00C8C928 /* AddAccount.swift */,
 				AE28C60229663A5B00C8C928 /* AccountLarge.swift */,
 				AE28C5EB295E4B1C00C8C928 /* AccountSmall.swift */,
