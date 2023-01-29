@@ -23,6 +23,8 @@ class Settings: ObservableObject
     @Published var hideStatusButtons : Bool = false
     @Published var showCards : Bool = false
     @Published var hideIconText : Bool = false
+    @Published var showTimelineToolBar = true
+    
     
     var iconSize = 20
     
@@ -52,6 +54,7 @@ class Settings: ObservableObject
         
         hideStatusButtons = defaults.bool(forKey: "hidestatusbuttons")
         showCards = defaults.bool(forKey: "showcards")
+        showTimelineToolBar = defaults.bool(forKey: "showtimelinetoolbar")
     }
    
   

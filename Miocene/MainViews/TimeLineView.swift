@@ -28,68 +28,79 @@ struct TimeLineView: View
     
     var body: some View
     {
-            mainView()
+        mainView()
     }
     
     
     func mainView() -> some View
     {
-            VStack
+        VStack(alignment: .leading)
             {
-                HStack(spacing: 20)
+                HStack
                 {
-                    
-                    if let accounts = mast.localAccountRecords
+                    PopButtonColor(text: "", icon: "ellipsis", textColor: settings.theme.minorColor, iconColor: settings.theme.minorColor)
                     {
-                        PopMenu(icon: "person.crop.circle",
-                                menuItems: [PopMenuItem(text: "@\(accounts[0].username)",userData: accounts[0]),
-                                           ])
-                        { item in
-                        }
+                        settings.showTimelineToolBar.toggle()
+                        UserDefaults.standard.set(settings.showTimelineToolBar, forKey: "showtimelinetoolbar")
                     }
                     
-                    
-                    PopMenu(icon: "clock.arrow.circlepath",
-                            menuItems: [PopMenuItem(text: TimeLine.home.rawValue,userData:TimeLine.home),
-                                        PopMenuItem(text: TimeLine.localTimeline.rawValue,userData:TimeLine.localTimeline),
-                                        PopMenuItem(text: TimeLine.publicTimeline.rawValue,userData:TimeLine.publicTimeline),
-                                        PopMenuItem(text: TimeLine.tag.rawValue,userData:TimeLine.tag),
-                                        PopMenuItem(text: TimeLine.favorites.rawValue,userData:TimeLine.favorites),
-                                        PopMenuItem(text: TimeLine.notifications.rawValue,userData:TimeLine.notifications),
-                                        PopMenuItem(text: TimeLine.mentions.rawValue,userData:TimeLine.mentions),
-                                       ])
-                    { item in
-                        if item.userData == TimeLine.tag
+                        HStack(spacing: 20)
                         {
-                            appState.selectedTimeline = TimeLine.tag
-                            showTagAsk = true
-                            if appState.currentTag.count > 0
+                            
+                            if let accounts = mast.localAccountRecords
                             {
-                                showLoading = true
-                                fetchSomeStatuses(timeline:.tag,tag:appState.currentTag)
+                                PopMenu(icon: "person.crop.circle",
+                                        menuItems: [PopMenuItem(text: "@\(accounts[0].username)",userData: accounts[0]),
+                                                   ])
+                                { item in
+                                }
                             }
-                        }
-                        else
-                        {
-                            showTagAsk = false
-                            if let timeline = TimeLine(rawValue: item.text)
+                            
+                            PopMenu(icon: "clock.arrow.circlepath",
+                                    menuItems: [PopMenuItem(text: TimeLine.home.rawValue,userData:TimeLine.home),
+                                                PopMenuItem(text: TimeLine.localTimeline.rawValue,userData:TimeLine.localTimeline),
+                                                PopMenuItem(text: TimeLine.publicTimeline.rawValue,userData:TimeLine.publicTimeline),
+                                                PopMenuItem(text: TimeLine.tag.rawValue,userData:TimeLine.tag),
+                                                PopMenuItem(text: TimeLine.favorites.rawValue,userData:TimeLine.favorites),
+                                                PopMenuItem(text: TimeLine.notifications.rawValue,userData:TimeLine.notifications),
+                                                PopMenuItem(text: TimeLine.mentions.rawValue,userData:TimeLine.mentions),
+                                               ])
+                            { item in
+                                if item.userData == TimeLine.tag
+                                {
+                                    appState.selectedTimeline = TimeLine.tag
+                                    showTagAsk = true
+                                    if appState.currentTag.count > 0
+                                    {
+                                        showLoading = true
+                                        fetchSomeStatuses(timeline:.tag,tag:appState.currentTag)
+                                    }
+                                }
+                                else
+                                {
+                                    showTagAsk = false
+                                    if let timeline = TimeLine(rawValue: item.text)
+                                    {
+                                        showLoading = true
+                                        appState.selectedTimeline = timeline
+                                        fetchSomeStatuses(timeline:timeline,tag:appState.currentTag)
+                                    }
+                                }
+                            }
+                            
+                            Filters()
+                            
+                            PopButton(text: "Refresh", icon: "arrow.triangle.2.circlepath")
                             {
-                                showLoading = true
-                                appState.selectedTimeline = timeline
-                                fetchSomeStatuses(timeline:timeline,tag:appState.currentTag)
+                                fetchNewerStatuses(timeline: appState.selectedTimeline, tag: appState.currentTag)
                             }
+                            
+                            NewPostButton(mast:mast)
                         }
-                    }
-                    
-                    Filters()
-                    
-                    PopButton(text: "Refresh", icon: "arrow.triangle.2.circlepath")
-                    {
-                        fetchNewerStatuses(timeline: appState.selectedTimeline, tag: appState.currentTag)
-                    }
-                    
-                    NewPostButton(mast:mast)
+                        .opacity(settings.showTimelineToolBar == true ? 1.0 : 0.0)
+                        .animation(.easeInOut(duration: 0.25))
                 }
+                
                 
                 
                 SpacerLine(color: settings.theme.minorColor)
@@ -109,13 +120,15 @@ struct TimeLineView: View
                         .keyboardShortcut(.defaultAction)
                     }
                 }
-                
+                /*
                 if showLoading
                 {
                     ProgressView("Loading...")
                         .font(settings.font.title)
                         .foregroundColor(settings.theme.accentColor)
+                        .frame(alignment: .center)
                 }
+                 */
                 
                 
                 ScrollView
