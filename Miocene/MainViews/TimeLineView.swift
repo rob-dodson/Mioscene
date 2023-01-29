@@ -38,7 +38,7 @@ struct TimeLineView: View
             {
                 HStack
                 {
-                    PopButtonColor(text: "", icon: "ellipsis", textColor: settings.theme.minorColor, iconColor: settings.theme.minorColor)
+                    PopButtonColor(text: "", icon: "ellipsis.rectangle", textColor: settings.theme.minorColor, iconColor: settings.theme.minorColor)
                     {
                         settings.showTimelineToolBar.toggle()
                         UserDefaults.standard.set(settings.showTimelineToolBar, forKey: "showtimelinetoolbar")

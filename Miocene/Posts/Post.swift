@@ -455,22 +455,20 @@ struct Post: View
             {
                 ForEach(tags.indices, id:\.self)
                 { index in
+
                     let name = "#\(tags[index].name)"
-                    Button(name, action:
+                    
+                    
+                    PopTextButton(text: name, font: settings.font.footnote, ontap:
                     {
                         appState.showTag(tag: name)
                     })
-                    .help(name)
-                    .onTapGesture
-                    {
-                        appState.showTag(tag: name)
-                    }
-                    
                 }
             }
         }
     }
 }
+
 
 func gifimage(urlstring:String,done: @escaping (Image) -> some View) -> some View
 {

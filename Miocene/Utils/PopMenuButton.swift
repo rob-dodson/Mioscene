@@ -144,7 +144,8 @@ struct PopButtonColor: View
                 {
                     tap = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2)
-                    { tap = false
+                    {
+                        tap = false
                         ontap()
                     }
                 }
@@ -159,3 +160,34 @@ struct PopButtonColor: View
     }
 }
 
+struct PopTextButton: View
+{
+    @EnvironmentObject var settings: Settings
+    
+    let text : String
+    let font : Font
+    var ontap: () -> Void
+    
+    @State private var tap = false
+    
+    var body: some View
+    {
+        VStack(alignment: .center,spacing: 3)
+        {
+            Text(text)
+                .font(font)
+                .foregroundColor(tap ? settings.theme.accentColor : settings.theme.minorColor)
+                .scaleEffect(tap ? 1.1 : 1)
+                .animation(.spring(response: 0.4, dampingFraction: 0.6),value: tap)
+                .onTapGesture
+            {
+                tap = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2)
+                {
+                    tap = false
+                    ontap()
+                }
+            }
+        }
+    }
+}
