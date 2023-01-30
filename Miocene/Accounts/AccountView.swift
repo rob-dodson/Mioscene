@@ -25,7 +25,7 @@ struct AccountView: View
             {
                 if let accounts = mast.localAccountRecords
                 {
-                    PopMenu(icon: "person.crop.circle",
+                    PopMenu(icon: "person.crop.circle",selected: "",
                             menuItems: [PopMenuItem(text: "@\(accounts[0].username)",userData: accounts[0]),
                                        ])
                     { item in
@@ -37,7 +37,6 @@ struct AccountView: View
                     appState.showAccount(maccount: MAccount(displayname: appState.currentUserMastAccount!.displayName, acct: appState.currentUserMastAccount!))
                 }
 
-                
                 AddAccount(mast: mast)
                 
             }

@@ -9,7 +9,6 @@ import SwiftUI
 import MastodonKit
 
 
-
 struct NewPostButton: View
 {
     @ObservedObject var mast : Mastodon
@@ -24,13 +23,12 @@ struct NewPostButton: View
         HStack
         {
             PopButton(text: "New Post", icon: "square.and.pencil")
-                {
-                    shouldPresentSheet.toggle()
-                }
+            {
+                shouldPresentSheet.toggle()
+            }
         }
         .sheet(isPresented: $shouldPresentSheet)
         {
-            Log.log(msg:"Sheet dismissed!")
         }
         content:
         {

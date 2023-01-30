@@ -110,7 +110,7 @@ struct Filters: View
         {
             if filterSets.count > 0
             {
-                PopMenu(icon: "camera.filters",menuItems:makeItems(filtersets: filterSets))
+                PopMenu(icon: "camera.filters",selected: filterSets[currentFilterSetIndex].name,menuItems:makeItems(filtersets: filterSets))
                 { item in
                     shouldPresentSheet = true
                 }
@@ -123,7 +123,6 @@ struct Filters: View
         }
         .sheet(isPresented: $shouldPresentSheet)
         {
-            Log.log(msg:"Sheet dismissed!")
         }
     content:
         {

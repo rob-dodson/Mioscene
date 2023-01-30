@@ -24,6 +24,7 @@ struct EditPost: View
     
     @State private var countColor = Color.green
     @State private var showContentWarning = false
+    @State private var alertMediaUploading = false
     @State private var contentWarning : String = ""
     @State private var postVisibility : MastodonKit.Visibility = .public
     @State private var attachedurls = [AttachmentURL]()
@@ -124,7 +125,7 @@ struct EditPost: View
             
             ToolbarItem
             {
-                PopMenu(icon: "eye", menuItems: [PopMenuItem(text: MastodonKit.Visibility.public.rawValue,userData:MastodonKit.Visibility.public),
+                PopMenu(icon: "eye",selected: postVisibility.rawValue, menuItems: [PopMenuItem(text: MastodonKit.Visibility.public.rawValue,userData:MastodonKit.Visibility.public),
                                                  PopMenuItem(text: MastodonKit.Visibility.unlisted.rawValue,userData:MastodonKit.Visibility.unlisted),
                                                  PopMenuItem(text: MastodonKit.Visibility.private.rawValue,userData:MastodonKit.Visibility.private),
                                                  PopMenuItem(text: MastodonKit.Visibility.direct.rawValue,userData:MastodonKit.Visibility.direct)
@@ -153,7 +154,9 @@ struct EditPost: View
                 {
                     let pollpayload = showPoll == true ? PollBuilder.getPollPayLoad(pollState: pollState) : nil
                     
-                     mast.post(newpost:newPost,
+                    alertMediaUploading = (attachedurls.count > 0) ? true : false
+                    
+                    mast.post(newpost:newPost,
                                spoiler:showContentWarning == true ? contentWarning : nil,
                                visibility:postVisibility,
                                attachedURLS:attachedurls,
@@ -164,12 +167,16 @@ struct EditPost: View
                                      {
                                      case .success:
                                         shouldPresentSheet = false
+                                        alertMediaUploading = false
                                         done()
                                      case .failure(let error):
                                          errorSystem.reportError(type: .postingError,
                                                                 msg: error.localizedDescription)
                                      }
                                }
+                }
+                .alert("Uploading media...", isPresented: $alertMediaUploading)
+                {
                 }
             }
         }
@@ -183,7 +190,7 @@ struct EditPost: View
     
     func attachmentsView() -> some View
     {
-        return VStack
+        return HStack
         {
             ForEach($attachedurls)
             { attachment in
@@ -195,7 +202,7 @@ struct EditPost: View
                 {
                     Image(systemName: "photo")
                 }
-                .frame(width: 70, height: 70)
+                .frame(width: 100, height: 100)
                 .cornerRadius(5)
                 .contextMenu
                 {

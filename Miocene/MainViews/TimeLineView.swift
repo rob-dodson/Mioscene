@@ -50,14 +50,15 @@ struct TimeLineView: View
                         
                         if let accounts = mast.localAccountRecords
                         {
-                            PopMenu(icon: "person.crop.circle",
+                            PopMenu(icon: "person.crop.circle",selected:"@\(accounts[0].username)",
                                     menuItems: [PopMenuItem(text: "@\(accounts[0].username)",userData: accounts[0]),
                                                ])
                             { item in
                             }
                         }
                         
-                        PopMenu(icon: "clock.arrow.circlepath",
+                        
+                        PopMenu(icon: "clock.arrow.circlepath",selected:appState.selectedTimeline.rawValue,
                                 menuItems: [PopMenuItem(text: TimeLine.home.rawValue,userData:TimeLine.home),
                                             PopMenuItem(text: TimeLine.localTimeline.rawValue,userData:TimeLine.localTimeline),
                                             PopMenuItem(text: TimeLine.publicTimeline.rawValue,userData:TimeLine.publicTimeline),

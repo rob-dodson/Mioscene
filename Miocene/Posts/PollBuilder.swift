@@ -114,7 +114,6 @@ struct PollBuilder: View
         .padding()
     }
     
-
     
     static func getPollPayLoad(pollState:PollState) -> MastodonKit.PollPayload
     {

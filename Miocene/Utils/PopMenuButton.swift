@@ -25,21 +25,25 @@ struct PopMenuItem<UserType>
 struct PopMenu<UserType> : View
 {
     let icon : String
+    @State var selected : String
     let menuItems : [PopMenuItem<UserType>]
     let picked: (PopMenuItem<UserType>) -> Void
     
     @State private var showMenu = false
-    @State private var currentItem : Int = 0
     
     @EnvironmentObject var settings: Settings
   
+    
     var body: some View
     {
         HStack
         {
-            PopButton(text: menuItems[currentItem].text,icon:icon)
+            if let item = menuItems.first(where: {$0.text == selected})
             {
-                showMenu = true
+                PopButton(text: item.text,icon:icon)
+                {
+                    showMenu = true
+                }
             }
         }
         .popover(isPresented: $showMenu,arrowEdge:.bottom)
@@ -50,13 +54,16 @@ struct PopMenu<UserType> : View
     
     func menu(food:[PopMenuItem<UserType>]) -> some View
     {
+        //
+        // draw the checkmark for the currently selected item
+        //
         HStack(alignment:.top)
         {
             VStack(alignment: .leading)
             {
                 ForEach(food.indices,id:\.self)
                 { idx in
-                        if idx == currentItem
+                    if food[idx].text  == selected
                         {
                             Image(systemName: "checkmark")
                                 .foregroundColor(settings.theme.accentColor)
@@ -67,10 +74,12 @@ struct PopMenu<UserType> : View
                             Text(" ")
                                 .padding(EdgeInsets(top: 2, leading: 4, bottom: 0, trailing: 0))
                         }
-                    
                 }
             }
             
+            //
+            // menu items
+            //
             VStack(alignment: .leading)
             {
                 ForEach(food.indices,id:\.self)
@@ -79,17 +88,15 @@ struct PopMenu<UserType> : View
                             .onTapGesture
                         {
                             showMenu = false
-                            currentItem = idx
+                            self.selected = food[idx].text
                             picked(food[idx])
                         }
                         .padding(EdgeInsets(top: 2, leading: 0, bottom: 0, trailing: 2))
                 }
             }
-            
         }
         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
     }
-    
 }
 
 
@@ -160,6 +167,7 @@ struct PopButtonColor: View
     }
 }
 
+
 //
 // a text only pop button
 //
@@ -169,7 +177,7 @@ struct PopTextButton: View
     
     let text : String
     let font : Font
-    var ontap: () -> Void
+    var ontap: (String) -> Void
     
     @State private var tap = false
     
@@ -188,7 +196,7 @@ struct PopTextButton: View
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2)
                 {
                     tap = false
-                    ontap()
+                    ontap(text)
                 }
             }
         }

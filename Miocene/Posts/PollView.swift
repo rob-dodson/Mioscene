@@ -166,7 +166,6 @@ struct PollView: View
         .border(width: 1, edges: [.top,.bottom,.leading,.trailing], color: settings.theme.minorColor)
     }
     
-  
 
     func clearvotes()
     {
@@ -176,6 +175,7 @@ struct PollView: View
             votes[index] = -1
         }
     }
+    
     
     func vote()
     {

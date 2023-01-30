@@ -19,8 +19,8 @@ struct AddAccount: View
 
 
     @State private var shouldPresentSheet = false
-    @State private var server : String = "mastodon.social" // ""
-    @State private var email : String = "robdod@gmail.com" // ""
+    @State private var server : String = ""
+    @State private var email : String = ""
     @State private var password : String = ""
 
     var body: some View
@@ -31,7 +31,6 @@ struct AddAccount: View
         }
         .sheet(isPresented: $shouldPresentSheet)
         {
-            Log.log(msg:"Sheet dismissed!")
         }
         content:
         {
@@ -42,11 +41,11 @@ struct AddAccount: View
                     .font(settings.font.title)
                     .padding(.top)
                 
-                TextField("Mastodon Server", text: $server)
+                TextField("Mastodon Server", text: $server,prompt: Text("server name"))
                     .padding()
                     .font(settings.font.title)
                 
-                TextField("Email", text: $email)
+                TextField("Email", text: $email,prompt: Text("email address"))
                     .padding()
                     .font(settings.font.title)
                 

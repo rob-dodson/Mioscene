@@ -318,8 +318,11 @@ struct AccountLarge: View
     
     func toggleButton(state:Bool,truelabel:String,falselabel:String,trueicon:String,falseicon:String,truefunc: @escaping () -> Void,falsefunc:@escaping () -> Void) -> some View
     {
-        return PopButton(text: state == true ? truelabel : falselabel,
-                         icon: state == true ? trueicon : falseicon)
+        return PopButtonColor(text: state == true ? truelabel : falselabel,
+                              icon: state == true ? trueicon : falseicon,
+                              textColor: settings.theme.minorColor,
+                              iconColor: state == true ? settings.theme.accentColor : settings.theme.bodyColor
+                                )
         {
             if state == true
             {

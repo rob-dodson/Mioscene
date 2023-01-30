@@ -306,14 +306,12 @@ struct Post: View
                             //
                             // reply
                             //
-                            PopButton(text: "",
-                                      icon: "arrowshape.turn.up.left")
+                            PopButton(text: "", icon: "arrowshape.turn.up.left")
                             {
                                 shouldPresentSheet.toggle()
                             }
                             .sheet(isPresented: $shouldPresentSheet)
                             {
-                                Log.log(msg:"Sheet dismissed!")
                             }
                         content:
                             {
@@ -440,7 +438,7 @@ struct Post: View
     
     func makeTagStack(tags:[Tag]) -> some View
     {
-        let min = 150.0
+        let min = 50.0
         let max = 400.0
         let columns = [
             GridItem(.flexible(minimum: min, maximum: max)),
@@ -458,10 +456,11 @@ struct Post: View
 
                     let name = "#\(tags[index].name)"
                     
-                    PopTextButton(text: name, font: settings.font.footnote, ontap:
-                    {
-                        appState.showTag(tag: name)
+                    PopTextButton(text: name, font: settings.font.subheadline, ontap:
+                    { tag in
+                        appState.showTag(tag: tag)
                     })
+                    .help("#\(tags[index].name)")
                 }
             }
         }
