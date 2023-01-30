@@ -100,9 +100,12 @@ struct EditPost: View
             {
                 PopButton(text: "Photo", icon: "photo")
                 {
-                    if let url = showOpenPanel()
+                    if let urls = showOpenPanel()
                     {
-                        attachedurls.append(AttachmentURL(url:url))
+                        for url in urls
+                        {
+                            attachedurls.append(AttachmentURL(url:url))
+                        }
                     }
                 }
             }
@@ -157,23 +160,23 @@ struct EditPost: View
                     alertMediaUploading = (attachedurls.count > 0) ? true : false
                     
                     mast.post(newpost:newPost,
-                               spoiler:showContentWarning == true ? contentWarning : nil,
-                               visibility:postVisibility,
-                               attachedURLS:attachedurls,
-                               pollpayload:pollpayload)
-                               { result in
-                                    
-                                     switch result
-                                     {
-                                     case .success:
-                                        shouldPresentSheet = false
-                                        alertMediaUploading = false
-                                        done()
-                                     case .failure(let error):
-                                         errorSystem.reportError(type: .postingError,
-                                                                msg: error.localizedDescription)
-                                     }
-                               }
+                       spoiler:showContentWarning == true ? contentWarning : nil,
+                       visibility:postVisibility,
+                       attachedURLS:attachedurls,
+                       pollpayload:pollpayload)
+                       { result in
+                            
+                             switch result
+                             {
+                             case .success:
+                                shouldPresentSheet = false
+                                alertMediaUploading = false
+                                done()
+                             case .failure(let error):
+                                 errorSystem.reportError(type: .postingError,
+                                                        msg: error.localizedDescription)
+                             }
+                       }
                 }
                 .alert("Uploading media...", isPresented: $alertMediaUploading)
                 {
@@ -183,10 +186,12 @@ struct EditPost: View
         .frame(height: showPoll == true ? pollViewSize() : 375)
     }
     
+    
     func  pollViewSize() -> CGFloat
     {
         return CGFloat(625 + (pollState.pollOptions.count * 12))
     }
+    
     
     func attachmentsView() -> some View
     {
@@ -194,6 +199,7 @@ struct EditPost: View
         {
             ForEach($attachedurls)
             { attachment in
+                
                 AsyncImage(url: attachment.url.wrappedValue)
                 { image in
                     image.resizable()

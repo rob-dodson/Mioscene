@@ -214,7 +214,7 @@ extension String
 
 
 
-func showOpenPanel() -> URL?
+func showOpenPanel() -> [URL]?
 {
     let openPanel = NSOpenPanel()
     //openPanel.allowedContentTypes =
@@ -222,7 +222,7 @@ func showOpenPanel() -> URL?
     openPanel.canChooseDirectories = false
     openPanel.canChooseFiles = true
     let response = openPanel.runModal()
-    return response == .OK ? openPanel.url : nil
+    return response == .OK ? openPanel.urls : nil
 }
 
 
