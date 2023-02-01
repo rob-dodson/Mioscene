@@ -189,21 +189,43 @@ struct TimeLineView: View
         if loadingStats == true { return }
         loadingStats = true
         
-        if let first = stats.first
+        Task
         {
-            let newerThanID = first.status.id
-            mast.getNewerStatuses(timeline: timeline, id:newerThanID, tag: tag, done:
-            { newerstats in
-                
-                stats = newerstats + stats
-                
-                if stats.count > 150
+            var nomore = false
+            
+            while(nomore == false)
+            {
+                if let first = stats.first
                 {
-                    print("removing last 50 from stats")
-                    stats.removeLast(50)
+                    let newerThanID = first.status.id
+                    
+                    mast.getNewerStatuses(timeline: timeline, id:newerThanID, tag: tag, done:
+                    { newerstats in
+                        
+                        if newerstats.count > 0
+                        {
+                            stats = newerstats + stats
+                            
+                            if stats.count > 150
+                            {
+                                print("removing last 50 from stats")
+                                stats.removeLast(50)
+                            }
+                        }
+                        else
+                        {
+                            nomore = true
+                        }
+                    })
                 }
-                loadingStats = false
-            })
+                
+                if nomore == false
+                {
+                    try await Task.sleep(for: .seconds(4))
+                }
+            }
+            
+            loadingStats = false
         }
     }
     
