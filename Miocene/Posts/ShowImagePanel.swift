@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ShowImagePanel: View
 {
-    var url : URL
+    static var url : URL?
     var done : () -> Void
     
     var body: some View
@@ -22,11 +22,11 @@ struct ShowImagePanel: View
             }
             .padding()
             
-            AsyncImage(url: url)
+            AsyncImage(url: ShowImagePanel.url)
             { image in
                 image.resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width:800,height:800)
+                    .frame(minWidth:800,minHeight: 800)
             }
         placeholder:
             {

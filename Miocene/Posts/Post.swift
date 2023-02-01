@@ -15,7 +15,8 @@ struct Post: View
 {
     @ObservedObject var mast : Mastodon
     @ObservedObject var mstat : MStatus
-   
+    var notification : MastodonKit.Notification?
+    
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
 
@@ -23,6 +24,7 @@ struct Post: View
     @State private var showSensitiveContent : Bool = false
     @State private var shouldPresentSheet = false
     @State private var shouldPresentImageSheet = false
+    @State private var imageShowIndex : Int  = 1
     @State var datePublished = ""
     @State var hoursstr : String = ""
     
@@ -47,6 +49,32 @@ struct Post: View
     {
         GroupBox()
         {
+            if let note = notification
+            {
+                HStack
+                {
+                    switch note.type
+                    {
+                        case .favourite:
+                            Text("Favorited by")
+                        case .follow:
+                            Text("Followed by")
+                        case .mention:
+                            Text("Mentioned by")
+                        case .poll:
+                            Text("Poll by")
+                        case .reblog:
+                            Text("Reblogged by")
+                        case .other(let textstr):
+                            Text("\(textstr)")
+                    }
+                    
+                    AccountSmall(mast:mast,maccount: MAccount(displayname: note.account.displayName, acct: note.account))
+                }
+                .font(settings.font.headline)
+                .foregroundColor(settings.theme.accentColor)
+            }
+            
             HStack(alignment: .top)
             {
                 //
@@ -203,19 +231,20 @@ struct Post: View
                             .cornerRadius(5)
                             .onTapGesture
                             {
-                                shouldPresentImageSheet = true
+                                if let url = URL(string: status.mediaAttachments[index].url)
+                                {
+                                    ShowImagePanel.url = url
+                                    shouldPresentImageSheet = true
+                                }
                             }
                             .sheet(isPresented: $shouldPresentImageSheet)
                             {
                             }
                             content:
                             {
-                                if let url = URL(string:attachment.url)
+                                ShowImagePanel()
                                 {
-                                    ShowImagePanel(url:url)
-                                    {
-                                        shouldPresentImageSheet = false
-                                    }
+                                    shouldPresentImageSheet = false
                                 }
                             }
                         }

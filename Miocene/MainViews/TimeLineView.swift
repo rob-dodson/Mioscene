@@ -19,7 +19,6 @@ struct TimeLineView: View
     @State private var favorites = [MStatus]()
     @State private var tags = [MStatus]()
     @State private var showLoading = true
-    @State private var showTagAsk = false
     @State private var loadingStats = false
     @State private var showingpopup : Bool = false
     @State private var timelineTimer : Timer?
@@ -35,68 +34,17 @@ struct TimeLineView: View
     func mainView() -> some View
     {
         VStack(alignment: .leading)
-            {
-                HStack
+        {
+                HStack(alignment: .center )
                 {
-                    PopButtonColor(text: "", icon: "ellipsis.rectangle", textColor: settings.theme.minorColor, iconColor: settings.theme.minorColor)
-                    {
-                        settings.showTimelineToolBar.toggle()
-                        UserDefaults.standard.set(settings.showTimelineToolBar, forKey: "showtimelinetoolbar")
-                    }
-                    .padding(EdgeInsets(top: 0.5, leading: 0.5, bottom: 0, trailing: 0))
+                    toolbarToggleButton()
                     
                     HStack(spacing: 20)
                     {
-                        
-                        if let accounts = mast.localAccountRecords
-                        {
-                            PopMenu(icon: "person.crop.circle",selected:"@\(accounts[0].username)",
-                                    menuItems: [PopMenuItem(text: "@\(accounts[0].username)",userData: accounts[0]),
-                                               ])
-                            { item in
-                            }
-                        }
-                        
-                        
-                        PopMenu(icon: "clock.arrow.circlepath",selected:appState.selectedTimeline.rawValue,
-                                menuItems: [PopMenuItem(text: TimeLine.home.rawValue,userData:TimeLine.home),
-                                            PopMenuItem(text: TimeLine.localTimeline.rawValue,userData:TimeLine.localTimeline),
-                                            PopMenuItem(text: TimeLine.publicTimeline.rawValue,userData:TimeLine.publicTimeline),
-                                            PopMenuItem(text: TimeLine.tag.rawValue,userData:TimeLine.tag),
-                                            PopMenuItem(text: TimeLine.favorites.rawValue,userData:TimeLine.favorites),
-                                            PopMenuItem(text: TimeLine.notifications.rawValue,userData:TimeLine.notifications),
-                                            PopMenuItem(text: TimeLine.mentions.rawValue,userData:TimeLine.mentions),
-                                           ])
-                        { item in
-                            if item.userData == TimeLine.tag
-                            {
-                                appState.selectedTimeline = TimeLine.tag
-                                showTagAsk = true
-                                if appState.currentTag.count > 0
-                                {
-                                    showLoading = true
-                                    fetchSomeStatuses(timeline:.tag,tag:appState.currentTag)
-                                }
-                            }
-                            else
-                            {
-                                showTagAsk = false
-                                if let timeline = TimeLine(rawValue: item.text)
-                                {
-                                    showLoading = true
-                                    appState.selectedTimeline = timeline
-                                    fetchSomeStatuses(timeline:timeline,tag:appState.currentTag)
-                                }
-                            }
-                        }
-                        
+                        accountsMenu()
+                        timelineMenu()
                         Filters()
-                        
-                        PopButton(text: "Refresh", icon: "arrow.triangle.2.circlepath")
-                        {
-                            fetchNewerStatuses(timeline: appState.selectedTimeline, tag: appState.currentTag)
-                        }
-                        
+                        refreshButton()
                         NewPostButton(mast:mast)
                     }
                     .opacity(settings.showTimelineToolBar == true ? 1.0 : 0.0)
@@ -104,11 +52,9 @@ struct TimeLineView: View
                     .animation(.easeInOut(duration: 0.25))
                 }
                 
-                
-                
                 SpacerLine(color: settings.theme.minorColor)
                 
-                if showTagAsk == true
+                if appState.selectedTimeline == .tag
                 {
                     HStack
                     {
@@ -125,14 +71,13 @@ struct TimeLineView: View
                 }
                 /*
                 if showLoading
-                {
+                { // How about a timer here that only shows if taking more than 2 seconds
                     ProgressView("Loading...")
                         .font(settings.font.title)
                         .foregroundColor(settings.theme.accentColor)
                         .frame(alignment: .center)
                 }
                  */
-                
                 
                 ScrollView
                 {
@@ -154,12 +99,12 @@ struct TimeLineView: View
                                 Post(mast:mast,mstat:mstat)
                                     .padding([.horizontal,.top],5)
                                     .onAppear
+                                {
+                                    if mstat.id == stats[stats.count - 1].id
                                     {
-                                        if mstat.id == stats[stats.count - 1].id
-                                        {
-                                            fetchOlderStatuses(timeline: appState.selectedTimeline, tag: appState.currentTag)
-                                        }
+                                        fetchOlderStatuses(timeline: appState.selectedTimeline, tag: appState.currentTag)
                                     }
+                                }
                             }
                         }
                     }
@@ -170,6 +115,7 @@ struct TimeLineView: View
                 }
         }
     }
+    
     
     
     func runTasks()
@@ -184,17 +130,59 @@ struct TimeLineView: View
         }
     }
     
+    @State var lastfetch : TimeLine = TimeLine.home
     
     func getstats() -> [MStatus]
     {
+        if stats.count == 0 || lastfetch != appState.selectedTimeline
+        {
+            let group = DispatchGroup()
+            group.enter()
+            
+            DispatchQueue.global(qos: .userInitiated).async
+            {
+                timelineTimer?.invalidate()
+                
+                fetchSomeStatuses(timeline: appState.selectedTimeline, tag: appState.currentTag)
+                lastfetch = appState.selectedTimeline
+                
+                runTasks()
+                
+                group.leave()
+            }
+            
+            group.wait()
+        }
+        
         return stats
     }
      
+    
     func getnotifications() -> [MNotification]
     {
         return notifications
     }
     
+    
+    func fetchSomeStatuses(timeline:TimeLine,tag:String)
+    {
+        if loadingStats == true { return }
+        loadingStats = true
+        
+        if timeline == .notifications || timeline == .mentions
+        {
+            getSomeNotifications(timeline: timeline)
+        }
+        else
+        {
+            mast.getSomeStatuses(timeline: timeline, tag: tag, done:
+            { somestats in
+                showLoading = false
+                stats = somestats
+                loadingStats = false
+            })
+        }
+    }
     
     func fetchNewerStatuses(timeline:TimeLine,tag:String)
     {
@@ -205,7 +193,7 @@ struct TimeLineView: View
         {
             let newerThanID = first.status.id
             mast.getNewerStatuses(timeline: timeline, id:newerThanID, tag: tag, done:
-           { newerstats in
+            { newerstats in
                 
                 stats = newerstats + stats
                 
@@ -235,25 +223,7 @@ struct TimeLineView: View
         }
     }
     
-    func fetchSomeStatuses(timeline:TimeLine,tag:String)
-    {
-        if loadingStats == true { return }
-        loadingStats = true
-        
-        if timeline == .notifications || timeline == .mentions
-        {
-            getSomeNotifications(timeline: timeline)
-        }
-        else
-        {
-            mast.getSomeStatuses(timeline: timeline, tag: tag, done:
-                                    { somestats in
-                showLoading = false
-                stats = somestats
-                loadingStats = false
-            })
-        }
-    }
+    
     
     func getSomeNotifications(timeline:TimeLine)
     {
@@ -264,5 +234,82 @@ struct TimeLineView: View
             loadingStats = false
         }
     }
+    
+    func refreshButton() -> some View
+    {
+        PopButton(text: "Refresh", icon: "arrow.triangle.2.circlepath")
+        {
+            fetchNewerStatuses(timeline: appState.selectedTimeline, tag: appState.currentTag)
+        }
+    }
+    
+    
+    func toolbarToggleButton() -> some View
+    {
+        PopButtonColor(text: "", icon: "ellipsis.rectangle", textColor: settings.theme.minorColor, iconColor: settings.theme.minorColor)
+        {
+            settings.showTimelineToolBar.toggle()
+            UserDefaults.standard.set(settings.showTimelineToolBar, forKey: "showtimelinetoolbar")
+        }
+        .padding(EdgeInsets(top: 0.5, leading: 0.5, bottom: 0, trailing: 0))
+    }
+    
+    func accountsMenu() -> some  View
+    {
+        var popitems = [PopMenuItem<LocalAccountRecord>]()
+        
+        if let accounts = mast.localAccountRecords
+        {
+            for account in accounts
+            {
+                let popitem = PopMenuItem<LocalAccountRecord>(text: "@\(account.username)",userData: account)
+                popitems.append(popitem)
+            }
+        }
+        else
+        {
+            let popitem = PopMenuItem<LocalAccountRecord>(text: "@Add Account",userData: nil)
+            popitems.append(popitem)
+        }
+        
+        return PopMenu(icon: "person.crop.circle",selected:"@\(mast.localAccountRecords?[0].username ?? "Add Account")",menuItems:popitems)
+            { item in
+            }
+    }
+
+        
+    func timelineMenu() -> some View
+    {
+        PopMenu(icon: "clock.arrow.circlepath",selected:appState.selectedTimeline.rawValue,
+                menuItems: [PopMenuItem(text: TimeLine.home.rawValue,userData:TimeLine.home),
+                            PopMenuItem(text: TimeLine.localTimeline.rawValue,userData:TimeLine.localTimeline),
+                            PopMenuItem(text: TimeLine.publicTimeline.rawValue,userData:TimeLine.publicTimeline),
+                            PopMenuItem(text: TimeLine.tag.rawValue,userData:TimeLine.tag),
+                            PopMenuItem(text: TimeLine.favorites.rawValue,userData:TimeLine.favorites),
+                            PopMenuItem(text: TimeLine.notifications.rawValue,userData:TimeLine.notifications),
+                            PopMenuItem(text: TimeLine.mentions.rawValue,userData:TimeLine.mentions),
+                           ])
+        { item in
+            if item.userData == TimeLine.tag
+            {
+                appState.selectedTimeline = TimeLine.tag
+                if appState.currentTag.count > 0
+                {
+                    showLoading = true
+                    fetchSomeStatuses(timeline:.tag,tag:appState.currentTag)
+                }
+            }
+            else
+            {
+                if let timeline = TimeLine(rawValue: item.text)
+                {
+                    showLoading = true
+                    appState.selectedTimeline = timeline
+                    fetchSomeStatuses(timeline:timeline,tag:appState.currentTag)
+                }
+            }
+        }
+    }
+    
 }
 

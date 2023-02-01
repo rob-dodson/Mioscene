@@ -24,37 +24,11 @@ struct NotificationView: View
         {
             VStack
             {
-                HStack
-                {
-                    HStack
-                    {
-                        switch note.type
-                        {
-                        case .favourite:
-                            Text("Favorited by")
-                        case .follow:
-                            Text("Followed by")
-                        case .mention:
-                            Text("Mentioned by")
-                        case .poll:
-                            Text("Poll by")
-                        case .reblog:
-                            Text("Reblogged by")
-                        case .other(let textstr):
-                            Text("\(textstr)")
-                        }
-                    }
-                    .font(settings.font.headline)
-                    .foregroundColor(settings.theme.accentColor)
-                    
-                    AccountSmall(mast:mast,maccount: MAccount(displayname: note.account.displayName, acct: note.account))
-                }
-                
                 if let status = mnotification.notification.status
                 {
                     let mstatus = MStatus(status:status)
                     
-                    Post(mast: mast, mstat: mstatus)
+                    Post(mast: mast, mstat: mstatus,notification: note)
                 }
             }
         }

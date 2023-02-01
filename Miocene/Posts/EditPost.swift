@@ -129,10 +129,10 @@ struct EditPost: View
             ToolbarItem
             {
                 PopMenu(icon: "eye",selected: postVisibility.rawValue, menuItems: [PopMenuItem(text: MastodonKit.Visibility.public.rawValue,userData:MastodonKit.Visibility.public),
-                                                 PopMenuItem(text: MastodonKit.Visibility.unlisted.rawValue,userData:MastodonKit.Visibility.unlisted),
-                                                 PopMenuItem(text: MastodonKit.Visibility.private.rawValue,userData:MastodonKit.Visibility.private),
-                                                 PopMenuItem(text: MastodonKit.Visibility.direct.rawValue,userData:MastodonKit.Visibility.direct)
-                                                 ])
+                         PopMenuItem(text: MastodonKit.Visibility.unlisted.rawValue,userData:MastodonKit.Visibility.unlisted),
+                         PopMenuItem(text: MastodonKit.Visibility.private.rawValue,userData:MastodonKit.Visibility.private),
+                         PopMenuItem(text: MastodonKit.Visibility.direct.rawValue,userData:MastodonKit.Visibility.direct)
+                         ])
                 { item in
                     if let userdata = item.userData
                     {

@@ -440,7 +440,7 @@ class Mastodon : ObservableObject
                 
                 while waitcount < waitcounttotal || retrywait > maxwait
                 {
-                    try await Task.sleep(for: .seconds(3))
+                    try await Task.sleep(for: .seconds(2))
                     retrywait += 1
                 }
                 

@@ -167,7 +167,6 @@ struct PopButtonColor: View
     }
 }
 
-
 //
 // a text only pop button
 //

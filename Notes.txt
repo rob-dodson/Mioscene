@@ -10,3 +10,10 @@ defaults write shyfrogproductions.com.Miocene addfonts -array Myriad Courier
  Use @ObservedObject to allow a parent view to pass down to a child view an already created ObservableObject (via @StateObject).
  Use @EnvironmentObject to consume an ObservableObject that has already been created in a parent view and then attached via the view’s environmentObject() view modifier.
  */
+ 
+ A hashtag in the body:
+ 
+ <a href="https://sfba.social/tags/Monday" class="mention hashtag" rel="nofollow noopener noreferrer" target="_blank">#<span>Monday</span></a>
+
+
+@icecubesapp You know what would help me? A unified timeline, Twitterrific-style, where the contents of Home and Mentions are (optionally) combined chronologically into a single timeline.
