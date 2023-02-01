@@ -24,6 +24,7 @@ class Settings: ObservableObject
     @Published var showCards : Bool = false
     @Published var hideIconText : Bool = false
     @Published var showTimelineToolBar = true
+    @Published var addMentionsToHome = false
     
     
     var iconSize = 20
@@ -55,6 +56,7 @@ class Settings: ObservableObject
         hideStatusButtons = defaults.bool(forKey: "hidestatusbuttons")
         showCards = defaults.bool(forKey: "showcards")
         showTimelineToolBar = defaults.bool(forKey: "showtimelinetoolbar")
+        addMentionsToHome = defaults.bool(forKey: "addmentionstohome")
     }
    
   

@@ -129,6 +129,13 @@ struct SettingsView: View
                     let defaults = UserDefaults.standard
                     defaults.set(settings.hideIconText, forKey: "hideicontext")
                 }
+                
+                Toggle("Add Mentions to Home Timeline", isOn: $settings.addMentionsToHome)
+                .onChange(of: settings.addMentionsToHome)
+                { newValue in
+                    let defaults = UserDefaults.standard
+                    defaults.set(settings.addMentionsToHome, forKey: "addmentionstohome")
+                }
             }
             .padding()
             
