@@ -22,6 +22,7 @@ struct Post: View
     
     @State private var showSensitiveContent : Bool = false
     @State private var shouldPresentSheet = false
+    @State private var shouldPresentImageSheet = false
     @State var datePublished = ""
     @State var hoursstr : String = ""
     
@@ -147,6 +148,7 @@ struct Post: View
                                 .font(settings.font.body)
                                 .foregroundColor(settings.theme.bodyColor)
                                 .textSelection(.enabled)
+                            
                         }
                     }
                   
@@ -194,16 +196,26 @@ struct Post: View
                                     .aspectRatio(contentMode: .fit)
                                     .frame(maxWidth:300)
                             }
-                        placeholder:
+                            placeholder:
                             {
                                 Image(systemName: "photo")
                             }
                             .cornerRadius(5)
                             .onTapGesture
                             {
+                                shouldPresentImageSheet = true
+                            }
+                            .sheet(isPresented: $shouldPresentImageSheet)
+                            {
+                            }
+                            content:
+                            {
                                 if let url = URL(string:attachment.url)
                                 {
-                                    NSWorkspace.shared.open(url)
+                                    ShowImagePanel(url:url)
+                                    {
+                                        shouldPresentImageSheet = false
+                                    }
                                 }
                             }
                         }
@@ -267,7 +279,7 @@ struct Post: View
                         makeTagStack(tags: status.tags)
                     }
                     
-                           
+                    
                     //
                     // reblogged
                     //
@@ -441,10 +453,10 @@ struct Post: View
         let min = 50.0
         let max = 400.0
         let columns = [
-            GridItem(.flexible(minimum: min, maximum: max)),
-            GridItem(.flexible(minimum: min, maximum: max)),
-            GridItem(.flexible(minimum: min, maximum: max)),
-            GridItem(.flexible(minimum: min, maximum: max)),
+            GridItem(.flexible(minimum: min, maximum: max),spacing: 2),
+            GridItem(.flexible(minimum: min, maximum: max),spacing: 2),
+            GridItem(.flexible(minimum: min, maximum: max),spacing: 2),
+            GridItem(.flexible(minimum: min, maximum: max),spacing: 2),
             ]
         
         return Grid
@@ -456,11 +468,17 @@ struct Post: View
 
                     let name = "#\(tags[index].name)"
                     
-                    PopTextButton(text: name, font: settings.font.subheadline, ontap:
-                    { tag in
-                        appState.showTag(tag: tag)
-                    })
-                    .help("#\(tags[index].name)")
+                    HStack
+                    {
+                        PopTextButton(text: name, font: settings.font.subheadline, ontap:
+                        { tag in
+                            appState.showTag(tag: tag)
+                        })
+                        .help("#\(tags[index].name)")
+                        .padding(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))
+                        .background(settings.theme.blockColor)
+                        .cornerRadius(5)
+                    }
                 }
             }
         }
