@@ -26,7 +26,7 @@ struct ShowImagePanel: View
             { image in
                 image.resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(minWidth:800,minHeight: 800)
+                    .frame(minWidth:900,minHeight:900)
             }
         placeholder:
             {
