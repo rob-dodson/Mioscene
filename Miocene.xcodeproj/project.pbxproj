@@ -44,6 +44,7 @@
 		AEAFA2EC297EED5B00970F40 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2EB297EED5B00970F40 /* Filters.swift */; };
 		AEAFA2EF297F4BBF00970F40 /* SwiftyGif in Frameworks */ = {isa = PBXBuildFile; productRef = AEAFA2EE297F4BBF00970F40 /* SwiftyGif */; };
 		AEAFA2F129807C9B00970F40 /* PopMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2F029807C9B00970F40 /* PopMenuButton.swift */; };
+		AEE6EB79298A080700463A71 /* ShowImagePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE6EB78298A080700463A71 /* ShowImagePanel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +85,7 @@
 		AEAFA2EB297EED5B00970F40 /* Filters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 		AEAFA2F029807C9B00970F40 /* PopMenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopMenuButton.swift; sourceTree = "<group>"; };
 		AEE6EB772985CBC300463A71 /* Notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
+		AEE6EB78298A080700463A71 /* ShowImagePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowImagePanel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +197,7 @@
 				AEAFA2D62979D2DD00970F40 /* EditPost.swift */,
 				AE06EC01294D1D1D006CAB67 /* Post.swift */,
 				AE28C5D72953C8A500C8C928 /* NewPostButton.swift */,
+				AEE6EB78298A080700463A71 /* ShowImagePanel.swift */,
 			);
 			path = Posts;
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 				AE28C5E4295CE9F900C8C928 /* TimeLineView.swift in Sources */,
 				AE28C60329663A5B00C8C928 /* AccountLarge.swift in Sources */,
 				AE28C5F029635CAA00C8C928 /* Keys.swift in Sources */,
+				AEE6EB79298A080700463A71 /* ShowImagePanel.swift in Sources */,
 				AE9A85D6295629C100E8B193 /* Settings.swift in Sources */,
 				AE06EC02294D1D1D006CAB67 /* Post.swift in Sources */,
 				AE28C61C297349C900C8C928 /* PollBuilder.swift in Sources */,
