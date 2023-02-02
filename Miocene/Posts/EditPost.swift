@@ -98,7 +98,7 @@ struct EditPost: View
         {
             ToolbarItem
             {
-                PopButton(text: "Photo", icon: "photo")
+                PopButton(text: "Photo", icon: "photo",isSelected: false)
                 {
                     if let urls = showOpenPanel()
                     {
@@ -112,7 +112,7 @@ struct EditPost: View
             
             ToolbarItem
             {
-                PopButton(text: "Warning", icon: "exclamationmark.triangle")
+                PopButton(text: "Warning", icon: "exclamationmark.triangle",isSelected: false)
                 {
                     showContentWarning.toggle()
                 }
@@ -120,7 +120,7 @@ struct EditPost: View
            
             ToolbarItem
             {
-                PopButton(text: "Poll", icon: "chart.bar.doc.horizontal")
+                PopButton(text: "Poll", icon: "chart.bar.doc.horizontal",isSelected: false)
                 {
                     showPoll.toggle()
                 }
@@ -143,7 +143,7 @@ struct EditPost: View
             
             ToolbarItem
             {
-                PopButton(text: "Cancel", icon: "trash.slash")
+                PopButton(text: "Cancel", icon: "trash.slash",isSelected: false)
                 {
                     shouldPresentSheet = false
                     done()
@@ -153,7 +153,7 @@ struct EditPost: View
             
             ToolbarItem
             {
-                PopButton(text: "Post", icon: "paperplane")
+                PopButton(text: "Post", icon: "paperplane",isSelected: false)
                 {
                     let pollpayload = showPoll == true ? PollBuilder.getPollPayLoad(pollState: pollState) : nil
                     

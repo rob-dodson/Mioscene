@@ -33,11 +33,15 @@ struct TimeLineView: View
     
     func mainView() -> some View
     {
-        VStack(alignment: .leading)
+        VStack(alignment: .center)
         {
                 HStack(alignment: .center )
                 {
-                    toolbarToggleButton()
+                    HStack()
+                   {
+                        toolbarToggleButton()
+                   }
+                   .frame(alignment: .leading)
                     
                     HStack(spacing: 20)
                     {
@@ -184,6 +188,7 @@ struct TimeLineView: View
         }
     }
     
+    
     func fetchNewerStatuses(timeline:TimeLine,tag:String)
     {
         if loadingStats == true { return }
@@ -201,7 +206,7 @@ struct TimeLineView: View
                     
                     mast.getNewerStatuses(timeline: timeline, id:newerThanID, tag: tag, done:
                     { newerstats in
-                        
+                        print("NEW STATUSES \(newerstats.count)")
                         if newerstats.count > 0
                         {
                             stats = newerstats + stats
@@ -228,6 +233,7 @@ struct TimeLineView: View
             loadingStats = false
         }
     }
+    
     
     func fetchOlderStatuses(timeline:TimeLine,tag:String)
     {
@@ -259,7 +265,7 @@ struct TimeLineView: View
     
     func refreshButton() -> some View
     {
-        PopButton(text: "Refresh", icon: "arrow.triangle.2.circlepath")
+        PopButton(text: "Refresh", icon: "arrow.triangle.2.circlepath",isSelected: false)
         {
             fetchNewerStatuses(timeline: appState.selectedTimeline, tag: appState.currentTag)
         }
@@ -268,7 +274,7 @@ struct TimeLineView: View
     
     func toolbarToggleButton() -> some View
     {
-        PopButtonColor(text: "", icon: "ellipsis.rectangle", textColor: settings.theme.minorColor, iconColor: settings.theme.minorColor)
+        PopButtonColor(text: "", icon: "ellipsis.rectangle", textColor: settings.theme.minorColor, iconColor: settings.theme.minorColor,isSelected: false)
         {
             settings.showTimelineToolBar.toggle()
             UserDefaults.standard.set(settings.showTimelineToolBar, forKey: "showtimelinetoolbar")

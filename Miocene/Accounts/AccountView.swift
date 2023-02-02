@@ -32,7 +32,7 @@ struct AccountView: View
                     }
                 }
                 
-                PopButton(text:"My Account", icon:"person")
+                PopButton(text:"My Account", icon:"person",isSelected: false)
                 {
                     appState.showAccount(maccount: MAccount(displayname: appState.currentUserMastAccount!.displayName, acct: appState.currentUserMastAccount!))
                 }

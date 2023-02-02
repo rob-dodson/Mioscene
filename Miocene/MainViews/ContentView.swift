@@ -17,34 +17,32 @@ struct ContentView: View
     @EnvironmentObject var errorSystem : ErrorSystem
     @EnvironmentObject var appState: AppState
     
-    
     var body: some View
     {
+        VStack
+        {
+            GeometryReader
+            { geo in
+                
                 VStack
                 {
-                    GeometryReader
-                    { geo in
-                        VStack
-                        {
-                            CustomTopTabBar(tabIndex: $appState.tabIndex)
-                            
-                            switch appState.tabIndex
-                            {
-                                case .TimeLine: TimeLineView(mast: mast)
-                                case .Accounts: AccountView(mast: mast,maccount: MAccount(displayname: appState.currentUserMastAccount!.displayName, acct: appState.currentUserMastAccount!))
-                                case .Search: SearchView(mast: mast)
-                                case .Settings: SettingsView()
-                            }
-                            
-                            Spacer()
-                        }
-                        .frame(minWidth:100,maxHeight: geo.size.height * 1.0)
+                    CustomTopTabBar(tabIndex: $appState.tabIndex)
+                    
+                    switch appState.tabIndex
+                    {
+                        case .TimeLine: TimeLineView(mast: mast)
+                        case .Accounts: AccountView(mast: mast,maccount: MAccount(displayname: appState.currentUserMastAccount!.displayName, acct: appState.currentUserMastAccount!))
+                        case .Search:  SearchView(mast: mast)
+                        case .Settings: SettingsView()
                     }
+                }
+                .frame(minWidth:100,maxHeight: geo.size.height * 1.0)
             }
-            .padding(.horizontal, 20)
+        }
     }
 }
-       
+ 
+
 struct CustomTopTabBar: View
 {
     @Binding var tabIndex: TabIndex
@@ -56,26 +54,24 @@ struct CustomTopTabBar: View
     {
         Spacer()
         
-        HStack(alignment: .center,spacing: 70)
+        HStack(alignment: .center,spacing: 40)
         {
-            Spacer()
+            PopButton(text: "Timelines",icon:"house", isSelected: tabIndex == .TimeLine ? true : false)
+                { onButtonTapped(index: .TimeLine) }
             
-            TabBarButton(text: "Timelines",icon:"house", isSelected: .constant(tabIndex == .TimeLine))
-                .onTapGesture { onButtonTapped(index: .TimeLine) }
+            PopButton(text: "Accounts",icon:"person", isSelected: tabIndex == .Accounts ? true : false)
+                { onButtonTapped(index: .Accounts) }
             
-            TabBarButton(text: "Accounts",icon:"person", isSelected: .constant(tabIndex == .Accounts))
-                .onTapGesture { onButtonTapped(index: .Accounts) }
+            PopButton(text: "Search", icon:"magnifyingglass",isSelected: tabIndex == .Search ? true : false)
+                 { onButtonTapped(index: .Search) }
             
-            TabBarButton(text: "Search", icon:"magnifyingglass",isSelected: .constant(tabIndex == .Search))
-                .onTapGesture { onButtonTapped(index: .Search) }
-            
-            TabBarButton(text: "Settings",icon:"gear", isSelected: .constant(tabIndex == .Settings))
-                .onTapGesture { onButtonTapped(index: .Settings) }
-                         
-           Spacer()
+            PopButton(text: "Settings",icon:"gear", isSelected:tabIndex == .Settings ? true : false)
+                { onButtonTapped(index: .Settings) }
         }
+        .padding(.bottom,5)
         .border(width: 1, edges: [.bottom], color: .black)
     }
+    
     
     private func onButtonTapped(index: TabIndex)
     {
@@ -84,27 +80,6 @@ struct CustomTopTabBar: View
 }
 
 
-
-struct TabBarButton: View
-{
-    @EnvironmentObject var settings: Settings
-    
-    let text : String
-    let icon : String
-    
-    @Binding var isSelected: Bool
-    
-    var body: some View
-    {
-        VStack
-        {
-            Image(systemName:icon)
-                .font(.system(size: CGFloat(settings.iconSize), weight: .light))
-                .foregroundColor(isSelected ? settings.theme.accentColor : settings.theme.minorColor)
-                .padding(.bottom,10)
-        }
-    }
-}
 
 
 

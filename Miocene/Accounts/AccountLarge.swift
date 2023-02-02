@@ -263,7 +263,7 @@ struct AccountLarge: View
         {
             if maccount.account.id == appState.currentUserMastAccount?.id
             {
-                PopButton(text: "Edit Profile", icon: "pencil")
+                PopButton(text: "Edit Profile", icon: "pencil",isSelected: false)
                 {
                     if let myurl = mast.getCurrentMastodonAccount()?.url
                     {
@@ -321,7 +321,8 @@ struct AccountLarge: View
         return PopButtonColor(text: state == true ? truelabel : falselabel,
                               icon: state == true ? trueicon : falseicon,
                               textColor: settings.theme.minorColor,
-                              iconColor: state == true ? settings.theme.accentColor : settings.theme.bodyColor
+                              iconColor: state == true ? settings.theme.accentColor : settings.theme.bodyColor,
+                              isSelected: false
                                 )
         {
             if state == true

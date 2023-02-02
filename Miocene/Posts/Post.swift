@@ -347,7 +347,7 @@ struct Post: View
                             //
                             // reply
                             //
-                            PopButton(text: "", icon: "arrowshape.turn.up.left")
+                            PopButton(text: "", icon: "arrowshape.turn.up.left",isSelected: false)
                             {
                                 shouldPresentSheet.toggle()
                             }
@@ -369,7 +369,7 @@ struct Post: View
                             PopButtonColor(text: "\(mstatus.favoritesCount)",
                                     icon: "star",
                                     textColor:settings.theme.minorColor,
-                                    iconColor:mstatus.favorited == true ? settings.theme.accentColor : settings.theme.bodyColor)
+                                    iconColor:mstatus.favorited == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false)
                             {
                                 if mstatus.favorited == true
                                 {
@@ -392,7 +392,7 @@ struct Post: View
                             PopButtonColor(text: "\(mstatus.reblogsCount)",
                                     icon: "arrow.2.squarepath",
                                     textColor:settings.theme.minorColor,
-                                    iconColor:mstatus.reblogged == true ? settings.theme.accentColor : settings.theme.bodyColor)
+                                    iconColor:mstatus.reblogged == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false)
                             {
                                 if mstatus.reblogged == true
                                 {

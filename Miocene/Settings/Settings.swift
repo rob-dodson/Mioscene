@@ -9,13 +9,6 @@ import Foundation
 import SwiftUI
 import MastodonKit
 
-
-
-
-
-/**
- Settings
- */
 class Settings: ObservableObject
 {
     @Published var theme : Theme
@@ -28,7 +21,6 @@ class Settings: ObservableObject
     
     
     var iconSize = 20
-    
     var themes = Themes()
     
     init()
@@ -58,8 +50,6 @@ class Settings: ObservableObject
         showTimelineToolBar = defaults.bool(forKey: "showtimelinetoolbar")
         addMentionsToHome = defaults.bool(forKey: "addmentionstohome")
     }
-   
-  
 }
 
  

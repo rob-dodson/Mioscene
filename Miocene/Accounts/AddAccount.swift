@@ -25,7 +25,7 @@ struct AddAccount: View
 
     var body: some View
     {
-        PopButton(text: "Add Account", icon: "person.badge.plus")
+        PopButton(text: "Add Account", icon: "person.badge.plus",isSelected: false)
         {
             shouldPresentSheet = true
         }
@@ -72,7 +72,7 @@ struct AddAccount: View
             {
                 ToolbarItem
                 {
-                    PopButton(text: "Cancel", icon: "trash.slash")
+                    PopButton(text: "Cancel", icon: "trash.slash",isSelected: false)
                     {
                         shouldPresentSheet = false
                     }
@@ -80,7 +80,7 @@ struct AddAccount: View
                 
                 ToolbarItem
                 {
-                    PopButton(text: "Save", icon: "square.and.arrow.down")
+                    PopButton(text: "Save", icon: "square.and.arrow.down",isSelected: false)
                     {
                         mast.newAccount(server: server, email: email, password: password)
                         { mioceneerror,msg in

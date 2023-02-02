@@ -37,14 +37,15 @@ struct SearchView: View
                     let request =  MastodonKit.Search.search(query:searchTerm,resolve:false)
                     mast.client.run(request)
                     { result in
-                            showLoading = false
-                            switch result
-                            {
-                            case .success:
-                                results = result.value
-                            case .failure(let error):
-                                Log.log(msg:error.localizedDescription)
-                            }
+                        
+                        showLoading = false
+                        switch result
+                        {
+                        case .success:
+                            results = result.value
+                        case .failure(let error):
+                            Log.log(msg:error.localizedDescription)
+                        }
                     }
                 }
                 .padding([.bottom,.trailing])
@@ -55,7 +56,6 @@ struct SearchView: View
             
             if showLoading
             {
-                
                 ProgressView("Loading...")
                     .foregroundColor(settings.theme.accentColor)
             }
@@ -94,6 +94,7 @@ struct SearchView: View
             }
         }
     }
+    
     
     func accountview(accounts:[Account]) -> some View
     {

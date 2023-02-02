@@ -40,7 +40,7 @@ struct PopMenu<UserType> : View
         {
             if let item = menuItems.first(where: {$0.text == selected})
             {
-                PopButton(text: item.text,icon:icon)
+                PopButton(text: item.text,icon:icon,isSelected: false)
                 {
                     showMenu = true
                 }
@@ -109,6 +109,7 @@ struct PopButton: View
     
     let text : String
     let icon : String
+    let isSelected : Bool
     var ontap: () -> Void
     
     var body : some View
@@ -117,6 +118,7 @@ struct PopButton: View
                        icon: icon,
                        textColor: settings.theme.minorColor,
                        iconColor: settings.theme.bodyColor,
+                       isSelected: isSelected,
                        ontap: ontap)
     }
 }
@@ -133,6 +135,7 @@ struct PopButtonColor: View
     let icon : String
     let textColor : Color
     let iconColor : Color
+    let isSelected : Bool
     var ontap: () -> Void // called when user clicks on this button
     
     @State private var tap = false
@@ -144,9 +147,10 @@ struct PopButtonColor: View
         {
             Image(systemName:icon)
                 .font(.system(size: CGFloat(settings.iconSize), weight: .light))
-                .foregroundColor(tap ? settings.theme.accentColor : iconColor)
+                .foregroundColor(tap ? settings.theme.accentColor : (isSelected == true ? settings.theme.accentColor : iconColor))
                 .scaleEffect(tap ? 1.2 : 1)
                 .animation(.spring(response: 0.4, dampingFraction: 0.6),value: tap)
+                .help(text)
                 .onTapGesture
                 {
                     tap = true
@@ -189,6 +193,7 @@ struct PopTextButton: View
                 .foregroundColor(tap ? settings.theme.accentColor : settings.theme.minorColor)
                 .scaleEffect(tap ? 1.1 : 1)
                 .animation(.spring(response: 0.4, dampingFraction: 0.6),value: tap)
+                .help(text)
                 .onTapGesture
             {
                 tap = true
