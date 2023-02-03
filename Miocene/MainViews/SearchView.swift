@@ -26,7 +26,7 @@ struct SearchView: View
         {
             VStack(alignment: .trailing)
             {
-                TextField("Search", text: $searchTerm)
+                TextField("@name, #hashtag, or anything", text: $searchTerm)
                     .padding()
                     .font(settings.font.title)
                 

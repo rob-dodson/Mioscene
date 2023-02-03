@@ -19,7 +19,7 @@ struct Post: View
     
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
-
+    
     
     @State private var showSensitiveContent : Bool = false
     @State private var shouldPresentSheet = false
@@ -43,7 +43,7 @@ struct Post: View
             dopost(status: status,mstatus:mstat)
         }
     }
-
+    
     
     func dopost(status:Status,mstatus:MStatus) -> some View
     {
@@ -97,7 +97,7 @@ struct Post: View
                         appState.showAccount(maccount:MAccount(displayname: account.displayName, acct: account))
                     }
                 }
-              
+                
                 
                 VStack(alignment: .leading,spacing: 10)
                 {
@@ -113,10 +113,10 @@ struct Post: View
                                 .font(settings.font.headline)
                                 .foregroundColor(settings.theme.nameColor)
                                 .onTapGesture
-                                {
-                                    appState.showAccount(maccount:MAccount(displayname: status.account.displayName, acct: status.account))
-                                }
-                                
+                            {
+                                appState.showAccount(maccount:MAccount(displayname: status.account.displayName, acct: status.account))
+                            }
+                            
                             if status.account.bot == true
                             {
                                 Text("[BOT]")
@@ -128,12 +128,12 @@ struct Post: View
                                 .font(settings.font.subheadline)
                                 .foregroundColor(settings.theme.minorColor)
                                 .onTapGesture
-                                {
-                                    appState.showAccount(maccount:MAccount(displayname: status.account.displayName, acct: status.account))
-                                }
+                            {
+                                appState.showAccount(maccount:MAccount(displayname: status.account.displayName, acct: status.account))
+                            }
                         }
                         
-                      
+                        
                         if let appname = status.application?.name
                         {
                             Text("posted with \(appname)")
@@ -142,7 +142,7 @@ struct Post: View
                         }
                         
                     }
-                   
+                    
                     if status.sensitive == true
                     {
                         HStack
@@ -161,7 +161,7 @@ struct Post: View
                         .padding(EdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4))
                         .border(width: 1, edges: [.top,.bottom,.leading,.trailing], color: settings.theme.accentColor)
                     }
-
+                    
                     if status.sensitive == false || (status.sensitive == true && showSensitiveContent == true)
                     {
                         //
@@ -169,8 +169,8 @@ struct Post: View
                         //
                         let betterPSpaceing = status.content.replacingOccurrences(of: "</p>", with: "</p><br />")
                         if let nsAttrString = betterPSpaceing.htmlAttributedString(color:settings.theme.bodyColor,
-                                                                                  linkColor:settings.theme.linkColor,
-                                                                                  font: settings.font.body)
+                                                                                   linkColor:settings.theme.linkColor,
+                                                                                   font: settings.font.body)
                         {
                             Text(AttributedString(nsAttrString))
                                 .font(settings.font.body)
@@ -179,7 +179,7 @@ struct Post: View
                             
                         }
                     }
-                  
+                    
                     
                     //
                     // attachments.
@@ -187,18 +187,18 @@ struct Post: View
                     ForEach(status.mediaAttachments.indices, id:\.self)
                     { index in
                         let attachment = status.mediaAttachments[index]
-
+                        
                         //
                         // video
                         //
                         if attachment.type == .video || attachment.type == .gifv
                         {
                             
-                           if  let player = AVPlayer(url: URL(string:attachment.url)!)
+                            if  let player = AVPlayer(url: URL(string:attachment.url)!)
                             {
-                               VideoPlayer(player: player)
-                                   .frame(width: 400, height: 300, alignment: .center)
-                           }
+                                VideoPlayer(player: player)
+                                    .frame(width: 400, height: 300, alignment: .center)
+                            }
                             else
                             {
                                 Image(systemName: "video.slash.fill")
@@ -208,14 +208,14 @@ struct Post: View
                         // image
                         //
                         /*
-                        else if attachment.type == .gifv
-                        {
-                            Text(".gifv")
-                            gifimage(urlstring:attachment.url)
-                            { image in
-                                image.resizable()
-                            }
-                        }*/
+                         else if attachment.type == .gifv
+                         {
+                         Text(".gifv")
+                         gifimage(urlstring:attachment.url)
+                         { image in
+                         image.resizable()
+                         }
+                         }*/
                         else if attachment.type == .image
                         {
                             AsyncImage(url: URL(string:attachment.url))
@@ -224,7 +224,7 @@ struct Post: View
                                     .aspectRatio(contentMode: .fit)
                                     .frame(maxWidth:300)
                             }
-                            placeholder:
+                        placeholder:
                             {
                                 Image(systemName: "photo")
                             }
@@ -240,7 +240,7 @@ struct Post: View
                             .sheet(isPresented: $shouldPresentImageSheet)
                             {
                             }
-                            content:
+                        content:
                             {
                                 ShowImagePanel()
                                 {
@@ -284,7 +284,7 @@ struct Post: View
                             {
                                 NSWorkspace.shared.open(card.url)
                             }
-                           // .frame(minWidth: 150,minHeight: 75)
+                            // .frame(minWidth: 150,minHeight: 75)
                             .background(settings.theme.blockColor)
                             .border(width: 1, edges: [.leading,.top,.bottom,.trailing], color: settings.theme.minorColor)
                         }
@@ -321,21 +321,21 @@ struct Post: View
                             Text("\(mstatus.status.account.displayName)")
                                 .foregroundColor(settings.theme.linkColor)
                                 .onTapGesture
+                            {
+                                appState.showAccount(maccount:MAccount(displayname: mstatus.status.account.displayName, acct: mstatus.status.account))
+                            }
+                            .onHover
+                            { inside in
+                                if inside
                                 {
-                                        appState.showAccount(maccount:MAccount(displayname: mstatus.status.account.displayName, acct: mstatus.status.account))
+                                    NSCursor.pointingHand.push()
+                                } else {
+                                    NSCursor.pop()
                                 }
-                                .onHover
-                                { inside in
-                                    if inside
-                                    {
-                                        NSCursor.pointingHand.push()
-                                    } else {
-                                        NSCursor.pop()
-                                    }
-                                }
+                            }
                         }
                     }
-                
+                    
                     
                     //
                     // buttons
@@ -357,7 +357,7 @@ struct Post: View
                         content:
                             {
                                 EditPost(mast: mast,newPost: "@\(status.account.acct): ",title:"Reply",done:
-                                {
+                                            {
                                     shouldPresentSheet = false
                                 })
                             }
@@ -367,9 +367,9 @@ struct Post: View
                             // favorite
                             //
                             PopButtonColor(text: "\(mstatus.favoritesCount)",
-                                    icon: "star",
-                                    textColor:settings.theme.minorColor,
-                                    iconColor:mstatus.favorited == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false)
+                                           icon: "star",
+                                           textColor:settings.theme.minorColor,
+                                           iconColor:mstatus.favorited == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false)
                             {
                                 if mstatus.favorited == true
                                 {
@@ -390,9 +390,9 @@ struct Post: View
                             // reblog
                             //
                             PopButtonColor(text: "\(mstatus.reblogsCount)",
-                                    icon: "arrow.2.squarepath",
-                                    textColor:settings.theme.minorColor,
-                                    iconColor:mstatus.reblogged == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false)
+                                           icon: "arrow.2.squarepath",
+                                           textColor:settings.theme.minorColor,
+                                           iconColor:mstatus.reblogged == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false)
                             {
                                 if mstatus.reblogged == true
                                 {
@@ -413,11 +413,11 @@ struct Post: View
                         // created Date
                         //
                         makeDateView(status: status)
-
+                        
                     }
                 }
-               .frame(minWidth:150,maxWidth:.infinity, alignment: .leading)  // .infinity
-           }
+                .frame(minWidth:150,maxWidth:.infinity, alignment: .leading)  // .infinity
+            }
             .padding(.bottom,5)
         }
         .background(settings.theme.blockColor)
@@ -457,13 +457,13 @@ struct Post: View
             .font(settings.font.footnote)
             .foregroundColor(settings.theme.minorColor)
             .onAppear(perform:
-            {
+                        {
                 calcDate(status: status)
             })
             .onReceive(Post.timer!)
-            { input in
-               calcDate(status: status)
-            }
+        { input in
+            calcDate(status: status)
+        }
     }
     
     func calcDate(status:Status)
@@ -479,38 +479,39 @@ struct Post: View
     
     func makeTagStack(tags:[Tag]) -> some View
     {
-        let min = 50.0
-        let max = 400.0
-        let columns = [
-            GridItem(.flexible(minimum: min, maximum: max),spacing: 2),
-            GridItem(.flexible(minimum: min, maximum: max),spacing: 2),
-            GridItem(.flexible(minimum: min, maximum: max),spacing: 2),
-            GridItem(.flexible(minimum: min, maximum: max),spacing: 2),
-            ]
-        
         return Grid
         {
-            LazyVGrid(columns: columns,alignment:.leading)
+            Grid()
             {
                 ForEach(tags.indices, id:\.self)
                 { index in
-
-                    let name = "#\(tags[index].name)"
                     
-                    HStack
+                    if index % 2 == 0
                     {
-                        PopTextButton(text: name, font: settings.font.subheadline, ontap:
-                        { tag in
-                            appState.showTag(tag: tag)
-                        })
-                        .help("#\(tags[index].name)")
-                        .padding(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))
-                        .background(settings.theme.blockColor)
-                        .cornerRadius(5)
+                        GridRow
+                        {
+                            displayTag(name: "#\(tags[index].name)")
+                            if (index + 1 < tags.count)
+                            {
+                                displayTag(name: "#\(tags[index + 1].name)")
+                            }
+                        }
                     }
                 }
             }
         }
+    }
+    
+    func displayTag(name:String) -> some  View
+    {
+        PopTextButton(text: name, font: settings.font.subheadline, ontap:
+        { tag in
+            appState.showTag(tag: tag)
+        })
+        .help(name)
+        .padding(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))
+        .background(settings.theme.blockColor)
+        .cornerRadius(5)
     }
 }
 
