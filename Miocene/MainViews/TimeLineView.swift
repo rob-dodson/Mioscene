@@ -206,7 +206,7 @@ struct TimeLineView: View
                     
                     mast.getNewerStatuses(timeline: timeline, id:newerThanID, tag: tag, done:
                     { newerstats in
-                        print("NEW STATUSES \(newerstats.count)")
+                        print("NEW STATUSES \(newerstats.count) newthanid: \(newerThanID)")
                         if newerstats.count > 0
                         {
                             stats = newerstats + stats

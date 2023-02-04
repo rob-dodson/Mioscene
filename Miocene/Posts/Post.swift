@@ -22,6 +22,7 @@ struct Post: View
     
     
     @State private var showSensitiveContent : Bool = false
+    @State private var showContentWarning : Bool = false
     @State private var shouldPresentSheet = false
     @State private var shouldPresentImageSheet = false
     @State private var imageShowIndex : Int  = 1
@@ -143,13 +144,13 @@ struct Post: View
                         
                     }
                     
-                    if status.sensitive == true
+                    if status.spoilerText.count > 0
                     {
                         HStack
                         {
                             Button
                             {
-                                showSensitiveContent.toggle()
+                                showContentWarning.toggle()
                             }
                         label:
                             {
@@ -162,7 +163,7 @@ struct Post: View
                         .border(width: 1, edges: [.top,.bottom,.leading,.trailing], color: settings.theme.accentColor)
                     }
                     
-                    if status.sensitive == false || (status.sensitive == true && showSensitiveContent == true)
+                    if status.spoilerText.count == 0 || (status.spoilerText.count > 0 && showContentWarning == true)
                     {
                         //
                         // html body of post
@@ -184,73 +185,76 @@ struct Post: View
                     //
                     // attachments.
                     //
-                    ForEach(status.mediaAttachments.indices, id:\.self)
-                    { index in
-                        let attachment = status.mediaAttachments[index]
-                        
-                        //
-                        // video
-                        //
-                        if attachment.type == .video || attachment.type == .gifv
-                        {
+                    if status.sensitive == false || (status.sensitive == true && showSensitiveContent == true)
+                    {
+                        ForEach(status.mediaAttachments.indices, id:\.self)
+                        { index in
+                            let attachment = status.mediaAttachments[index]
                             
-                            if  let player = AVPlayer(url: URL(string:attachment.url)!)
+                            //
+                            // video
+                            //
+                            if attachment.type == .video || attachment.type == .gifv
                             {
-                                VideoPlayer(player: player)
-                                    .frame(width: 400, height: 300, alignment: .center)
+                                
+                                if  let player = AVPlayer(url: URL(string:attachment.url)!)
+                                {
+                                    VideoPlayer(player: player)
+                                        .frame(width: 400, height: 300, alignment: .center)
+                                }
+                                else
+                                {
+                                    Image(systemName: "video.slash.fill")
+                                }
+                            }
+                            //
+                            // image
+                            //
+                            /*
+                             else if attachment.type == .gifv
+                             {
+                             Text(".gifv")
+                             gifimage(urlstring:attachment.url)
+                             { image in
+                             image.resizable()
+                             }
+                             }*/
+                            else if attachment.type == .image
+                            {
+                                AsyncImage(url: URL(string:attachment.url))
+                                { image in
+                                    image.resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(maxWidth:300)
+                                }
+                            placeholder:
+                                {
+                                    Image(systemName: "photo")
+                                }
+                                .cornerRadius(5)
+                                .onTapGesture
+                                {
+                                    if let url = URL(string: status.mediaAttachments[index].url)
+                                    {
+                                        ShowImagePanel.url = url
+                                        shouldPresentImageSheet = true
+                                    }
+                                }
+                                .sheet(isPresented: $shouldPresentImageSheet)
+                                {
+                                }
+                            content:
+                                {
+                                    ShowImagePanel()
+                                    {
+                                        shouldPresentImageSheet = false
+                                    }
+                                }
                             }
                             else
                             {
-                                Image(systemName: "video.slash.fill")
+                                Text("IMAGE TYPE NOT SUPPORTED \(attachment.type.rawValue)")
                             }
-                        }
-                        //
-                        // image
-                        //
-                        /*
-                         else if attachment.type == .gifv
-                         {
-                         Text(".gifv")
-                         gifimage(urlstring:attachment.url)
-                         { image in
-                         image.resizable()
-                         }
-                         }*/
-                        else if attachment.type == .image
-                        {
-                            AsyncImage(url: URL(string:attachment.url))
-                            { image in
-                                image.resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(maxWidth:300)
-                            }
-                        placeholder:
-                            {
-                                Image(systemName: "photo")
-                            }
-                            .cornerRadius(5)
-                            .onTapGesture
-                            {
-                                if let url = URL(string: status.mediaAttachments[index].url)
-                                {
-                                    ShowImagePanel.url = url
-                                    shouldPresentImageSheet = true
-                                }
-                            }
-                            .sheet(isPresented: $shouldPresentImageSheet)
-                            {
-                            }
-                        content:
-                            {
-                                ShowImagePanel()
-                                {
-                                    shouldPresentImageSheet = false
-                                }
-                            }
-                        }
-                        else
-                        {
-                            Text("IMAGE TYPE NOT SUPPORTED \(attachment.type.rawValue)")
                         }
                     }
                     
@@ -287,6 +291,21 @@ struct Post: View
                             // .frame(minWidth: 150,minHeight: 75)
                             .background(settings.theme.blockColor)
                             .border(width: 1, edges: [.leading,.top,.bottom,.trailing], color: settings.theme.minorColor)
+                        }
+                    }
+                  
+                    //
+                    // sensitive flag
+                    //
+                    if status.sensitive == true
+                    {
+                        PopButtonColor(text: "Sensitive",
+                                       icon: "eye.slash",
+                                       textColor: settings.theme.accentColor,
+                                       iconColor: settings.theme.accentColor,
+                                       isSelected: true)
+                        {
+                            showSensitiveContent.toggle()
                         }
                     }
                     
@@ -357,7 +376,7 @@ struct Post: View
                         content:
                             {
                                 EditPost(mast: mast,newPost: "@\(status.account.acct): ",title:"Reply",done:
-                                            {
+                                {
                                     shouldPresentSheet = false
                                 })
                             }

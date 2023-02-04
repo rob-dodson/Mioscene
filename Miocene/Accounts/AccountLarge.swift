@@ -255,7 +255,10 @@ struct AccountLarge: View
             let id : String = String(maccount.account.id)
             mast.getRelationships(ids: [id])
             { relationships in
-                relationship = relationships[0]
+                if relationships.count > 0
+                {
+                    relationship = relationships[0]
+                }
             }
         }
         

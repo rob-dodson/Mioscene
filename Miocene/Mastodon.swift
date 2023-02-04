@@ -42,7 +42,7 @@ class Mastodon : ObservableObject
     var sql : SqliteDB
     var localAccountRecords : [LocalAccountRecord]?
     private var appState = AppState.shared
-    private var requestSize = 10
+    private var requestSize = 25
     
     init()
     {
@@ -383,7 +383,7 @@ class Mastodon : ObservableObject
     
     
     
-    func post(newpost:String,spoiler:String?,visibility:Visibility,attachedURLS:[AttachmentURL],pollpayload:PollPayload?,done: @escaping (Result<Status>) -> Void)
+    func post(newpost:String,replyTo:String?,sensitive:Bool?,spoiler:String?,visibility:Visibility,attachedURLS:[AttachmentURL],pollpayload:PollPayload?,done: @escaping (Result<Status>) -> Void)
     {
         if attachedURLS.count > 0
         {
@@ -444,7 +444,12 @@ class Mastodon : ObservableObject
                     retrywait += 1
                 }
                 
-                let request = Statuses.create(status:newpost,mediaIDs:mediaIDs,spoilerText:spoiler,visibility: visibility)
+                let request = Statuses.create(status:newpost,
+                                              replyToID:replyTo,
+                                              mediaIDs:mediaIDs,
+                                              sensitive: sensitive,
+                                              spoilerText:spoiler,
+                                              visibility: visibility)
                 client.run(request)
                 { result in
                     Log.log(msg:"post with media result \(result)")

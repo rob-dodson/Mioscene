@@ -14,6 +14,7 @@ struct EditPost: View
     @ObservedObject var mast : Mastodon
     @State var newPost : String = ""
     @State var title : String = "New Post"
+    @State var replyTo : String?
     var done: () -> Void
     
     @EnvironmentObject var settings: Settings
@@ -29,6 +30,7 @@ struct EditPost: View
     @State private var postVisibility : MastodonKit.Visibility = .public
     @State private var attachedurls = [AttachmentURL]()
     @State private var showPoll = false
+    @State private var sensitive = false
     @State private var pollType : PollType = .single
     @State private var pollTime : PollTimes = .fiveMinutes
     @StateObject private var pollState = PollState()
@@ -112,7 +114,15 @@ struct EditPost: View
             
             ToolbarItem
             {
-                PopButton(text: "Warning", icon: "exclamationmark.triangle",isSelected: false)
+                PopButton(text: "Sensitive", icon: "eye.slash",isSelected: sensitive)
+                {
+                    sensitive.toggle()
+                }
+            }
+            
+            ToolbarItem
+            {
+                PopButton(text: "Warning", icon: "exclamationmark.triangle",isSelected: showContentWarning)
                 {
                     showContentWarning.toggle()
                 }
@@ -120,7 +130,7 @@ struct EditPost: View
            
             ToolbarItem
             {
-                PopButton(text: "Poll", icon: "chart.bar.doc.horizontal",isSelected: false)
+                PopButton(text: "Poll", icon: "chart.bar.doc.horizontal",isSelected: showPoll)
                 {
                     showPoll.toggle()
                 }
@@ -160,6 +170,8 @@ struct EditPost: View
                     alertMediaUploading = (attachedurls.count > 0) ? true : false
                     
                     mast.post(newpost:newPost,
+                              replyTo:replyTo,
+                              sensitive: sensitive,
                        spoiler:showContentWarning == true ? contentWarning : nil,
                        visibility:postVisibility,
                        attachedURLS:attachedurls,
