@@ -26,69 +26,75 @@ struct PollView: View
         {
             VStack(alignment: .leading)
             {
-                ForEach(poll.options.indices, id:\.self)
-                { index in
-                    
-                    let total = Double(poll.votesCount)
-                    let itemcount = Double(poll.options[index].votesCount ?? 0)
-                    let percent = max(0.0,trunc((itemcount / total) * 100.0))
-                    
-                  
-                    HStack
-                    {
-                        if voted == false && poll.voted == false
-                        {
-                            Button()
-                            {
-                                if votes[index] == -1
-                                {
-                                    if poll.multiple == false
-                                    {
-                                        clearvotes()
-                                    }
-                                    votes[index] = index
-                                }
-                                else
-                                {
-                                    votes[index] = -1
-                                }
-                            }
-                        label:
-                            {
-                                if votes[index] != -1
-                                {
-                                    Image(systemName: "checkmark")
-                                }
-                                else
-                                {
-                                    Image(systemName: "circle")
-                                }
-                            }
-                            .buttonStyle(.plain)
-                        }
+                
+                    ForEach(poll.options.indices, id:\.self)
+                    { index in
                         
-                        ZStack(alignment: .leading)
+                        let total = Double(poll.votesCount)
+                        let itemcount = Double(poll.options[index].votesCount ?? 0)
+                        let percent = max(0.0,trunc((itemcount / total) * 100.0))
+                        
+                        
+                        HStack
                         {
-                            Rectangle().frame(width:300 ,height: 20)
-                                .foregroundColor(settings.theme.minorColor.opacity(0.25))
-                            
-                            if voted == true || poll.voted == true
+                            if voted == false && poll.voted == false
                             {
-                                Rectangle().frame(width:CGFloat(percent),height: 20)
-                                    .foregroundColor(settings.theme.accentColor)
+                                Button()
+                                {
+                                    if votes[index] == -1
+                                    {
+                                        if poll.multiple == false
+                                        {
+                                            clearvotes()
+                                        }
+                                        votes[index] = index
+                                    }
+                                    else
+                                    {
+                                        votes[index] = -1
+                                    }
+                                }
+                            label:
+                                {
+                                    if votes[index] != -1
+                                    {
+                                        Image(systemName: "checkmark")
+                                    }
+                                    else
+                                    {
+                                        Image(systemName: "circle")
+                                    }
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            
+                            GeometryReader
+                            { geo in
+                            
+                            ZStack(alignment: .leading)
+                            {
+                                Rectangle().frame(width:geo.size.width ,height: 20)
+                                    .foregroundColor(settings.theme.minorColor.opacity(0.25))
                                 
-                                HStack
+                                if voted == true || poll.voted == true
+                                {
+                                    Rectangle().frame(width:CGFloat(percent),height: 20)
+                                        .foregroundColor(settings.theme.accentColor)
+                                    
+                                    HStack
+                                    {
+                                        Text(" \(poll.options[index].title)")
+                                        Spacer()
+                                        Text("\(percent.formatted())% ")
+                                    }
+                                }
+                                else
                                 {
                                     Text(" \(poll.options[index].title)")
-                                    Spacer()
-                                    Text("\(percent.formatted())% ")
                                 }
                             }
-                            else
-                            {
-                                Text(" \(poll.options[index].title)")
-                            }
                         }
+                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 8, trailing: 0))
                     }
                 }
             }
