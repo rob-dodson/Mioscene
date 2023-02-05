@@ -245,8 +245,15 @@ struct TimeLineView: View
             let olderThanID = last.status.id
             mast.getOlderStatuses(timeline: timeline, id:olderThanID, tag: tag, done:
            { olderstats in
-                stats = stats + olderstats
-                loadingStats = false
+                if olderstats[0].status.id == olderThanID
+                {
+                    print("DUPE OLDER") // Mastodon API bug?
+                }
+                else
+                {
+                    stats = stats + olderstats
+                    loadingStats = false
+                }
             })
         }
     }
@@ -314,6 +321,7 @@ struct TimeLineView: View
                             PopMenuItem(text: TimeLine.publicTimeline.rawValue,userData:TimeLine.publicTimeline),
                             PopMenuItem(text: TimeLine.tag.rawValue,userData:TimeLine.tag),
                             PopMenuItem(text: TimeLine.favorites.rawValue,userData:TimeLine.favorites),
+                            PopMenuItem(text: TimeLine.bookmarks.rawValue,userData:TimeLine.bookmarks),
                             PopMenuItem(text: TimeLine.notifications.rawValue,userData:TimeLine.notifications),
                             PopMenuItem(text: TimeLine.mentions.rawValue,userData:TimeLine.mentions),
                            ])

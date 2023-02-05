@@ -426,6 +426,26 @@ struct Post: View
                                 }
                                 mstatus.reblogged.toggle()
                             }
+                            
+                            //
+                            // bookmark
+                            //
+                            PopButtonColor(text: "",
+                                           icon: "bookmark",
+                                           textColor:settings.theme.minorColor,
+                                           iconColor:mstatus.bookmarked == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false)
+                            {
+                                if mstatus.bookmarked == true
+                                {
+                                    mast.unbookmark(status: status)
+                                }
+                                else
+                                {
+                                    mast.bookmark(status: status)
+                                }
+                                mstatus.bookmarked.toggle()
+                            }
+                            
                         }
                         
                         //

@@ -16,6 +16,7 @@ class MStatus : Identifiable,ObservableObject
     @Published var favoritesCount : Int = 0
     @Published var reblogged : Bool = false
     @Published var reblogsCount: Int = 0
+    @Published var bookmarked : Bool = false
 
     init(status:Status)
     {
@@ -24,6 +25,7 @@ class MStatus : Identifiable,ObservableObject
         self.favoritesCount = status.favouritesCount
         self.reblogged = status.reblogged ?? false
         self.reblogsCount = status.reblogsCount
+        self.bookmarked = status.bookmarked ?? false
     }
     
     var id = UUID()

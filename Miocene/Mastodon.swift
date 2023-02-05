@@ -25,6 +25,7 @@ enum TimeLine : String,CaseIterable, Identifiable,Equatable
          publicTimeline = "Public Timeline",
          tag = "Tag",
          favorites = "Favorites",
+         bookmarks = "Bookmarks",
          notifications = "All Notifications",
          mentions = "Mentions Only"
     
@@ -361,6 +362,24 @@ class Mastodon : ObservableObject
         }
     }
     
+    func bookmark(status:Status)
+    {
+        let request = Statuses.bookmark(id: status.id)
+        client.run(request)
+        { result in
+            Log.log(msg:"bookmark result \(result)")
+        }
+    }
+    
+    func unbookmark(status:Status)
+    {
+        let request = Statuses.unbookmark(id: status.id)
+        client.run(request)
+        { result in
+            Log.log(msg:"unbookmark result \(result)")
+        }
+    }
+    
     
     func reblog(status:Status)
     {
@@ -538,6 +557,8 @@ class Mastodon : ObservableObject
                 return Timelines.tag(tag)
             case .favorites:
                 return Favourites.all(range:range)
+            case .bookmarks:
+                return Bookmarks.all(range:range)
             case .notifications:
                 return Timelines.public(local: false,range:range)
             case .mentions:
