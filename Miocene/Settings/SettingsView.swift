@@ -18,26 +18,29 @@ struct SettingsView: View
     {
         VStack
         {
-            VStack(alignment: .trailing)
+            ScrollView
             {
-                appearance()
-                textSize()
-                font()
-                behaviors()
-            }
-            
-            SpacerLine(color: settings.theme.minorColor)
-            
-            Text("Help")
-                .font(settings.font.title)
-                .foregroundColor(settings.theme.accentColor)
-            
-            VStack(alignment: .leading)
-            {
-                Link("Miocene 1.0", destination: URL(string:"https://miocene.app/about")!)
-                Link("Miocene Support", destination: URL(string:"https://miocene.app/support")!)
-                Link("Privacy", destination: URL(string:"https://miocene.app/privacy")!)
-                Link("Copyright Shy Frog Productions LLC", destination: URL(string:"https://miocene.app/about")!)
+                VStack(alignment: .trailing)
+                {
+                    appearance()
+                    textSize()
+                    font()
+                    behaviors()
+                }
+                
+                SpacerLine(color: settings.theme.minorColor)
+                
+                Text("Help")
+                    .font(settings.font.title)
+                    .foregroundColor(settings.theme.accentColor)
+                
+                VStack(alignment: .leading)
+                {
+                    Link("Miocene 1.0", destination: URL(string:"https://miocene.app/about")!)
+                    Link("Miocene Support", destination: URL(string:"https://miocene.app/support")!)
+                    Link("Privacy", destination: URL(string:"https://miocene.app/privacy")!)
+                    Link("Copyright Shy Frog Productions LLC", destination: URL(string:"https://miocene.app/about")!)
+                }
             }
         }
         .frame(maxHeight: .infinity,alignment: .top)
