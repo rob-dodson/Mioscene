@@ -33,7 +33,7 @@ struct ContentView: View
                         case .TimeLine: TimeLineView(mast: mast)
                         case .Accounts: AccountView(mast: mast,maccount: MAccount(displayname: appState.currentUserMastAccount!.displayName, acct: appState.currentUserMastAccount!))
                         case .Search:  SearchView(mast: mast)
-                        case .Settings: SettingsView()
+                        case .Settings: SettingsView(mast: mast)
                     }
                 }
                 .frame(minWidth:100,maxHeight: geo.size.height * 1.0)

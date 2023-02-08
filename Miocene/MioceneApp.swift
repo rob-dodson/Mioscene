@@ -9,7 +9,7 @@ import SwiftUI
 @main
 struct MioceneApp: App
 {
-    @StateObject private var mast = Mastodon()
+    @StateObject private var mast = Mastodon.shared
     @StateObject var settings = Settings()
     @StateObject var errorSystem = ErrorSystem()
     @StateObject var appState = AppState.shared 

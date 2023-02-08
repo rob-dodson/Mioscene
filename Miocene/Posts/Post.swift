@@ -141,9 +141,12 @@ struct Post: View
                                 .font(settings.font.footnote).italic()
                                 .foregroundColor(settings.theme.minorColor)
                         }
-                        
                     }
                     
+                    
+                    //
+                    // content warning
+                    //
                     if status.spoilerText.count > 0
                     {
                         HStack
@@ -162,12 +165,14 @@ struct Post: View
                         .padding(EdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4))
                         .border(width: 1, edges: [.top,.bottom,.leading,.trailing], color: settings.theme.accentColor)
                     }
+                 
+                    
+                    //
+                    // html body of post
+                    //
                     
                     if status.spoilerText.count == 0 || (status.spoilerText.count > 0 && showContentWarning == true)
                     {
-                        //
-                        // html body of post
-                        //
                         let betterPSpaceing = status.content.replacingOccurrences(of: "</p>", with: "</p><br />")
                         if let nsAttrString = betterPSpaceing.htmlAttributedString(color:settings.theme.bodyColor,
                                                                                    linkColor:settings.theme.linkColor,
@@ -177,7 +182,7 @@ struct Post: View
                                 .font(settings.font.body)
                                 .foregroundColor(settings.theme.bodyColor)
                                 .textSelection(.enabled)
-                            
+                                
                         }
                     }
                     

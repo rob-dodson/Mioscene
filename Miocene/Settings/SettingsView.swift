@@ -10,6 +10,7 @@ import SwiftUI
 
 struct SettingsView: View
 {
+    @ObservedObject var mast : Mastodon
     @EnvironmentObject var settings: Settings
     
     let colorBlockSize = 20.0
@@ -52,10 +53,19 @@ struct SettingsView: View
     {
         return VStack
         {
-            Text("Appearance")
-                .font(settings.font.title)
-                .foregroundColor(settings.theme.accentColor)
-            
+            HStack(spacing: 2)
+            {
+                Link(destination: URL(string:"https://joinmastodon.org/")!)
+                {
+                    Image("MastodonSymbol")
+                        .foregroundColor(settings.theme.accentColor)
+                        .font(.largeTitle)
+                }
+                
+                Text("Appearance")
+                    .font(settings.font.title)
+                    .foregroundColor(settings.theme.accentColor)
+            }.symbolRenderingMode(.multicolor)
             
             ForEach($settings.themes.themeslist.indices, id:\.self)
             { index in

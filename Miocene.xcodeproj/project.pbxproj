@@ -45,6 +45,7 @@
 		AEAFA2EF297F4BBF00970F40 /* SwiftyGif in Frameworks */ = {isa = PBXBuildFile; productRef = AEAFA2EE297F4BBF00970F40 /* SwiftyGif */; };
 		AEAFA2F129807C9B00970F40 /* PopMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2F029807C9B00970F40 /* PopMenuButton.swift */; };
 		AEE6EB79298A080700463A71 /* ShowImagePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE6EB78298A080700463A71 /* ShowImagePanel.swift */; };
+		AEE7F88729916B9E0030C7F3 /* TimelineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE7F88629916B9E0030C7F3 /* TimelineManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,6 +87,7 @@
 		AEAFA2F029807C9B00970F40 /* PopMenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopMenuButton.swift; sourceTree = "<group>"; };
 		AEE6EB772985CBC300463A71 /* Notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
 		AEE6EB78298A080700463A71 /* ShowImagePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowImagePanel.swift; sourceTree = "<group>"; };
+		AEE7F88629916B9E0030C7F3 /* TimelineManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +135,7 @@
 				AED7E1812976436A0053D0C9 /* Utils */,
 				AEAFA2DF297B279E00970F40 /* MainViews */,
 				AE06EBEF294D16BB006CAB67 /* MioceneApp.swift */,
+				AEE7F88629916B9E0030C7F3 /* TimelineManager.swift */,
 				AE06EC03294D234D006CAB67 /* Mastodon.swift */,
 				AE06EBF3294D16BC006CAB67 /* Assets.xcassets */,
 				AE06EBF5294D16BC006CAB67 /* Miocene.entitlements */,
@@ -311,6 +314,7 @@
 			files = (
 				AE28C5FD29648C2400C8C928 /* SettingsView.swift in Sources */,
 				AE28C611296F48FD00C8C928 /* PollView.swift in Sources */,
+				AEE7F88729916B9E0030C7F3 /* TimelineManager.swift in Sources */,
 				AE28C5E4295CE9F900C8C928 /* TimeLineView.swift in Sources */,
 				AE28C60329663A5B00C8C928 /* AccountLarge.swift in Sources */,
 				AE28C5F029635CAA00C8C928 /* Keys.swift in Sources */,

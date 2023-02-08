@@ -18,40 +18,35 @@ struct AttachmentURL : Identifiable
 }
 
 
-enum TimeLine : String,CaseIterable, Identifiable,Equatable
-{
-    case home = "Home",
-         localTimeline = "Local Timeline",
-         publicTimeline = "Public Timeline",
-         tag = "Tag",
-         favorites = "Favorites",
-         bookmarks = "Bookmarks",
-         notifications = "All Notifications",
-         mentions = "Mentions Only"
-    
-    var id: Self { self }
-}
-
-
-@MainActor
 class Mastodon : ObservableObject
 {
     static let accessTokenKeyNamePrefix = "Miocene.mastodon.access.token"
+    static let shared = Mastodon()
     
-    var client : Client!
     var currentTimeline : TimeLine = .home
-    var sql : SqliteDB
     var localAccountRecords : [LocalAccountRecord]?
+    private var client : Client!
+    private var sql : SqliteDB
+    
+    @Published var userLoggedIn : Bool = false
+    
     private var appState = AppState.shared
     private var requestSize = 25
     
+    
     init()
+    {
+        sql = SqliteDB()
+        start()
+    }
+    
+    func start()
     {
         do
         {
             Log.log(msg:"Starting up",rewindfile:true)
             
-            sql = SqliteDB()
+            
             localAccountRecords = try sql.loadAccounts()
             
             if localAccountRecords != nil
@@ -60,9 +55,7 @@ class Mastodon : ObservableObject
                 {
                     if localrec.lastViewed == true
                     {
-                        appState.currentlocalAccountRecord = localrec
-                        
-                        let token = Keys.getFromKeychain(name: appState.currentlocalAccountRecord!.makeKeyChainName())
+                        let token = Keys.getFromKeychain(name: localrec.makeKeyChainName())
                         if let token
                         {
                             connect(serverurl: localrec.server, token: token, done:
@@ -70,14 +63,14 @@ class Mastodon : ObservableObject
                                 
                                 if let account = result.value
                                 {
-                                    DispatchQueue.main.async {
-                                        
-                                        self.appState.currentUserMastAccount = account
-                                        self.appState.currentViewingMastAccount = MAccount(displayname: account.displayName, acct: account)
-                                        self.appState.currentlocalAccountRecord = localrec
-                                        
-                                        Log.log(msg: "Account \(account.username) is logged in!")
-                                    }
+                                        DispatchQueue.main.async {
+                                            self.userLoggedIn = true
+                                            self.appState.currentlocalAccountRecord = localrec
+                                            self.appState.currentUserMastAccount = account
+                                            self.appState.currentViewingMastAccount = MAccount(displayname: account.displayName, acct: account)
+                                            
+                                            Log.log(msg: "Account \(account.username) is logged in!")
+                                        }
                                 }
                                 else if let error = result.error
                                 {
@@ -99,6 +92,20 @@ class Mastodon : ObservableObject
             Log.log(msg:"sql error \(error)")
         }
     }
+    
+    
+    func search(searchTerm:String,done:@escaping (Results) -> Void )
+    {
+        let request =  Search.search(query:searchTerm,resolve:false)
+        client.run(request)
+        { result in
+            if let results = result.value
+            {
+                done(results)
+            }
+        }
+    }
+    
     
     func connect(serverurl:String,token:String,done:@escaping (Result<Account>) -> Void)
     {
@@ -547,6 +554,8 @@ class Mastodon : ObservableObject
     {
         switch timeline
         {
+            case .custom:
+                return Timelines.home(range:range)
             case .home:
                 return Timelines.home(range:range)
             case .publicTimeline:
@@ -566,7 +575,7 @@ class Mastodon : ObservableObject
         }
     }
     
-    func getSomeStatuses(timeline:TimeLine,tag:String,done: @escaping ([MStatus]) -> Void)
+    func getSomeStatuses(timeline:TimeLine,tag:String,done: @escaping ([MStatus]) -> Void) async
     {
         let request = makeRequest(timeline: timeline,range: .limit(requestSize),tag:tag)
         
@@ -587,13 +596,13 @@ class Mastodon : ObservableObject
     }
     
     
-    func getNewerStatuses(timeline:TimeLine,id:String,tag:String,done: @escaping ([MStatus]) -> Void)
+    func getNewerStatuses(timeline:TimeLine,id:String,tag:String,done: @escaping ([MStatus],Bool) -> Void)
     {
         let request = makeRequest(timeline: timeline,range:.min(id: id, limit: requestSize),tag:tag)
         
         getTimeline(request: request)
         { statuses, pagination in
-            done(statuses)
+            done(statuses, pagination == nil ? false : true)
         }
     }
     

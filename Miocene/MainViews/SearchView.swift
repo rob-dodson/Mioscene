@@ -34,18 +34,9 @@ struct SearchView: View
                 {
                     showLoading = true
                     results = nil
-                    let request =  MastodonKit.Search.search(query:searchTerm,resolve:false)
-                    mast.client.run(request)
-                    { result in
-                        
-                        showLoading = false
-                        switch result
-                        {
-                        case .success:
-                            results = result.value
-                        case .failure(let error):
-                            Log.log(msg:error.localizedDescription)
-                        }
+                    mast.search(searchTerm: searchTerm)
+                    { theresults in
+                        results = theresults
                     }
                 }
                 .padding([.bottom,.trailing])
