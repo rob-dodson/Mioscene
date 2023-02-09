@@ -44,7 +44,7 @@ struct TimeLineView: View
                     {
                         accountsMenu()
                         timelineMenu()
-                        Filters()
+                        FiltersView()
                         refreshButton()
                         NewPostButton(mast:mast)
                     }

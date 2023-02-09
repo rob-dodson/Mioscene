@@ -213,83 +213,18 @@ class TimelineManager : ObservableObject
                 // sort by date/time
                 //
                 stats = stats.sorted(by:
-                                        { a, b in
+                { a, b in
                     return a.status.createdAt.timeIntervalSince1970 < b.status.createdAt.timeIntervalSince1970
                 })
+                
                 
                 //
                 // now apply filters
                 //
-                stats = filterStats(filterSet:customtimeline.filterSet,stats:stats)
+                stats = FilterTools.shared.filterStats(filterSet:customtimeline.filterSet,stats:stats)
             }
             
             return stats
-        }
-    }
-    
-    
-    private func filterStats(filterSet:FilterSet,stats:[MStatus]) -> [MStatus]
-    {
-        var filteredstats = [MStatus]()
-        
-        for stat in stats
-        {
-            var keepit = false
-            
-            for filter in filterSet.filters
-            {
-                if filter.isOn == false { continue }
-                
-                let match = keepItem(filter: filter, stat: stat)
-                
-                switch filterSet.setType
-                {
-                    case .AllFilters:
-                        if match == false { keepit = false }
-                    case .AnyFilter:
-                        if match == true { keepit = true }
-                }
-            }
-            
-            if keepit == true
-            {
-                filteredstats.append(stat)
-            }
-        }
-        
-        return filteredstats
-    }
-    
-    
-    private func keepItem(filter:Filter,stat:MStatus) -> Bool
-    {
-        var match = false
-        
-        switch filter.type
-        {
-            case .accountName:
-                match = (stat.status.account.acct == filter.filterString) ? true : false
-                
-            case .displayName:
-                match = (stat.status.account.displayName == filter.filterString) ? true : false
-                
-            case .hashtag:
-                for hashtag in stat.status.tags
-                {
-                    if hashtag.name == filter.filterString { match = true }
-                }
-                
-            case .body:
-                if stat.status.content.contains(try! Regex(filter.filterString)) { match = true }
-        }
-        
-        switch filter.keepOrReject
-        {
-            case .keep:
-                return match == true ? true : false
-                
-            case .reject:
-                return match == true ? false : true
         }
     }
     
@@ -370,6 +305,7 @@ class TimelineManager : ObservableObject
             }
         }
     }
+   
     
     private func getNewStatuses(timelineRequest:TimelineRequest)
     {
