@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 
 
-
 enum TimeLine : String,CaseIterable,Identifiable,Equatable
 {
     case custom = "Custom",
@@ -53,14 +52,18 @@ class TimelineManager : ObservableObject
 {
     @EnvironmentObject var settings: Settings
     
-    // TimeLineView uses these in it's ScrollView
+    //
+    // TimeLineView uses these in it's ScrollView ===
+    //
     @Published var theStats = [MStatus]()
     @Published var theNotifications = [MNotification]()
 
+    
     @State private var fetching : Bool = false
     @State private var currentRequest = TimelineRequest(timelineWhen: .current, timeLine: .home, tag: "")
     @State private var timelineTimer : Timer?
     @State private var mast = Mastodon.shared
+    
     
     //
     // Public API
@@ -74,18 +77,18 @@ class TimelineManager : ObservableObject
     }
     
     //
-    // These update theStats/theNotifications and will cause the TimeLineView to update!
+    // These funcs update theStats/theNotifications and will cause the TimeLineView to reload!
     //
     func clearTimeline()
     {
         theStats = [MStatus]()
+        theNotifications = [MNotification]()
     }
     
     func setTimelineRequestAndFetch(request:TimelineRequest)
     {
         doRequest(request: request)
     }
-    
     
     func getOlderStats()
     {
@@ -96,7 +99,6 @@ class TimelineManager : ObservableObject
         doRequest(request: requestOld)
     }
     
-    
     func getNewerStats()
     {
         var requestNew = self.currentRequest
@@ -106,7 +108,6 @@ class TimelineManager : ObservableObject
         doRequest(request: requestNew)
     }
  
-    
     func getCurrentStats()
     {
         var requestCurrent = self.currentRequest
@@ -119,7 +120,7 @@ class TimelineManager : ObservableObject
     //
     // private funcs
     //
-    func doRequest(request:TimelineRequest)
+    private func doRequest(request:TimelineRequest)
     {
         Task
         {
@@ -150,20 +151,6 @@ class TimelineManager : ObservableObject
         }
     }
     
-    
-    func getNotifications(timelineRequest:TimelineRequest)
-    {
-        mast.getNotifications(mentionsOnly:timelineRequest.timeLine == .mentions ? true : false)
-        { mnotes in
-            
-            DispatchQueue.main.async
-            {
-                self.theNotifications = mnotes
-            }
-        }
-    }
-    
-    
     private func fetchStatuses(timelineRequest:TimelineRequest) async
     {
         if fetching == true { return }
@@ -183,7 +170,19 @@ class TimelineManager : ObservableObject
                 
             case .custom:
                 print("CUSTOM")
-                
+        }
+    }
+    
+    
+    private func getNotifications(timelineRequest:TimelineRequest)
+    {
+        mast.getNotifications(mentionsOnly:timelineRequest.timeLine == .mentions ? true : false)
+        { mnotes in
+            
+            DispatchQueue.main.async
+            {
+                self.theNotifications = mnotes
+            }
         }
     }
     
