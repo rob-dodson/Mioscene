@@ -53,17 +53,17 @@ class TimelineManager : ObservableObject
 {
     @EnvironmentObject var settings: Settings
     
-    @Published var theStats = [MStatus]() // TimeLineView uses this in it's ScrollView
-    
+    // TimeLineView uses these in it's ScrollView
+    @Published var theStats = [MStatus]()
+    @Published var theNotifications = [MNotification]()
+
     @State private var fetching : Bool = false
     @State private var currentRequest = TimelineRequest(timelineWhen: .current, timeLine: .home, tag: "")
     @State private var timelineTimer : Timer?
     @State private var mast = Mastodon.shared
     
-    
     //
     // Public API
-    // These simply update theStats and this should cause the TimeLineView to update!
     //
     func start()
     {
@@ -73,6 +73,9 @@ class TimelineManager : ObservableObject
         }
     }
     
+    //
+    // These update theStats/theNotifications and will cause the TimeLineView to update!
+    //
     func clearTimeline()
     {
         theStats = [MStatus]()
@@ -148,13 +151,40 @@ class TimelineManager : ObservableObject
     }
     
     
+    func getNotifications(timelineRequest:TimelineRequest)
+    {
+        mast.getNotifications(mentionsOnly:timelineRequest.timeLine == .mentions ? true : false)
+        { mnotes in
+            
+            DispatchQueue.main.async
+            {
+                self.theNotifications = mnotes
+            }
+        }
+    }
+    
+    
     private func fetchStatuses(timelineRequest:TimelineRequest) async
     {
         if fetching == true { return }
         fetching = true
         
-        theStats = await assembleTimeline(timelineRequest: timelineRequest)
-        currentRequest = timelineRequest
+        switch timelineRequest.timeLine
+        {
+            case .home,.localTimeline,.publicTimeline,.favorites,.tag,.bookmarks:
+                
+                theStats = await assembleTimeline(timelineRequest: timelineRequest)
+                currentRequest = timelineRequest
+                
+            case .mentions,.notifications:
+                
+                getNotifications(timelineRequest: timelineRequest)
+                currentRequest = timelineRequest
+                
+            case .custom:
+                print("CUSTOM")
+                
+        }
     }
     
     
@@ -272,23 +302,33 @@ class TimelineManager : ObservableObject
         switch timelineRequest.timelineWhen
         {
             case .current:
-                await self.mast.getSomeStatuses(timeline: timelineRequest.timeLine, tag:timelineRequest.tag, done:
-                { somestats in
-                    DispatchQueue.main.async
-                    {
-                        self.theStats = somestats
-                    }
-                })
+                getCurrentStats(timelineRequest: timelineRequest)
                 
             case .newer:
-                self.getNewStatuses(timelineRequest: timelineRequest)
+                getNewStatuses(timelineRequest: timelineRequest)
                 
             case .older:
-                self.getOlderStats(timelineRequest: timelineRequest)
+                getOlderStats(timelineRequest: timelineRequest)
         }
         
-        fetching = false
         return theStats
+    }
+    
+    
+    private func getCurrentStats(timelineRequest:TimelineRequest)
+    {
+        Task
+        {
+            await mast.getSomeStatuses(timeline: timelineRequest.timeLine, tag:timelineRequest.tag)
+            { somestats in
+                
+                DispatchQueue.main.async
+                {
+                    self.theStats = somestats
+                    self.fetching = false
+                }
+            }
+        }
     }
     
     
@@ -296,33 +336,37 @@ class TimelineManager : ObservableObject
     {
         guard let id = timelineRequest.id else { return }
         
-        
-        self.mast.getOlderStatuses(timeline: timelineRequest.timeLine, id: id, tag:timelineRequest.tag)
-        { [self] olderstats in
-            
-            if timelineRequest.timeLine == .bookmarks || timelineRequest.timeLine == .favorites // getOlder always returns all, so we filter out ones we have. Bug? Me dumb?
-            {
-                let filteredoldstats = olderstats.filter
-                { mstatus in
-                    
-                    for stat in theStats
-                    {
-                        if stat.status.id == mstatus.status.id { return false }
+        Task
+        {
+            mast.getOlderStatuses(timeline: timelineRequest.timeLine, id: id, tag:timelineRequest.tag)
+            { [self] olderstats in
+                
+                if timelineRequest.timeLine == .bookmarks || timelineRequest.timeLine == .favorites // getOlder always returns all, so we filter out ones we have. Bug? Me dumb?
+                {
+                    let filteredoldstats = olderstats.filter
+                    { mstatus in
+                        
+                        for stat in theStats
+                        {
+                            if stat.status.id == mstatus.status.id { return false }
+                        }
+                        return true
                     }
-                    return true
+                    
+                    DispatchQueue.main.async
+                    {
+                        self.theStats = self.theStats + filteredoldstats
+                    }
+                }
+                else
+                {
+                    DispatchQueue.main.async
+                    {
+                        self.theStats = self.theStats + olderstats
+                    }
                 }
                 
-                DispatchQueue.main.async
-                {
-                    self.theStats = self.theStats + filteredoldstats
-                }
-            }
-            else
-            {
-                DispatchQueue.main.async
-                {
-                    self.theStats = self.theStats + olderstats
-                }
+                self.fetching = false
             }
         }
     }
@@ -366,6 +410,8 @@ class TimelineManager : ObservableObject
                 
                 try? await Task.sleep(for: .seconds(1))
             }
+            
+            self.fetching = false
         }
     }
     

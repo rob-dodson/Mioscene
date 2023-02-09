@@ -16,14 +16,12 @@ struct TimeLineView: View
     
     @StateObject private var timelineManger = TimelineManager()
     
-    @State private var notifications = [MNotification]()
-    @State private var favorites = [MStatus]()
-    @State private var tags = [MStatus]()
     @State private var showingpopup : Bool = false
     
-    @State var currentTag = String()
+    @State var currentTag = String() // move this into TimeLineManager?
     @State var selectedTimeline : TimeLine = .home
 
+    
     var body: some View
     {
         mainView()
@@ -99,8 +97,8 @@ struct TimeLineView: View
                         while(mast.userLoggedIn == false)
                         {
                             try? await Task.sleep(for: .seconds(0.25))
-                            print("SLEEP")
                         }
+                        
                         timelineManger.start()
                         timelineManger.setTimelineRequestAndFetch(request: TimelineRequest(timelineWhen: .current, timeLine: .home, tag: "")) // get this request from defaults. last used.
                     }
@@ -138,17 +136,9 @@ struct TimeLineView: View
     
     func getnotifications() -> [MNotification]
     {
-        return notifications
+        return timelineManger.theNotifications
     }
     
-    
-    func getSomeNotifications(timeline:TimeLine)
-    {
-        mast.getNotifications(mentionsOnly:timeline == .mentions ? true : false)
-        { mnotes in
-            notifications = mnotes
-        }
-    }
     
     
     func refreshButton() -> some View
@@ -211,6 +201,8 @@ struct TimeLineView: View
             
             if let timeline = TimeLine(rawValue: item.text)
             {
+                timelineManger.clearTimeline()
+                
                 selectedTimeline = timeline
                 
                 let request = TimelineRequest(timelineWhen: .current, timeLine: timeline, tag: currentTag)
