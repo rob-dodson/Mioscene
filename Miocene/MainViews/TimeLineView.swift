@@ -59,28 +59,7 @@ struct TimeLineView: View
                 
                 if selectedTimeline == .tag
                 {
-                    HStack
-                    {
-                        TextField("#tag", text: $currentTag)
-                            .padding()
-                            .font(settings.font.title)
-                            .onSubmit
-                            {
-                                let request = TimelineRequest(timelineWhen: .current, timeLine: .tag, tag: currentTag)
-                                timelineManger.setTimelineRequestAndFetch(request: request)
-                            }
-                        
-                        PopButton(text: "Load", icon: "paperplane.fill", isSelected: true)
-                        {
-                            let request = TimelineRequest(timelineWhen: .current, timeLine: .tag, tag: currentTag)
-                            timelineManger.setTimelineRequestAndFetch(request: request)
-                        }
-                    }
-                    .padding([.trailing],25)
-                    .onAppear()
-                    {
-                        timelineManger.clearTimeline()
-                    }
+                    handleTagInput()
                 }
                 
                 ScrollView
@@ -119,10 +98,9 @@ struct TimeLineView: View
                     {
                         while(mast.userLoggedIn == false)
                         {
-                            try? await Task.sleep(for: .seconds(0.5))
+                            try? await Task.sleep(for: .seconds(0.25))
                             print("SLEEP")
                         }
-                        print("IN")
                         timelineManger.start()
                         timelineManger.setTimelineRequestAndFetch(request: TimelineRequest(timelineWhen: .current, timeLine: .home, tag: "")) // get this request from defaults. last used.
                     }
@@ -131,6 +109,32 @@ struct TimeLineView: View
     }
     
      
+    func handleTagInput() -> some View
+    {
+        HStack
+        {
+            TextField("#tag", text: $currentTag)
+                .padding()
+                .font(settings.font.title)
+                .onSubmit
+            {
+                let request = TimelineRequest(timelineWhen: .current, timeLine: .tag, tag: currentTag)
+                timelineManger.setTimelineRequestAndFetch(request: request)
+            }
+            
+            PopButton(text: "Load", icon: "paperplane.fill", isSelected: true)
+            {
+                let request = TimelineRequest(timelineWhen: .current, timeLine: .tag, tag: currentTag)
+                timelineManger.setTimelineRequestAndFetch(request: request)
+            }
+        }
+        .padding([.trailing],25)
+        .onAppear()
+        {
+            timelineManger.clearTimeline()
+        }
+    }
+    
     
     func getnotifications() -> [MNotification]
     {
