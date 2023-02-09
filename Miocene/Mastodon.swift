@@ -602,7 +602,7 @@ class Mastodon : ObservableObject
         
         getTimeline(request: request)
         { statuses, pagination in
-            done(statuses, pagination == nil ? false : true)
+            done(statuses, pagination == nil ? false : true) // Fix why why pagination return max?
         }
     }
     

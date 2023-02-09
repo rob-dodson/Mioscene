@@ -19,13 +19,11 @@ struct TimeLineView: View
     @State private var notifications = [MNotification]()
     @State private var favorites = [MStatus]()
     @State private var tags = [MStatus]()
-    @State private var loadingStats = false
     @State private var showingpopup : Bool = false
-    @State private var timelineTimer : Timer?
     
-    static var taskRunning = false
-    
-    
+    @State var currentTag = String()
+    @State var selectedTimeline : TimeLine = .home
+
     var body: some View
     {
         mainView()
@@ -59,20 +57,29 @@ struct TimeLineView: View
                 
                 SpacerLine(color: settings.theme.minorColor)
                 
-                if appState.selectedTimeline == .tag
+                if selectedTimeline == .tag
                 {
                     HStack
                     {
-                        TextField("#tag", text: $appState.currentTag)
+                        TextField("#tag", text: $currentTag)
                             .padding()
                             .font(settings.font.title)
+                            .onSubmit
+                            {
+                                let request = TimelineRequest(timelineWhen: .current, timeLine: .tag, tag: currentTag)
+                                timelineManger.setTimelineRequestAndFetch(request: request)
+                            }
                         
-                        Button("Load")
+                        PopButton(text: "Load", icon: "paperplane.fill", isSelected: true)
                         {
-                            let request = TimelineRequest(timelineWhen: .current, timeLine: .tag, tag: appState.currentTag)
-                            timelineManger.setTimelineRequestAndFetchCurrent(request: request)
+                            let request = TimelineRequest(timelineWhen: .current, timeLine: .tag, tag: currentTag)
+                            timelineManger.setTimelineRequestAndFetch(request: request)
                         }
-                        .keyboardShortcut(.defaultAction)
+                    }
+                    .padding([.trailing],25)
+                    .onAppear()
+                    {
+                        timelineManger.clearTimeline()
                     }
                 }
                 
@@ -80,7 +87,7 @@ struct TimeLineView: View
                 {
                     LazyVStack
                     {
-                        if appState.selectedTimeline == .notifications || appState.selectedTimeline == .mentions
+                        if selectedTimeline == .notifications || selectedTimeline == .mentions
                         {
                             ForEach(getnotifications())
                             { note in
@@ -111,12 +118,13 @@ struct TimeLineView: View
                     Task
                     {
                         while(mast.userLoggedIn == false)
-                        { // on boarding here
+                        {
                             try? await Task.sleep(for: .seconds(0.5))
                             print("SLEEP")
                         }
                         print("IN")
-                        timelineManger.setTimelineRequestAndFetchCurrent(request: TimelineRequest(timelineWhen: .current, timeLine: .home, tag: "")) // get this request from defaults. last used.
+                        timelineManger.start()
+                        timelineManger.setTimelineRequestAndFetch(request: TimelineRequest(timelineWhen: .current, timeLine: .home, tag: "")) // get this request from defaults. last used.
                     }
                 }
         }
@@ -130,16 +138,14 @@ struct TimeLineView: View
     }
     
     
-    
-    
     func getSomeNotifications(timeline:TimeLine)
     {
         mast.getNotifications(mentionsOnly:timeline == .mentions ? true : false)
         { mnotes in
             notifications = mnotes
-            loadingStats = false
         }
     }
+    
     
     func refreshButton() -> some View
     {
@@ -152,7 +158,7 @@ struct TimeLineView: View
     
     func toolbarToggleButton() -> some View
     {
-        PopButtonColor(text: "", icon: "ellipsis.curlybraces", textColor: settings.theme.minorColor, iconColor: settings.theme.minorColor,isSelected: false)
+        PopButtonColor(text: "", icon: "ellipsis.circle", textColor: settings.theme.minorColor, iconColor: settings.theme.minorColor,isSelected: false)
         {
             settings.showTimelineToolBar.toggle()
             UserDefaults.standard.set(settings.showTimelineToolBar, forKey: "showtimelinetoolbar")
@@ -187,7 +193,7 @@ struct TimeLineView: View
         
     func timelineMenu() -> some View
     {
-        PopMenu(icon: "clock.arrow.circlepath",selected:appState.selectedTimeline.rawValue,
+        PopMenu(icon: "clock.arrow.circlepath",selected:selectedTimeline.rawValue,
                 menuItems: [PopMenuItem(text: TimeLine.home.rawValue,userData:TimeLine.home),
                             PopMenuItem(text: TimeLine.localTimeline.rawValue,userData:TimeLine.localTimeline),
                             PopMenuItem(text: TimeLine.publicTimeline.rawValue,userData:TimeLine.publicTimeline),
@@ -199,22 +205,12 @@ struct TimeLineView: View
                            ])
         { item in
             
-            if item.userData == TimeLine.tag
+            if let timeline = TimeLine(rawValue: item.text)
             {
-                appState.selectedTimeline = TimeLine.tag
-                if appState.currentTag.count > 0
-                {
-                    let request = TimelineRequest(timelineWhen: .current, timeLine: .tag, tag: appState.currentTag)
-                    timelineManger.setTimelineRequestAndFetchCurrent(request: request)
-                }
-            }
-            else
-            {
-                if let timeline = TimeLine(rawValue: item.text)
-                {
-                    let request = TimelineRequest(timelineWhen: .current, timeLine: timeline, tag: "")
-                    timelineManger.setTimelineRequestAndFetchCurrent(request: request)
-                }
+                selectedTimeline = timeline
+                
+                let request = TimelineRequest(timelineWhen: .current, timeLine: timeline, tag: currentTag)
+                timelineManger.setTimelineRequestAndFetch(request: request)
             }
         }
     }

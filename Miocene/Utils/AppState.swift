@@ -28,24 +28,21 @@ class AppState : ObservableObject
     @Published var currentlocalAccountRecord : LocalAccountRecord?
     @Published var currentUserMastAccount : MastodonKit.Account?
     @Published var currentViewingMastAccount : MAccount?
-    @Published var currenttabindex = CurrentTabIndex()
     @Published var tabIndex : TabIndex = .TimeLine
-    @Published var currentTag = String()
-    @Published var selectedTimeline : TimeLine = .home
+    
     
     static let shared = AppState()
     
     
     func showTag(tag:String)
     {
-        currentTag = tag
-        selectedTimeline = .tag
+     //   selectedTimeline = .tag
         tabIndex = .TimeLine
     }
     
     func showHome()
     {
-        selectedTimeline = .home
+    //    selectedTimeline = .home
         tabIndex = .TimeLine
     }
     

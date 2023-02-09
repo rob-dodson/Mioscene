@@ -53,69 +53,78 @@ class TimelineManager : ObservableObject
 {
     @EnvironmentObject var settings: Settings
     
-    @Published var theStats = [MStatus]()
+    @Published var theStats = [MStatus]() // TimeLineView uses this in it's ScrollView
     
     @State private var fetching : Bool = false
     @State private var currentRequest = TimelineRequest(timelineWhen: .current, timeLine: .home, tag: "")
     @State private var timelineTimer : Timer?
     @State private var mast = Mastodon.shared
-        
     
-
     
     //
     // Public API
     // These simply update theStats and this should cause the TimeLineView to update!
     //
-    func setTimelineRequestAndFetchCurrent(request:TimelineRequest)
+    func start()
     {
         if timelineTimer == nil // first time run this
         {
             loop()
         }
-        
-        Task
-        {
-            await fetchStatuses(timelineRequest:request)
-        }
     }
+    
+    func clearTimeline()
+    {
+        theStats = [MStatus]()
+    }
+    
+    func setTimelineRequestAndFetch(request:TimelineRequest)
+    {
+        doRequest(request: request)
+    }
+    
     
     func getOlderStats()
     {
-        Task
-        {
-            var requestOld = self.currentRequest
-            requestOld.timelineWhen = .older
-            requestOld.id = theStats.last?.status.id
-            await fetchStatuses(timelineRequest:requestOld)
-        }
+        var requestOld = self.currentRequest
+        requestOld.timelineWhen = .older
+        requestOld.id = theStats.last?.status.id
+        
+        doRequest(request: requestOld)
     }
+    
     
     func getNewerStats()
     {
-        Task
-        {
-            var requestNew = self.currentRequest
-            requestNew.timelineWhen = .newer
-            requestNew.id = theStats.first?.status.id
-            await fetchStatuses(timelineRequest:requestNew)
-        }
+        var requestNew = self.currentRequest
+        requestNew.timelineWhen = .newer
+        requestNew.id = theStats.first?.status.id
+        
+        doRequest(request: requestNew)
     }
+ 
     
     func getCurrentStats()
     {
-        Task
-        {
-            var requestCurrent = self.currentRequest
-            requestCurrent.timelineWhen = .current
-            await fetchStatuses(timelineRequest:requestCurrent)
-        }
+        var requestCurrent = self.currentRequest
+        requestCurrent.timelineWhen = .current
+        
+        doRequest(request: requestCurrent)
     }
     
     
     //
     // private funcs
     //
+    func doRequest(request:TimelineRequest)
+    {
+        Task
+        {
+            await fetchStatuses(timelineRequest:request)
+        }
+    }
+    
+    
     private func loop()
     {
         if timelineTimer != nil { timelineTimer?.invalidate() }
