@@ -189,6 +189,9 @@ class TimelineManager : ObservableObject
     
     private func assembleTimeline(timelineRequest:TimelineRequest) async -> [MStatus]
     {
+        //
+        // standard tiumelines
+        //
         if timelineRequest.timeLine != .custom
         {
             return await getTimeline(timelineRequest:timelineRequest)

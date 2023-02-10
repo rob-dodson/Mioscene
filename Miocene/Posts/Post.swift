@@ -118,7 +118,7 @@ struct Post: View
                                 appState.showAccount(maccount:MAccount(displayname: status.account.displayName, acct: status.account))
                             }
                             
-                            if status.account.bot == true
+                            if status.account.bot == true && UserDefaults.standard.bool(forKey: "flagbots") == true
                             {
                                 Text("[BOT]")
                                     .foregroundColor(settings.theme.accentColor)
@@ -244,6 +244,10 @@ struct Post: View
                                         ShowImagePanel.url = url
                                         shouldPresentImageSheet = true
                                     }
+                                }
+                                .onDrag()
+                                {
+                                    NSItemProvider(object: URL(string:attachment.url)! as NSURL) 
                                 }
                                 .sheet(isPresented: $shouldPresentImageSheet)
                                 {

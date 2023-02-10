@@ -190,6 +190,13 @@ struct SettingsView: View
                 let defaults = UserDefaults.standard
                 defaults.set(settings.addMentionsToHome, forKey: "addmentionstohome")
             }
+            
+            Toggle("Flag Bots", isOn: $settings.flagBots)
+                .onChange(of: settings.flagBots)
+            { newValue in
+                let defaults = UserDefaults.standard
+                defaults.set(settings.flagBots, forKey: "flagbots")
+            }
         }
         .padding()
     }

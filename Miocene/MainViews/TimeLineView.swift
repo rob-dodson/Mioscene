@@ -187,15 +187,15 @@ struct TimeLineView: View
         
     func timelineMenu() -> some View
     {
-        PopMenu(icon: "clock.arrow.circlepath",selected:selectedTimeline.rawValue,
-                menuItems: [PopMenuItem(text: TimeLine.home.rawValue,userData:TimeLine.home),
-                            PopMenuItem(text: TimeLine.localTimeline.rawValue,userData:TimeLine.localTimeline),
-                            PopMenuItem(text: TimeLine.publicTimeline.rawValue,userData:TimeLine.publicTimeline),
-                            PopMenuItem(text: TimeLine.tag.rawValue,userData:TimeLine.tag),
-                            PopMenuItem(text: TimeLine.favorites.rawValue,userData:TimeLine.favorites),
-                            PopMenuItem(text: TimeLine.bookmarks.rawValue,userData:TimeLine.bookmarks),
-                            PopMenuItem(text: TimeLine.notifications.rawValue,userData:TimeLine.notifications),
-                            PopMenuItem(text: TimeLine.mentions.rawValue,userData:TimeLine.mentions),
+        return PopMenu(icon: "clock.arrow.circlepath",selected:selectedTimeline.rawValue,
+                menuItems: [PopMenuItem(text: TimeLine.home.rawValue,userData:TimeLine.home.rawValue),
+                            PopMenuItem(text: TimeLine.localTimeline.rawValue,userData:TimeLine.localTimeline.rawValue),
+                            PopMenuItem(text: TimeLine.publicTimeline.rawValue,userData:TimeLine.publicTimeline.rawValue),
+                            PopMenuItem(text: TimeLine.tag.rawValue,userData:TimeLine.tag.rawValue),
+                            PopMenuItem(text: TimeLine.favorites.rawValue,userData:TimeLine.favorites.rawValue),
+                            PopMenuItem(text: TimeLine.bookmarks.rawValue,userData:TimeLine.bookmarks.rawValue),
+                            PopMenuItem(text: TimeLine.notifications.rawValue,userData:TimeLine.notifications.rawValue),
+                            PopMenuItem(text: TimeLine.mentions.rawValue,userData:TimeLine.mentions.rawValue),
                            ])
         { item in
             

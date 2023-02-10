@@ -18,6 +18,7 @@ class Settings: ObservableObject
     @Published var hideIconText : Bool = false
     @Published var showTimelineToolBar = true
     @Published var addMentionsToHome = false
+    @Published var flagBots = true
     
     
     var iconSize = 20
@@ -49,6 +50,7 @@ class Settings: ObservableObject
         showCards = defaults.bool(forKey: "showcards")
         showTimelineToolBar = defaults.bool(forKey: "showtimelinetoolbar")
         addMentionsToHome = defaults.bool(forKey: "addmentionstohome")
+        flagBots = defaults.bool(forKey: "flagbots")
     }
 }
 

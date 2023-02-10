@@ -84,6 +84,7 @@ struct PopMenu<UserType> : View
             {
                 ForEach(food.indices,id:\.self)
                 { idx in
+                    
                         Text(food[idx].text)
                             .onTapGesture
                         {
