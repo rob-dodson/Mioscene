@@ -16,6 +16,15 @@ struct PopMenuItem<UserType>
 {
     let text : String
     let userData : UserType?
+    let subMenu : PopMenu<UserType>?
+    
+    init(text: String, userData: UserType?, subMenu: PopMenu<UserType>? = nil)
+    {
+        self.text = text
+        self.userData = userData
+        self.subMenu = subMenu
+    }
+    
 }
 
 
@@ -30,6 +39,7 @@ struct PopMenu<UserType> : View
     let picked: (PopMenuItem<UserType>) -> Void
     
     @State private var showMenu = false
+    @State private var showSubMenu = false
     
     @EnvironmentObject var settings: Settings
   
@@ -38,7 +48,7 @@ struct PopMenu<UserType> : View
     {
         HStack
         {
-            if let item = menuItems.first(where: {$0.text == selected})
+            if let item = findSelected(items: menuItems)
             {
                 PopButton(text: item.text,icon:icon,isSelected: false)
                 {
@@ -50,53 +60,102 @@ struct PopMenu<UserType> : View
         {
             menu(food: menuItems)
         }
+        
     }
+       
     
-    func menu(food:[PopMenuItem<UserType>]) -> some View
+    func findSelected(items:[PopMenuItem<UserType>]) -> PopMenuItem<UserType>?
     {
-        //
-        // draw the checkmark for the currently selected item
-        //
-        HStack(alignment:.top)
+        for item in items
         {
-            VStack(alignment: .leading)
+            if item.text == selected { return item }
+            
+            if let submenu = item.subMenu
             {
-                ForEach(food.indices,id:\.self)
-                { idx in
-                    if food[idx].text  == selected
-                        {
-                            Image(systemName: "checkmark")
-                                .foregroundColor(settings.theme.accentColor)
-                                .padding(EdgeInsets(top: 2, leading: 4, bottom: 0, trailing: 0))
-                        }
-                        else
-                        {
-                            Text(" ")
-                                .padding(EdgeInsets(top: 2, leading: 4, bottom: 0, trailing: 0))
-                        }
+                for subitem in submenu.menuItems
+                {
+                    if subitem.text == selected { return subitem }
                 }
             }
+        }
+        
+        return nil
+    }
+    
+    //
+    // menu items
+    //
+    func menu(food:[PopMenuItem<UserType>]) -> some View
+    {
+        HStack(alignment:.top)
+        {
             
-            //
-            // menu items
-            //
             VStack(alignment: .leading)
             {
                 ForEach(food.indices,id:\.self)
                 { idx in
-                    
-                        Text(food[idx].text)
-                            .onTapGesture
+                        
+                    if food[idx].subMenu != nil
+                    {
+                        HStack
                         {
-                            showMenu = false
-                            self.selected = food[idx].text
-                            picked(food[idx])
+                            Image(systemName: food[idx].subMenu!.icon)
+                            Text(food[idx].text)
+                                .onTapGesture
+                            {
+                                showSubMenu = true
+                            }
+                            Spacer()
+                            Text(">")
                         }
                         .padding(EdgeInsets(top: 2, leading: 0, bottom: 0, trailing: 2))
+                        .popover(isPresented: $showSubMenu,arrowEdge:.trailing)
+                        {
+                            if let sub = food[idx].subMenu
+                            {
+                                ForEach(sub.menuItems.indices,id:\.self)
+                                { ii in
+                                    makeMenuButton(item: sub.menuItems[ii])
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        makeMenuButton(item: food[idx])
+                    }
                 }
             }
         }
         .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
+    }
+    
+    
+    func makeMenuButton(item:PopMenuItem<UserType>) -> some View
+    {
+        return HStack
+        {
+            if item.text  == selected
+            {
+                Image(systemName: "checkmark")
+                    .foregroundColor(settings.theme.accentColor)
+                    .padding(EdgeInsets(top: 2, leading: 4, bottom: 0, trailing: 0))
+            }
+            else
+            {
+                Text("   ")
+                    .padding(EdgeInsets(top: 2, leading: 4, bottom: 0, trailing: 0))
+            }
+            
+            Text(item.text)
+                .onTapGesture
+            {
+                showMenu = false
+                self.selected = item.text
+                picked(item)
+            }
+            .padding(EdgeInsets(top: 2, leading: 0, bottom: 0, trailing: 5))
+        }
     }
 }
 

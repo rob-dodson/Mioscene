@@ -187,6 +187,16 @@ struct TimeLineView: View
         
     func timelineMenu() -> some View
     {
+        let customSubMenu = PopMenu(icon: "person",selected:selectedTimeline.rawValue,
+                                    menuItems: [PopMenuItem(text: "Custom1",userData:"custom1"),
+                                            PopMenuItem(text: "Custom2",userData:"custom1"),
+                                             PopMenuItem(text: "Custom3",userData:"custom1"),
+                                                PopMenuItem(text: "Custom4",userData:"custom1"),
+                                                ])
+        { iten in
+            
+        }
+        
         return PopMenu(icon: "clock.arrow.circlepath",selected:selectedTimeline.rawValue,
                 menuItems: [PopMenuItem(text: TimeLine.home.rawValue,userData:TimeLine.home.rawValue),
                             PopMenuItem(text: TimeLine.localTimeline.rawValue,userData:TimeLine.localTimeline.rawValue),
@@ -196,6 +206,7 @@ struct TimeLineView: View
                             PopMenuItem(text: TimeLine.bookmarks.rawValue,userData:TimeLine.bookmarks.rawValue),
                             PopMenuItem(text: TimeLine.notifications.rawValue,userData:TimeLine.notifications.rawValue),
                             PopMenuItem(text: TimeLine.mentions.rawValue,userData:TimeLine.mentions.rawValue),
+                            PopMenuItem(text: "Custom",userData:"custom",subMenu: customSubMenu),
                            ])
         { item in
             
@@ -207,6 +218,10 @@ struct TimeLineView: View
                 
                 let request = TimelineRequest(timelineWhen: .current, timeLine: timeline, tag: currentTag)
                 timelineManger.setTimelineRequestAndFetch(request: request)
+            }
+            else if item.text.hasPrefix("Custom")
+            {
+                print ("\(item.text)")
             }
         }
     }
