@@ -83,7 +83,7 @@ struct TimeLineView: View
                                 {
                                     if mstat.id == timelineManger.theStats[timelineManger.theStats.count - 1].id
                                     {
-                                        timelineManger.getOlderStats()
+                                    //    timelineManger.getOlderStats()
                                     }
                                 }
                             }
@@ -188,40 +188,42 @@ struct TimeLineView: View
     func timelineMenu() -> some View
     {
         let customSubMenu = PopMenu(icon: "person",selected:selectedTimeline.rawValue,
-                                    menuItems: [PopMenuItem(text: "Custom1",userData:"custom1"),
-                                            PopMenuItem(text: "Custom2",userData:"custom1"),
-                                             PopMenuItem(text: "Custom3",userData:"custom1"),
-                                                PopMenuItem(text: "Custom4",userData:"custom1"),
+                                    menuItems: [PopMenuItem(text: "macOS",userData:TimeLine.custom),
                                                 ])
-        { iten in
-            
+        { item in
         }
         
         return PopMenu(icon: "clock.arrow.circlepath",selected:selectedTimeline.rawValue,
-                menuItems: [PopMenuItem(text: TimeLine.home.rawValue,userData:TimeLine.home.rawValue),
-                            PopMenuItem(text: TimeLine.localTimeline.rawValue,userData:TimeLine.localTimeline.rawValue),
-                            PopMenuItem(text: TimeLine.publicTimeline.rawValue,userData:TimeLine.publicTimeline.rawValue),
-                            PopMenuItem(text: TimeLine.tag.rawValue,userData:TimeLine.tag.rawValue),
-                            PopMenuItem(text: TimeLine.favorites.rawValue,userData:TimeLine.favorites.rawValue),
-                            PopMenuItem(text: TimeLine.bookmarks.rawValue,userData:TimeLine.bookmarks.rawValue),
-                            PopMenuItem(text: TimeLine.notifications.rawValue,userData:TimeLine.notifications.rawValue),
-                            PopMenuItem(text: TimeLine.mentions.rawValue,userData:TimeLine.mentions.rawValue),
-                            PopMenuItem(text: "Custom",userData:"custom",subMenu: customSubMenu),
+                menuItems: [PopMenuItem(text: TimeLine.home.rawValue,userData:TimeLine.home),
+                            PopMenuItem(text: TimeLine.localTimeline.rawValue,userData:TimeLine.localTimeline),
+                            PopMenuItem(text: TimeLine.publicTimeline.rawValue,userData:TimeLine.publicTimeline),
+                            PopMenuItem(text: TimeLine.tag.rawValue,userData:TimeLine.tag),
+                            PopMenuItem(text: TimeLine.favorites.rawValue,userData:TimeLine.favorites),
+                            PopMenuItem(text: TimeLine.bookmarks.rawValue,userData:TimeLine.bookmarks),
+                            PopMenuItem(text: TimeLine.notifications.rawValue,userData:TimeLine.notifications),
+                            PopMenuItem(text: TimeLine.mentions.rawValue,userData:TimeLine.mentions),
+                            PopMenuItem(text: TimeLine.custom.rawValue,userData:TimeLine.custom,subMenu: customSubMenu),
                            ])
         { item in
             
-            if let timeline = TimeLine(rawValue: item.text)
+            timelineManger.clearTimeline()
+            selectedTimeline = item.userData!
+            
+            if item.userData == .custom
             {
-                timelineManger.clearTimeline()
-                
-                selectedTimeline = timeline
-                
-                let request = TimelineRequest(timelineWhen: .current, timeLine: timeline, tag: currentTag)
+                // load customtime lines here
+                let filter1 = Filter(name: "macOS", isOn: true, keepOrReject: .keep, isRegex: false, filterString: "macOS", type: .body)
+                let filter2 = Filter(name: "#macOS", isOn: true, keepOrReject: .keep, isRegex: false, filterString: "macOS", type: .hashtag)
+                let filterset = FilterSet(name: "macOS", filters: [filter1,filter2], setType: .AnyFilter)
+                let timelinerequest = TimelineRequest(timelineWhen: .current, timeLine: .localTimeline, tag: "")
+                let customtimeline = CustomTimeline(name: item.text, timelineRequests: [timelinerequest], filterSet: filterset)
+                let request = TimelineRequest(timelineWhen: .current, timeLine: .custom, tag: currentTag,customTimeLine: customtimeline)
                 timelineManger.setTimelineRequestAndFetch(request: request)
             }
-            else if item.text.hasPrefix("Custom")
+            else
             {
-                print ("\(item.text)")
+                let request = TimelineRequest(timelineWhen: .current, timeLine: item.userData!, tag: currentTag)
+                timelineManger.setTimelineRequestAndFetch(request: request)
             }
         }
     }

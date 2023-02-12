@@ -24,7 +24,6 @@ struct PopMenuItem<UserType>
         self.userData = userData
         self.subMenu = subMenu
     }
-    
 }
 
 
@@ -82,6 +81,7 @@ struct PopMenu<UserType> : View
         return nil
     }
     
+    
     //
     // menu items
     //
@@ -108,30 +108,29 @@ struct PopMenu<UserType> : View
                             Spacer()
                             Text(">")
                         }
-                        .padding(EdgeInsets(top: 2, leading: 0, bottom: 0, trailing: 2))
+                        .padding(EdgeInsets(top: 10, leading: 10, bottom: idx == food.count - 1 ? 10 : 0, trailing: 10))
                         .popover(isPresented: $showSubMenu,arrowEdge:.trailing)
                         {
                             if let sub = food[idx].subMenu
                             {
                                 ForEach(sub.menuItems.indices,id:\.self)
                                 { ii in
-                                    makeMenuButton(item: sub.menuItems[ii])
+                                    makeMenuButton(item: sub.menuItems[ii],bottom: ii == sub.menuItems.count - 1)
                                 }
                             }
                         }
                     }
                     else
                     {
-                        makeMenuButton(item: food[idx])
+                        makeMenuButton(item: food[idx],bottom: idx == food.count - 1)
                     }
                 }
             }
         }
-        .padding(EdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5))
     }
     
     
-    func makeMenuButton(item:PopMenuItem<UserType>) -> some View
+    func makeMenuButton(item:PopMenuItem<UserType>,bottom:Bool) -> some View
     {
         return HStack
         {
@@ -139,14 +138,11 @@ struct PopMenu<UserType> : View
             {
                 Image(systemName: "checkmark")
                     .foregroundColor(settings.theme.accentColor)
-                    .padding(EdgeInsets(top: 2, leading: 4, bottom: 0, trailing: 0))
             }
             else
             {
                 Text("   ")
-                    .padding(EdgeInsets(top: 2, leading: 4, bottom: 0, trailing: 0))
             }
-            
             Text(item.text)
                 .onTapGesture
             {
@@ -154,8 +150,9 @@ struct PopMenu<UserType> : View
                 self.selected = item.text
                 picked(item)
             }
-            .padding(EdgeInsets(top: 2, leading: 0, bottom: 0, trailing: 5))
+            Spacer()
         }
+        .padding(EdgeInsets(top: 10, leading: 10, bottom: bottom == true ? 10 : 0, trailing:10))
     }
 }
 

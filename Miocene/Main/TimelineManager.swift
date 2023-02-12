@@ -33,6 +33,7 @@ enum TimelineWhen : Int
 
 struct CustomTimeline
 {
+    var name : String
     var timelineRequests : [TimelineRequest]
     var filterSet : FilterSet
 }
@@ -45,6 +46,7 @@ struct TimelineRequest
     var tag : String
     var customTimeLine : CustomTimeline?
     var id : String?
+    var lastId : String?
 }
 
 
@@ -60,7 +62,7 @@ class TimelineManager : ObservableObject
 
     
     @State private var fetching : Bool = false
-    @State private var currentRequest = TimelineRequest(timelineWhen: .current, timeLine: .home, tag: "")
+     private var currentRequest : TimelineRequest? //(timelineWhen: .current, timeLine: .home, tag: "")
     @State private var timelineTimer : Timer?
     @State private var mast = Mastodon.shared
     
@@ -70,6 +72,7 @@ class TimelineManager : ObservableObject
     //
     func start()
     {
+        print("START TLM")
         if timelineTimer == nil // first time run this
         {
             loop()
@@ -92,28 +95,33 @@ class TimelineManager : ObservableObject
     
     func getOlderStats()
     {
-        var requestOld = self.currentRequest
-        requestOld.timelineWhen = .older
-        requestOld.id = theStats.last?.status.id
-        
-        doRequest(request: requestOld)
+        if var requestOld = self.currentRequest
+        {
+            requestOld.timelineWhen = .older
+            requestOld.id = theStats.last?.status.id
+            
+            doRequest(request: requestOld)
+        }
     }
     
     func getNewerStats()
     {
-        var requestNew = self.currentRequest
-        requestNew.timelineWhen = .newer
-        requestNew.id = theStats.first?.status.id
-        
-        doRequest(request: requestNew)
+        if var requestNew = self.currentRequest
+        {
+            requestNew.timelineWhen = .newer
+            requestNew.id = theStats.first?.status.id
+            
+            doRequest(request: requestNew)
+        }
     }
  
     func getCurrentStats()
     {
-        var requestCurrent = self.currentRequest
-        requestCurrent.timelineWhen = .current
-        
-        doRequest(request: requestCurrent)
+        if var requestCurrent = self.currentRequest
+        {
+            requestCurrent.timelineWhen = .current
+            doRequest(request: requestCurrent)
+        }
     }
     
     
@@ -122,7 +130,7 @@ class TimelineManager : ObservableObject
     //
     private func doRequest(request:TimelineRequest)
     {
-        Task
+        Task(priority: .userInitiated)
         {
             await fetchStatuses(timelineRequest:request)
         }
@@ -144,10 +152,12 @@ class TimelineManager : ObservableObject
     {
         Task
         {
-            var requestNew = currentRequest
-            requestNew.timelineWhen = .newer
-            requestNew.id = theStats.first?.status.id
-            await fetchStatuses(timelineRequest:requestNew)
+            if var requestNew = currentRequest
+            {
+                requestNew.timelineWhen = .newer
+                requestNew.id = theStats.first?.status.id
+                await fetchStatuses(timelineRequest:requestNew)
+            }
         }
     }
     
@@ -160,8 +170,18 @@ class TimelineManager : ObservableObject
         {
             case .home,.localTimeline,.publicTimeline,.favorites,.tag,.bookmarks:
                 
-                theStats = await assembleTimeline(timelineRequest: timelineRequest)
-                currentRequest = timelineRequest
+                assembleTimeline(timelineRequest: timelineRequest)
+                { newstats in
+                   
+                    self.currentRequest = timelineRequest
+                   
+                    DispatchQueue.main.async
+                    {
+                        self.theStats = newstats
+                    }
+                    self.fetching = false
+                }
+                
                 
             case .mentions,.notifications:
                 
@@ -169,10 +189,19 @@ class TimelineManager : ObservableObject
                 currentRequest = timelineRequest
                 
             case .custom:
-                print("CUSTOM")
+                assembleTimeline(timelineRequest: timelineRequest)
+                { newstats in
+                    self.currentRequest = timelineRequest
+                    
+                    DispatchQueue.main.async
+                    {
+                        self.theStats = newstats
+                    }
+                    self.fetching = false
+                }
+                
         }
     }
-    
     
     private func getNotifications(timelineRequest:TimelineRequest)
     {
@@ -187,170 +216,177 @@ class TimelineManager : ObservableObject
     }
     
     
-    private func assembleTimeline(timelineRequest:TimelineRequest) async -> [MStatus]
+    private func assembleTimeline(timelineRequest:TimelineRequest, done: @escaping ([MStatus]) -> Void)
     {
         //
         // standard tiumelines
         //
         if timelineRequest.timeLine != .custom
         {
-            return await getTimeline(timelineRequest:timelineRequest)
+            getTimeline(timelineRequest:timelineRequest)
+            { stats in
+                done(stats)
+            }
         }
         else // custom timeline
         {
-            var stats = [MStatus]()
-            
             //
             // append all desired timelines into one array
             //
             if let customtimeline = timelineRequest.customTimeLine
             {
-                for timelineRequest in customtimeline.timelineRequests
+                let group = DispatchGroup()
+                group.enter()
+                
+                var retstats = [MStatus]()
+                
+                var counter = 0
+                for var custreq in customtimeline.timelineRequests
                 {
-                    let custStats = await getTimeline(timelineRequest:timelineRequest)
-                    stats = stats + custStats
+                    custreq.id = timelineRequest.id
+                    custreq.timelineWhen = timelineRequest.timelineWhen
+                    
+                    counter += 1
+                    getTimeline(timelineRequest:custreq)
+                    { custstats in
+                        
+                        retstats = retstats + custstats
+                        custreq.lastId = custstats.last?.status.id
+                        counter -= 1
+                        if counter == 0
+                        {
+                            group.leave()
+                        }
+                    }
                 }
+                group.wait()
                 
                 //
                 // sort by date/time
                 //
-                stats = stats.sorted(by:
+                retstats = retstats.sorted(by:
                 { a, b in
                     return a.status.createdAt.timeIntervalSince1970 < b.status.createdAt.timeIntervalSince1970
                 })
                 
+              
                 
                 //
                 // now apply filters
                 //
-                stats = FilterTools.shared.filterStats(filterSet:customtimeline.filterSet,stats:stats)
+                retstats = FilterTools.shared.filterStats(filterSet:customtimeline.filterSet,stats:retstats)
+                
+                
+                done(retstats)
             }
-            
-            return stats
         }
     }
     
     
-    private func getTimeline(timelineRequest:TimelineRequest) async -> [MStatus]
+    private func getTimeline(timelineRequest:TimelineRequest, done: @escaping ([MStatus]) -> Void)
     {
-        guard fetching == false else { return theStats }
+        guard fetching == false else { return }
         fetching = true
         
         switch timelineRequest.timelineWhen
         {
             case .current:
                 getCurrentStats(timelineRequest: timelineRequest)
+                { stats in
+                    done(stats)
+                }
                 
             case .newer:
                 getNewStatuses(timelineRequest: timelineRequest)
+                { stats in
+                    done(stats)
+                }
                 
             case .older:
                 getOlderStats(timelineRequest: timelineRequest)
+                { stats in
+                    done(stats)
+                }
         }
         
-        return theStats
     }
     
     
-    private func getCurrentStats(timelineRequest:TimelineRequest)
+    private func getCurrentStats(timelineRequest:TimelineRequest, done: @escaping ([MStatus]) -> Void)
     {
-        Task
-        {
-            await mast.getSomeStatuses(timeline: timelineRequest.timeLine, tag:timelineRequest.tag)
-            { somestats in
-                
-                DispatchQueue.main.async
-                {
-                    self.theStats = somestats
-                    self.fetching = false
-                }
-            }
+        mast.getSomeStatuses(timeline: timelineRequest.timeLine, tag:timelineRequest.tag)
+        { somestats in
+            
+            done(somestats)
         }
     }
     
     
-    private func getOlderStats(timelineRequest:TimelineRequest)
+    private func getOlderStats(timelineRequest:TimelineRequest, done: @escaping ([MStatus]) -> Void)
     {
         guard let id = timelineRequest.id else { return }
         
-        Task
-        {
-            mast.getOlderStatuses(timeline: timelineRequest.timeLine, id: id, tag:timelineRequest.tag)
-            { [self] olderstats in
-                
-                if timelineRequest.timeLine == .bookmarks || timelineRequest.timeLine == .favorites // getOlder always returns all, so we filter out ones we have. Bug? Me dumb?
-                {
-                    let filteredoldstats = olderstats.filter
-                    { mstatus in
-                        
-                        for stat in theStats
-                        {
-                            if stat.status.id == mstatus.status.id { return false }
-                        }
-                        return true
-                    }
+        mast.getOlderStatuses(timeline: timelineRequest.timeLine, id: id, tag:timelineRequest.tag)
+        { [self] olderstats in
+            
+            if timelineRequest.timeLine == .bookmarks || timelineRequest.timeLine == .favorites // getOlder always returns all, so we filter out ones we have. Bug? Me dumb?
+            {
+                let filteredoldstats = olderstats.filter
+                { mstatus in
                     
-                    DispatchQueue.main.async
+                    for stat in theStats
                     {
-                        self.theStats = self.theStats + filteredoldstats
+                        if stat.status.id == mstatus.status.id { return false }
                     }
-                }
-                else
-                {
-                    DispatchQueue.main.async
-                    {
-                        self.theStats = self.theStats + olderstats
-                    }
+                    return true
                 }
                 
-                self.fetching = false
+                done(self.theStats + filteredoldstats)
+            }
+            else
+            {
+                done(self.theStats + olderstats)
             }
         }
     }
    
     
-    private func getNewStatuses(timelineRequest:TimelineRequest)
+    private func getNewStatuses(timelineRequest:TimelineRequest, done: @escaping ([MStatus]) -> Void)
     {
         guard var newid = timelineRequest.id else { return }
         
-        Task
+        var retstats = [MStatus]()
+        var nomore = false
+        
+        while(nomore == false)
         {
-            var nomore = false
-            while(nomore == false)
-            {
-                mast.getNewerStatuses(timeline: timelineRequest.timeLine, id: newid, tag:timelineRequest.tag)
-                { newstats,morestats in
-                    
-                    print("NEW \(newstats.count) more:\(morestats)")
-                    if newstats.count > 0
-                    {
-                            DispatchQueue.main.async
-                            {
-                                self.theStats = newstats + self.theStats
-                                
-                                if self.theStats.count > 150
-                                {
-                                    print("removing last 50 from stats")
-                                    self.theStats.removeLast(50)
-                                }
-                            }
-                    }
-                    
-                    if morestats == false
-                    {
-                        nomore = true
-                    }
-                    else
-                    {
-                        newid = (newstats.first?.status.id)!
-                    }
+            mast.getNewerStatuses(timeline: timelineRequest.timeLine, id: newid, tag:timelineRequest.tag)
+            { newstats,morestats in
+                
+                print("NEW \(newstats.count) more:\(morestats)")
+                if newstats.count > 0
+                {
+                    retstats = retstats + newstats
                 }
                 
-                try? await Task.sleep(for: .seconds(1))
+                if morestats == false
+                {
+                    nomore = true
+                }
+                else
+                {
+                    newid = (newstats.first?.status.id)!
+                }
             }
-            
-            self.fetching = false
         }
+        
+        retstats = retstats + self.theStats
+        if retstats.count > 150
+        {
+            print("removing last 50 from stats")
+            retstats.removeLast(50)
+        }
+        done(retstats)
     }
     
 }

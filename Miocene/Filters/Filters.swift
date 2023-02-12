@@ -49,6 +49,7 @@ struct Filter : Hashable,Identifiable
     var isOn : Bool
     var keepOrReject : KeepOrReject
     var isRegex : Bool
+    var ingoreCase : Bool = true
     var filterString : String
     var type : FilterType
     
@@ -102,6 +103,19 @@ struct FilterTools
     }
     
     
+    func strcmp(a:String,b:String,ignoreCase:Bool) -> Bool
+    {
+        if ignoreCase == true
+        {
+            if a.uppercased() == b.uppercased() { return true } else { return false }
+        }
+        else
+        {
+            if a == b { return true } else { return false }
+        }
+    }
+    
+    
     func keepItem(filter:Filter,stat:MStatus) -> Bool
     {
         var match = false
@@ -109,10 +123,10 @@ struct FilterTools
         switch filter.type
         {
             case .accountName:
-                match = (stat.status.account.acct == filter.filterString) ? true : false
+                match = strcmp(a:stat.status.account.acct,b:filter.filterString,ignoreCase:filter.ingoreCase)
                 
             case .displayName:
-                match = (stat.status.account.displayName == filter.filterString) ? true : false
+                match = strcmp(a:stat.status.account.displayName,b:filter.filterString,ignoreCase:filter.ingoreCase)
                 
             case .hashtag:
                 for hashtag in stat.status.tags

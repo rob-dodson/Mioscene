@@ -575,7 +575,7 @@ class Mastodon : ObservableObject
         }
     }
     
-    func getSomeStatuses(timeline:TimeLine,tag:String,done: @escaping ([MStatus]) -> Void) async
+    func getSomeStatuses(timeline:TimeLine,tag:String,done: @escaping ([MStatus]) -> Void)
     {
         let request = makeRequest(timeline: timeline,range: .limit(requestSize),tag:tag)
         
@@ -596,7 +596,7 @@ class Mastodon : ObservableObject
     }
     
     
-    func getNewerStatuses(timeline:TimeLine,id:String,tag:String,done: @escaping ([MStatus],Bool) -> Void)
+    func getNewerStatuses(timeline:TimeLine,id:String,tag:String,done: @escaping ([MStatus],Bool) -> Void) 
     {
         let request = makeRequest(timeline: timeline,range:.min(id: id, limit: requestSize),tag:tag)
         
