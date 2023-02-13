@@ -83,7 +83,7 @@ struct TimeLineView: View
                                 {
                                     if mstat.id == timelineManger.theStats[timelineManger.theStats.count - 1].id
                                     {
-                                    //    timelineManger.getOlderStats()
+                                        timelineManger.getOlderStats()
                                     }
                                 }
                             }
@@ -187,11 +187,37 @@ struct TimeLineView: View
         
     func timelineMenu() -> some View
     {
+        let filter1 = Filter(name: "macOS", isOn: true, keepOrReject: .keep, isRegex: false, filterString: "macOS", type: .body)
+        let filter2 = Filter(name: "#macOS", isOn: true, keepOrReject: .keep, isRegex: false, filterString: "macOS", type: .hashtag)
+        let filterset = FilterSet(name: "macOS", filters: [filter1,filter2], setType: .AnyFilter)
+        let timelinerequest = TimelineRequest(timelineWhen: .current, timeLine: .localTimeline, tag: "")
+        let customtimeline = CustomTimeline(name: "macOS - Local", timelineRequests: [timelinerequest], filterSet: filterset)
+        
+        let filter0 = Filter(name: "Ivory", isOn: true, keepOrReject: .keep, isRegex: false, filterString: "Ivory", type: .body)
+        let filterset0 = FilterSet(name: "Ivory", filters: [filter0], setType: .AnyFilter)
+        let timelinerequest0 = TimelineRequest(timelineWhen: .current, timeLine: .home, tag: "")
+        let customtimeline0 = CustomTimeline(name: "Ivory - Home", timelineRequests: [timelinerequest0], filterSet: filterset0)
+        
+        
+        
+        var custdict = Dictionary<String,CustomTimeline>()
+        custdict["macOS - Local"] = customtimeline
+        custdict["Ivory - Home"] = customtimeline0
+        
         let customSubMenu = PopMenu(icon: "person",selected:selectedTimeline.rawValue,
-                                    menuItems: [PopMenuItem(text: "macOS",userData:TimeLine.custom),
+                                    menuItems: [PopMenuItem(text: "macOS - Local",userData:TimeLine.custom),
+                                                PopMenuItem(text: "Ivory - Home",userData:TimeLine.custom)
                                                 ])
         { item in
+            print("Custom Sub Menu \(item.text)")
+            
+            let timeline = custdict[item.text]
+            
+            let request = TimelineRequest(timelineWhen: .current, timeLine: .custom, tag: currentTag,customTimeLine: timeline)
+            timelineManger.setTimelineRequestAndFetch(request: request)
         }
+        
+        
         
         return PopMenu(icon: "clock.arrow.circlepath",selected:selectedTimeline.rawValue,
                 menuItems: [PopMenuItem(text: TimeLine.home.rawValue,userData:TimeLine.home),
@@ -209,22 +235,8 @@ struct TimeLineView: View
             timelineManger.clearTimeline()
             selectedTimeline = item.userData!
             
-            if item.userData == .custom
-            {
-                // load customtime lines here
-                let filter1 = Filter(name: "macOS", isOn: true, keepOrReject: .keep, isRegex: false, filterString: "macOS", type: .body)
-                let filter2 = Filter(name: "#macOS", isOn: true, keepOrReject: .keep, isRegex: false, filterString: "macOS", type: .hashtag)
-                let filterset = FilterSet(name: "macOS", filters: [filter1,filter2], setType: .AnyFilter)
-                let timelinerequest = TimelineRequest(timelineWhen: .current, timeLine: .localTimeline, tag: "")
-                let customtimeline = CustomTimeline(name: item.text, timelineRequests: [timelinerequest], filterSet: filterset)
-                let request = TimelineRequest(timelineWhen: .current, timeLine: .custom, tag: currentTag,customTimeLine: customtimeline)
-                timelineManger.setTimelineRequestAndFetch(request: request)
-            }
-            else
-            {
-                let request = TimelineRequest(timelineWhen: .current, timeLine: item.userData!, tag: currentTag)
-                timelineManger.setTimelineRequestAndFetch(request: request)
-            }
+            let request = TimelineRequest(timelineWhen: .current, timeLine: item.userData!, tag: currentTag)
+            timelineManger.setTimelineRequestAndFetch(request: request)
         }
     }
     

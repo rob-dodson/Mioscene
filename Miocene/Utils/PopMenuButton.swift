@@ -57,7 +57,7 @@ struct PopMenu<UserType> : View
         }
         .popover(isPresented: $showMenu,arrowEdge:.bottom)
         {
-            menu(food: menuItems)
+            menu(food: menuItems,picked:picked)
         }
         
     }
@@ -85,7 +85,7 @@ struct PopMenu<UserType> : View
     //
     // menu items
     //
-    func menu(food:[PopMenuItem<UserType>]) -> some View
+    func menu(food:[PopMenuItem<UserType>],picked: @escaping (PopMenuItem<UserType>) -> Void) -> some View
     {
         HStack(alignment:.top)
         {
@@ -115,14 +115,14 @@ struct PopMenu<UserType> : View
                             {
                                 ForEach(sub.menuItems.indices,id:\.self)
                                 { ii in
-                                    makeMenuButton(item: sub.menuItems[ii],bottom: ii == sub.menuItems.count - 1)
+                                    makeMenuButton(item: sub.menuItems[ii],bottom: ii == sub.menuItems.count - 1,picked: sub.picked)
                                 }
                             }
                         }
                     }
                     else
                     {
-                        makeMenuButton(item: food[idx],bottom: idx == food.count - 1)
+                        makeMenuButton(item: food[idx],bottom: idx == food.count - 1,picked:picked)
                     }
                 }
             }
@@ -130,7 +130,7 @@ struct PopMenu<UserType> : View
     }
     
     
-    func makeMenuButton(item:PopMenuItem<UserType>,bottom:Bool) -> some View
+    func makeMenuButton(item:PopMenuItem<UserType>,bottom:Bool,picked: @escaping (PopMenuItem<UserType>) -> Void) -> some View
     {
         return HStack
         {

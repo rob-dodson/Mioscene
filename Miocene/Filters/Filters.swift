@@ -135,7 +135,7 @@ struct FilterTools
                 }
                 
             case .body:
-                if stat.status.content.contains(try! Regex(filter.filterString)) { match = true }
+                if stat.status.content.contains(try! Regex(filter.filterString).ignoresCase(filter.ingoreCase) ) { match = true }
         }
         
         switch filter.keepOrReject
