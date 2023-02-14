@@ -13,8 +13,8 @@ struct EditPost: View
 {
     @ObservedObject var mast : Mastodon
     @State var newPost : String = ""
-    @State var title : String = "New Post"
     @State var replyTo : String?
+    @State var postVisibility : MastodonKit.Visibility
     var done: () -> Void
     
     @EnvironmentObject var settings: Settings
@@ -27,7 +27,6 @@ struct EditPost: View
     @State private var showContentWarning = false
     @State private var alertMediaUploading = false
     @State private var contentWarning : String = ""
-    @State private var postVisibility : MastodonKit.Visibility = .public
     @State private var attachedurls = [AttachmentURL]()
     @State private var showPoll = false
     @State private var sensitive = false
@@ -36,9 +35,11 @@ struct EditPost: View
     @StateObject private var pollState = PollState()
     
     
+   
+    
     var body: some View
     {
-        Text(title)
+        Text(getTitle())
             .foregroundColor(settings.theme.accentColor)
             .font(settings.font.title)
             .padding(.top)
@@ -138,17 +139,7 @@ struct EditPost: View
             
             ToolbarItem
             {
-                PopMenu(icon: "eye",selected: postVisibility.rawValue, menuItems: [PopMenuItem(text: MastodonKit.Visibility.public.rawValue,userData:MastodonKit.Visibility.public),
-                         PopMenuItem(text: MastodonKit.Visibility.unlisted.rawValue,userData:MastodonKit.Visibility.unlisted),
-                         PopMenuItem(text: MastodonKit.Visibility.private.rawValue,userData:MastodonKit.Visibility.private),
-                         PopMenuItem(text: MastodonKit.Visibility.direct.rawValue,userData:MastodonKit.Visibility.direct)
-                         ])
-                { item in
-                    if let userdata = item.userData
-                    {
-                        postVisibility = userdata
-                    }
-                }
+                visibilityMenu()
             }
             
             ToolbarItem
@@ -199,6 +190,49 @@ struct EditPost: View
     }
     
     
+    func getTitle() -> String
+    {
+        if replyTo == nil
+        {
+            return "New Post"
+        }
+        else
+        {
+            return postVisibility == .direct ? "Direct Message" : "Reply To"
+        }
+    }
+    
+    
+    func visibilityMenu() -> some View
+    {
+        var menuitems = [PopMenuItem<MastodonKit.Visibility>]()
+        
+        if replyTo == nil
+        {
+            menuitems = [PopMenuItem(text: MastodonKit.Visibility.public.rawValue,userData:MastodonKit.Visibility.public),
+                        PopMenuItem(text: MastodonKit.Visibility.unlisted.rawValue,userData:MastodonKit.Visibility.unlisted),
+                        PopMenuItem(text: MastodonKit.Visibility.private.rawValue,userData:MastodonKit.Visibility.private)
+                        ]
+        }
+        else
+        {
+            menuitems = [PopMenuItem(text: MastodonKit.Visibility.public.rawValue,userData:MastodonKit.Visibility.public),
+                         PopMenuItem(text: MastodonKit.Visibility.unlisted.rawValue,userData:MastodonKit.Visibility.unlisted),
+                         PopMenuItem(text: MastodonKit.Visibility.private.rawValue,userData:MastodonKit.Visibility.private),
+                         PopMenuItem(text: MastodonKit.Visibility.direct.rawValue,userData:MastodonKit.Visibility.direct)
+            ]
+        }
+        
+        return PopMenu(icon: "eye",selected: postVisibility.rawValue, menuItems: menuitems)
+            { item in
+                if let userdata = item.userData
+                {
+                    postVisibility = userdata
+                }
+            }
+    }
+
+                                     
     func  pollViewSize() -> CGFloat
     {
         return CGFloat(625 + (pollState.pollOptions.count * 12))

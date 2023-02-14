@@ -23,6 +23,7 @@ struct Post: View
     
     @State private var showSensitiveContent : Bool = false
     @State private var showContentWarning : Bool = false
+    @State private var shouldPresentDirectSheet = false
     @State private var shouldPresentSheet = false
     @State private var shouldPresentImageSheet = false
     @State private var imageShowIndex : Int  = 1
@@ -149,23 +150,20 @@ struct Post: View
                     //
                     if status.spoilerText.count > 0
                     {
-                        HStack
+                        HStack(alignment: .center)
                         {
-                            Button
+                            PopButton(text: "", icon: "exclamationmark.triangle", isSelected: showContentWarning == true ? false : true)
                             {
                                 showContentWarning.toggle()
                             }
-                        label:
-                            {
-                                Text("CW")
-                            }
                             
                             Text(status.spoilerText)
+                                .baselineOffset(15.0)
                         }
-                        .padding(EdgeInsets(top: 4, leading: 4, bottom: 4, trailing: 4))
+                        .padding(EdgeInsets(top: 4, leading: 4, bottom: -12, trailing: 4))
                         .border(width: 1, edges: [.top,.bottom,.leading,.trailing], color: settings.theme.accentColor)
                     }
-                 
+                    
                     
                     //
                     // html body of post
@@ -182,7 +180,7 @@ struct Post: View
                                 .font(settings.font.body)
                                 .foregroundColor(settings.theme.bodyColor)
                                 .textSelection(.enabled)
-                                
+                            
                         }
                     }
                     
@@ -247,7 +245,7 @@ struct Post: View
                                 }
                                 .onDrag()
                                 {
-                                    NSItemProvider(object: URL(string:attachment.url)! as NSURL) 
+                                    NSItemProvider(object: URL(string:attachment.url)! as NSURL)
                                 }
                                 .sheet(isPresented: $shouldPresentImageSheet)
                                 {
@@ -302,7 +300,7 @@ struct Post: View
                             .border(width: 1, edges: [.leading,.top,.bottom,.trailing], color: settings.theme.minorColor)
                         }
                     }
-                  
+                    
                     //
                     // sensitive flag
                     //
@@ -379,16 +377,7 @@ struct Post: View
                             {
                                 shouldPresentSheet.toggle()
                             }
-                            .sheet(isPresented: $shouldPresentSheet)
-                            {
-                            }
-                        content:
-                            {
-                                EditPost(mast: mast,newPost: "@\(status.account.acct): ",title:"Reply",done:
-                                {
-                                    shouldPresentSheet = false
-                                })
-                            }
+                            
                             
                             
                             //
@@ -468,49 +457,78 @@ struct Post: View
             }
             .padding(.bottom,5)
         }
+        .sheet(isPresented: $shouldPresentDirectSheet)
+        {
+        }
+    content:
+        {
+            EditPost(mast: mast,newPost: "@\(status.account.acct): ",replyTo:status.account.id,postVisibility:.direct)
+            {
+                shouldPresentDirectSheet = false
+            }
+        }
+        .sheet(isPresented: $shouldPresentSheet)
+        {
+        }
+    content:
+        {
+            EditPost(mast: mast,newPost: "@\(status.account.acct): ",replyTo:status.account.id,postVisibility:.public)
+            {
+                shouldPresentSheet = false
+            }
+        }
         .background(settings.theme.blockColor)
         .cornerRadius(5)
         .contextMenu
         {
-            VStack
+            contextMenu(status:status)
+        }
+    }
+    
+    
+    func contextMenu(status:Status) -> some View
+    {
+        VStack
+        {
+            if status.account.id == appState.currentUserMastAccount?.id
             {
-                if status.account.id == appState.currentUserMastAccount?.id
-                {
-                    Button
-                    {
-                        mast.deletePost(id:status.id)
-                    } label: { Image(systemName: "speaker.slash.fill"); Text("Delete Post") }
-                }
-                
-                Button { } label: {  Text("Direct Message @\(status.account.acct)") }
-                
                 Button
                 {
-                    mast.mute(account: status.account, done: { result in })
-                } label: {  Text("Mute Author") }
-                
-                Button
-                {
-                    mast.unfollow(account: status.account, done: { result in })
-                } label: {  Text("Unfollow Author") }
-                
-                Button
-                {
-                    NSPasteboard.general.clearContents()
-                    NSPasteboard.general.setString(status.content, forType: .string)
-                    
-                } label: {  Text("Copy Post Text") }
-                
-                Button
-                {
-                    NSPasteboard.general.clearContents()
-                    if let url = status.url
-                    {
-                        NSPasteboard.general.setString(url.absoluteString, forType: .string)
-                    }
-                } label: {  Text("Copy Link to Post") }
-                
+                    mast.deletePost(id:status.id)
+                } label: { Image(systemName: "speaker.slash.fill"); Text("Delete Post") }
             }
+            
+            Button
+            {
+                shouldPresentDirectSheet.toggle()
+            } label: {  Text("Direct Message @\(status.account.acct)") }
+            
+            Button
+            {
+                mast.mute(account: status.account, done: { result in })
+            } label: {  Text("Mute Author") }
+            
+            Button
+            {
+                mast.unfollow(account: status.account, done: { result in })
+            } label: {  Text("Unfollow Author") }
+            
+            Button
+            {
+                NSPasteboard.general.clearContents()
+                NSPasteboard.general.setString(status.content, forType: .string)
+                
+            } label: {  Text("Copy Post Text") }
+            
+            Button
+            {
+                NSPasteboard.general.clearContents()
+                if let url = status.url
+                {
+                    NSPasteboard.general.setString(url.absoluteString, forType: .string)
+                }
+            } label: {  Text("Copy Link to Post") }
+            
         }
     }
     
