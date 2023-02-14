@@ -483,10 +483,32 @@ struct Post: View
                 }
                 
                 Button { } label: {  Text("Direct Message @\(status.account.acct)") }
-                Button { } label: {  Text("Mute Author") }
-                Button { } label: {  Text("Unfollow Author") }
-                Button { } label: {  Text("Copy Post Text") }
-                Button { } label: {  Text("Copy Link to Post") }
+                
+                Button
+                {
+                    mast.mute(account: status.account, done: { result in })
+                } label: {  Text("Mute Author") }
+                
+                Button
+                {
+                    mast.unfollow(account: status.account, done: { result in })
+                } label: {  Text("Unfollow Author") }
+                
+                Button
+                {
+                    NSPasteboard.general.clearContents()
+                    NSPasteboard.general.setString(status.content, forType: .string)
+                    
+                } label: {  Text("Copy Post Text") }
+                
+                Button
+                {
+                    NSPasteboard.general.clearContents()
+                    if let url = status.url
+                    {
+                        NSPasteboard.general.setString(url.absoluteString, forType: .string)
+                    }
+                } label: {  Text("Copy Link to Post") }
                 
             }
         }
