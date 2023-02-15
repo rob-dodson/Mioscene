@@ -25,9 +25,7 @@ struct Post: View
     @State private var showContentWarning : Bool = false
     @State private var shouldPresentDirectSheet = false
     @State private var shouldPresentSheet = false
-    @State private var shouldPresentErrorSheet = false
     @State private var shouldPresentImageSheet = false
-    @State private var shouldPresentInfoSheet = false
     @State private var imageShowIndex : Int  = 1
     @State var datePublished = ""
     @State var hoursstr : String = ""
@@ -564,9 +562,7 @@ struct Post: View
             {
                 errorSystem.reportError(type: .notimplemented,msg:  "Soon!")
             } label: {  Text("Report User") }
-            
         }
-        
     }
     
     
@@ -626,6 +622,7 @@ struct Post: View
             }
         }
     }
+ 
     
     func displayTag(name:String) -> some  View
     {
