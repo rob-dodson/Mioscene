@@ -12,7 +12,10 @@ class ErrorSystem : ObservableObject
 {
     @Published var errorType : MioceneError?
     @Published var errorMessage : String = "Unknown Error"
-
+    
+    @Published var infoType : MioceneInfo?
+    @Published var infoMessage : String = "Unknown Info"
+    
     func reportError(type:MioceneError,msg:String)
     {
         DispatchQueue.main.async
@@ -21,7 +24,34 @@ class ErrorSystem : ObservableObject
             self.errorType = type
         }
     }
+    
+    func showMessage(type:MioceneInfo,msg:String)
+    {
+        DispatchQueue.main.async
+        {
+            self.infoMessage = msg
+            self.infoType = .info
+        }
+    }
 }
+
+enum MioceneInfo : LocalizedError
+{
+    case info
+    case warning
+    
+    var infoDescription : String?
+    {
+        switch self
+        {
+            case .info:
+                return "Info"
+            case .warning:
+                return "Warning"
+        }
+    }
+}
+
 
 enum MioceneError : LocalizedError
 {
@@ -32,6 +62,7 @@ enum MioceneError : LocalizedError
     case accountError
     case loginError
     case registrationError
+    case notimplemented
     
     var errorDescription: String?
     {
@@ -44,37 +75,17 @@ enum MioceneError : LocalizedError
         case .postingError:
             return "Posting Error"
         case .sqlError:
-            return "Sql Error"
+            return "Database Error"
         case .accountError:
             return "Account Error"
         case .loginError:
-            return "Logi Error"
+            return "Login Error"
         case .registrationError:
             return "Registration Error"
+        case .notimplemented:
+            return "Sorry, Not implemented yet"
         }
     }
-
-    var recoverySuggestion: String?
-    {
-        switch self
-        {
-        case .ok:
-            return "Ok"
-        case .unknownError:
-            return "Something's not working"
-        case .postingError:
-            return "Article publishing failed due to missing text"
-        case .sqlError:
-            return "Sql Error"
-        case .accountError:
-            return "Account Error"
-        case .loginError:
-            return "Logi Error"
-        case .registrationError:
-            return "Registration Error"
-        }
-    }
-
 }
 
 struct LocalizedAlertError: LocalizedError
@@ -83,10 +94,6 @@ struct LocalizedAlertError: LocalizedError
     var errorDescription: String?
     {
         underlyingError.errorDescription
-    }
-    var recoverySuggestion: String?
-    {
-        underlyingError.recoverySuggestion
     }
 
     init?(error: Error?)
@@ -113,6 +120,24 @@ extension View
         }
     message:
         { error in
+            Text(msg)
+        }
+    }
+    
+    func messageAlert(title:String,show: Binding<MioceneInfo?>,msg:String, buttonTitle: String = "OK",done:@escaping () -> Void) -> some View
+    {
+        
+        return alert(title,isPresented: .constant(show.wrappedValue != nil))
+        {
+            
+            Button(buttonTitle)
+            {
+                show.wrappedValue = nil
+                done()
+            }
+        }
+    message:
+        {
             Text(msg)
         }
     }
