@@ -19,13 +19,15 @@ struct Post: View
     
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
-    
+    @EnvironmentObject var errorSystem : ErrorSystem
     
     @State private var showSensitiveContent : Bool = false
     @State private var showContentWarning : Bool = false
     @State private var shouldPresentDirectSheet = false
     @State private var shouldPresentSheet = false
+    @State private var shouldPresentErrorSheet = false
     @State private var shouldPresentImageSheet = false
+    @State private var shouldPresentInfoSheet = false
     @State private var imageShowIndex : Int  = 1
     @State var datePublished = ""
     @State var hoursstr : String = ""
@@ -260,7 +262,7 @@ struct Post: View
                             }
                             else
                             {
-                                Text("IMAGE TYPE NOT SUPPORTED \(attachment.type.rawValue)")
+                                Text("ATTACHMENT TYPE NOT SUPPORTED \(attachment.type.rawValue)")
                             }
                         }
                     }
@@ -457,6 +459,8 @@ struct Post: View
             }
             .padding(.bottom,5)
         }
+        .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage,done: {  })
+        .messageAlert(title: "Info", show:$errorSystem.infoType, msg: errorSystem.infoMessage, done: {  })
         .sheet(isPresented: $shouldPresentDirectSheet)
         {
         }
@@ -492,11 +496,23 @@ struct Post: View
         {
             if status.account.id == appState.currentUserMastAccount?.id
             {
-                Button
+                Button  // PopMenuHere?
                 {
                     mast.deletePost(id:status.id)
+                    errorSystem.showMessage(type:.info,msg: "Post deleted")
                 } label: { Image(systemName: "speaker.slash.fill"); Text("Delete Post") }
+                
+                Button
+                {
+                    errorSystem.reportError(type: .notimplemented,msg: "Soon!")
+                } label: { Image(systemName: "pin"); Text("Pin") }
+               
+                Button
+                {
+                    errorSystem.reportError(type: .notimplemented,msg: "Soon!")
+                } label: { Image(systemName: "pin.slash"); Text("UnPin") }
             }
+            
             
             Button
             {
@@ -506,18 +522,20 @@ struct Post: View
             Button
             {
                 mast.mute(account: status.account, done: { result in })
+                errorSystem.showMessage(type:.info,msg: "\(status.account.displayName) muted")
             } label: {  Text("Mute Author") }
             
             Button
             {
                 mast.unfollow(account: status.account, done: { result in })
+                errorSystem.showMessage(type:.info,msg: "\(status.account.displayName) unfollowed")
             } label: {  Text("Unfollow Author") }
             
             Button
             {
                 NSPasteboard.general.clearContents()
                 NSPasteboard.general.setString(status.content, forType: .string)
-                
+                errorSystem.showMessage(type:.info,msg: "Text copied to pasteboard")
             } label: {  Text("Copy Post Text") }
             
             Button
@@ -525,11 +543,30 @@ struct Post: View
                 NSPasteboard.general.clearContents()
                 if let url = status.url
                 {
+                    NSPasteboard.general.clearContents()
                     NSPasteboard.general.setString(url.absoluteString, forType: .string)
+                    errorSystem.showMessage(type:.info,msg: "Link copied to pasteboard")
                 }
             } label: {  Text("Copy Link to Post") }
             
+            
+            Button
+            {
+                errorSystem.reportError(type: .notimplemented,msg: "Soon!")
+            } label: {  Text("Show Thread") }
+            
+            Button
+            {
+                errorSystem.reportError(type: .notimplemented,msg:  "Soon!")
+            } label: {  Text("Report Post") }
+            
+            Button
+            {
+                errorSystem.reportError(type: .notimplemented,msg:  "Soon!")
+            } label: {  Text("Report User") }
+            
         }
+        
     }
     
     
