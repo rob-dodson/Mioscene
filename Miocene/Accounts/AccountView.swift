@@ -37,7 +37,7 @@ struct AccountView: View
                     appState.showAccount(maccount: MAccount(displayname: appState.currentUserMastAccount!.displayName, acct: appState.currentUserMastAccount!))
                 }
 
-                AddAccount(mast: mast)
+                AddAccountButton(mast: mast)
                 
             }
             

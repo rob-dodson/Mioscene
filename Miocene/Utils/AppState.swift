@@ -36,13 +36,11 @@ class AppState : ObservableObject
     
     func showTag(tag:String)
     {
-     //   selectedTimeline = .tag
         tabIndex = .TimeLine
     }
     
     func showHome()
     {
-    //    selectedTimeline = .home
         tabIndex = .TimeLine
     }
     

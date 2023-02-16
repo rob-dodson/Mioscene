@@ -9,7 +9,7 @@
 
 import Foundation
 import MastodonKit
-
+import AuthenticationServices
 
 struct AttachmentURL : Identifiable
 {
@@ -17,7 +17,15 @@ struct AttachmentURL : Identifiable
     let id = UUID()
 }
 
-
+class SignInViewModel: NSObject, ObservableObject, ASWebAuthenticationPresentationContextProviding {
+    
+    // MARK: - ASWebAuthenticationPresentationContextProviding
+    
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+        return ASPresentationAnchor()
+    }
+    
+}
 class Mastodon : ObservableObject
 {
     static let accessTokenKeyNamePrefix = "Miocene.mastodon.access.token"
@@ -32,7 +40,7 @@ class Mastodon : ObservableObject
     
     private var appState = AppState.shared
     private var requestSize = 25
-    
+    private var session : ASWebAuthenticationSession?
     
     init()
     {
@@ -45,7 +53,6 @@ class Mastodon : ObservableObject
         do
         {
             Log.log(msg:"Starting up",rewindfile:true)
-            
             
             localAccountRecords = try sql.loadAccounts()
             
@@ -124,22 +131,111 @@ class Mastodon : ObservableObject
                 Log.log(msg:"id: \(application.id)")
                 Log.log(msg:"redirect uri: \(application.redirectURI)")
                 Log.log(msg:"client id: \(application.clientID)")
-                Log.log(msg:"client secret: \(application.clientSecret)")
+              //  Log.log(msg:"client secret: \(application.clientSecret)")
+                
+                self.client.run(Accounts.currentUser())
+                { result in
+                    done(result)
+                }
             }
-        }
-        
-        client.run(Accounts.currentUser())
-        { result in
-            done(result)
+            else
+            {
+               // done(.loginError,"error getting account \(result)")
+            }
         }
     }
    
-    
-    func getCurrentMastodonAccount() -> Account?
+
+    func newAccontOAuth(server:String,email:String,done:@escaping (MioceneError,String) -> Void)
     {
-        return appState.currentlocalAccountRecord?.usersMastodonAccount ?? nil
+        let serverurl = "https://\(server)"
+        let newClient = Client(baseURL: serverurl)
+        
+        let scheme = "miocene"
+        let redirecturi = "miocene://"
+        
+        let request = Clients.register(
+            clientName: "Miocene",
+            redirectURI:redirecturi,
+            scopes: [.read, .write,.follow],
+            website: "https://shyfrogproductions.com")
+        
+        
+        var clientid = ""
+        let signInView = SignInViewModel()
+       
+        
+        newClient.run(request)
+        { result in
+            if let application = result.value
+            {
+                clientid = application.clientID
+                
+                let oauthhurl = "https://\(server)/oauth/authorize?client_id=\(clientid)&redirect_uri=\(redirecturi)&response_type=code&scope=read+write+follow"
+                //print("oauth url \(oauthhurl)")
+                guard let authURL = URL(string: oauthhurl) else { print("oauth url error");return }
+                
+                DispatchQueue.main.async
+                {
+                    let session = ASWebAuthenticationSession(url: authURL, callbackURLScheme: scheme)
+                    { callbackURL, error in
+                        
+                        print("OAUTH \(String(describing: callbackURL?.debugDescription)) \(String(describing: error?.localizedDescription))")
+                        
+                        guard error == nil, let callbackURL = callbackURL else { return }
+                        let queryItems = URLComponents(string: callbackURL.absoluteString)?.queryItems
+                        if let code = queryItems?.filter({ $0.name == "code" }).first?.value
+                        {
+                            self.setuplogin(email: email, server: server, token: code, done: done)
+                        }
+                        else
+                        {
+                            done(.loginError,"failed to get token \(result)")
+                        }
+                    }
+                    
+                    session.prefersEphemeralWebBrowserSession = true
+                    session.presentationContextProvider = signInView
+                    session.start()
+                }
+            }
+            else
+            {
+                Log.log(msg:"Clients.register error \(result)")
+            }
+        }
     }
 
+    func setuplogin(email:String,server:String,token:String,done:@escaping (MioceneError,String) -> Void)
+    {
+        let localaccount = LocalAccountRecord(username: email, email:email, server: server, lastViewed: true)
+        
+        Keys.storeInKeychain(name: localaccount.makeKeyChainName(), value: token)
+        
+        self.connect(serverurl: server, token:token)
+        { result in
+            
+            if let account = result.value
+            {
+                localaccount.username = account.username
+                self.appState.currentUserMastAccount = account
+                self.appState.currentViewingMastAccount = MAccount(displayname: account.displayName, acct: account)
+                do
+                {
+                    try self.sql.updateAccount(account: localaccount)
+                    done(.ok,"Account stored in db, logged in OK")
+                }
+                catch
+                {
+                    done(.sqlError,"Sql error storing account: \(error)")
+                }
+            }
+            else if let error = result.error
+            {
+                done(.accountError,"error getting account: \(error)")
+            }
+        }
+    }
     
     func newAccount(server:String,email:String,password:String,done:@escaping (MioceneError,String) -> Void)
     {
@@ -161,41 +257,15 @@ class Mastodon : ObservableObject
             {
                 clientid = application.clientID
                 clientsecret = application.clientSecret
+             
                 
                 let loginrequest = Login.silent(clientID: clientid, clientSecret: clientsecret, scopes: [.read, .write,.follow], username: email, password: password)
-                
                 newClient.run(loginrequest)
                 { result in
                     
                     if let loginsettings = result.value
                     {
-                            let localaccount = LocalAccountRecord(username: email, email:email, server: server, lastViewed: true)
-                            
-                            Keys.storeInKeychain(name: localaccount.makeKeyChainName(), value: loginsettings.accessToken)
-                            
-                            self.connect(serverurl: server, token: loginsettings.accessToken, done:
-                            { result in
-                                
-                                if let account = result.value
-                                {
-                                    localaccount.username = account.username
-                                    self.appState.currentUserMastAccount = account
-                                    self.appState.currentViewingMastAccount = MAccount(displayname: account.displayName, acct: account)
-                                    do
-                                    {
-                                        try self.sql.updateAccount(account: localaccount)
-                                        done(.ok,"Account logged in OK")
-                                    }
-                                    catch
-                                    {
-                                        done(.sqlError,"Sql error storing account \(error)")
-                                    }
-                                }
-                                else if let error = result.error
-                                {
-                                    done(.accountError,"error getting account \(error)")
-                                }
-                            })
+                        self.setuplogin(email: email, server: server, token: loginsettings.accessToken, done: done)
                     }
                     else
                     {
@@ -210,6 +280,14 @@ class Mastodon : ObservableObject
         }
     }
    
+    func getCurrentMastodonAccount() -> Account?
+    {
+        return appState.currentlocalAccountRecord?.usersMastodonAccount ?? nil
+    }
+    
+    
+    
+    
     func getStatusesForAccount(account:Account,done: @escaping ([MStatus]) -> Void)
     {
         var returnstats = [MStatus]()

@@ -180,7 +180,6 @@ struct Post: View
                                 .font(settings.font.body)
                                 .foregroundColor(settings.theme.bodyColor)
                                 .textSelection(.enabled)
-                            
                         }
                     }
                     

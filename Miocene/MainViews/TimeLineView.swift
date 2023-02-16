@@ -16,11 +16,9 @@ struct TimeLineView: View
     
     @StateObject private var timelineManger = TimelineManager()
     
-    @State private var showingpopup : Bool = false
-    
     @State var currentTag = String() // move this into TimeLineManager?
     @State var selectedTimeline : TimeLine = .home
-
+    @State private var presentAddAccountSheet = false
     
     var body: some View
     {
@@ -173,15 +171,43 @@ struct TimeLineView: View
                 popitems.append(popitem)
             }
         }
+        
+        let popitem = PopMenuItem<LocalAccountRecord>(text: "Add Account",userData: nil)
+        popitems.append(popitem)
+        
+        var selected = ""
+        if let accounts = mast.localAccountRecords
+        {
+            if let lastaccount = accounts.first(where: { rec in
+                rec.lastViewed == true
+            })
+            {
+                selected = lastaccount.username
+            }
+        }
         else
         {
-            let popitem = PopMenuItem<LocalAccountRecord>(text: "@Add Account",userData: nil)
-            popitems.append(popitem)
+            selected = "Add Account"
         }
         
-        return PopMenu(icon: "person.crop.circle",selected:"@\(mast.localAccountRecords?[0].username ?? "Add Account")",menuItems:popitems)
-            { item in
+        return PopMenu(icon: "person.crop.circle",selected:"@\(selected)",menuItems:popitems)
+        { item in
+            print("Account: \(item.text)")
+            if item.text == "Add Account"
+            {
+                presentAddAccountSheet = true
             }
+        }
+        .sheet(isPresented: $presentAddAccountSheet)
+        {
+        }
+    content:
+        {
+            AddAccountPanel(mast: mast)
+            {
+                presentAddAccountSheet = false
+            }
+        }
     }
 
         

@@ -18,7 +18,7 @@
 		AE28C5E4295CE9F900C8C928 /* TimeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5E3295CE9F900C8C928 /* TimeLineView.swift */; };
 		AE28C5E6295CEDCE00C8C928 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5E5295CEDCE00C8C928 /* AccountView.swift */; };
 		AE28C5EC295E4B1C00C8C928 /* AccountSmall.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5EB295E4B1C00C8C928 /* AccountSmall.swift */; };
-		AE28C5EE29634C0B00C8C928 /* AddAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5ED29634C0B00C8C928 /* AddAccount.swift */; };
+		AE28C5EE29634C0B00C8C928 /* AddAccountButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5ED29634C0B00C8C928 /* AddAccountButton.swift */; };
 		AE28C5F029635CAA00C8C928 /* Keys.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5EF29635CAA00C8C928 /* Keys.swift */; };
 		AE28C5F429635DE600C8C928 /* KeychainSwift in Frameworks */ = {isa = PBXBuildFile; productRef = AE28C5F329635DE600C8C928 /* KeychainSwift */; };
 		AE28C5F72963717D00C8C928 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = AE28C5F62963717D00C8C928 /* GRDB */; };
@@ -45,6 +45,7 @@
 		AEAFA2EC297EED5B00970F40 /* Filters.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2EB297EED5B00970F40 /* Filters.swift */; };
 		AEAFA2EF297F4BBF00970F40 /* SwiftyGif in Frameworks */ = {isa = PBXBuildFile; productRef = AEAFA2EE297F4BBF00970F40 /* SwiftyGif */; };
 		AEAFA2F129807C9B00970F40 /* PopMenuButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEAFA2F029807C9B00970F40 /* PopMenuButton.swift */; };
+		AED3518B299D92AA00082074 /* AddAccountPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AED3518A299D92AA00082074 /* AddAccountPanel.swift */; };
 		AEE6EB79298A080700463A71 /* ShowImagePanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE6EB78298A080700463A71 /* ShowImagePanel.swift */; };
 		AEE7F88729916B9E0030C7F3 /* TimelineManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AEE7F88629916B9E0030C7F3 /* TimelineManager.swift */; };
 /* End PBXBuildFile section */
@@ -64,7 +65,7 @@
 		AE28C5E3295CE9F900C8C928 /* TimeLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeLineView.swift; sourceTree = "<group>"; };
 		AE28C5E5295CEDCE00C8C928 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
 		AE28C5EB295E4B1C00C8C928 /* AccountSmall.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountSmall.swift; sourceTree = "<group>"; };
-		AE28C5ED29634C0B00C8C928 /* AddAccount.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAccount.swift; sourceTree = "<group>"; };
+		AE28C5ED29634C0B00C8C928 /* AddAccountButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddAccountButton.swift; sourceTree = "<group>"; };
 		AE28C5EF29635CAA00C8C928 /* Keys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keys.swift; sourceTree = "<group>"; };
 		AE28C5F82963719B00C8C928 /* SqliteDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqliteDB.swift; sourceTree = "<group>"; };
 		AE28C5FA2963727500C8C928 /* LocalAccountRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAccountRecord.swift; sourceTree = "<group>"; };
@@ -87,6 +88,8 @@
 		AEAFA2E7297DD59200970F40 /* MNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MNotification.swift; sourceTree = "<group>"; };
 		AEAFA2EB297EED5B00970F40 /* Filters.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Filters.swift; sourceTree = "<group>"; };
 		AEAFA2F029807C9B00970F40 /* PopMenuButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopMenuButton.swift; sourceTree = "<group>"; };
+		AED3518A299D92AA00082074 /* AddAccountPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAccountPanel.swift; sourceTree = "<group>"; };
+		AED3518C299E761700082074 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AEE6EB772985CBC300463A71 /* Notes.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Notes.txt; sourceTree = "<group>"; };
 		AEE6EB78298A080700463A71 /* ShowImagePanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowImagePanel.swift; sourceTree = "<group>"; };
 		AEE7F88629916B9E0030C7F3 /* TimelineManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineManager.swift; sourceTree = "<group>"; };
@@ -130,6 +133,7 @@
 		AE06EBEE294D16BB006CAB67 /* Miocene */ = {
 			isa = PBXGroup;
 			children = (
+				AED3518C299E761700082074 /* Info.plist */,
 				AE9CCCF529959A9B00FB3449 /* Main */,
 				AEAFA2DF297B279E00970F40 /* MainViews */,
 				AE9CCCF429959A7C00FB3449 /* Filters */,
@@ -204,10 +208,11 @@
 			isa = PBXGroup;
 			children = (
 				AE28C5E5295CEDCE00C8C928 /* AccountView.swift */,
-				AE28C5ED29634C0B00C8C928 /* AddAccount.swift */,
 				AE28C60229663A5B00C8C928 /* AccountLarge.swift */,
 				AE28C5EB295E4B1C00C8C928 /* AccountSmall.swift */,
 				AE28C5FA2963727500C8C928 /* LocalAccountRecord.swift */,
+				AE28C5ED29634C0B00C8C928 /* AddAccountButton.swift */,
+				AED3518A299D92AA00082074 /* AddAccountPanel.swift */,
 			);
 			path = Accounts;
 			sourceTree = "<group>";
@@ -344,11 +349,12 @@
 				AE28C61C297349C900C8C928 /* PollBuilder.swift in Sources */,
 				AE06EBF2294D16BB006CAB67 /* ContentView.swift in Sources */,
 				AE28C60F296F25CD00C8C928 /* Themes.swift in Sources */,
-				AE28C5EE29634C0B00C8C928 /* AddAccount.swift in Sources */,
+				AE28C5EE29634C0B00C8C928 /* AddAccountButton.swift in Sources */,
 				AEAFA2E6297DD54600970F40 /* MStatus.swift in Sources */,
 				AEAFA2F129807C9B00970F40 /* PopMenuButton.swift in Sources */,
 				AEAFA2E3297DACE300970F40 /* MAccount.swift in Sources */,
 				AE06EC04294D234D006CAB67 /* Mastodon.swift in Sources */,
+				AED3518B299D92AA00082074 /* AddAccountPanel.swift in Sources */,
 				AE28C5F92963719B00C8C928 /* SqliteDB.swift in Sources */,
 				AEAFA2D72979D2E300970F40 /* EditPost.swift in Sources */,
 				AE28C5EC295E4B1C00C8C928 /* AccountSmall.swift in Sources */,
@@ -503,6 +509,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Miocene/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Miocene;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -543,6 +550,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Miocene/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Miocene;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;

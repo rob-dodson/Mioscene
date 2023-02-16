@@ -53,19 +53,9 @@ struct SettingsView: View
     {
         return VStack
         {
-            HStack(spacing: 2)
-            {
-                Link(destination: URL(string:"https://joinmastodon.org/")!)
-                {
-                    Image("MastodonSymbol")
-                        .foregroundColor(settings.theme.accentColor)
-                        .font(.largeTitle)
-                }
-                
                 Text("Appearance")
                     .font(settings.font.title)
                     .foregroundColor(settings.theme.accentColor)
-            }.symbolRenderingMode(.multicolor)
             
             ForEach($settings.themes.themeslist.indices, id:\.self)
             { index in
