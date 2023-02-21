@@ -10,7 +10,6 @@ import MastodonKit
 
 struct AddAccountPanel: View
 {
-    @ObservedObject var mast : Mastodon
     var done : () -> Void
     
     @EnvironmentObject var settings: Settings
@@ -18,7 +17,6 @@ struct AddAccountPanel: View
     @EnvironmentObject var appState : AppState
     
     @State private var server : String = "shyfrog.masto.host"
-    @State private var email : String = ""
     @State private var password : String = ""
     @State private var useOAuth = true
     
@@ -32,10 +30,6 @@ struct AddAccountPanel: View
                 .padding(.top)
             
             TextField("Mastodon Server", text: $server,prompt: Text("server name"))
-                .padding()
-                .font(settings.font.title)
-            
-            TextField("Email", text: $email,prompt: Text("email address"))
                 .padding()
                 .font(settings.font.title)
             
@@ -79,27 +73,15 @@ struct AddAccountPanel: View
                 }
             }
             
+            
             ToolbarItem
             {
                 PopButton(text: "Save", icon: "square.and.arrow.down",isSelected: false)
                 {
-                    if useOAuth == false
-                    {
-                        mast.newAccount(server: server, email: email, password: password)
-                        { mioceneerror,msg in
-                            
-                            Log.log(msg: msg)
-                            errorSystem.reportError(type: mioceneerror,msg: msg)
-                        }
-                    }
-                    else
-                    {
-                        mast.newAccontOAuth(server: server, email: email)
-                        { mioceneerror,msg in
-                            
-                            Log.log(msg: msg)
-                            errorSystem.reportError(type: mioceneerror,msg: msg)
-                        }
+                    appState.addAccount(server: server)
+                    { mioceneerror, msg in
+                        Log.log(msg: msg)
+                        errorSystem.reportError(type: mioceneerror,msg: msg)
                     }
                 }
             }

@@ -9,16 +9,15 @@ import SwiftUI
 
 struct TimeLineView: View
 {
-    @ObservedObject var mast: Mastodon
-    
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
     
-    @StateObject private var timelineManger = TimelineManager()
+    @StateObject var timelineManger : TimelineManager
     
     @State var currentTag = String() // move this into TimeLineManager?
     @State var selectedTimeline : TimeLine = .home
     @State private var presentAddAccountSheet = false
+    
     
     var body: some View
     {
@@ -44,7 +43,7 @@ struct TimeLineView: View
                         timelineMenu()
                         FiltersView()
                         refreshButton()
-                        NewPostButton(mast:mast)
+                        NewPostButton()
                     }
                     .opacity(settings.showTimelineToolBar == true ? 1.0 : 0.0)
                     .frame(maxHeight:settings.showTimelineToolBar == true ? 55 : 5)
@@ -66,7 +65,7 @@ struct TimeLineView: View
                         {
                             ForEach(getnotifications())
                             { note in
-                                NotificationView(mast:mast,mnotification:note)
+                                NotificationView(mnotification:note)
                                     .padding([.horizontal,.top],5)
                             }
                         }
@@ -75,7 +74,7 @@ struct TimeLineView: View
                             ForEach(timelineManger.theStats)
                             { mstat in
                                 
-                                Post(mast:mast,mstat:mstat)
+                                Post(mstat:mstat)
                                     .padding([.horizontal,.top],5)
                                     .onAppear
                                 {
@@ -92,7 +91,7 @@ struct TimeLineView: View
                 {
                     Task
                     {
-                        while(mast.userLoggedIn == false)
+                        while(appState.userLoggedIn == false)
                         {
                             try? await Task.sleep(for: .seconds(0.25))
                         }
@@ -162,33 +161,25 @@ struct TimeLineView: View
     func accountsMenu() -> some  View
     {
         var popitems = [PopMenuItem<LocalAccountRecord>]()
+        var selected = ""
         
-        if let accounts = mast.localAccountRecords
+        for account in AppState.localAccountRecords.values
         {
-            for account in accounts
+            let popitem = PopMenuItem<LocalAccountRecord>(text: "@\(account.username)",userData: account)
+            popitems.append(popitem)
+            if account.lastViewed == true
             {
-                let popitem = PopMenuItem<LocalAccountRecord>(text: "@\(account.username)",userData: account)
-                popitems.append(popitem)
+                selected = account.username
             }
+        }
+        
+        if selected == ""
+        {
+            selected = "Add Account"
         }
         
         let popitem = PopMenuItem<LocalAccountRecord>(text: "Add Account",userData: nil)
         popitems.append(popitem)
-        
-        var selected = ""
-        if let accounts = mast.localAccountRecords
-        {
-            if let lastaccount = accounts.first(where: { rec in
-                rec.lastViewed == true
-            })
-            {
-                selected = lastaccount.username
-            }
-        }
-        else
-        {
-            selected = "Add Account"
-        }
         
         return PopMenu(icon: "person.crop.circle",selected:"@\(selected)",menuItems:popitems)
         { item in
@@ -203,7 +194,7 @@ struct TimeLineView: View
         }
     content:
         {
-            AddAccountPanel(mast: mast)
+            AddAccountPanel()
             {
                 presentAddAccountSheet = false
             }

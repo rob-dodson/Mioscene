@@ -10,7 +10,6 @@ import SwiftUI
 
 struct SettingsView: View
 {
-    @ObservedObject var mast : Mastodon
     @EnvironmentObject var settings: Settings
     
     let colorBlockSize = 20.0

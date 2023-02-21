@@ -11,7 +11,6 @@ import MastodonKit
 
 struct EditPost: View
 {
-    @ObservedObject var mast : Mastodon
     @State var newPost : String = ""
     @State var replyTo : String?
     @State var postVisibility : MastodonKit.Visibility
@@ -160,7 +159,7 @@ struct EditPost: View
                     
                     alertMediaUploading = (attachedurls.count > 0) ? true : false
                     
-                    mast.post(newpost:newPost,
+                    appState.mastio()?.post(newpost:newPost,
                               replyTo:replyTo,
                               sensitive: sensitive,
                        spoiler:showContentWarning == true ? contentWarning : nil,

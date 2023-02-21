@@ -62,7 +62,8 @@ class TimelineRequest
 
 class TimelineManager : ObservableObject
 {
-    @EnvironmentObject var settings: Settings
+    @State var settings: Settings
+    @State var appState: AppState
     
     //
     // TimeLineView uses these in it's ScrollView ===
@@ -72,9 +73,14 @@ class TimelineManager : ObservableObject
 
     
     @State private var fetching : Bool = false
-     private var currentRequest : TimelineRequest? //(timelineWhen: .current, timeLine: .home, tag: "")
+    private var currentRequest : TimelineRequest? //(timelineWhen: .current, timeLine: .home, tag: "")
     @State private var timelineTimer : Timer?
-    @State private var mast = Mastodon.shared
+    
+    init(settings: Settings, appState: AppState)
+    {
+        self.settings = settings
+        self.appState = appState
+    }
     
     
     //
@@ -207,7 +213,7 @@ class TimelineManager : ObservableObject
     
     private func getNotifications(timelineRequest:TimelineRequest)
     {
-        mast.getNotifications(mentionsOnly:timelineRequest.timeLine == .mentions ? true : false)
+        appState.mastio()?.getNotifications(mentionsOnly:timelineRequest.timeLine == .mentions ? true : false)
         { mnotes in
             
             DispatchQueue.main.async
@@ -321,9 +327,8 @@ class TimelineManager : ObservableObject
     
     private func getCurrentStats(timelineRequest:TimelineRequest, done: @escaping ([MStatus]) -> Void)
     {
-        mast.getSomeStatuses(timeline: timelineRequest.timeLine, tag:timelineRequest.tag)
+        appState.mastio()?.getSomeStatuses(timeline: timelineRequest.timeLine, tag:timelineRequest.tag)
         { somestats in
-            
             done(somestats)
         }
     }
@@ -333,7 +338,7 @@ class TimelineManager : ObservableObject
     {
         guard let lastid = timelineRequest.lastId else { return }
         
-        mast.getOlderStatuses(timeline: timelineRequest.timeLine, id: lastid, tag:timelineRequest.tag)
+        appState.mastio()?.getOlderStatuses(timeline: timelineRequest.timeLine, id: lastid, tag:timelineRequest.tag)
         { [self] olderstats in
             
             if timelineRequest.timeLine == .bookmarks || timelineRequest.timeLine == .favorites // getOlder always returns all, so we filter out ones we have. Bug? Me dumb?
@@ -370,7 +375,7 @@ class TimelineManager : ObservableObject
             let group = DispatchGroup()
             group.enter()
             
-            mast.getNewerStatuses(timeline: timelineRequest.timeLine, id: newid, tag:timelineRequest.tag)
+            appState.mastio()?.getNewerStatuses(timeline: timelineRequest.timeLine, id: newid, tag:timelineRequest.tag)
             { newstats,morestats in
                 
                 print("NEW \(newstats.count) more:\(morestats)")

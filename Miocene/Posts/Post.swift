@@ -13,7 +13,6 @@ import SwiftyGif
 
 struct Post: View
 {
-    @ObservedObject var mast : Mastodon
     @ObservedObject var mstat : MStatus
     var notification : MastodonKit.Notification?
     
@@ -71,7 +70,7 @@ struct Post: View
                             Text("\(textstr)")
                     }
                     
-                    AccountSmall(mast:mast,maccount: MAccount(displayname: note.account.displayName, acct: note.account))
+                    AccountSmall(maccount: MAccount(displayname: note.account.displayName, acct: note.account))
                 }
                 .font(settings.font.headline)
                 .foregroundColor(settings.theme.accentColor)
@@ -82,22 +81,20 @@ struct Post: View
                 //
                 // Poster's avatar
                 //
-                if let account = status.account
+                let account = status.account
+                AsyncImage(url: URL(string: account.avatar ?? ""))
+                { image in
+                    image.resizable()
+                }
+            placeholder:
                 {
-                    AsyncImage(url: URL(string: account.avatar ?? ""))
-                    { image in
-                        image.resizable()
-                    }
-                placeholder:
-                    {
-                        Image(systemName: "person.fill.questionmark")
-                    }
-                    .frame(width: 50, height: 50)
-                    .cornerRadius(5)
-                    .onTapGesture
-                    {
-                        appState.showAccount(maccount:MAccount(displayname: account.displayName, acct: account))
-                    }
+                    Image(systemName: "person.fill.questionmark")
+                }
+                .frame(width: 50, height: 50)
+                .cornerRadius(5)
+                .onTapGesture
+                {
+                    appState.showAccount(maccount:MAccount(displayname: account.displayName, acct: account))
                 }
                 
                 
@@ -198,16 +195,9 @@ struct Post: View
                             //
                             if attachment.type == .video || attachment.type == .gifv
                             {
-                                
-                                if  let player = AVPlayer(url: URL(string:attachment.url)!)
-                                {
-                                    VideoPlayer(player: player)
-                                        .frame(width: 400, height: 300, alignment: .center)
-                                }
-                                else
-                                {
-                                    Image(systemName: "video.slash.fill")
-                                }
+                                let player = AVPlayer(url: URL(string:attachment.url)!)
+                                VideoPlayer(player: player)
+                                    .frame(width: 400, height: 300, alignment: .center)
                             }
                             //
                             // image
@@ -321,7 +311,7 @@ struct Post: View
                     //
                     if let poll = status.poll
                     {
-                        PollView(mast:mast,poll:poll)
+                        PollView(poll:poll)
                     }
                     
                     
@@ -389,12 +379,12 @@ struct Post: View
                             {
                                 if mstatus.favorited == true
                                 {
-                                    mast.unfavorite(status: status)
+                                    appState.mastio()?.unfavorite(status: status)
                                     mstatus.favoritesCount -= 1
                                 }
                                 else
                                 {
-                                    mast.favorite(status: status)
+                                    appState.mastio()?.favorite(status: status)
                                     mstatus.favoritesCount += 1
                                     
                                 }
@@ -412,12 +402,12 @@ struct Post: View
                             {
                                 if mstatus.reblogged == true
                                 {
-                                    mast.unreblog(status: status)
+                                    appState.mastio()?.unreblog(status: status)
                                     mstatus.reblogsCount -= 1
                                 }
                                 else
                                 {
-                                    mast.reblog(status: status)
+                                    appState.mastio()?.reblog(status: status)
                                     mstatus.reblogsCount += 1
                                     
                                 }
@@ -434,11 +424,11 @@ struct Post: View
                             {
                                 if mstatus.bookmarked == true
                                 {
-                                    mast.unbookmark(status: status)
+                                    appState.mastio()?.unbookmark(status: status)
                                 }
                                 else
                                 {
-                                    mast.bookmark(status: status)
+                                    appState.mastio()?.bookmark(status: status)
                                 }
                                 mstatus.bookmarked.toggle()
                             }
@@ -463,7 +453,7 @@ struct Post: View
         }
     content:
         {
-            EditPost(mast: mast,newPost: "@\(status.account.acct): ",replyTo:status.account.id,postVisibility:.direct)
+            EditPost(newPost: "@\(status.account.acct): ",replyTo:status.account.id,postVisibility:.direct)
             {
                 shouldPresentDirectSheet = false
             }
@@ -473,7 +463,7 @@ struct Post: View
         }
     content:
         {
-            EditPost(mast: mast,newPost: "@\(status.account.acct): ",replyTo:status.account.id,postVisibility:.public)
+            EditPost(newPost: "@\(status.account.acct): ",replyTo:status.account.id,postVisibility:.public)
             {
                 shouldPresentSheet = false
             }
@@ -495,7 +485,7 @@ struct Post: View
             {
                 Button  // PopMenuHere?
                 {
-                    mast.deletePost(id:status.id)
+                    appState.mastio()?.deletePost(id:status.id)
                     errorSystem.showMessage(type:.info,msg: "Post deleted")
                 } label: { Image(systemName: "speaker.slash.fill"); Text("Delete Post") }
                 
@@ -518,13 +508,13 @@ struct Post: View
             
             Button
             {
-                mast.mute(account: status.account, done: { result in })
+                appState.mastio()?.mute(account: status.account, done: { result in })
                 errorSystem.showMessage(type:.info,msg: "\(status.account.displayName) muted")
             } label: {  Text("Mute Author") }
             
             Button
             {
-                mast.unfollow(account: status.account, done: { result in })
+                appState.mastio()?.unfollow(account: status.account, done: { result in })
                 errorSystem.showMessage(type:.info,msg: "\(status.account.displayName) unfollowed")
             } label: {  Text("Unfollow Author") }
             
@@ -573,13 +563,14 @@ struct Post: View
             _ = Post.timer!.connect() // do we need to keep this around?
         }
         
-        return Text(datePublished)
+        return Text(hoursstr)
             .font(settings.font.footnote)
             .foregroundColor(settings.theme.minorColor)
             .onAppear(perform:
                         {
                 calcDate(status: status)
             })
+            .help(datePublished)
             .onReceive(Post.timer!)
         { input in
             calcDate(status: status)

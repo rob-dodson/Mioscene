@@ -1,5 +1,5 @@
 //
-//  Mastodon.swift
+//  MastodonIO.swift
 //  Miocene
 //
 //  Created by Robert Dodson on 12/16/22.
@@ -17,112 +17,36 @@ struct AttachmentURL : Identifiable
     let id = UUID()
 }
 
-class SignInViewModel: NSObject, ObservableObject, ASWebAuthenticationPresentationContextProviding {
-    
-    // MARK: - ASWebAuthenticationPresentationContextProviding
-    
-    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor {
+class SignInViewModel: NSObject, ObservableObject, ASWebAuthenticationPresentationContextProviding
+{
+    func presentationAnchor(for session: ASWebAuthenticationSession) -> ASPresentationAnchor
+    {
         return ASPresentationAnchor()
     }
-    
 }
-class Mastodon : ObservableObject
+
+class MastodonIO : ObservableObject
 {
-    static let accessTokenKeyNamePrefix = "Miocene.mastodon.access.token"
-    static let shared = Mastodon()
-    
     var currentTimeline : TimeLine = .home
-    var localAccountRecords : [LocalAccountRecord]?
+    
     private var client : Client!
-    private var sql : SqliteDB
+    private var sql : SqliteDB!
     
-    @Published var userLoggedIn : Bool = false
-    
-    private var appState = AppState.shared
     private var requestSize = 25
     private var session : ASWebAuthenticationSession?
-    
-    init()
-    {
-        sql = SqliteDB()
-        start()
-    }
-    
-    func start()
-    {
-        do
-        {
-            Log.log(msg:"Starting up",rewindfile:true)
-            
-            localAccountRecords = try sql.loadAccounts()
-            
-            if localAccountRecords != nil
-            {
-                for localrec in localAccountRecords!
-                {
-                    if localrec.lastViewed == true
-                    {
-                        let token = Keys.getFromKeychain(name: localrec.makeKeyChainName())
-                        if let token
-                        {
-                            connect(serverurl: localrec.server, token: token, done:
-                            { result in
-                                
-                                if let account = result.value
-                                {
-                                        DispatchQueue.main.async {
-                                            self.userLoggedIn = true
-                                            self.appState.currentlocalAccountRecord = localrec
-                                            self.appState.currentUserMastAccount = account
-                                            self.appState.currentViewingMastAccount = MAccount(displayname: account.displayName, acct: account)
-                                            
-                                            Log.log(msg: "Account \(account.username) is logged in!")
-                                        }
-                                }
-                                else if let error = result.error
-                                {
-                                    Log.log(msg: "error getting account \(error)")
-                                }
-                            })
-                        }
-                        else
-                        {
-                            Log.log(msg: "Error getting token from Keychain")
-                        }
-                            
-                    }
-                }
-            }
-        }
-        catch
-        {
-            Log.log(msg:"sql error \(error)")
-        }
-    }
-    
-    
-    func search(searchTerm:String,done:@escaping (Results) -> Void )
-    {
-        let request =  Search.search(query:searchTerm,resolve:false)
-        client.run(request)
-        { result in
-            if let results = result.value
-            {
-                done(results)
-            }
-        }
-    }
     
     
     func connect(serverurl:String,token:String,done:@escaping (Result<Account>) -> Void)
     {
-        client =  Client(baseURL: "https://\(serverurl)",accessToken: token)
+        client = Client(baseURL: "https://\(serverurl)",accessToken: token)
         
         let request = Clients.register(
             clientName: "Miocene",
-            scopes: [.read, .write,.follow],
+            scopes: [.read,.write,.follow],
             website: "https://shyfrogproductions.com"
         )
+
+        Log.log(msg:"mastio start for  \(serverurl)")
 
         client.run(request)
         { result in
@@ -140,16 +64,16 @@ class Mastodon : ObservableObject
             }
             else
             {
-               // done(.loginError,"error getting account \(result)")
+                Log.log(msg:"Error getting account: \(result)")
             }
         }
     }
    
 
-    func newAccontOAuth(server:String,email:String,done:@escaping (MioceneError,String) -> Void)
+    func newAccountOAuth(server:String,done:@escaping (MioceneError,String) -> Void)
     {
         let serverurl = "https://\(server)"
-        let newClient = Client(baseURL: serverurl)
+        client = Client(baseURL: serverurl)
         
         let scheme = "miocene"
         let redirecturi = "miocene://"
@@ -160,20 +84,17 @@ class Mastodon : ObservableObject
             scopes: [.read, .write,.follow],
             website: "https://shyfrogproductions.com")
         
-        
-        var clientid = ""
         let signInView = SignInViewModel()
        
-        
-        newClient.run(request)
+        client.run(request)
         { result in
+            
             if let application = result.value
             {
-                clientid = application.clientID
                 
-                let oauthhurl = "https://\(server)/oauth/authorize?client_id=\(clientid)&redirect_uri=\(redirecturi)&response_type=code&scope=read+write+follow"
-                //print("oauth url \(oauthhurl)")
-                guard let authURL = URL(string: oauthhurl) else { print("oauth url error");return }
+                let oauthhurl = "https://\(server)/oauth/authorize?client_id=\(application.clientID)&redirect_uri=\(redirecturi)&response_type=code&scope=read+write+follow"
+
+                guard let authURL = URL(string: oauthhurl) else { done(.loginError,"oauth url error"); return }
                 
                 DispatchQueue.main.async
                 {
@@ -184,13 +105,13 @@ class Mastodon : ObservableObject
                         
                         guard error == nil, let callbackURL = callbackURL else { return }
                         let queryItems = URLComponents(string: callbackURL.absoluteString)?.queryItems
-                        if let code = queryItems?.filter({ $0.name == "code" }).first?.value
+                        if let token = queryItems?.filter({ $0.name == "code" }).first?.value
                         {
-                            self.setuplogin(email: email, server: server, token: code, done: done)
+                            done(.ok,token)
                         }
                         else
                         {
-                            done(.loginError,"failed to get token \(result)")
+                            done(.loginError,"failed to get token: \(result)")
                         }
                     }
                     
@@ -201,42 +122,12 @@ class Mastodon : ObservableObject
             }
             else
             {
-                Log.log(msg:"Clients.register error \(result)")
+                done(.loginError,"Clients.register error: \(result)")
             }
         }
     }
 
-    func setuplogin(email:String,server:String,token:String,done:@escaping (MioceneError,String) -> Void)
-    {
-        let localaccount = LocalAccountRecord(username: email, email:email, server: server, lastViewed: true)
-        
-        Keys.storeInKeychain(name: localaccount.makeKeyChainName(), value: token)
-        
-        self.connect(serverurl: server, token:token)
-        { result in
-            
-            if let account = result.value
-            {
-                localaccount.username = account.username
-                self.appState.currentUserMastAccount = account
-                self.appState.currentViewingMastAccount = MAccount(displayname: account.displayName, acct: account)
-                do
-                {
-                    try self.sql.updateAccount(account: localaccount)
-                    done(.ok,"Account stored in db, logged in OK")
-                }
-                catch
-                {
-                    done(.sqlError,"Sql error storing account: \(error)")
-                }
-            }
-            else if let error = result.error
-            {
-                done(.accountError,"error getting account: \(error)")
-            }
-        }
-    }
-    
+    /*
     func newAccount(server:String,email:String,password:String,done:@escaping (MioceneError,String) -> Void)
     {
         let serverurl = "https://\(server)"
@@ -265,7 +156,7 @@ class Mastodon : ObservableObject
                     
                     if let loginsettings = result.value
                     {
-                        self.setuplogin(email: email, server: server, token: loginsettings.accessToken, done: done)
+                        done(.ok,loginsettings.accessToken)
                     }
                     else
                     {
@@ -279,12 +170,7 @@ class Mastodon : ObservableObject
             }
         }
     }
-   
-    func getCurrentMastodonAccount() -> Account?
-    {
-        return appState.currentlocalAccountRecord?.usersMastodonAccount ?? nil
-    }
-    
+   */
     
     
     
@@ -325,6 +211,18 @@ class Mastodon : ObservableObject
         }
     }
     
+    
+    func search(searchTerm:String,done:@escaping (Results) -> Void )
+    {
+        let request =  Search.search(query:searchTerm,resolve:false)
+        client.run(request)
+        { result in
+            if let results = result.value
+            {
+                done(results)
+            }
+        }
+    }
     
     func follow(account:Account,done: @escaping (Relationship) -> Void)
     {
@@ -486,8 +384,16 @@ class Mastodon : ObservableObject
     }
     
     
-    
-    func post(newpost:String,replyTo:String?,sensitive:Bool?,spoiler:String?,visibility:Visibility,attachedURLS:[AttachmentURL],pollpayload:PollPayload?,done: @escaping (Result<Status>) -> Void)
+    func post(
+        newpost:String,
+        replyTo:String?,
+        sensitive:Bool?,
+        spoiler:String?,
+        visibility:Visibility,
+        attachedURLS:[AttachmentURL],
+        pollpayload:PollPayload?,
+        done: @escaping (Result<Status>) -> Void
+    )
     {
         if attachedURLS.count > 0
         {

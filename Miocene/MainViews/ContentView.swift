@@ -11,8 +11,6 @@ import MastodonKit
 
 struct ContentView: View
 {
-    @ObservedObject var mast : Mastodon
-    
     @EnvironmentObject var settings : Settings
     @EnvironmentObject var errorSystem : ErrorSystem
     @EnvironmentObject var appState: AppState
@@ -30,10 +28,10 @@ struct ContentView: View
                     
                     switch appState.tabIndex
                     {
-                        case .TimeLine: TimeLineView(mast: mast)
-                        case .Accounts: AccountView(mast: mast,maccount: MAccount(displayname: appState.currentUserMastAccount!.displayName, acct: appState.currentUserMastAccount!))
-                        case .Search:  SearchView(mast: mast)
-                        case .Settings: SettingsView(mast: mast)
+                        case .TimeLine: TimeLineView(timelineManger: TimelineManager(settings: settings, appState: appState))
+                        case .Accounts: AccountView(maccount: MAccount(displayname: appState.currentUserMastAccount!.displayName, acct: appState.currentUserMastAccount!))
+                        case .Search:  SearchView()
+                        case .Settings: SettingsView()
                     }
                 }
                 .frame(minWidth:100,maxHeight: geo.size.height * 1.0)

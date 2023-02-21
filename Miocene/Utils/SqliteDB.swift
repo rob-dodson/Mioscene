@@ -1,19 +1,8 @@
 //
-//  SQLiteIO.swift
+//  SQLiteDB.swift
 //  Miocene
 //
 //  Created by Robert Dodson on 1/2/23.
-//
-
-//
-//  SqliteDB.swift
-//  FrogBlog
-//
-//  Created by Robert Dodson on 1/17/20.
-//  Copyright © 2020 Robert Dodson. All rights reserved.
-//
-//  An interface the GRDB sqllite package. All I/O to the
-//  database goes through here.
 //
 
 import Foundation
@@ -40,10 +29,10 @@ class SqliteDB
         {
             let databaseURL = try FileManager.default
                 .url(for: .applicationSupportDirectory,
-                     in: .userDomainMask,
-                     appropriateFor: nil,
-                     create: true)
-                .appendingPathComponent("Miocene")
+                      in: .userDomainMask,
+          appropriateFor: nil,
+                  create: true)
+                 .appendingPathComponent("Miocene")
         
             try FileManager().createDirectory(at: databaseURL,
                                               withIntermediateDirectories: true,

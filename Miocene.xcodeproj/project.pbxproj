@@ -12,7 +12,7 @@
 		AE06EBF4294D16BC006CAB67 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE06EBF3294D16BC006CAB67 /* Assets.xcassets */; };
 		AE06EBF8294D16BC006CAB67 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AE06EBF7294D16BC006CAB67 /* Preview Assets.xcassets */; };
 		AE06EC02294D1D1D006CAB67 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE06EC01294D1D1D006CAB67 /* Post.swift */; };
-		AE06EC04294D234D006CAB67 /* Mastodon.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE06EC03294D234D006CAB67 /* Mastodon.swift */; };
+		AE06EC04294D234D006CAB67 /* MastodonIO.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE06EC03294D234D006CAB67 /* MastodonIO.swift */; };
 		AE28C5D82953C8A500C8C928 /* NewPostButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5D72953C8A500C8C928 /* NewPostButton.swift */; };
 		AE28C5DA295A7ACE00C8C928 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5D9295A7ACE00C8C928 /* SearchView.swift */; };
 		AE28C5E4295CE9F900C8C928 /* TimeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5E3295CE9F900C8C928 /* TimeLineView.swift */; };
@@ -58,7 +58,7 @@
 		AE06EBF5294D16BC006CAB67 /* Miocene.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Miocene.entitlements; sourceTree = "<group>"; };
 		AE06EBF7294D16BC006CAB67 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		AE06EC01294D1D1D006CAB67 /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
-		AE06EC03294D234D006CAB67 /* Mastodon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mastodon.swift; sourceTree = "<group>"; };
+		AE06EC03294D234D006CAB67 /* MastodonIO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MastodonIO.swift; sourceTree = "<group>"; };
 		AE11F8BE299AE55C0007D0FA /* MastodonKit-Rob */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "MastodonKit-Rob"; path = "../MastodonKit-Rob"; sourceTree = "<group>"; };
 		AE28C5D72953C8A500C8C928 /* NewPostButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostButton.swift; sourceTree = "<group>"; };
 		AE28C5D9295A7ACE00C8C928 /* SearchView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
@@ -178,7 +178,8 @@
 			children = (
 				AE06EBEF294D16BB006CAB67 /* MioceneApp.swift */,
 				AEE7F88629916B9E0030C7F3 /* TimelineManager.swift */,
-				AE06EC03294D234D006CAB67 /* Mastodon.swift */,
+				AE06EC03294D234D006CAB67 /* MastodonIO.swift */,
+				AEAFA2E0297C261700970F40 /* AppState.swift */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -233,7 +234,6 @@
 		AED7E1812976436A0053D0C9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				AEAFA2E0297C261700970F40 /* AppState.swift */,
 				AE28C5FE296524AE00C8C928 /* ErrorSystem.swift */,
 				AE28C5F82963719B00C8C928 /* SqliteDB.swift */,
 				AE28C5EF29635CAA00C8C928 /* Keys.swift */,
@@ -353,7 +353,7 @@
 				AEAFA2E6297DD54600970F40 /* MStatus.swift in Sources */,
 				AEAFA2F129807C9B00970F40 /* PopMenuButton.swift in Sources */,
 				AEAFA2E3297DACE300970F40 /* MAccount.swift in Sources */,
-				AE06EC04294D234D006CAB67 /* Mastodon.swift in Sources */,
+				AE06EC04294D234D006CAB67 /* MastodonIO.swift in Sources */,
 				AED3518B299D92AA00082074 /* AddAccountPanel.swift in Sources */,
 				AE28C5F92963719B00C8C928 /* SqliteDB.swift in Sources */,
 				AEAFA2D72979D2E300970F40 /* EditPost.swift in Sources */,

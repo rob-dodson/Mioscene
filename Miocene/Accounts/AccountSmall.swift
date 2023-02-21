@@ -11,8 +11,6 @@ import MastodonKit
 
 struct AccountSmall: View
 {
-    @ObservedObject var mast : Mastodon
-    
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
     

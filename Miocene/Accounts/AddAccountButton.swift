@@ -11,8 +11,6 @@ import MastodonKit
 
 struct AddAccountButton: View
 {
-    @ObservedObject var mast : Mastodon
-    
     @State private var shouldPresentSheet = false
 
     var body: some View
@@ -26,7 +24,7 @@ struct AddAccountButton: View
         }
         content:
         {
-            AddAccountPanel(mast: mast)
+            AddAccountPanel()
             {
                 shouldPresentSheet = false
             }

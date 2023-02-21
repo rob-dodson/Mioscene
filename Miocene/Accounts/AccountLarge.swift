@@ -10,7 +10,6 @@ import MastodonKit
 
 struct AccountLarge: View
 {
-    @ObservedObject var mast : Mastodon
     @ObservedObject var maccount : MAccount
     
     @EnvironmentObject var settings: Settings
@@ -110,22 +109,20 @@ struct AccountLarge: View
                             .foregroundColor(settings.theme.minorColor)
                             .font(.footnote).italic()
                         
-                        if let url = maccount.account.url
-                        {
-                            let name = url.absoluteString.replacing(/http[s]*:\/\//, with:"")
-                            Link(name,destination: url)
-                                .foregroundColor(settings.theme.linkColor)
-                                .font(.headline)
-                                .onHover
-                                { inside in
-                                    if inside
-                                    {
-                                        NSCursor.pointingHand.push()
-                                    } else {
-                                        NSCursor.pop()
-                                    }
+                        let url = maccount.account.url
+                        let name = url.absoluteString.replacing(/http[s]*:\/\//, with:"")
+                        Link(name,destination: url)
+                            .foregroundColor(settings.theme.linkColor)
+                            .font(.headline)
+                            .onHover
+                            { inside in
+                                if inside
+                                {
+                                    NSCursor.pointingHand.push()
+                                } else {
+                                    NSCursor.pop()
                                 }
-                        }
+                            }
                         
                         //
                         // stats
@@ -198,7 +195,7 @@ struct AccountLarge: View
         if AccountLarge.lastStatusesID != maccount.account.id
         {
             AccountLarge.lastStatusesID = maccount.account.id
-            mast.getStatusesForAccount(account:maccount.account)
+            appState.mastio()?.getStatusesForAccount(account:maccount.account)
             { mstatus in
                 accountStatuses = mstatus
                 
@@ -209,7 +206,7 @@ struct AccountLarge: View
         {
             ForEach(accountStatuses)
             { mstatus in
-                Post(mast:mast,mstat:mstatus)
+                Post(mstat:mstatus)
                     .padding([.horizontal,.top])
             }
         }
@@ -253,7 +250,7 @@ struct AccountLarge: View
         if maccount.account.id != relationship?.id
         {
             let id : String = String(maccount.account.id)
-            mast.getRelationships(ids: [id])
+            appState.mastio()?.getRelationships(ids: [id])
             { relationships in
                 if relationships.count > 0
                 {
@@ -268,7 +265,7 @@ struct AccountLarge: View
             {
                 PopButton(text: "Edit Profile", icon: "pencil",isSelected: false)
                 {
-                    if let myurl = mast.getCurrentMastodonAccount()?.url
+                    if let myurl = appState.getCurrentMastodonAccount()?.url
                     {
                         NSWorkspace.shared.open(myurl)
                     }
@@ -295,19 +292,19 @@ struct AccountLarge: View
                         {
                             toggleButton(state: relationship!.following, truelabel: "Following", falselabel: "Not Following",
                                          trueicon:"person.line.dotted.person.fill",falseicon:"person.2.slash",
-                                         truefunc: { mast.unfollow(account: maccount.account, done: { result in relationship = result }) },
-                                         falsefunc: { mast.follow(account: maccount.account, done: { result in relationship = result }) })
+                                         truefunc: { appState.mastio()?.unfollow(account: maccount.account, done: { result in relationship = result }) },
+                                         falsefunc: { appState.mastio()?.follow(account: maccount.account, done: { result in relationship = result }) })
                         }
                         
                         toggleButton(state: relationship!.muting, truelabel: "Muted", falselabel: "Not Muted",
                                      trueicon:"ear.trianglebadge.exclamationmark",falseicon:"ear.badge.checkmark",
-                                     truefunc: { mast.unmute(account: maccount.account, done: { result in relationship = result }) },
-                                     falsefunc: { mast.mute(account: maccount.account, done: { result in relationship = result }) })
+                                     truefunc: { appState.mastio()?.unmute(account: maccount.account, done: { result in relationship = result }) },
+                                     falsefunc: { appState.mastio()?.mute(account: maccount.account, done: { result in relationship = result }) })
                         
                         toggleButton(state: relationship!.blocking, truelabel: "Blocked", falselabel: "Not Blocked",
                                      trueicon:"hand.raised",falseicon:"hand.thumbsup",
-                                     truefunc: { mast.unblock(account: maccount.account, done: { result in relationship = result }) },
-                                     falsefunc: { mast.block(account: maccount.account, done: { result in relationship = result }) })
+                                     truefunc: { appState.mastio()?.unblock(account: maccount.account, done: { result in relationship = result }) },
+                                     falsefunc: { appState.mastio()?.block(account: maccount.account, done: { result in relationship = result }) })
                     }
                     .padding(EdgeInsets(top: 2, leading: 0, bottom: 1, trailing: 0))
                     

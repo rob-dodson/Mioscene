@@ -11,8 +11,6 @@ import MastodonKit
 
 struct NewPostButton: View
 {
-    @ObservedObject var mast : Mastodon
-    
     @EnvironmentObject var settings: Settings
     
     @State private var shouldPresentSheet = false
@@ -32,7 +30,7 @@ struct NewPostButton: View
         }
         content:
         {
-            EditPost(mast: mast,newPost:"",postVisibility: .public, done:
+            EditPost(newPost:"",postVisibility: .public, done:
             {
                 shouldPresentSheet = false
             })

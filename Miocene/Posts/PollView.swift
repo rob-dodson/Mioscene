@@ -11,10 +11,10 @@ import MastodonKit
 
 struct PollView: View
 {
-    @ObservedObject var mast : Mastodon
     @State var poll : MastodonKit.Poll
     
     @EnvironmentObject var settings: Settings
+    @EnvironmentObject var appState: AppState
     
     @State private var votes : [Int] = Array(repeating: -1, count: 10) // what is the current poll limit?
     @State private var voted : Bool = false
@@ -194,7 +194,7 @@ struct PollView: View
             choiceSet.insert(val)
         }
         
-        mast.voteOnPoll(poll: poll, choices: choiceSet)
+        appState.mastio()?.voteOnPoll(poll: poll, choices: choiceSet)
         { updatedpoll in
             poll = updatedpoll
         }

@@ -11,10 +11,10 @@ import MastodonKit
 
 struct NotificationView: View
 {
-    @ObservedObject var mast : Mastodon
     @ObservedObject var mnotification : MNotification
     
     @EnvironmentObject var settings: Settings
+    @EnvironmentObject var appState: AppState
     
     var body: some View
     {
@@ -28,14 +28,14 @@ struct NotificationView: View
                 {
                     let mstatus = MStatus(status:status)
                     
-                    Post(mast: mast, mstat: mstatus,notification: note)
+                    Post(mstat: mstatus,notification: note)
                 }
             }
         }
         .contextMenu
         {
-            Button { mast.deleteNotification(id:note.id) } label: { Text("Delete Notification") }
-            Button { mast.deleteAllNotifications()} label: { Text("Delete All Notifications") }
+            Button { appState.mastio()?.deleteNotification(id:note.id) } label: { Text("Delete Notification") }
+            Button { appState.mastio()?.deleteAllNotifications()} label: { Text("Delete All Notifications") }
         }
     }
 }

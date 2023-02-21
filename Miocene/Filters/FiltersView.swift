@@ -101,28 +101,26 @@ struct FiltersView: View
     {
         return VStack
         {
-            if let filterset = filterSets[setindex]
+            let filterset = filterSets[setindex]
+            Text(filterset.name)
+                .foregroundColor(settings.theme.accentColor)
+                .font(settings.font.subheadline)
+                .padding(.top)
+            
+            VStack(alignment:.leading)
             {
-                Text(filterset.name)
-                    .foregroundColor(settings.theme.accentColor)
-                    .font(settings.font.subheadline)
-                    .padding(.top)
-                
-                VStack(alignment:.leading)
+                Picker("", selection: $filterSets[setindex].setType)
                 {
-                    Picker("", selection: $filterSets[setindex].setType)
-                    {
-                        ForEach(FilterSetType.allCases)
-                        { t in
-                            Text(t.rawValue ).tag(t)
-                        }
+                    ForEach(FilterSetType.allCases)
+                    { t in
+                        Text(t.rawValue ).tag(t)
                     }
-                    .frame(maxWidth: 150)
-                    
-                    ForEach(filterset.filters.indices, id:\.self)
-                    { idx in
-                        showFilter(setIndex:setindex,filterIndex: idx)
-                    }
+                }
+                .frame(maxWidth: 150)
+                
+                ForEach(filterset.filters.indices, id:\.self)
+                { idx in
+                    showFilter(setIndex:setindex,filterIndex: idx)
                 }
             }
         }

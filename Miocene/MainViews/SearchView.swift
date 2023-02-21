@@ -11,8 +11,6 @@ import MastodonKit
 
 struct SearchView: View
 {
-    @ObservedObject var mast : Mastodon
-    
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
     
@@ -34,7 +32,7 @@ struct SearchView: View
                 {
                     showLoading = true
                     results = nil
-                    mast.search(searchTerm: searchTerm)
+                    appState.mastio()?.search(searchTerm: searchTerm)
                     { theresults in
                         results = theresults
                     }
@@ -97,7 +95,7 @@ struct SearchView: View
             {
                 ForEach(accounts.indices, id:\.self)
                 { index in
-                    AccountSmall(mast:mast,maccount: MAccount(displayname: accounts[index].displayName, acct:accounts[index]))
+                    AccountSmall(maccount: MAccount(displayname: accounts[index].displayName, acct:accounts[index]))
                 }
             }
         }
@@ -138,8 +136,10 @@ struct SearchView: View
             {
                 ForEach(statuses.indices, id:\.self)
                 { index in
-                    let mstat = mast.convert(status:statuses[index])
-                    Post(mast: mast, mstat: mstat)
+                    if let mstat = appState.mastio()?.convert(status:statuses[index])
+                    {
+                        Post(mstat: mstat)
+                    }
                 }
             }
         }
