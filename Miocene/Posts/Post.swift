@@ -70,7 +70,7 @@ struct Post: View
                             Text("\(textstr)")
                     }
                     
-                    AccountSmall(maccount: MAccount(displayname: note.account.displayName, acct: note.account))
+                    AccountSmall(account: note.account)
                 }
                 .font(settings.font.headline)
                 .foregroundColor(settings.theme.accentColor)
@@ -94,7 +94,7 @@ struct Post: View
                 .cornerRadius(5)
                 .onTapGesture
                 {
-                    appState.showAccount(maccount:MAccount(displayname: account.displayName, acct: account))
+                    appState.showAccount(showaccount:account)
                 }
                 
                 
@@ -113,7 +113,7 @@ struct Post: View
                                 .foregroundColor(settings.theme.nameColor)
                                 .onTapGesture
                             {
-                                appState.showAccount(maccount:MAccount(displayname: status.account.displayName, acct: status.account))
+                                appState.showAccount(showaccount:status.account)
                             }
                             
                             if status.account.bot == true && UserDefaults.standard.bool(forKey: "flagbots") == true
@@ -128,7 +128,7 @@ struct Post: View
                                 .foregroundColor(settings.theme.minorColor)
                                 .onTapGesture
                             {
-                                appState.showAccount(maccount:MAccount(displayname: status.account.displayName, acct: status.account))
+                                appState.showAccount(showaccount:status.account)
                             }
                         }
                         
@@ -337,7 +337,7 @@ struct Post: View
                                 .foregroundColor(settings.theme.linkColor)
                                 .onTapGesture
                             {
-                                appState.showAccount(maccount:MAccount(displayname: mstatus.status.account.displayName, acct: mstatus.status.account))
+                                appState.showAccount(showaccount: mstatus.status.account)
                             }
                             .onHover
                             { inside in
@@ -481,23 +481,26 @@ struct Post: View
     {
         VStack
         {
-            if status.account.id == appState.currentUserMastAccount?.id
+            if let account = appState.currentMastodonAccount()
             {
-                Button  // PopMenuHere?
+                if status.account.id == account.id
                 {
-                    appState.mastio()?.deletePost(id:status.id)
-                    errorSystem.showMessage(type:.info,msg: "Post deleted")
-                } label: { Image(systemName: "speaker.slash.fill"); Text("Delete Post") }
-                
-                Button
-                {
-                    errorSystem.reportError(type: .notimplemented,msg: "Soon!")
-                } label: { Image(systemName: "pin"); Text("Pin") }
-               
-                Button
-                {
-                    errorSystem.reportError(type: .notimplemented,msg: "Soon!")
-                } label: { Image(systemName: "pin.slash"); Text("UnPin") }
+                    Button  // PopMenuHere?
+                    {
+                        appState.mastio()?.deletePost(id:status.id)
+                        errorSystem.showMessage(type:.info,msg: "Post deleted")
+                    } label: { Image(systemName: "speaker.slash.fill"); Text("Delete Post") }
+                    
+                    Button
+                    {
+                        errorSystem.reportError(type: .notimplemented,msg: "Soon!")
+                    } label: { Image(systemName: "pin"); Text("Pin") }
+                    
+                    Button
+                    {
+                        errorSystem.reportError(type: .notimplemented,msg: "Soon!")
+                    } label: { Image(systemName: "pin.slash"); Text("UnPin") }
+                }
             }
             
             
@@ -618,7 +621,7 @@ struct Post: View
     {
         PopTextButton(text: name, font: settings.font.subheadline, ontap:
         { tag in
-            appState.showTag(tag: tag)
+            appState.showTag(showtag: tag)
         })
         .help(name)
         .padding(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))

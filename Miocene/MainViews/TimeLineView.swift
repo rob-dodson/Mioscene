@@ -160,33 +160,35 @@ struct TimeLineView: View
     
     func accountsMenu() -> some  View
     {
-        var popitems = [PopMenuItem<LocalAccountRecord>]()
-        var selected = ""
-        
-        for account in AppState.localAccountRecords.values
+        var popitems = [PopMenuItem<AccountKey>]()
+        _ = AppState.localAccountRecords.values.map()
         {
-            let popitem = PopMenuItem<LocalAccountRecord>(text: "@\(account.username)",userData: account)
+            let popitem = PopMenuItem<AccountKey>(text: $0.server,userData: $0.accountKey())
             popitems.append(popitem)
-            if account.lastViewed == true
-            {
-                selected = account.username
-            }
         }
+        popitems.append(PopMenuItem<AccountKey>(text: "Add Account",userData: nil))
         
-        if selected == ""
-        {
-            selected = "Add Account"
-        }
-        
-        let popitem = PopMenuItem<LocalAccountRecord>(text: "Add Account",userData: nil)
-        popitems.append(popitem)
-        
-        return PopMenu(icon: "person.crop.circle",selected:"@\(selected)",menuItems:popitems)
-        { item in
-            print("Account: \(item.text)")
-            if item.text == "Add Account"
+        let localrec = appState.currentLocalAccountRecord()
+        return PopMenu(icon: "person.crop.circle",selected:localrec!.server ,menuItems:popitems)
+        { result in
+            
+            print("Account Picked: \(result.text)")
+            
+            if result.text == "Add Account"
             {
                 presentAddAccountSheet = true
+            }
+            else
+            {
+                if let accountkey = result.userData
+                {
+                    timelineManger.clearTimeline()
+                    
+                    appState.setAccount(accountKey: accountkey)
+                    
+                    let request = TimelineRequest(timelineWhen: .current, timeLine: selectedTimeline, tag: currentTag)
+                    timelineManger.setTimelineRequestAndFetch(request: request)
+                }
             }
         }
         .sheet(isPresented: $presentAddAccountSheet)

@@ -19,6 +19,7 @@ struct AddAccountPanel: View
     @State private var server : String = "shyfrog.masto.host"
     @State private var password : String = ""
     @State private var useOAuth = true
+    @State private var step = 0
     
     var body: some View
     {
@@ -62,6 +63,10 @@ struct AddAccountPanel: View
                 done()
             }
         }
+        .onAppear()
+        {
+            step = 0
+        }
         .frame(width: 400)
         .toolbar
         {
@@ -73,18 +78,36 @@ struct AddAccountPanel: View
                 }
             }
             
-            
-            ToolbarItem
+            if step ==  0
             {
-                PopButton(text: "Save", icon: "square.and.arrow.down",isSelected: false)
+                ToolbarItem
                 {
-                    appState.addAccount(server: server)
-                    { mioceneerror, msg in
-                        Log.log(msg: msg)
-                        errorSystem.reportError(type: mioceneerror,msg: msg)
+                    PopButton(text: "Next", icon: "arrow.forward",isSelected: true)
+                    {
+                        appState.addAccount(server: server)
+                        { mioceneerror, msg in
+                            step = 1
+                            Log.log(msg: msg)
+                            errorSystem.reportError(type: mioceneerror,msg: msg)
+                        }
                     }
                 }
             }
+            else if step == 1
+            {
+                ToolbarItem
+                {
+                    PopButton(text: "Complete", icon: "arrow.forward",isSelected: true)
+                    {
+                        step = 2
+                        Log.log(msg: "Account added")
+                        errorSystem.reportError(type: .ok,msg: "Account added")
+                    }
+                }
+                
+            }
+                 
         }
+        
     }
 }

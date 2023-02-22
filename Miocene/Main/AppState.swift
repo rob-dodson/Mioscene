@@ -20,14 +20,18 @@ enum TabIndex : Int
 
 class AppState : ObservableObject
 {
-    @Published var currentlocalAccountRecord : LocalAccountRecord?
-    @Published var currentUserMastAccount : MastodonKit.Account?
-    @Published var currentViewingMastAccount : MAccount?
+    private var currentAccountKey : AccountKey = AccountKey(server: "noserver", username: "nouser")
+    
+    private var showAccount : MastodonKit.Account?
+    private var showTag : String?
+    
     @Published var tabIndex : TabIndex = .TimeLine
     @Published var userLoggedIn : Bool = false
     
-    static var localAccountRecords = Dictionary<LocalAccountRecord.AccountKey,LocalAccountRecord>()
-    static var mastIOs = Dictionary<LocalAccountRecord.AccountKey,MastodonIO>()
+    static var localAccountRecords = Dictionary<AccountKey,LocalAccountRecord>()
+    static var mastIOs = Dictionary<AccountKey,MastodonIO>()
+    static var userMastAccounts = Dictionary<AccountKey,MastodonKit.Account>()
+    
     
     init()
     {
@@ -35,6 +39,48 @@ class AppState : ObservableObject
         loadAccounts()
     }
     
+    
+    func setAccount(accountKey:AccountKey)
+    {
+        currentAccountKey = accountKey
+    }
+    
+    func mastio() -> MastodonIO?
+    {
+        return AppState.mastIOs[currentAccountKey]
+    }
+    
+    func currentLocalAccountRecord() -> LocalAccountRecord?
+    {
+        return AppState.localAccountRecords[currentAccountKey]
+    }
+    
+    func currentMastodonAccount() -> Account?
+    {
+        return AppState.userMastAccounts[currentAccountKey]
+    }
+    
+    func showTag(showtag:String)
+    {
+        showTag = showtag
+        tabIndex = .TimeLine
+    }
+    
+    func showHome()
+    {
+        tabIndex = .TimeLine
+    }
+    
+    func showAccount(showaccount:MastodonKit.Account)
+    {
+        showAccount = showaccount
+        tabIndex = .Accounts
+    }
+    
+    func getShowAccount() -> MastodonKit.Account?
+    {
+        return showAccount
+    }
     
     func loadAccounts()
     {
@@ -54,6 +100,13 @@ class AppState : ObservableObject
                     AppState.mastIOs[localrec.accountKey()] = MastodonIO()
                     
                     connectMastIOForAccount(localrec: localrec)
+                    
+                    if localrec.lastViewed == true
+                    {
+                        self.userLoggedIn = true
+                        self.setAccount(accountKey: localrec.accountKey())
+                        currentAccountKey = localrec.accountKey()
+                    }
                 }
             }
         }
@@ -74,15 +127,9 @@ class AppState : ObservableObject
             
             if let account = result.value
             {
-                DispatchQueue.main.async
-                {
-                    self.userLoggedIn = true
-                    self.currentlocalAccountRecord = localrec
-                    self.currentUserMastAccount = account
-                    self.currentViewingMastAccount = MAccount(displayname: account.displayName, acct: account)
-                    
-                    Log.log(msg: "Account \(account.username) is connected to \(localrec.server)!")
-                }
+                AppState.userMastAccounts[localrec.accountKey()] = account
+                
+                Log.log(msg: "Account \(account.username) is connected to \(localrec.server)!")
             }
             else if let error = result.error
             {
@@ -121,10 +168,10 @@ class AppState : ObservableObject
                             AppState.mastIOs[localaccount.accountKey()] = mastio
                             Keys.storeInKeychain(name: localaccount.makeKeyChainName(), value: msg_or_token)
                             
-                            self.currentUserMastAccount = account
-                            self.currentViewingMastAccount = MAccount(displayname: account.displayName, acct: account)
-                            
-                            done(.ok,"Account stored in db, logged in OK")
+                                self.setAccount(accountKey: localaccount.accountKey())
+                                AppState.userMastAccounts[localaccount.accountKey()] = account
+                                
+                                done(.ok,"Account stored in db, logged in OK")
                         }
                         catch
                         {
@@ -140,38 +187,5 @@ class AppState : ObservableObject
         }
     }
     
-    func getCurrentMastodonAccount() -> Account?
-    {
-        return currentlocalAccountRecord?.usersMastodonAccount ?? nil
-    }
-    
-    
-    func mastio() -> MastodonIO?
-    {
-        if let localrec = currentlocalAccountRecord
-        {
-            if let mastio = AppState.mastIOs[localrec.accountKey()]
-            {
-                return mastio
-            }
-        }
-        
-        return nil
-    }
-    
-    func showTag(tag:String)
-    {
-        tabIndex = .TimeLine
-    }
-    
-    func showHome()
-    {
-        tabIndex = .TimeLine
-    }
-    
-    func showAccount(maccount:MAccount)
-    {
-        currentViewingMastAccount = maccount
-        tabIndex = .Accounts
-    }
+   
 }

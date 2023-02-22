@@ -14,7 +14,7 @@ struct AccountSmall: View
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
     
-    @State var maccount : MAccount
+    @State var account : MastodonKit.Account
     
     var body: some View
     {
@@ -24,7 +24,7 @@ struct AccountSmall: View
             {
                 HStack(alignment: .top)
                 {
-                    AsyncImage(url: URL(string: maccount.account.avatar ?? ""))
+                    AsyncImage(url: URL(string: account.avatar ?? ""))
                     { image in
                         image.resizable()
                     }
@@ -36,22 +36,22 @@ struct AccountSmall: View
                     .cornerRadius(5)
                     .onTapGesture
                     {
-                        appState.showAccount(maccount:maccount)
+                        appState.showAccount(showaccount:account)
                     }
                     
                     VStack(alignment: .leading,spacing: 3)
                     {
-                        Text(maccount.displayName)
+                        Text(account.displayName)
                             .font(settings.font.headline)
                             .foregroundColor(settings.theme.nameColor)
                         
-                        Text("@\(maccount.account.acct)")
+                        Text("@\(account.acct)")
                             .font(settings.font.subheadline)
                             .foregroundColor(settings.theme.minorColor)
                     }
                     .onTapGesture
                     {
-                        appState.showAccount(maccount:maccount)
+                        appState.showAccount(showaccount:account)
                     }
                 }
             }

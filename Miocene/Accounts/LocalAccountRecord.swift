@@ -12,6 +12,16 @@ import GRDB
 
 
 //
+// used to key dictionaries of mastio and accounts
+//
+struct AccountKey : Hashable
+{
+    var server : String
+    var username : String
+}
+
+
+//
 // this record stored locally in an sqlite db, via GRDB.
 // it contains basic info to connect to a mastodon server.
 //
@@ -77,14 +87,7 @@ class LocalAccountRecord : Record,Codable,Identifiable
         super.init()
     }
     
-    //
-    // used to key dictionaries of mastio and accounts
-    //
-    struct AccountKey : Hashable
-    {
-        var server : String
-        var email : String
-    }
+   
 
     func desc() -> String
     {
@@ -96,7 +99,7 @@ class LocalAccountRecord : Record,Codable,Identifiable
     //
     func accountKey() -> AccountKey
     {
-        return AccountKey(server: server, email: email)
+        return AccountKey(server: server, username: username)
     }
     
     

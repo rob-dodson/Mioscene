@@ -64,7 +64,7 @@ class MastodonIO : ObservableObject
             }
             else
             {
-                Log.log(msg:"Error getting account: \(result)")
+                Log.log(msg:"Error getting application: \(result)")
             }
         }
     }
@@ -105,13 +105,33 @@ class MastodonIO : ObservableObject
                         
                         guard error == nil, let callbackURL = callbackURL else { return }
                         let queryItems = URLComponents(string: callbackURL.absoluteString)?.queryItems
-                        if let token = queryItems?.filter({ $0.name == "code" }).first?.value
+                        if let authcode = queryItems?.filter({ $0.name == "code" }).first?.value
                         {
-                            done(.ok,token)
+                            let request = Login.oauth(clientID: application.clientID,
+                                                      clientSecret: application.clientSecret,
+                                                      scopes: [.read, .write,.follow],
+                                                      redirectURI: redirecturi,
+                                                      code: authcode)
+                            self.client.run(request)
+                            { result in
+                                
+                                if result.isError
+                                {
+                                    done(.loginError,"failed to get token: \(result)")
+                                }
+                                else
+                                {
+                                    if let auth = result.value
+                                    {
+                                        done(.ok,auth.accessToken)
+                                    }
+                                }
+                            }
+                            
                         }
                         else
                         {
-                            done(.loginError,"failed to get token: \(result)")
+                            done(.loginError,"failed to get authcode: \(result)")
                         }
                     }
                     

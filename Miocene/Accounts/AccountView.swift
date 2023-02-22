@@ -10,8 +10,6 @@ import MastodonKit
 
 struct AccountView: View
 {
-    @ObservedObject var maccount : MAccount
-    
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
     
@@ -22,7 +20,7 @@ struct AccountView: View
         {
             HStack(alignment: .bottom, spacing: settings.hideIconText == true ? 80 : 40)
             {
-                if let account = appState.currentlocalAccountRecord
+                if let account = appState.currentLocalAccountRecord()
                 {
                     PopMenu(icon: "person.crop.circle",selected: "",
                             menuItems: [PopMenuItem(text: "@\(account.username)",userData: account),
@@ -33,7 +31,10 @@ struct AccountView: View
                 
                 PopButton(text:"My Account", icon:"person",isSelected: false)
                 {
-                    appState.showAccount(maccount: MAccount(displayname: appState.currentUserMastAccount!.displayName, acct: appState.currentUserMastAccount!))
+                    if let account = appState.currentMastodonAccount()
+                    {
+                        appState.showAccount(showaccount: account)
+                    }
                 }
 
                 AddAccountButton()
@@ -41,8 +42,14 @@ struct AccountView: View
             }
             
             SpacerLine(color: settings.theme.minorColor)
-            
-            AccountLarge(maccount: appState.currentViewingMastAccount!)
+            if let account = appState.getShowAccount()
+            {
+                AccountLarge(account: account)
+            }
+            else if let account = appState.currentMastodonAccount()
+            {
+                AccountLarge(account: account)
+            }
         }
         .padding(EdgeInsets(top: 2, leading: 5, bottom: 2, trailing: 5))
         .textSelection(.enabled)

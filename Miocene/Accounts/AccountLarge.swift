@@ -10,7 +10,7 @@ import MastodonKit
 
 struct AccountLarge: View
 {
-    @ObservedObject var maccount : MAccount
+    @State var account : MastodonKit.Account
     
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
@@ -34,7 +34,7 @@ struct AccountLarge: View
                         //
                         // User's avatar image
                         //
-                        AsyncImage(url: URL(string:maccount.account.avatar ?? ""))
+                        AsyncImage(url: URL(string:account.avatar ?? ""))
                         { image in
                             image.resizable()
                         }
@@ -47,7 +47,7 @@ struct AccountLarge: View
                         .cornerRadius(5)
                         
                         
-                        if let header = maccount.account.header
+                        if let header = account.header
                         {
                             if let url = URL(string: header)
                             {
@@ -76,7 +76,7 @@ struct AccountLarge: View
                         //
                         // Follow actions
                         //
-                        getRelationship(maccount:maccount)
+                        getRelationship(account:account)
                     }
                 }
                 
@@ -90,26 +90,26 @@ struct AccountLarge: View
                         //
                         HStack
                         {
-                            Text("\(maccount.account.displayName)")
+                            Text("\(account.displayName)")
                                 .foregroundColor(settings.theme.nameColor)
                                 .font(settings.font.headline)
                             
-                            if maccount.account.bot == true
+                            if account.bot == true
                             {
                                 Text("[BOT]")
                                     .foregroundColor(settings.theme.accentColor)
                                     .font(settings.font.headline)
                             }
                         }
-                        Text("@\(maccount.account.acct)")
+                        Text("@\(account.acct)")
                             .foregroundColor(settings.theme.minorColor)
                             .font(settings.font.subheadline)
                         
-                        Text("User since \(maccount.account.createdAt.formatted())")
+                        Text("User since \(account.createdAt.formatted())")
                             .foregroundColor(settings.theme.minorColor)
                             .font(.footnote).italic()
                         
-                        let url = maccount.account.url
+                        let url = account.url
                         let name = url.absoluteString.replacing(/http[s]*:\/\//, with:"")
                         Link(name,destination: url)
                             .foregroundColor(settings.theme.linkColor)
@@ -131,17 +131,17 @@ struct AccountLarge: View
                         {
                             VStack
                             {
-                                Text("\(maccount.account.statusesCount)")
+                                Text("\(account.statusesCount)")
                                 Text("Posts")
                             }
                             VStack
                             {
-                                Text("\(maccount.account.followersCount)")
+                                Text("\(account.followersCount)")
                                 Text("Followers")
                             }
                             VStack
                             {
-                                Text("\(maccount.account.followingCount)")
+                                Text("\(account.followingCount)")
                                 Text("Following")
                             }
                         }
@@ -154,7 +154,7 @@ struct AccountLarge: View
                         //
                         VStack(alignment: .leading)
                         {
-                            if let nsAttrString = maccount.account.note.htmlAttributedString(color:settings.theme.bodyColor,font:settings.font.body)
+                            if let nsAttrString = account.note.htmlAttributedString(color:settings.theme.bodyColor,font:settings.font.body)
                             {
                                 Text(AttributedString(nsAttrString))
                                     .textSelection(.enabled)
@@ -164,7 +164,7 @@ struct AccountLarge: View
                             //
                             // fields
                             //
-                            if let fields = maccount.account.fields
+                            if let fields = account.fields
                             {
                                 if fields.count > 0
                                 {
@@ -186,16 +186,16 @@ struct AccountLarge: View
             
         SpacerLine(color: settings.theme.minorColor)
         
-        getStatuses(maccount: maccount)
+        getStatuses(account: account)
     }
     
     
-    func getStatuses(maccount:MAccount) -> some View
+    func getStatuses(account:Account) -> some View
     {
-        if AccountLarge.lastStatusesID != maccount.account.id
+        if AccountLarge.lastStatusesID != account.id
         {
-            AccountLarge.lastStatusesID = maccount.account.id
-            appState.mastio()?.getStatusesForAccount(account:maccount.account)
+            AccountLarge.lastStatusesID = account.id
+            appState.mastio()?.getStatusesForAccount(account:account)
             { mstatus in
                 accountStatuses = mstatus
                 
@@ -245,11 +245,11 @@ struct AccountLarge: View
         }
     }
     
-    func getRelationship(maccount:MAccount) -> some View
+    func getRelationship(account:Account) -> some View
     {
-        if maccount.account.id != relationship?.id
+        if account.id != relationship?.id
         {
-            let id : String = String(maccount.account.id)
+            let id : String = String(account.id)
             appState.mastio()?.getRelationships(ids: [id])
             { relationships in
                 if relationships.count > 0
@@ -261,18 +261,19 @@ struct AccountLarge: View
         
         return HStack
         {
-            if maccount.account.id == appState.currentUserMastAccount?.id
+            if let mastaccount = appState.currentMastodonAccount()
             {
-                PopButton(text: "Edit Profile", icon: "pencil",isSelected: false)
+                if account.id == mastaccount.id
                 {
-                    if let myurl = appState.getCurrentMastodonAccount()?.url
+                    PopButton(text: "Edit Profile", icon: "pencil",isSelected: false)
                     {
+                        let myurl = mastaccount.url
                         NSWorkspace.shared.open(myurl)
                     }
                 }
-                
             }
-            else if relationship != nil
+            
+            if relationship != nil
             {
                 VStack
                 {
@@ -292,19 +293,19 @@ struct AccountLarge: View
                         {
                             toggleButton(state: relationship!.following, truelabel: "Following", falselabel: "Not Following",
                                          trueicon:"person.line.dotted.person.fill",falseicon:"person.2.slash",
-                                         truefunc: { appState.mastio()?.unfollow(account: maccount.account, done: { result in relationship = result }) },
-                                         falsefunc: { appState.mastio()?.follow(account: maccount.account, done: { result in relationship = result }) })
+                                         truefunc: { appState.mastio()?.unfollow(account: account, done: { result in relationship = result }) },
+                                         falsefunc: { appState.mastio()?.follow(account: account, done: { result in relationship = result }) })
                         }
                         
                         toggleButton(state: relationship!.muting, truelabel: "Muted", falselabel: "Not Muted",
                                      trueicon:"ear.trianglebadge.exclamationmark",falseicon:"ear.badge.checkmark",
-                                     truefunc: { appState.mastio()?.unmute(account: maccount.account, done: { result in relationship = result }) },
-                                     falsefunc: { appState.mastio()?.mute(account: maccount.account, done: { result in relationship = result }) })
+                                     truefunc: { appState.mastio()?.unmute(account: account, done: { result in relationship = result }) },
+                                     falsefunc: { appState.mastio()?.mute(account: account, done: { result in relationship = result }) })
                         
                         toggleButton(state: relationship!.blocking, truelabel: "Blocked", falselabel: "Not Blocked",
                                      trueicon:"hand.raised",falseicon:"hand.thumbsup",
-                                     truefunc: { appState.mastio()?.unblock(account: maccount.account, done: { result in relationship = result }) },
-                                     falsefunc: { appState.mastio()?.block(account: maccount.account, done: { result in relationship = result }) })
+                                     truefunc: { appState.mastio()?.unblock(account: account, done: { result in relationship = result }) },
+                                     falsefunc: { appState.mastio()?.block(account: account, done: { result in relationship = result }) })
                     }
                     .padding(EdgeInsets(top: 2, leading: 0, bottom: 1, trailing: 0))
                     

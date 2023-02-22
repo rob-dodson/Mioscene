@@ -95,7 +95,7 @@ struct SearchView: View
             {
                 ForEach(accounts.indices, id:\.self)
                 { index in
-                    AccountSmall(maccount: MAccount(displayname: accounts[index].displayName, acct:accounts[index]))
+                    AccountSmall(account:accounts[index])
                 }
             }
         }
@@ -118,7 +118,7 @@ struct SearchView: View
                         .foregroundColor(settings.theme.bodyColor)
                         .onTapGesture
                         {
-                            appState.showTag(tag: "#\(hashtags[index].name)")
+                            appState.showTag(showtag: "#\(hashtags[index].name)")
                         }
                 }
             }

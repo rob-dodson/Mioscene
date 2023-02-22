@@ -29,7 +29,7 @@ struct ContentView: View
                     switch appState.tabIndex
                     {
                         case .TimeLine: TimeLineView(timelineManger: TimelineManager(settings: settings, appState: appState))
-                        case .Accounts: AccountView(maccount: MAccount(displayname: appState.currentUserMastAccount!.displayName, acct: appState.currentUserMastAccount!))
+                        case .Accounts: AccountView()
                         case .Search:  SearchView()
                         case .Settings: SettingsView()
                     }
