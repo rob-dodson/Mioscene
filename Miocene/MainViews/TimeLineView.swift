@@ -16,7 +16,11 @@ struct TimeLineView: View
     
     @State var currentTag = String() // move this into TimeLineManager?
     @State var selectedTimeline : TimeLine = .home
+   
     @State private var presentAddAccountSheet = false
+    @State private var currentSelectedTimeline = "Home"
+    @State private var currentAccountServer = "Add Account"
+    @State private var saveCurrentAccountServer = "Add Account"
     
     
     var body: some View
@@ -168,15 +172,24 @@ struct TimeLineView: View
         }
         popitems.append(PopMenuItem<AccountKey>(text: "Add Account",userData: nil))
         
-        let localrec = appState.currentLocalAccountRecord()
-        return PopMenu(icon: "person.crop.circle",selected:localrec!.server ,menuItems:popitems)
+        DispatchQueue.main.async
+        {
+            if let localrec = appState.currentLocalAccountRecord()
+            {
+                currentAccountServer = localrec.server
+            }
+        }
+        
+        return PopMenu(icon: "person.crop.circle",selected:$currentAccountServer,menuItems:popitems)
         { result in
             
             print("Account Picked: \(result.text)")
             
             if result.text == "Add Account"
             {
+                saveCurrentAccountServer = appState.currentLocalAccountRecord()!.server
                 presentAddAccountSheet = true
+                
             }
             else
             {
@@ -198,6 +211,7 @@ struct TimeLineView: View
         {
             AddAccountPanel()
             {
+                currentAccountServer = saveCurrentAccountServer
                 presentAddAccountSheet = false
             }
         }
@@ -223,7 +237,7 @@ struct TimeLineView: View
         custdict["macOS - Local"] = customtimeline
         custdict["Ivory - Home"] = customtimeline0
         
-        let customSubMenu = PopMenu(icon: "person",selected:selectedTimeline.rawValue,
+        let customSubMenu = PopMenu(icon: "person",selected:$currentSelectedTimeline,
                                     menuItems: [PopMenuItem(text: "macOS - Local",userData:TimeLine.custom),
                                                 PopMenuItem(text: "Ivory - Home",userData:TimeLine.custom)
                                                 ])
@@ -238,7 +252,7 @@ struct TimeLineView: View
         
         
         
-        return PopMenu(icon: "clock.arrow.circlepath",selected:selectedTimeline.rawValue,
+        return PopMenu(icon: "clock.arrow.circlepath",selected:$currentSelectedTimeline,
                 menuItems: [PopMenuItem(text: TimeLine.home.rawValue,userData:TimeLine.home),
                             PopMenuItem(text: TimeLine.localTimeline.rawValue,userData:TimeLine.localTimeline),
                             PopMenuItem(text: TimeLine.publicTimeline.rawValue,userData:TimeLine.publicTimeline),

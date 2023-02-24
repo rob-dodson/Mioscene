@@ -33,7 +33,7 @@ struct PopMenuItem<UserType>
 struct PopMenu<UserType> : View
 {
     let icon : String
-    @State var selected : String
+    @Binding var selected : String
     let menuItems : [PopMenuItem<UserType>]
     let picked: (PopMenuItem<UserType>) -> Void
     

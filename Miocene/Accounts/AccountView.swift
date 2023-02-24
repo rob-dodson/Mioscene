@@ -13,6 +13,7 @@ struct AccountView: View
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
     
+    @State private var currentAccountServer = "server"
     
     var body: some View
     {
@@ -22,7 +23,7 @@ struct AccountView: View
             {
                 if let account = appState.currentLocalAccountRecord()
                 {
-                    PopMenu(icon: "person.crop.circle",selected: "",
+                    PopMenu(icon: "person.crop.circle",selected:$currentAccountServer ,
                             menuItems: [PopMenuItem(text: "@\(account.username)",userData: account),
                                        ])
                     { item in

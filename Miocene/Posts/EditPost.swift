@@ -31,6 +31,7 @@ struct EditPost: View
     @State private var sensitive = false
     @State private var pollType : PollType = .single
     @State private var pollTime : PollTimes = .fiveMinutes
+    @State private var currentSelectedVisibilty = MastodonKit.Visibility.public.rawValue
     @StateObject private var pollState = PollState()
     
     
@@ -222,11 +223,13 @@ struct EditPost: View
             ]
         }
         
-        return PopMenu(icon: "eye",selected: postVisibility.rawValue, menuItems: menuitems)
+        return PopMenu(icon: "eye",selected: $currentSelectedVisibilty, menuItems: menuitems)
             { item in
                 if let userdata = item.userData
                 {
                     postVisibility = userdata
+                    currentSelectedVisibilty = postVisibility.rawValue
+
                 }
             }
     }

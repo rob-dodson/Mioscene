@@ -18,6 +18,7 @@ struct FiltersView: View
     @State private var shouldPresentSheet = false
     @State private var filterSets = [FilterSet]()
     @State private var currentFilterSetIndex : Int = 0
+    @State private var currentSelectedFilter = "No Filter"
     
     var body: some View
     {
@@ -25,8 +26,9 @@ struct FiltersView: View
         {
             if filterSets.count > 0
             {
-                PopMenu(icon: "camera.filters",selected: filterSets[currentFilterSetIndex].name,menuItems:FilterTools.shared.makeItems(filtersets: filterSets))
+                PopMenu(icon: "camera.filters",selected:$currentSelectedFilter,menuItems:FilterTools.shared.makeItems(filtersets: filterSets))
                 { item in
+                    currentSelectedFilter = filterSets[currentFilterSetIndex].name
                     shouldPresentSheet = true
                 }
             }
