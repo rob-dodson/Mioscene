@@ -23,98 +23,100 @@ struct AccountLarge: View
     
     var body: some View
     {
-        GroupBox
+        ScrollView
         {
-            VStack(alignment:.leading)
+            GroupBox
             {
-                Grid
+                VStack(alignment:.leading)
                 {
-                    GridRow
+                    Grid
                     {
-                        //
-                        // User's avatar image
-                        //
-                        AsyncImage(url: URL(string:account.avatar ?? ""))
-                        { image in
-                            image.resizable()
-                        }
-                    placeholder:
+                        GridRow
                         {
-                            Image(systemName: "person.fill.questionmark")
-                        }
-                        .offset(x:5,y:5)
-                        .frame(width: 100, height: 100)
-                        .cornerRadius(5)
-                        
-                        
-                        if let header = account.header
-                        {
-                            if let url = URL(string: header)
+                            //
+                            // User's avatar image
+                            //
+                            AsyncImage(url: URL(string:account.avatar ?? ""))
+                            { image in
+                                image.resizable()
+                            }
+                        placeholder:
                             {
-                                AsyncImage(url: url)
-                                { image in
-                                    image.resizable()
-                                     .aspectRatio(contentMode: .fit)
-                                }
-                            placeholder:
+                                Image(systemName: "person.fill.questionmark")
+                            }
+                            .offset(x:5,y:5)
+                            .frame(width: 100, height: 100)
+                            .cornerRadius(5)
+                            
+                            
+                            if let header = account.header
+                            {
+                                if let url = URL(string: header)
                                 {
-                                    
+                                    AsyncImage(url: url)
+                                    { image in
+                                        image.resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                    }
+                                placeholder:
+                                    {
+                                        
+                                    }
+                                    .frame(maxWidth: 300, maxHeight: 200)
+                                    .cornerRadius(5)
                                 }
-                                .frame(maxWidth: 300, maxHeight: 200)
-                                .cornerRadius(5)
+                                else
+                                {
+                                    Rectangle().frame(width:300,height:200).foregroundColor(settings.theme.minorColor)
+                                }
                             }
-                            else
-                            {
-                                Rectangle().frame(width:300,height:200).foregroundColor(settings.theme.minorColor)
-                            }
+                        }
+                        
+                        GridRow
+                        {
+                            Spacer()
+                            //
+                            // Follow actions
+                            //
+                            getRelationship(account:account)
                         }
                     }
                     
-                    GridRow
+                    
+                    VStack(alignment: .leading,spacing: 2)
                     {
-                        Spacer()
-                        //
-                        // Follow actions
-                        //
-                        getRelationship(account:account)
-                    }
-                }
-                
-                
-                VStack(alignment: .leading,spacing: 2)
-                {
-                    VStack(alignment:.leading)
-                    {
-                        //
-                        // Names
-                        //
-                        HStack
+                        VStack(alignment:.leading)
                         {
-                            Text("\(account.displayName)")
-                                .foregroundColor(settings.theme.nameColor)
-                                .font(settings.font.headline)
-                            
-                            if account.bot == true
+                            //
+                            // Names
+                            //
+                            HStack
                             {
-                                Text("[BOT]")
-                                    .foregroundColor(settings.theme.accentColor)
+                                Text("\(account.displayName)")
+                                    .foregroundColor(settings.theme.nameColor)
                                     .font(settings.font.headline)
+                                
+                                if account.bot == true
+                                {
+                                    Text("[BOT]")
+                                        .foregroundColor(settings.theme.accentColor)
+                                        .font(settings.font.headline)
+                                }
                             }
-                        }
-                        Text("@\(account.acct)")
-                            .foregroundColor(settings.theme.minorColor)
-                            .font(settings.font.subheadline)
-                        
-                        Text("User since \(account.createdAt.formatted())")
-                            .foregroundColor(settings.theme.minorColor)
-                            .font(.footnote).italic()
-                        
-                        let url = account.url
-                        let name = url.absoluteString.replacing(/http[s]*:\/\//, with:"")
-                        Link(name,destination: url)
-                            .foregroundColor(settings.theme.linkColor)
-                            .font(.headline)
-                            .onHover
+                            Text("@\(account.acct)")
+                                .foregroundColor(settings.theme.minorColor)
+                                .font(settings.font.subheadline)
+                            
+                            Text("User since \(account.createdAt.formatted())")
+                                .foregroundColor(settings.theme.minorColor)
+                                .font(.footnote).italic()
+                            
+                            let url = account.url
+                            let name = url.absoluteString.replacing(/http[s]*:\/\//, with:"")
+                            Link(name,destination: url)
+                                .foregroundColor(settings.theme.linkColor)
+                                .font(.headline)
+                                .onHover
                             { inside in
                                 if inside
                                 {
@@ -123,70 +125,71 @@ struct AccountLarge: View
                                     NSCursor.pop()
                                 }
                             }
-                        
-                        //
-                        // stats
-                        //
-                        HStack
-                        {
-                            VStack
-                            {
-                                Text("\(account.statusesCount)")
-                                Text("Posts")
-                            }
-                            VStack
-                            {
-                                Text("\(account.followersCount)")
-                                Text("Followers")
-                            }
-                            VStack
-                            {
-                                Text("\(account.followingCount)")
-                                Text("Following")
-                            }
-                        }
-                        .font(settings.font.body)
-                        .foregroundColor(settings.theme.minorColor)
-                        
-                        
-                        //
-                        // note
-                        //
-                        VStack(alignment: .leading)
-                        {
-                            if let nsAttrString = account.note.htmlAttributedString(color:settings.theme.bodyColor,font:settings.font.body)
-                            {
-                                Text(AttributedString(nsAttrString))
-                                    .textSelection(.enabled)
-                                    .fixedSize(horizontal: false, vertical: true) // make the text wrap
-                            }
                             
                             //
-                            // fields
+                            // stats
                             //
-                            if let fields = account.fields
+                            HStack
                             {
-                                if fields.count > 0
+                                VStack
                                 {
-                                    fieldsView(fields:fields)
-                                        .padding()
-                                        .frame(maxWidth: .infinity)
-                                        .background(settings.theme.blockColor)
+                                    Text("\(account.statusesCount)")
+                                    Text("Posts")
+                                }
+                                VStack
+                                {
+                                    Text("\(account.followersCount)")
+                                    Text("Followers")
+                                }
+                                VStack
+                                {
+                                    Text("\(account.followingCount)")
+                                    Text("Following")
                                 }
                             }
+                            .font(settings.font.body)
+                            .foregroundColor(settings.theme.minorColor)
+                            
+                            
+                            //
+                            // note
+                            //
+                            VStack(alignment: .leading)
+                            {
+                                if let nsAttrString = account.note.htmlAttributedString(color:settings.theme.bodyColor,font:settings.font.body)
+                                {
+                                    Text(AttributedString(nsAttrString))
+                                        .textSelection(.enabled)
+                                        .fixedSize(horizontal: false, vertical: true) // make the text wrap
+                                }
+                                
+                                //
+                                // fields
+                                //
+                                if let fields = account.fields
+                                {
+                                    if fields.count > 0
+                                    {
+                                        fieldsView(fields:fields)
+                                            .padding()
+                                            .frame(maxWidth: .infinity)
+                                            .background(settings.theme.blockColor)
+                                    }
+                                }
+                            }
+                            .padding()
+                            // .frame(maxWidth: .infinity,maxHeight:.infinity)
+                            .background(settings.theme.blockColor)
+                            .cornerRadius(5)
                         }
-                        .padding()
-                       // .frame(maxWidth: .infinity,maxHeight:.infinity)
-                        .background(settings.theme.blockColor)
-                        .cornerRadius(5)
                     }
                 }
             }
-        }
             
-        SpacerLine(color: settings.theme.minorColor)
-        
-        getStatuses(account: account)
+            SpacerLine(color: settings.theme.minorColor)
+            
+            getStatuses(account: account)
+        }
     }
     
     
@@ -202,7 +205,7 @@ struct AccountLarge: View
             }
         }
         
-        return ScrollView
+        return VStack
         {
             ForEach(accountStatuses)
             { mstatus in
@@ -211,6 +214,7 @@ struct AccountLarge: View
             }
         }
     }
+    
     
     func fieldsView(fields:[VerifiableMetadataField]) -> some View
     {
