@@ -16,7 +16,6 @@ struct SearchView: View
     
     @State private var searchTerm : String = ""
     @State private var results : Results?
-    @State private var showLoading = false
     
     var body: some View
     {
@@ -30,7 +29,6 @@ struct SearchView: View
                 
                 Button("Search")
                 {
-                    showLoading = true
                     results = nil
                     appState.mastio()?.search(searchTerm: searchTerm)
                     { theresults in
@@ -43,11 +41,6 @@ struct SearchView: View
             
             SpacerLine(color: settings.theme.minorColor)
             
-            if showLoading
-            {
-                ProgressView("Loading...")
-                    .foregroundColor(settings.theme.accentColor)
-            }
             
             ScrollView
             {
