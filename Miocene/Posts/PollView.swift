@@ -37,7 +37,7 @@ struct PollView: View
                         
                         HStack
                         {
-                            if voted == false && poll.voted == false
+                            if voted == false && poll.voted == false && poll.expired == false
                             {
                                 Button()
                                 {
@@ -76,7 +76,7 @@ struct PollView: View
                                 Rectangle().frame(width:geo.size.width ,height: 20)
                                     .foregroundColor(settings.theme.minorColor.opacity(0.25))
                                 
-                                if voted == true || poll.voted == true
+                                if voted == true || poll.voted == true || poll.expired == true
                                 {
                                     Rectangle().frame(width:CGFloat(percent),height: 20)
                                         .foregroundColor(settings.theme.accentColor)
@@ -104,7 +104,7 @@ struct PollView: View
             Text("Total Votes \(poll.votesCount)")
             Spacer()
           
-            if voted == false && poll.voted == false
+            if voted == false && poll.voted == false && poll.expired == false
             {
                 Button("Vote")
                 {
@@ -153,6 +153,7 @@ struct PollView: View
                 if poll.expired == true
                 {
                     Text("Expired")
+                        .foregroundColor(settings.theme.accentColor)
                 }
                 else
                 {
