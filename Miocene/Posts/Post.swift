@@ -468,7 +468,7 @@ struct Post: View
                 shouldPresentSheet = false
             }
         }
-        .background(settings.theme.blockColor)
+        .background(status.account.id == appState.currentMastodonAccount()?.id ? settings.theme.ownpostColor : settings.theme.blockColor)
         .cornerRadius(5)
         .contextMenu
         {
