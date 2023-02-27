@@ -14,8 +14,7 @@ struct TimeLineView: View
     
     @StateObject var timelineManger : TimelineManager
     
-    @State var currentTag = String() // move this into TimeLineManager?
-    @State var selectedTimeline : TimeLine = .home
+   //@State var selectedTimeline : TimeLine = .home
    
     @State private var presentAddAccountSheet = false
     @State private var currentSelectedTimeline = "Home"
@@ -56,7 +55,7 @@ struct TimeLineView: View
                 
                 SpacerLine(color: settings.theme.minorColor)
                 
-                if selectedTimeline == .tag
+                if appState.selectedTimeline == .tag
                 {
                     handleTagInput()
                 }
@@ -65,7 +64,7 @@ struct TimeLineView: View
                 {
                     LazyVStack
                     {
-                        if selectedTimeline == .notifications || selectedTimeline == .mentions
+                        if appState.selectedTimeline == .notifications || appState.selectedTimeline == .mentions
                         {
                             ForEach(getnotifications())
                             { note in
@@ -112,26 +111,36 @@ struct TimeLineView: View
     {
         HStack
         {
-            TextField("#tag", text: $currentTag)
+            TextField("#tag", text: $appState.showTag)
                 .padding()
                 .font(settings.font.title)
                 .onSubmit
             {
-                let request = TimelineRequest(timelineWhen: .current, timeLine: .tag, tag: currentTag)
+                let request = TimelineRequest(timelineWhen: .current, timeLine: .tag, tag: appState.showTag)
                 timelineManger.setTimelineRequestAndFetch(request: request)
             }
             
             PopButton(text: "Load", icon: "paperplane.fill", isSelected: true)
             {
-                let request = TimelineRequest(timelineWhen: .current, timeLine: .tag, tag: currentTag)
-                timelineManger.setTimelineRequestAndFetch(request: request)
+                loadTagTimeLine()
             }
         }
         .padding([.trailing],25)
         .onAppear()
         {
             timelineManger.clearTimeline()
+            if appState.showTag.count > 0
+            {
+                loadTagTimeLine()
+            }
         }
+    }
+     
+    
+    func loadTagTimeLine()
+    {
+        let request = TimelineRequest(timelineWhen: .current, timeLine: .tag, tag: appState.showTag)
+        timelineManger.setTimelineRequestAndFetch(request: request)
     }
     
     
@@ -199,7 +208,7 @@ struct TimeLineView: View
                     
                     appState.setAccount(accountKey: accountkey)
                     
-                    let request = TimelineRequest(timelineWhen: .current, timeLine: selectedTimeline, tag: currentTag)
+                    let request = TimelineRequest(timelineWhen: .current, timeLine: appState.selectedTimeline, tag: appState.showTag)
                     timelineManger.setTimelineRequestAndFetch(request: request)
                 }
             }
@@ -246,7 +255,7 @@ struct TimeLineView: View
             
             let timeline = custdict[item.text]
             
-            let request = TimelineRequest(timelineWhen: .current, timeLine: .custom, tag: currentTag,customTimeLine: timeline)
+            let request = TimelineRequest(timelineWhen: .current, timeLine: .custom, tag: appState.showTag,customTimeLine: timeline)
             timelineManger.setTimelineRequestAndFetch(request: request)
         }
         
@@ -266,9 +275,9 @@ struct TimeLineView: View
         { item in
             
             timelineManger.clearTimeline()
-            selectedTimeline = item.userData!
+            appState.selectedTimeline = item.userData!
             
-            let request = TimelineRequest(timelineWhen: .current, timeLine: item.userData!, tag: currentTag)
+            let request = TimelineRequest(timelineWhen: .current, timeLine: item.userData!, tag: appState.showTag)
             timelineManger.setTimelineRequestAndFetch(request: request)
         }
     }

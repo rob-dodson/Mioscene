@@ -23,10 +23,12 @@ class AppState : ObservableObject
     private var currentAccountKey : AccountKey = AccountKey(server: "noserver", username: "nouser")
     
     private var showAccount : MastodonKit.Account?
-    private var showTag : String?
+    
     
     @Published var tabIndex : TabIndex = .TimeLine
     @Published var userLoggedIn : Bool = false
+    @Published var showTag : String = ""
+    @Published var selectedTimeline : TimeLine = .home
     
     static var localAccountRecords = Dictionary<AccountKey,LocalAccountRecord>()
     static var mastIOs = Dictionary<AccountKey,MastodonIO>()
@@ -64,6 +66,7 @@ class AppState : ObservableObject
     {
         showTag = showtag
         tabIndex = .TimeLine
+        selectedTimeline = .tag
     }
     
     func showHome()
