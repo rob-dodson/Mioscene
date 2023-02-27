@@ -159,6 +159,10 @@ struct Post: View
                         }
                         .padding(EdgeInsets(top: 4, leading: 4, bottom: -12, trailing: 4))
                         .border(width: 1, edges: [.top,.bottom,.leading,.trailing], color: settings.theme.accentColor)
+                        .onTapGesture
+                        {
+                            showContentWarning.toggle()
+                        }
                     }
                     
                     
