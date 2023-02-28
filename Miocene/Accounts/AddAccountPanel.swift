@@ -70,7 +70,7 @@ struct AddAccountPanel: View
         .frame(width: 400)
         .toolbar
         {
-            ToolbarItem
+            ToolbarItem(placement: .automatic)
             {
                 PopButton(text: "Cancel", icon: "trash.slash",isSelected: false)
                 {
@@ -78,9 +78,9 @@ struct AddAccountPanel: View
                 }
             }
             
-            if step ==  0
+            if step == 0
             {
-                ToolbarItem
+                ToolbarItem(placement: .primaryAction)
                 {
                     PopButton(text: "Next", icon: "arrow.forward",isSelected: true)
                     {
@@ -95,7 +95,7 @@ struct AddAccountPanel: View
             }
             else if step == 1
             {
-                ToolbarItem
+                ToolbarItem(placement: .primaryAction)
                 {
                     PopButton(text: "Complete", icon: "arrow.forward",isSelected: true)
                     {

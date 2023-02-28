@@ -101,6 +101,15 @@ struct EditPost: View
         {
             ToolbarItem
             {
+                PopButton(text: "Cancel", icon: "trash.slash",isSelected: false)
+                {
+                    shouldPresentSheet = false
+                    done()
+                }
+            }
+            
+            ToolbarItem
+            {
                 PopButton(text: "Photo", icon: "photo",isSelected: false)
                 {
                     if let urls = showOpenPanel()
@@ -142,19 +151,12 @@ struct EditPost: View
                 visibilityMenu()
             }
             
-            ToolbarItem
-            {
-                PopButton(text: "Cancel", icon: "trash.slash",isSelected: false)
-                {
-                    shouldPresentSheet = false
-                    done()
-                }
-            }
             
             
-            ToolbarItem
+            
+            ToolbarItem(placement: .primaryAction)
             {
-                PopButton(text: "Post", icon: "paperplane",isSelected: false)
+                PopButton(text: "Post", icon: "paperplane",isSelected: true)
                 {
                     let pollpayload = showPoll == true ? PollBuilder.getPollPayLoad(pollState: pollState) : nil
                     
