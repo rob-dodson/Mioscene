@@ -269,7 +269,7 @@ struct AccountLarge: View
             {
                 if account.id == mastaccount.id
                 {
-                    PopButton(text: "Edit Profile", icon: "pencil",isSelected: false)
+                    PopButton(text: "Edit Profile", icon: "pencil",isSelected: false,help:"Edit Profile")
                     {
                         let myurl = mastaccount.url
                         NSWorkspace.shared.open(myurl)
@@ -327,7 +327,8 @@ struct AccountLarge: View
                               icon: state == true ? trueicon : falseicon,
                               textColor: settings.theme.minorColor,
                               iconColor: state == true ? settings.theme.accentColor : settings.theme.bodyColor,
-                              isSelected: false
+                              isSelected: false,
+                              help: "Toggle \(truelabel)/\(falselabel)"
                                 )
         {
             if state == true

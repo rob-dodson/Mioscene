@@ -54,16 +54,16 @@ struct CustomTopTabBar: View
         
         HStack(alignment: .center,spacing: 40)
         {
-            PopButton(text: "Timelines",icon:"house", isSelected: tabIndex == .TimeLine ? true : false)
+            PopButton(text: "Timelines",icon:"house", isSelected: tabIndex == .TimeLine ? true : false,help:"Show Timelines")
                 { onButtonTapped(index: .TimeLine) }
             
-            PopButton(text: "Accounts",icon:"person", isSelected: tabIndex == .Accounts ? true : false)
+            PopButton(text: "Accounts",icon:"person", isSelected: tabIndex == .Accounts ? true : false,help:"Show Accounts")
                 { onButtonTapped(index: .Accounts) }
             
-            PopButton(text: "Search", icon:"magnifyingglass",isSelected: tabIndex == .Search ? true : false)
+            PopButton(text: "Search", icon:"magnifyingglass",isSelected: tabIndex == .Search ? true : false,help:"Search")
                  { onButtonTapped(index: .Search) }
             
-            PopButton(text: "Settings",icon:"gear", isSelected:tabIndex == .Settings ? true : false)
+            PopButton(text: "Settings",icon:"gear", isSelected:tabIndex == .Settings ? true : false,help:"Settings")
                 { onButtonTapped(index: .Settings) }
         }
         .padding(.bottom,5)

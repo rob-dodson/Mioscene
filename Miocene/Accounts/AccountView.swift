@@ -24,13 +24,13 @@ struct AccountView: View
                 if let account = appState.currentLocalAccountRecord()
                 {
                     PopMenu(icon: "person.crop.circle",selected:$currentAccountServer ,
-                            menuItems: [PopMenuItem(text: "@\(account.username)",userData: account),
+                            menuItems: [PopMenuItem(text: "@\(account.username)",help:"Select Account @\(account.username)",userData: account),
                                        ])
                     { item in
                     }
                 }
                 
-                PopButton(text:"My Account", icon:"person",isSelected: false)
+                PopButton(text:"My Account", icon:"person",isSelected: false,help:"Show My Account")
                 {
                     if let account = appState.currentMastodonAccount()
                     {

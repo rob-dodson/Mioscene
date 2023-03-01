@@ -15,7 +15,7 @@ struct AddAccountButton: View
 
     var body: some View
     {
-        PopButton(text: "Add Account", icon: "person.badge.plus",isSelected: false)
+        PopButton(text: "Add Account", icon: "person.badge.plus",isSelected: false,help: "Add Account")
         {
             shouldPresentSheet = true
         }

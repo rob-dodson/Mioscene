@@ -15,12 +15,14 @@ import SwiftUI
 struct PopMenuItem<UserType>
 {
     let text : String
+    let help : String
     let userData : UserType?
     let subMenu : PopMenu<UserType>?
     
-    init(text: String, userData: UserType?, subMenu: PopMenu<UserType>? = nil)
+    init(text: String,help:String, userData: UserType?, subMenu: PopMenu<UserType>? = nil)
     {
         self.text = text
+        self.help = help
         self.userData = userData
         self.subMenu = subMenu
     }
@@ -49,7 +51,7 @@ struct PopMenu<UserType> : View
         {
             if let item = findSelected(items: menuItems)
             {
-                PopButton(text: item.text,icon:icon,isSelected: false)
+                PopButton(text: item.text,icon:icon,isSelected:false,help:item.help)
                 {
                     showMenu = true
                 }
@@ -167,7 +169,8 @@ struct PopButton: View
     let text : String
     let icon : String
     let isSelected : Bool
-    var ontap: () -> Void
+    let help : String
+    var ontap : () -> Void
     
     var body : some View
     {
@@ -176,6 +179,7 @@ struct PopButton: View
                        textColor: settings.theme.minorColor,
                        iconColor: settings.theme.bodyColor,
                        isSelected: isSelected,
+                       help:help,
                        ontap: ontap)
     }
 }
@@ -193,7 +197,8 @@ struct PopButtonColor: View
     let textColor : Color
     let iconColor : Color
     let isSelected : Bool
-    var ontap: () -> Void // called when user clicks on this button
+    let help : String
+    var ontap : () -> Void // called when user clicks on this button
     
     @State private var tap = false
     
@@ -207,7 +212,7 @@ struct PopButtonColor: View
                 .foregroundColor(tap ? settings.theme.accentColor : (isSelected == true ? settings.theme.accentColor : iconColor))
                 .scaleEffect(tap ? 1.2 : 1)
                 .animation(.spring(response: 0.4, dampingFraction: 0.6),value: tap)
-                .help(text)
+                .help(help)
                 .onTapGesture
                 {
                     tap = true
@@ -237,6 +242,7 @@ struct PopTextButton: View
     
     let text : String
     let font : Font
+    let help : String
     var ontap: (String) -> Void
     
     @State private var tap = false
@@ -250,7 +256,7 @@ struct PopTextButton: View
                 .foregroundColor(tap ? settings.theme.accentColor : settings.theme.minorColor)
                 .scaleEffect(tap ? 1.1 : 1)
                 .animation(.spring(response: 0.4, dampingFraction: 0.6),value: tap)
-                .help(text)
+                .help(help)
                 .onTapGesture
             {
                 tap = true

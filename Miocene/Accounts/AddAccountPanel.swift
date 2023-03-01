@@ -72,7 +72,7 @@ struct AddAccountPanel: View
         {
             ToolbarItem(placement: .automatic)
             {
-                PopButton(text: "Cancel", icon: "trash.slash",isSelected: false)
+                PopButton(text: "Cancel", icon: "trash.slash",isSelected: false,help: "Cancel")
                 {
                     done()
                 }
@@ -82,7 +82,7 @@ struct AddAccountPanel: View
             {
                 ToolbarItem(placement: .primaryAction)
                 {
-                    PopButton(text: "Next", icon: "arrow.forward",isSelected: true)
+                    PopButton(text: "Next", icon: "arrow.forward",isSelected: true,help:"Next Step")
                     {
                         appState.addAccount(server: server)
                         { mioceneerror, msg in
@@ -97,7 +97,7 @@ struct AddAccountPanel: View
             {
                 ToolbarItem(placement: .primaryAction)
                 {
-                    PopButton(text: "Complete", icon: "arrow.forward",isSelected: true)
+                    PopButton(text: "Complete", icon: "arrow.forward",isSelected: true,help:"Complete Account Setup")
                     {
                         step = 2
                         Log.log(msg: "Account added")

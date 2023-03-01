@@ -101,7 +101,7 @@ struct EditPost: View
         {
             ToolbarItem
             {
-                PopButton(text: "Cancel", icon: "trash.slash",isSelected: false)
+                PopButton(text: "Cancel", icon: "trash.slash",isSelected: false,help: "Cancel")
                 {
                     shouldPresentSheet = false
                     done()
@@ -110,7 +110,7 @@ struct EditPost: View
             
             ToolbarItem
             {
-                PopButton(text: "Photo", icon: "photo",isSelected: false)
+                PopButton(text: "Photo", icon: "photo",isSelected: false,help:"Attach Photo")
                 {
                     if let urls = showOpenPanel()
                     {
@@ -124,7 +124,7 @@ struct EditPost: View
             
             ToolbarItem
             {
-                PopButton(text: "Sensitive", icon: "eye.slash",isSelected: sensitive)
+                PopButton(text: "Sensitive", icon: "eye.slash",isSelected: sensitive,help:"Toggle Sensitive")
                 {
                     sensitive.toggle()
                 }
@@ -132,7 +132,7 @@ struct EditPost: View
             
             ToolbarItem
             {
-                PopButton(text: "Warning", icon: "exclamationmark.triangle",isSelected: showContentWarning)
+                PopButton(text: "Warning", icon: "exclamationmark.triangle",isSelected: showContentWarning,help:"Toggle Warning")
                 {
                     showContentWarning.toggle()
                 }
@@ -140,7 +140,7 @@ struct EditPost: View
            
             ToolbarItem
             {
-                PopButton(text: "Poll", icon: "chart.bar.doc.horizontal",isSelected: showPoll)
+                PopButton(text: "Poll", icon: "chart.bar.doc.horizontal",isSelected: showPoll,help:"Hide/Show Poll")
                 {
                     showPoll.toggle()
                 }
@@ -156,7 +156,7 @@ struct EditPost: View
             
             ToolbarItem(placement: .primaryAction)
             {
-                PopButton(text: "Post", icon: "paperplane",isSelected: true)
+                PopButton(text: "Post", icon: "paperplane",isSelected: true,help:"Send Post")
                 {
                     let pollpayload = showPoll == true ? PollBuilder.getPollPayLoad(pollState: pollState) : nil
                     
@@ -211,24 +211,25 @@ struct EditPost: View
 
         if replyTo == nil
         {
-            menuitems = [PopMenuItem(text: MastodonKit.Visibility.public.rawValue,userData:MastodonKit.Visibility.public),
-                        PopMenuItem(text: MastodonKit.Visibility.unlisted.rawValue,userData:MastodonKit.Visibility.unlisted),
-                        PopMenuItem(text: MastodonKit.Visibility.private.rawValue,userData:MastodonKit.Visibility.private)
+            menuitems = [PopMenuItem(text: MastodonKit.Visibility.public.rawValue,help:MastodonKit.Visibility.public.rawValue,userData:MastodonKit.Visibility.public),
+                         PopMenuItem(text: MastodonKit.Visibility.unlisted.rawValue,help:MastodonKit.Visibility.unlisted.rawValue,userData:MastodonKit.Visibility.unlisted),
+                         PopMenuItem(text: MastodonKit.Visibility.private.rawValue,help:MastodonKit.Visibility.private.rawValue,userData:MastodonKit.Visibility.private)
                         ]
         }
         else if postVisibility == .direct
         {
-            DispatchQueue.main.async {
+            DispatchQueue.main.async
+            {
                 currentSelectedVisibilty = MastodonKit.Visibility.direct.rawValue
             }
-            menuitems = [PopMenuItem(text: MastodonKit.Visibility.direct.rawValue,userData:MastodonKit.Visibility.direct)]
+            menuitems = [PopMenuItem(text: MastodonKit.Visibility.direct.rawValue,help:MastodonKit.Visibility.direct.rawValue,userData:MastodonKit.Visibility.direct)]
         }
         else
         {
-            menuitems = [PopMenuItem(text: MastodonKit.Visibility.public.rawValue,userData:MastodonKit.Visibility.public),
-                         PopMenuItem(text: MastodonKit.Visibility.unlisted.rawValue,userData:MastodonKit.Visibility.unlisted),
-                         PopMenuItem(text: MastodonKit.Visibility.private.rawValue,userData:MastodonKit.Visibility.private),
-                         PopMenuItem(text: MastodonKit.Visibility.direct.rawValue,userData:MastodonKit.Visibility.direct)
+            menuitems = [PopMenuItem(text: MastodonKit.Visibility.public.rawValue,help:MastodonKit.Visibility.public.rawValue,userData:MastodonKit.Visibility.public),
+                         PopMenuItem(text: MastodonKit.Visibility.unlisted.rawValue,help:MastodonKit.Visibility.unlisted.rawValue,userData:MastodonKit.Visibility.unlisted),
+                         PopMenuItem(text: MastodonKit.Visibility.private.rawValue,help:MastodonKit.Visibility.private.rawValue,userData:MastodonKit.Visibility.private),
+                         PopMenuItem(text: MastodonKit.Visibility.direct.rawValue,help:MastodonKit.Visibility.direct.rawValue,userData:MastodonKit.Visibility.direct)
             ]
         }
         

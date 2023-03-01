@@ -20,7 +20,7 @@ struct NewPostButton: View
     {
         HStack
         {
-            PopButton(text: "New Post", icon: "square.and.pencil",isSelected: false)
+            PopButton(text: "New Post", icon: "square.and.pencil",isSelected: false,help: "New Post")
             {
                 shouldPresentSheet.toggle()
             }

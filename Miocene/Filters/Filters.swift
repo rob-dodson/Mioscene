@@ -94,10 +94,10 @@ struct FilterTools
         
         for index in 0..<filtersets.count
         {
-            let menuitem = PopMenuItem(text: filtersets[index].name, userData:filtersets[index] )
+            let menuitem = PopMenuItem(text: filtersets[index].name,help: "User filter \(filtersets[index].name)", userData:filtersets[index] )
             items.append(menuitem)
         }
-        items.append(PopMenuItem(text: "Edit Filters", userData: nil))
+        items.append(PopMenuItem(text: "Edit Filters",help: "Edit Filters", userData: nil))
         
         return items
     }

@@ -120,7 +120,7 @@ struct TimeLineView: View
                 timelineManger.setTimelineRequestAndFetch(request: request)
             }
             
-            PopButton(text: "Load", icon: "paperplane.fill", isSelected: true)
+            PopButton(text: "Load", icon: "paperplane.fill", isSelected: true,help:"Load Tag Timeline")
             {
                 loadTagTimeLine()
             }
@@ -153,7 +153,7 @@ struct TimeLineView: View
     
     func refreshButton() -> some View
     {
-        PopButton(text: "Refresh", icon: "arrow.triangle.2.circlepath",isSelected: false)
+        PopButton(text: "Refresh", icon: "arrow.triangle.2.circlepath",isSelected: false,help:"Refresh Timeline")
         {
             timelineManger.getNewerStats()
         }
@@ -162,7 +162,7 @@ struct TimeLineView: View
     
     func toolbarToggleButton() -> some View
     {
-        PopButtonColor(text: "", icon: "ellipsis.circle", textColor: settings.theme.minorColor, iconColor: settings.theme.minorColor,isSelected: false)
+        PopButtonColor(text: "", icon: "ellipsis.circle", textColor: settings.theme.minorColor, iconColor: settings.theme.minorColor,isSelected: false,help: "Hide/Show Toolbar")
         {
             settings.showTimelineToolBar.toggle()
             UserDefaults.standard.set(settings.showTimelineToolBar, forKey: "showtimelinetoolbar")
@@ -176,10 +176,10 @@ struct TimeLineView: View
         var popitems = [PopMenuItem<AccountKey>]()
         _ = AppState.localAccountRecords.values.map()
         {
-            let popitem = PopMenuItem<AccountKey>(text: $0.server,userData: $0.accountKey())
+            let popitem = PopMenuItem<AccountKey>(text: $0.server,help:"Load Account \($0.server)",userData: $0.accountKey())
             popitems.append(popitem)
         }
-        popitems.append(PopMenuItem<AccountKey>(text: "Add Account",userData: nil))
+        popitems.append(PopMenuItem<AccountKey>(text: "Add Account",help:"Add Account",userData: nil))
         
         DispatchQueue.main.async
         {
@@ -243,12 +243,12 @@ struct TimeLineView: View
         
         
         var custdict = Dictionary<String,CustomTimeline>()
-        custdict["macOS - Local"] = customtimeline
-        custdict["Ivory - Home"] = customtimeline0
+        custdict[customtimeline.name] = customtimeline
+        custdict[customtimeline0.name] = customtimeline0
         
         let customSubMenu = PopMenu(icon: "person",selected:$currentSelectedTimeline,
-                                    menuItems: [PopMenuItem(text: "macOS - Local",userData:TimeLine.custom),
-                                                PopMenuItem(text: "Ivory - Home",userData:TimeLine.custom)
+                                    menuItems: [PopMenuItem(text: customtimeline0.name,help:"Filter \(customtimeline0.name)",userData:TimeLine.custom),
+                                                PopMenuItem(text: customtimeline.name,help:"Filter \(customtimeline.name)",userData:TimeLine.custom)
                                                 ])
         { item in
             print("Custom Sub Menu \(item.text)")
@@ -262,15 +262,15 @@ struct TimeLineView: View
         
         
         return PopMenu(icon: "clock.arrow.circlepath",selected:$currentSelectedTimeline,
-                menuItems: [PopMenuItem(text: TimeLine.home.rawValue,userData:TimeLine.home),
-                            PopMenuItem(text: TimeLine.localTimeline.rawValue,userData:TimeLine.localTimeline),
-                            PopMenuItem(text: TimeLine.publicTimeline.rawValue,userData:TimeLine.publicTimeline),
-                            PopMenuItem(text: TimeLine.tag.rawValue,userData:TimeLine.tag),
-                            PopMenuItem(text: TimeLine.favorites.rawValue,userData:TimeLine.favorites),
-                            PopMenuItem(text: TimeLine.bookmarks.rawValue,userData:TimeLine.bookmarks),
-                            PopMenuItem(text: TimeLine.notifications.rawValue,userData:TimeLine.notifications),
-                            PopMenuItem(text: TimeLine.mentions.rawValue,userData:TimeLine.mentions),
-                            PopMenuItem(text: TimeLine.custom.rawValue,userData:TimeLine.custom,subMenu: customSubMenu),
+                       menuItems: [PopMenuItem(text: TimeLine.home.rawValue,help:TimeLine.home.rawValue,userData:TimeLine.home),
+                                   PopMenuItem(text: TimeLine.localTimeline.rawValue,help:TimeLine.localTimeline.rawValue,userData:TimeLine.localTimeline),
+                                   PopMenuItem(text: TimeLine.publicTimeline.rawValue,help:TimeLine.publicTimeline.rawValue,userData:TimeLine.publicTimeline),
+                                   PopMenuItem(text: TimeLine.tag.rawValue,help:TimeLine.tag.rawValue,userData:TimeLine.tag),
+                                   PopMenuItem(text: TimeLine.favorites.rawValue,help:TimeLine.favorites.rawValue,userData:TimeLine.favorites),
+                                   PopMenuItem(text: TimeLine.bookmarks.rawValue,help:TimeLine.bookmarks.rawValue,userData:TimeLine.bookmarks),
+                                   PopMenuItem(text: TimeLine.notifications.rawValue,help:TimeLine.notifications.rawValue,userData:TimeLine.notifications),
+                                   PopMenuItem(text: TimeLine.mentions.rawValue,help:TimeLine.mentions.rawValue,userData:TimeLine.mentions),
+                            PopMenuItem(text: TimeLine.custom.rawValue,help:"Custom",userData:TimeLine.custom,subMenu: customSubMenu),
                            ])
         { item in
             

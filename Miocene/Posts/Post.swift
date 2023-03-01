@@ -149,7 +149,7 @@ struct Post: View
                     {
                         HStack(alignment: .center)
                         {
-                            PopButton(text: "", icon: "exclamationmark.triangle", isSelected: showContentWarning == true ? false : true)
+                            PopButton(text: "", icon: "exclamationmark.triangle", isSelected: showContentWarning == true ? false : true,help:"Toggle Content Warning (CW)")
                             {
                                 showContentWarning.toggle()
                             }
@@ -303,7 +303,8 @@ struct Post: View
                                        icon: "eye.slash",
                                        textColor: settings.theme.accentColor,
                                        iconColor: settings.theme.accentColor,
-                                       isSelected: true)
+                                       isSelected: true,
+                                       help:"Toggle Sensitive")
                         {
                             showSensitiveContent.toggle()
                         }
@@ -366,7 +367,7 @@ struct Post: View
                             //
                             // reply
                             //
-                            PopButton(text: "", icon: "arrowshape.turn.up.left",isSelected: false)
+                            PopButton(text: "", icon: "arrowshape.turn.up.left",isSelected: false,help:"Reply to this author")
                             {
                                 shouldPresentSheet.toggle()
                             }
@@ -379,7 +380,7 @@ struct Post: View
                             PopButtonColor(text: "\(mstatus.favoritesCount)",
                                            icon: "star",
                                            textColor:settings.theme.minorColor,
-                                           iconColor:mstatus.favorited == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false)
+                                           iconColor:mstatus.favorited == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false,help:"Mark as favorite")
                             {
                                 if mstatus.favorited == true
                                 {
@@ -402,7 +403,7 @@ struct Post: View
                             PopButtonColor(text: "\(mstatus.reblogsCount)",
                                            icon: "arrow.2.squarepath",
                                            textColor:settings.theme.minorColor,
-                                           iconColor:mstatus.reblogged == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false)
+                                           iconColor:mstatus.reblogged == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false,help:"Reblog this post")
                             {
                                 if mstatus.reblogged == true
                                 {
@@ -424,7 +425,7 @@ struct Post: View
                             PopButtonColor(text: "",
                                            icon: "bookmark",
                                            textColor:settings.theme.minorColor,
-                                           iconColor:mstatus.bookmarked == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false)
+                                           iconColor:mstatus.bookmarked == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false,help:"Bookmark this post")
                             {
                                 if mstatus.bookmarked == true
                                 {
@@ -623,7 +624,7 @@ struct Post: View
     
     func displayTag(name:String) -> some  View
     {
-        PopTextButton(text: name, font: settings.font.subheadline, ontap:
+        PopTextButton(text: name, font: settings.font.subheadline, help:"Tag \(name)", ontap:
         { tag in
             appState.showTag(showtag: tag)
         })

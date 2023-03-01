@@ -17,7 +17,7 @@ struct ShowImagePanel: View
     {
         VStack(alignment: .leading)
         {
-            PopButton(text: "", icon: "xmark",isSelected: false)
+            PopButton(text: "", icon: "xmark",isSelected: false,help:"Close Image")
             {
                 done()
             }
