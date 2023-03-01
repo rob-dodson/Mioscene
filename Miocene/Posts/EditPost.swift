@@ -208,13 +208,20 @@ struct EditPost: View
     func visibilityMenu() -> some View
     {
         var menuitems = [PopMenuItem<MastodonKit.Visibility>]()
-        
+
         if replyTo == nil
         {
             menuitems = [PopMenuItem(text: MastodonKit.Visibility.public.rawValue,userData:MastodonKit.Visibility.public),
                         PopMenuItem(text: MastodonKit.Visibility.unlisted.rawValue,userData:MastodonKit.Visibility.unlisted),
                         PopMenuItem(text: MastodonKit.Visibility.private.rawValue,userData:MastodonKit.Visibility.private)
                         ]
+        }
+        else if postVisibility == .direct
+        {
+            DispatchQueue.main.async {
+                currentSelectedVisibilty = MastodonKit.Visibility.direct.rawValue
+            }
+            menuitems = [PopMenuItem(text: MastodonKit.Visibility.direct.rawValue,userData:MastodonKit.Visibility.direct)]
         }
         else
         {
