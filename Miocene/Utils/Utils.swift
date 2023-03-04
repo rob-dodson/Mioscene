@@ -163,7 +163,45 @@ struct EdgeBorder: Shape
         return path
     }
 }
+
+ 
+extension Color
+{
+    var nsColor: NSColor { NSColor.init(self).usingColorSpace(.deviceRGB)! } // FIX
     
+    typealias RGBA = (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
+    
+    var rgba: RGBA?
+    {
+        var (r, g, b, a): RGBA = (0, 0, 0, 0)
+        
+        nsColor.getRed(&r, green: &g, blue: &b, alpha: &a)
+        
+        return (r, g, b, a)
+    }
+    
+    var hexaRGB: String?
+    {
+        guard let (red, green, blue, _) = rgba else { return nil }
+        
+        return String(format: "#%02x%02x%02x",
+            Int(red * 255),
+            Int(green * 255),
+            Int(blue * 255))
+    }
+    
+    var hexaRGBA: String?
+    {
+        guard let (red, green, blue, alpha) = rgba else { return nil }
+        
+        return String(format: "#%02x%02x%02x%02x",
+            Int(red * 255),
+            Int(green * 255),
+            Int(blue * 255),
+            Int(alpha * 255))
+    }
+}
+
 
 
 extension String
@@ -178,10 +216,10 @@ extension String
             <style>
         p { padding:5em; }
                 body {
-                    color: \(color);
+                    color: \(color.hexaRGB ?? "#555555");
                 }
                 a {
-                    color: \(linkColor);
+                    color: \(linkColor.hexaRGB ?? "#000088");
                 }
             </style>
           </head>
