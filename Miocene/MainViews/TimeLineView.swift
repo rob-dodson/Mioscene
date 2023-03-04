@@ -15,7 +15,6 @@ struct TimeLineView: View
     @StateObject var timelineManger : TimelineManager
     
     @State private var presentAddAccountSheet = false
-    @State private var currentSelectedTimeline = "Home"
     @State private var currentAccountServer = "Add Account"
     @State private var saveCurrentAccountServer = "Add Account"
     
@@ -244,7 +243,7 @@ struct TimeLineView: View
         custdict[customtimeline.name] = customtimeline
         custdict[customtimeline0.name] = customtimeline0
         
-        let customSubMenu = PopMenu(icon: "person",selected:$currentSelectedTimeline,
+        let customSubMenu = PopMenu(icon: "person",selected:$appState.currentTimelineName,
                                     menuItems: [PopMenuItem(text: customtimeline0.name,help:"Filter \(customtimeline0.name)",userData:TimeLine.custom),
                                                 PopMenuItem(text: customtimeline.name,help:"Filter \(customtimeline.name)",userData:TimeLine.custom)
                                                 ])
@@ -259,7 +258,7 @@ struct TimeLineView: View
         
         
         
-        return PopMenu(icon: "clock.arrow.circlepath",selected:$currentSelectedTimeline,
+        return PopMenu(icon: "clock.arrow.circlepath",selected:$appState.currentTimelineName,
                        menuItems: [PopMenuItem(text: TimeLine.home.rawValue,help:TimeLine.home.rawValue,userData:TimeLine.home),
                                    PopMenuItem(text: TimeLine.localTimeline.rawValue,help:TimeLine.localTimeline.rawValue,userData:TimeLine.localTimeline),
                                    PopMenuItem(text: TimeLine.publicTimeline.rawValue,help:TimeLine.publicTimeline.rawValue,userData:TimeLine.publicTimeline),
@@ -268,7 +267,7 @@ struct TimeLineView: View
                                    PopMenuItem(text: TimeLine.bookmarks.rawValue,help:TimeLine.bookmarks.rawValue,userData:TimeLine.bookmarks),
                                    PopMenuItem(text: TimeLine.notifications.rawValue,help:TimeLine.notifications.rawValue,userData:TimeLine.notifications),
                                    PopMenuItem(text: TimeLine.mentions.rawValue,help:TimeLine.mentions.rawValue,userData:TimeLine.mentions),
-                            PopMenuItem(text: TimeLine.custom.rawValue,help:"Custom",userData:TimeLine.custom,subMenu: customSubMenu),
+                                   PopMenuItem(text: TimeLine.custom.rawValue,help:"Custom",userData:TimeLine.custom,subMenu: customSubMenu),
                            ])
         { item in
             

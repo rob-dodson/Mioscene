@@ -29,6 +29,7 @@ class AppState : ObservableObject
     @Published var userLoggedIn : Bool = false
     @Published var showTag : String = ""
     @Published var selectedTimeline : TimeLine = .home
+    @Published var currentTimelineName : String = TimeLine.home.rawValue
     
     static var localAccountRecords = Dictionary<AccountKey,LocalAccountRecord>()
     static var mastIOs = Dictionary<AccountKey,MastodonIO>()
@@ -67,6 +68,7 @@ class AppState : ObservableObject
         showTag = showtag
         tabIndex = .TimeLine
         selectedTimeline = .tag
+        currentTimelineName = selectedTimeline.rawValue
     }
     
     func showHome()
