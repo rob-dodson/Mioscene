@@ -11,6 +11,7 @@ defaults write shyfrogproductions.com.Miocene addfonts -array Myriad Courier
  Use @EnvironmentObject to consume an ObservableObject that has already been created in a parent view and then attached via the view’s environmentObject() view modifier.
  
  https://www.hackingwithswift.com/quick-start/swiftui/all-swiftui-property-wrappers-explained-and-compared
+ https://developer.apple.com/documentation/swiftui/stateobject
  
  */
  

@@ -23,6 +23,7 @@ struct ShowImagePanel: View
             }
             .padding()
             
+            
             AsyncImage(url: ShowImagePanel.url)
             { image in
                 image.resizable()
@@ -39,6 +40,7 @@ struct ShowImagePanel: View
             {
                 done()
             }
+           
         }
     }
     

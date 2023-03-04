@@ -207,13 +207,14 @@ struct EditPost: View
     
     func visibilityMenu() -> some View
     {
+        let help = "Select Visibility"
         var menuitems = [PopMenuItem<MastodonKit.Visibility>]()
 
         if replyTo == nil
         {
-            menuitems = [PopMenuItem(text: MastodonKit.Visibility.public.rawValue,help:MastodonKit.Visibility.public.rawValue,userData:MastodonKit.Visibility.public),
-                         PopMenuItem(text: MastodonKit.Visibility.unlisted.rawValue,help:MastodonKit.Visibility.unlisted.rawValue,userData:MastodonKit.Visibility.unlisted),
-                         PopMenuItem(text: MastodonKit.Visibility.private.rawValue,help:MastodonKit.Visibility.private.rawValue,userData:MastodonKit.Visibility.private)
+            menuitems = [PopMenuItem(text: MastodonKit.Visibility.public.rawValue,help:help,userData:MastodonKit.Visibility.public),
+                         PopMenuItem(text: MastodonKit.Visibility.unlisted.rawValue,help:help,userData:MastodonKit.Visibility.unlisted),
+                         PopMenuItem(text: MastodonKit.Visibility.private.rawValue,help:help,userData:MastodonKit.Visibility.private)
                         ]
         }
         else if postVisibility == .direct
@@ -222,14 +223,14 @@ struct EditPost: View
             {
                 currentSelectedVisibilty = MastodonKit.Visibility.direct.rawValue
             }
-            menuitems = [PopMenuItem(text: MastodonKit.Visibility.direct.rawValue,help:MastodonKit.Visibility.direct.rawValue,userData:MastodonKit.Visibility.direct)]
+            menuitems = [PopMenuItem(text: MastodonKit.Visibility.direct.rawValue,help:help,userData:MastodonKit.Visibility.direct)]
         }
         else
         {
-            menuitems = [PopMenuItem(text: MastodonKit.Visibility.public.rawValue,help:MastodonKit.Visibility.public.rawValue,userData:MastodonKit.Visibility.public),
-                         PopMenuItem(text: MastodonKit.Visibility.unlisted.rawValue,help:MastodonKit.Visibility.unlisted.rawValue,userData:MastodonKit.Visibility.unlisted),
-                         PopMenuItem(text: MastodonKit.Visibility.private.rawValue,help:MastodonKit.Visibility.private.rawValue,userData:MastodonKit.Visibility.private),
-                         PopMenuItem(text: MastodonKit.Visibility.direct.rawValue,help:MastodonKit.Visibility.direct.rawValue,userData:MastodonKit.Visibility.direct)
+            menuitems = [PopMenuItem(text: MastodonKit.Visibility.public.rawValue,help:help,userData:MastodonKit.Visibility.public),
+                         PopMenuItem(text: MastodonKit.Visibility.unlisted.rawValue,help:help,userData:MastodonKit.Visibility.unlisted),
+                         PopMenuItem(text: MastodonKit.Visibility.private.rawValue,help:help,userData:MastodonKit.Visibility.private),
+                         PopMenuItem(text: MastodonKit.Visibility.direct.rawValue,help:help,userData:MastodonKit.Visibility.direct)
             ]
         }
         

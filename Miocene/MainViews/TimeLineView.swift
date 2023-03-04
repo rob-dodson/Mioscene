@@ -14,8 +14,6 @@ struct TimeLineView: View
     
     @StateObject var timelineManger : TimelineManager
     
-   //@State var selectedTimeline : TimeLine = .home
-   
     @State private var presentAddAccountSheet = false
     @State private var currentSelectedTimeline = "Home"
     @State private var currentAccountServer = "Add Account"
