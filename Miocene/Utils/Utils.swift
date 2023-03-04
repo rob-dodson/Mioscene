@@ -167,7 +167,10 @@ struct EdgeBorder: Shape
  
 extension Color
 {
-    var nsColor: NSColor { NSColor.init(self).usingColorSpace(.deviceRGB)! } // FIX
+    var nsColor: NSColor?
+    {
+        NSColor.init(self).usingColorSpace(.deviceRGB)
+    }
     
     typealias RGBA = (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
     
@@ -175,7 +178,7 @@ extension Color
     {
         var (r, g, b, a): RGBA = (0, 0, 0, 0)
         
-        nsColor.getRed(&r, green: &g, blue: &b, alpha: &a)
+        nsColor?.getRed(&r, green: &g, blue: &b, alpha: &a)
         
         return (r, g, b, a)
     }
