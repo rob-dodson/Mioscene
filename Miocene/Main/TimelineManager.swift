@@ -373,6 +373,7 @@ class TimelineManager : ObservableObject
         while(nomore == false)
         {
             let group = DispatchGroup()
+            group.setTarget(queue:.global(qos: .background))
             group.enter()
             
             appState.mastio()?.getNewerStatuses(timeline: timelineRequest.timeLine, id: newid, tag:timelineRequest.tag)
