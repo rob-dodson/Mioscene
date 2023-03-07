@@ -25,7 +25,7 @@
 		AE28C5F92963719B00C8C928 /* SqliteDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5F82963719B00C8C928 /* SqliteDB.swift */; };
 		AE28C5FB2963727500C8C928 /* LocalAccountRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5FA2963727500C8C928 /* LocalAccountRecord.swift */; };
 		AE28C5FD29648C2400C8C928 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5FC29648C2400C8C928 /* SettingsView.swift */; };
-		AE28C5FF296524AE00C8C928 /* ErrorSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5FE296524AE00C8C928 /* ErrorSystem.swift */; };
+		AE28C5FF296524AE00C8C928 /* AlertSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C5FE296524AE00C8C928 /* AlertSystem.swift */; };
 		AE28C60329663A5B00C8C928 /* AccountLarge.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C60229663A5B00C8C928 /* AccountLarge.swift */; };
 		AE28C609296CC65800C8C928 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C608296CC65800C8C928 /* NotificationView.swift */; };
 		AE28C60B296E1CF200C8C928 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE28C60A296E1CF200C8C928 /* Utils.swift */; };
@@ -70,7 +70,7 @@
 		AE28C5F82963719B00C8C928 /* SqliteDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SqliteDB.swift; sourceTree = "<group>"; };
 		AE28C5FA2963727500C8C928 /* LocalAccountRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalAccountRecord.swift; sourceTree = "<group>"; };
 		AE28C5FC29648C2400C8C928 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		AE28C5FE296524AE00C8C928 /* ErrorSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorSystem.swift; sourceTree = "<group>"; };
+		AE28C5FE296524AE00C8C928 /* AlertSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSystem.swift; sourceTree = "<group>"; };
 		AE28C60229663A5B00C8C928 /* AccountLarge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountLarge.swift; sourceTree = "<group>"; };
 		AE28C608296CC65800C8C928 /* NotificationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		AE28C60A296E1CF200C8C928 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
@@ -234,7 +234,7 @@
 		AED7E1812976436A0053D0C9 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				AE28C5FE296524AE00C8C928 /* ErrorSystem.swift */,
+				AE28C5FE296524AE00C8C928 /* AlertSystem.swift */,
 				AE28C5F82963719B00C8C928 /* SqliteDB.swift */,
 				AE28C5EF29635CAA00C8C928 /* Keys.swift */,
 				AE28C60A296E1CF200C8C928 /* Utils.swift */,
@@ -361,7 +361,7 @@
 				AE28C5D82953C8A500C8C928 /* NewPostButton.swift in Sources */,
 				AEAFA2EC297EED5B00970F40 /* Filters.swift in Sources */,
 				AEAFA2E1297C261700970F40 /* AppState.swift in Sources */,
-				AE28C5FF296524AE00C8C928 /* ErrorSystem.swift in Sources */,
+				AE28C5FF296524AE00C8C928 /* AlertSystem.swift in Sources */,
 				AE28C5E6295CEDCE00C8C928 /* AccountView.swift in Sources */,
 				AE06EBF0294D16BB006CAB67 /* MioceneApp.swift in Sources */,
 				AEAFA2E8297DD59200970F40 /* MNotification.swift in Sources */,

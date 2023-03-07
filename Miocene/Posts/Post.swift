@@ -18,7 +18,7 @@ struct Post: View
     
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
-    @EnvironmentObject var errorSystem : ErrorSystem
+    @EnvironmentObject var errorSystem : AlertSystem
     
     @State private var showSensitiveContent : Bool = false
     @State private var showContentWarning : Bool = false
@@ -493,7 +493,7 @@ struct Post: View
                     Button  // PopMenuHere?
                     {
                         appState.mastio()?.deletePost(id:status.id)
-                        Log.logAlert(errorType:.info,msg: "Post deleted")
+                        AlertSystem.shared?.showMessage(type:.info,msg: "Post deleted")
                     } label: { Image(systemName: "speaker.slash.fill"); Text("Delete Post") }
                     
                     Button

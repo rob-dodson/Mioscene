@@ -13,7 +13,7 @@ struct AddAccountPanel: View
     var done : () -> Void
     
     @EnvironmentObject var settings: Settings
-    @EnvironmentObject var errorSystem : ErrorSystem
+    @EnvironmentObject var errorSystem : AlertSystem
     @EnvironmentObject var appState : AppState
     
     @State private var server : String = "shyfrog.masto.host"

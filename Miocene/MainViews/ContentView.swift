@@ -12,7 +12,7 @@ import MastodonKit
 struct ContentView: View
 {
     @EnvironmentObject var settings : Settings
-    @EnvironmentObject var errorSystem : ErrorSystem
+    @EnvironmentObject var errorSystem : AlertSystem
     @EnvironmentObject var appState: AppState
     
     var body: some View

@@ -10,7 +10,7 @@ import SwiftUI
 struct MioceneApp: App
 {
     @StateObject var settings      = Settings()
-    @StateObject var errorSystem   = ErrorSystem()
+    @StateObject var errorSystem   = AlertSystem()
     @StateObject var appState      = AppState()
     
     var body: some Scene

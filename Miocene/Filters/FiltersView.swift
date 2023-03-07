@@ -12,7 +12,7 @@ import SwiftUI
 struct FiltersView: View
 {
     @EnvironmentObject var settings: Settings
-    @EnvironmentObject var errorSystem : ErrorSystem
+    @EnvironmentObject var errorSystem : AlertSystem
     @EnvironmentObject var appState : AppState
     
     @State private var shouldPresentSheet = false

@@ -16,7 +16,7 @@ class Log
     static func logAlert(errorType:MioceneError,msg:String)
     {
         Log.log(msg:msg)
-        ErrorSystem.shared?.reportError(type:errorType, msg: msg)
+        AlertSystem.shared?.reportError(type:errorType, msg: msg)
     }
 
 
