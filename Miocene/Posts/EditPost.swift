@@ -169,11 +169,10 @@ struct EditPost: View
                              switch result
                              {
                              case .success:
-                              //  shouldPresentSheet = false
                                 alertMediaUploading = false
                                 done()
                              case .failure(let error):
-                                     Log.logAlert(errorType: .postingError, msg: error.localizedDescription)
+                                Log.logAlert(errorType: .postingError, msg: error.localizedDescription)
                              }
                        }
                 }

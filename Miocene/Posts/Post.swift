@@ -451,8 +451,6 @@ struct Post: View
             }
             .padding(.bottom,5)
         }
-      //  .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage,done: {  })
-        .messageAlert(title: "Info", show:$errorSystem.infoType, msg: errorSystem.infoMessage, done: {  })
         .sheet(isPresented: $shouldPresentDirectSheet)
         {
         }
@@ -490,7 +488,7 @@ struct Post: View
             {
                 if status.account.id == account.id
                 {
-                    Button  // PopMenuHere?
+                    Button
                     {
                         appState.mastio()?.deletePost(id:status.id)
                         AlertSystem.shared?.showMessage(type:.info,msg: "Post deleted")
@@ -517,20 +515,20 @@ struct Post: View
             Button
             {
                 appState.mastio()?.mute(account: status.account, done: { result in })
-                Log.logAlert(errorType:.ok,msg:"\(status.account.displayName) muted")
+                AlertSystem.shared?.showMessage(type:.info,msg:"\(status.account.displayName) muted")
             } label: {  Text("Mute Author") }
             
             Button
             {
                 appState.mastio()?.unfollow(account: status.account, done: { result in })
-                Log.logAlert(errorType:.ok,msg:"\(status.account.displayName) unfollowed")
+                AlertSystem.shared?.showMessage(type:.info,msg:"\(status.account.displayName) unfollowed")
             } label: {  Text("Unfollow Author") }
             
             Button
             {
                 NSPasteboard.general.clearContents()
                 NSPasteboard.general.setString(status.content, forType: .string)
-                Log.logAlert(errorType:.ok,msg:"Link copied to pasteboard")
+                AlertSystem.shared?.showMessage(type:.info,msg:"Link copied to pasteboard")
             } label: {  Text("Copy Post Text") }
             
             Button
@@ -540,7 +538,7 @@ struct Post: View
                 {
                     NSPasteboard.general.clearContents()
                     NSPasteboard.general.setString(url.absoluteString, forType: .string)
-                    Log.logAlert(errorType:.ok,msg:"Link copied to pasteboard")
+                    AlertSystem.shared?.showMessage(type:.info,msg:"Link copied to pasteboard")
                 }
             } label: {  Text("Copy Link to Post") }
             
@@ -638,18 +636,19 @@ struct Post: View
 
 func gifimage(urlstring:String,done: @escaping (Image) -> some View) -> some View
 {
-        if let url = URL(string:urlstring)
-        {
-            DispatchQueue.global().async {
-                if let data = try? Data(contentsOf: url)
+    if let url = URL(string:urlstring)
+    {
+        DispatchQueue.global().async {
+            if let data = try? Data(contentsOf: url)
+            {
+                if let nsimage = try? NSImage(gifData: data)
                 {
-                    if let nsimage = try? NSImage(gifData: data)
-                    {
-                       _ = done(Image(nsImage: nsimage))
-                    }
+                   _ = done(Image(nsImage: nsimage))
                 }
             }
         }
+    }
+    
     return Image(systemName: "gear")
 }
 

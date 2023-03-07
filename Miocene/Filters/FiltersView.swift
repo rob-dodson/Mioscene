@@ -62,14 +62,6 @@ struct FiltersView: View
                     .padding()
                 }
             }
-            .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage,done:
-                            {
-                if errorSystem.errorType == .ok
-                {
-                    shouldPresentSheet = false
-                    appState.showHome()
-                }
-            })
             .frame(width: 800, height: 700)
             .toolbar
             {
