@@ -20,7 +20,6 @@ struct EditPost: View
     @EnvironmentObject var errorSystem : ErrorSystem
     @EnvironmentObject var appState: AppState
 
-    @State private var shouldPresentSheet = false
     
     @State private var countColor = Color.green
     @State private var showContentWarning = false
@@ -94,16 +93,12 @@ struct EditPost: View
                             
             }
         }
-        .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage,done: {
-            shouldPresentSheet = false
-        })
         .toolbar
         {
             ToolbarItem
             {
                 PopButton(text: "Cancel", icon: "trash.slash",isSelected: false,help: "Cancel")
                 {
-                    shouldPresentSheet = false
                     done()
                 }
             }
@@ -174,12 +169,11 @@ struct EditPost: View
                              switch result
                              {
                              case .success:
-                                shouldPresentSheet = false
+                              //  shouldPresentSheet = false
                                 alertMediaUploading = false
                                 done()
                              case .failure(let error):
-                                 errorSystem.reportError(type: .postingError,
-                                                        msg: error.localizedDescription)
+                                     Log.logAlert(errorType: .postingError, msg: error.localizedDescription)
                              }
                        }
                 }

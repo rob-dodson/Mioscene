@@ -16,6 +16,13 @@ class ErrorSystem : ObservableObject
     @Published var infoType : MioceneInfo?
     @Published var infoMessage : String = "Unknown Info"
     
+    static var shared : ErrorSystem?
+    
+    init()
+    {
+        ErrorSystem.shared = self
+    }
+    
     func reportError(type:MioceneError,msg:String)
     {
         DispatchQueue.main.async
@@ -56,6 +63,7 @@ enum MioceneInfo : LocalizedError
 enum MioceneError : LocalizedError
 {
     case ok
+    case info
     case unknownError
     case postingError
     case sqlError
@@ -70,6 +78,8 @@ enum MioceneError : LocalizedError
         {
         case .ok:
             return "Ok"
+        case .info:
+            return "Info"
         case .unknownError:
             return "Unknown Error"
         case .postingError:

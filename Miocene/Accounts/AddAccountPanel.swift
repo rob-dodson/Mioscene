@@ -87,8 +87,7 @@ struct AddAccountPanel: View
                         appState.addAccount(server: server)
                         { mioceneerror, msg in
                             step = 1
-                            Log.log(msg: msg)
-                            errorSystem.reportError(type: mioceneerror,msg: msg)
+                            Log.logAlert(errorType: .accountError, msg: msg)
                         }
                     }
                 }
@@ -100,8 +99,7 @@ struct AddAccountPanel: View
                     PopButton(text: "Complete", icon: "arrow.forward",isSelected: true,help:"Complete Account Setup")
                     {
                         step = 2
-                        Log.log(msg: "Account added")
-                        errorSystem.reportError(type: .ok,msg: "Account added")
+                        Log.logAlert(errorType: .ok,msg: "Account added")
                     }
                 }
                 

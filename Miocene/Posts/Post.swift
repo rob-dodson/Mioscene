@@ -451,7 +451,7 @@ struct Post: View
             }
             .padding(.bottom,5)
         }
-        .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage,done: {  })
+      //  .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage,done: {  })
         .messageAlert(title: "Info", show:$errorSystem.infoType, msg: errorSystem.infoMessage, done: {  })
         .sheet(isPresented: $shouldPresentDirectSheet)
         {
@@ -493,17 +493,17 @@ struct Post: View
                     Button  // PopMenuHere?
                     {
                         appState.mastio()?.deletePost(id:status.id)
-                        errorSystem.showMessage(type:.info,msg: "Post deleted")
+                        Log.logAlert(errorType:.info,msg: "Post deleted")
                     } label: { Image(systemName: "speaker.slash.fill"); Text("Delete Post") }
                     
                     Button
                     {
-                        errorSystem.reportError(type: .notimplemented,msg: "Soon!")
+                        Log.logAlert(errorType: .notimplemented, msg: "Pin coming soon")
                     } label: { Image(systemName: "pin"); Text("Pin") }
                     
                     Button
                     {
-                        errorSystem.reportError(type: .notimplemented,msg: "Soon!")
+                        Log.logAlert(errorType: .notimplemented, msg: "Unpin coming soon.")
                     } label: { Image(systemName: "pin.slash"); Text("UnPin") }
                 }
             }
@@ -517,20 +517,20 @@ struct Post: View
             Button
             {
                 appState.mastio()?.mute(account: status.account, done: { result in })
-                errorSystem.showMessage(type:.info,msg: "\(status.account.displayName) muted")
+                Log.logAlert(errorType:.ok,msg:"\(status.account.displayName) muted")
             } label: {  Text("Mute Author") }
             
             Button
             {
                 appState.mastio()?.unfollow(account: status.account, done: { result in })
-                errorSystem.showMessage(type:.info,msg: "\(status.account.displayName) unfollowed")
+                Log.logAlert(errorType:.ok,msg:"\(status.account.displayName) unfollowed")
             } label: {  Text("Unfollow Author") }
             
             Button
             {
                 NSPasteboard.general.clearContents()
                 NSPasteboard.general.setString(status.content, forType: .string)
-                errorSystem.showMessage(type:.info,msg: "Text copied to pasteboard")
+                Log.logAlert(errorType:.ok,msg:"Link copied to pasteboard")
             } label: {  Text("Copy Post Text") }
             
             Button
@@ -540,24 +540,24 @@ struct Post: View
                 {
                     NSPasteboard.general.clearContents()
                     NSPasteboard.general.setString(url.absoluteString, forType: .string)
-                    errorSystem.showMessage(type:.info,msg: "Link copied to pasteboard")
+                    Log.logAlert(errorType:.ok,msg:"Link copied to pasteboard")
                 }
             } label: {  Text("Copy Link to Post") }
             
             
             Button
             {
-                errorSystem.reportError(type: .notimplemented,msg: "Soon!")
+                Log.logAlert(errorType: .notimplemented,msg: "Threading coming soon!")
             } label: {  Text("Show Thread") }
             
             Button
             {
-                errorSystem.reportError(type: .notimplemented,msg:  "Soon!")
+                Log.logAlert(errorType: .notimplemented,msg: "Report Post coming soon!")
             } label: {  Text("Report Post") }
             
             Button
             {
-                errorSystem.reportError(type: .notimplemented,msg:  "Soon!")
+                Log.logAlert(errorType: .notimplemented,msg: "Report User coming soon!")
             } label: {  Text("Report User") }
         }
     }

@@ -37,6 +37,9 @@ struct ContentView: View
                 .frame(minWidth:100,maxHeight: geo.size.height * 1.0)
             }
         }
+        .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage,done:
+        {
+        })
     }
 }
  

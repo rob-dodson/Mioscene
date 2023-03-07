@@ -64,7 +64,7 @@ class MastodonIO : ObservableObject
             }
             else
             {
-                Log.log(msg:"Error getting application: \(result)")
+                Log.logAlert(errorType:.loginError,msg:"Error getting application: \(result)")
             }
         }
     }

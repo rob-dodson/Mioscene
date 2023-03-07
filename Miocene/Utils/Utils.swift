@@ -13,6 +13,13 @@ class Log
 {
     static var fileName : String?
     
+    static func logAlert(errorType:MioceneError,msg:String)
+    {
+        Log.log(msg:msg)
+        ErrorSystem.shared?.reportError(type:errorType, msg: msg)
+    }
+
+
     static func log(msg:String)
     {
        log(msg: msg, rewindfile: false)

@@ -117,15 +117,15 @@ class AppState : ObservableObject
         }
         catch
         {
-            Log.log(msg:"sql error \(error)")
+            Log.logAlert(errorType:.sqlError,msg:"sql error \(error)")
         }
     }
 
     
     func connectMastIOForAccount(localrec:LocalAccountRecord)
     {
-        guard let token = Keys.getFromKeychain(name: localrec.makeKeyChainName()) else { Log.log(msg: "Failed to get a keychain token for \(localrec.desc())"); return }
-        guard let mastio = AppState.mastIOs[localrec.accountKey()] else { Log.log(msg: "Failed to get mastio for \(localrec.desc())"); return}
+        guard let token = Keys.getFromKeychain(name: localrec.makeKeyChainName()) else { Log.logAlert(errorType: .loginError,msg: "Failed to get a keychain token for \(localrec.desc())"); return }
+        guard let mastio = AppState.mastIOs[localrec.accountKey()] else { Log.logAlert(errorType: .loginError,msg: "Failed to get mastio for \(localrec.desc())"); return}
         
         mastio.connect(serverurl: localrec.server, token: token)
         { result in
@@ -138,7 +138,7 @@ class AppState : ObservableObject
             }
             else if let error = result.error
             {
-                Log.log(msg: "error from mastio.connect: \(error)")
+                Log.logAlert(errorType: .loginError,msg: "error from mastio.connect: \(error)")
             }
         }
     }
@@ -191,6 +191,4 @@ class AppState : ObservableObject
             }
         }
     }
-    
-   
 }
