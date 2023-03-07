@@ -21,9 +21,7 @@ enum TabIndex : Int
 class AppState : ObservableObject
 {
     private var currentAccountKey : AccountKey = AccountKey(server: "noserver", username: "nouser")
-    
     private var showAccount : MastodonKit.Account?
-    
     
     @Published var tabIndex : TabIndex = .TimeLine
     @Published var userLoggedIn : Bool = false
@@ -48,20 +46,24 @@ class AppState : ObservableObject
         currentAccountKey = accountKey
     }
     
+    
     func mastio() -> MastodonIO?
     {
         return AppState.mastIOs[currentAccountKey]
     }
+    
     
     func currentLocalAccountRecord() -> LocalAccountRecord?
     {
         return AppState.localAccountRecords[currentAccountKey]
     }
     
+    
     func currentMastodonAccount() -> Account?
     {
         return AppState.userMastAccounts[currentAccountKey]
     }
+    
     
     func showTag(showtag:String)
     {
@@ -82,10 +84,12 @@ class AppState : ObservableObject
         tabIndex = .Accounts
     }
     
+    
     func getShowAccount() -> MastodonKit.Account?
     {
         return showAccount
     }
+    
     
     func loadAccounts()
     {
@@ -124,8 +128,17 @@ class AppState : ObservableObject
     
     func connectMastIOForAccount(localrec:LocalAccountRecord)
     {
-        guard let token = Keys.getFromKeychain(name: localrec.makeKeyChainName()) else { Log.logAlert(errorType: .loginError,msg: "Failed to get a keychain token for \(localrec.desc())"); return }
-        guard let mastio = AppState.mastIOs[localrec.accountKey()] else { Log.logAlert(errorType: .loginError,msg: "Failed to get mastio for \(localrec.desc())"); return}
+        guard let token = Keys.getFromKeychain(name: localrec.makeKeyChainName()) else
+        {
+            Log.logAlert(errorType: .loginError,msg: "Failed to get a keychain token for \(localrec.desc())")
+            return
+        }
+        
+        guard let mastio = AppState.mastIOs[localrec.accountKey()] else
+        {
+            Log.logAlert(errorType: .loginError,msg: "Failed to get mastio for \(localrec.desc())")
+            return
+        }
         
         mastio.connect(serverurl: localrec.server, token: token)
         { result in
@@ -173,10 +186,10 @@ class AppState : ObservableObject
                             AppState.mastIOs[localaccount.accountKey()] = mastio
                             Keys.storeInKeychain(name: localaccount.makeKeyChainName(), value: msg_or_token)
                             
-                                self.setAccount(accountKey: localaccount.accountKey())
-                                AppState.userMastAccounts[localaccount.accountKey()] = account
-                                
-                                done(.ok,"Account stored in db, logged in OK")
+                            self.setAccount(accountKey: localaccount.accountKey())
+                            AppState.userMastAccounts[localaccount.accountKey()] = account
+                            
+                            done(.ok,"Account stored in db, logged in OK")
                         }
                         catch
                         {
