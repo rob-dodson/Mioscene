@@ -186,6 +186,13 @@ struct SettingsView: View
                 let defaults = UserDefaults.standard
                 defaults.set(settings.flagBots, forKey: "flagbots")
             }
+            
+            Toggle("Hide Posts with Content Warning", isOn: $settings.hidePostsWithCW)
+                .onChange(of: settings.hidePostsWithCW)
+            { newValue in
+                let defaults = UserDefaults.standard
+                defaults.set(settings.flagBots, forKey: "hidepostswithcw")
+            }
         }
         .padding()
     }

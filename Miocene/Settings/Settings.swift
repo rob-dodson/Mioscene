@@ -19,6 +19,7 @@ class Settings: ObservableObject
     @Published var showTimelineToolBar = true
     @Published var addMentionsToHome = false
     @Published var flagBots = true
+    @Published var hidePostsWithCW = false
     
     
     var iconSize = 20
@@ -51,6 +52,7 @@ class Settings: ObservableObject
         showTimelineToolBar = defaults.bool(forKey: "showtimelinetoolbar")
         addMentionsToHome = defaults.bool(forKey: "addmentionstohome")
         flagBots = defaults.bool(forKey: "flagbots")
+        hidePostsWithCW = defaults.bool(forKey: "hidepostswithcw")
     }
 }
 

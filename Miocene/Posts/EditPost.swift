@@ -34,8 +34,6 @@ struct EditPost: View
     @StateObject private var pollState = PollState()
     
     
-   
-    
     var body: some View
     {
         Text(getTitle())
@@ -228,14 +226,14 @@ struct EditPost: View
         }
         
         return PopMenu(icon: "eye",selected: $currentSelectedVisibilty, menuItems: menuitems)
-            { item in
-                if let userdata = item.userData
-                {
-                    postVisibility = userdata
-                    currentSelectedVisibilty = postVisibility.rawValue
+        { item in
+            if let userdata = item.userData
+            {
+                postVisibility = userdata
+                currentSelectedVisibilty = postVisibility.rawValue
 
-                }
             }
+        }
     }
 
                                      

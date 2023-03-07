@@ -74,13 +74,16 @@ struct TimeLineView: View
                             ForEach(timelineManger.theStats)
                             { mstat in
                                 
-                                Post(mstat:mstat)
-                                    .padding([.horizontal,.top],5)
-                                    .onAppear
+                                if  !(mstat.status.spoilerText.count > 0 && settings.hidePostsWithCW == true)
                                 {
-                                    if mstat.id == timelineManger.theStats[timelineManger.theStats.count - 1].id
+                                    Post(mstat:mstat)
+                                        .padding([.horizontal,.top],5)
+                                        .onAppear
                                     {
-                                        timelineManger.getOlderStats()
+                                        if mstat.id == timelineManger.theStats[timelineManger.theStats.count - 1].id
+                                        {
+                                            timelineManger.getOlderStats()
+                                        }
                                     }
                                 }
                             }
