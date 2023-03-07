@@ -103,7 +103,7 @@ struct Post: View
                     //
                     // names
                     //
-                    VStack(alignment: .leading)
+                    VStack(alignment: .leading,spacing: -2)
                     {
                         HStack
                         {
@@ -122,16 +122,15 @@ struct Post: View
                                     .foregroundColor(settings.theme.accentColor)
                                     .font(settings.font.footnote)
                             }
-                            
-                            Text("@\(status.account.acct)")
-                                .font(settings.font.subheadline)
-                                .foregroundColor(settings.theme.minorColor)
-                                .onTapGesture
-                            {
-                                appState.showAccount(showaccount:status.account)
-                            }
                         }
                         
+                        Text("@\(status.account.acct)")
+                            .font(settings.font.subheadline)
+                            .foregroundColor(settings.theme.minorColor)
+                            .onTapGesture
+                        {
+                            appState.showAccount(showaccount:status.account)
+                        }
                         
                         if let appname = status.application?.name
                         {
