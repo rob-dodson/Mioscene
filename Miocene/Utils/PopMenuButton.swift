@@ -228,6 +228,15 @@ struct PopButtonColor: View
                 Text(text)
                     .font(settings.font.footnote)
                     .foregroundColor(textColor)
+                    .onTapGesture
+                    {
+                        tap = true
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2)
+                        {
+                            tap = false
+                            ontap()
+                        }
+                    }
             }
         }
     }
