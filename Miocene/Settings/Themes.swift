@@ -19,6 +19,7 @@ struct Theme : Identifiable
         case link = "link"
         case block = "block"
         case ownpost = "ownpost"
+        case appback = "appback"
         
         var id: Self { return self }
     }
@@ -33,6 +34,7 @@ struct Theme : Identifiable
     var linkColor : Color
     var blockColor : Color
     var ownpostColor : Color
+    var appbackColor : Color
 
     init(name: String, colors: Dictionary<String, Color>, id: UUID = UUID())
     {
@@ -47,6 +49,7 @@ struct Theme : Identifiable
         linkColor = colors[colorName.link.rawValue] ?? Color.blue
         blockColor = colors[colorName.block.rawValue] ?? Color.init(red: 0.2, green: 0.2, blue: 0.2)
         ownpostColor = colors[colorName.ownpost.rawValue] ?? Color.gray
+        appbackColor = colors[colorName.appback.rawValue] ?? Color.gray
 
     }
 }
@@ -59,7 +62,7 @@ class Themes
     init()
     {
         themeslist = Array<Theme>()
-        let themeNames = ["Hyper","Serious"]
+        let themeNames = ["Hyper","Midnight"]
         
         //
         // get colors from Assests.xcasssets
@@ -73,7 +76,7 @@ class Themes
                           Theme.colorName.link.rawValue:Color("link\(index)"),
                           Theme.colorName.block.rawValue:Color("block\(index)"),
                           Theme.colorName.ownpost.rawValue:Color("ownpost\(index)"),
-
+                          Theme.colorName.appback.rawValue:Color("appback\(index)"),
                            ]
             
             let theme = Theme(name: themeNames[index], colors: colors)
