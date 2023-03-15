@@ -599,14 +599,27 @@ class MastodonIO : ObservableObject
         }
     }
     
+    /*
+    @available(*, renamed: "getNewerStatuses(timeline:id:tag:)")
+    func getNewerStatuses(timeline:TimeLine,id:String,tag:String,done: @escaping ([MStatus],Bool) -> Void)
+    {
+        Task {
+            let result = await getNewerStatuses(timeline: timeline, id: id, tag: tag)
+            done(result.0, result.1)
+        }
+    }
+    */
     
-    func getNewerStatuses(timeline:TimeLine,id:String,tag:String,done: @escaping ([MStatus],Bool) -> Void) 
+    func getNewerStatuses(timeline:TimeLine,id:String,tag:String) async -> (newstats : [MStatus], morestats : Bool)
     {
         let request = makeRequest(timeline: timeline,range:.min(id: id, limit: requestSize),tag:tag)
         
-        getTimeline(request: request)
-        { statuses, pagination in
-            done(statuses, pagination == nil ? false : true) // Fix why why pagination return max?
+        return await withCheckedContinuation
+        { continuation in
+            getTimeline(request: request)
+            { statuses, pagination in
+                continuation.resume(returning: (statuses, pagination == nil ? false : true)) // Fix why why pagination return max?
+            }
         }
     }
     

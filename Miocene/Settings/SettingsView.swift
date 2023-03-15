@@ -148,7 +148,7 @@ struct SettingsView: View
     {
         return VStack(alignment: .leading)
         {
-            Text("Behaviors")
+            Text("Filters")
                 .font(settings.font.title)
                 .foregroundColor(settings.theme.accentColor)
             

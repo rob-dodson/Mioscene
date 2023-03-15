@@ -4,6 +4,7 @@
 //
 //  Created by Robert Dodson on 1/3/23.
 //
+
 import SwiftUI
 
 
@@ -41,7 +42,6 @@ class AlertSystem : ObservableObject
     }
 }
 
-
 enum MioceneInfo : LocalizedError
 {
     case info
@@ -75,26 +75,25 @@ enum MioceneError : LocalizedError
     {
         switch self
         {
-            case .ok:
-                return "Ok"
-            case .unknownError:
-                return "Unknown Error"
-            case .postingError:
-                return "Posting Error"
-            case .sqlError:
-                return "Database Error"
-            case .accountError:
-                return "Account Error"
-            case .loginError:
-                return "Login Error"
-            case .registrationError:
-                return "Registration Error"
-            case .notimplemented:
-                return "Sorry, Not implemented yet"
+        case .ok:
+            return "Ok"
+        case .unknownError:
+            return "Unknown Error"
+        case .postingError:
+            return "Posting Error"
+        case .sqlError:
+            return "Database Error"
+        case .accountError:
+            return "Account Error"
+        case .loginError:
+            return "Login Error"
+        case .registrationError:
+            return "Registration Error"
+        case .notimplemented:
+            return "Sorry, Not implemented yet"
         }
     }
 }
-
 
 extension View
 {

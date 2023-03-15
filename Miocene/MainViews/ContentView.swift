@@ -13,7 +13,8 @@ struct ContentView: View
 {
     @EnvironmentObject var settings : Settings
     @EnvironmentObject var errorSystem : AlertSystem
-    @EnvironmentObject var appState: AppState
+    @EnvironmentObject var appState : AppState
+
     
     var body: some View
     {
@@ -22,21 +23,24 @@ struct ContentView: View
             GeometryReader
             { geo in
                 
-                VStack
+                HStack(alignment: .top,spacing: 10)
                 {
                     CustomTopTabBar(tabIndex: $appState.tabIndex)
                     
+                    Rectangle().frame(width:0.5,height: geo.size.height).foregroundColor(settings.theme.minorColor)
+                    
                     switch appState.tabIndex
                     {
-                        case .TimeLine: TimeLineView(timelineManger: TimelineManager(settings: settings, appState: appState))
+                        case .TimeLine: TimeLineView(timelineManger: TimelineManager())
                         case .Accounts: AccountView()
                         case .Search:  SearchView()
                         case .Settings: SettingsView()
                     }
                 }
-                .frame(minWidth:100,maxHeight: geo.size.height * 1.0)
+                .frame(minWidth:100,maxHeight: geo.size.height)
             }
         }
+        .background(settings.theme.appbackColor)
         .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage,done: {})
         .messageAlert(title: "Info", show:$errorSystem.infoType, msg: errorSystem.infoMessage, done: {})
     }
@@ -54,7 +58,7 @@ struct CustomTopTabBar: View
     {
         Spacer()
         
-        HStack(alignment: .center,spacing: 40)
+        VStack(alignment: .center,spacing: 30)
         {
             PopButton(text: "Timelines",icon:"house", isSelected: tabIndex == .TimeLine ? true : false,help:"Show Timelines")
                 { onButtonTapped(index: .TimeLine) }
@@ -68,8 +72,8 @@ struct CustomTopTabBar: View
             PopButton(text: "Settings",icon:"gear", isSelected:tabIndex == .Settings ? true : false,help:"Settings")
                 { onButtonTapped(index: .Settings) }
         }
-        .padding(.bottom,5)
-        .border(width: 1, edges: [.bottom], color: .black)
+        .padding(.top,15)
+        //.border(width: 1, edges: [.bottom], color: .black)
     }
     
     
@@ -82,5 +86,27 @@ struct CustomTopTabBar: View
 
 
 
-
+/*
+ 
+ var body: some View
+ {
+ GeometryReader
+ { geo in
+ VStack(alignment: .leading)
+ {
+ NavigationStack
+ {
+ NavigationLink { TimeLineView(timelineManger: TimelineManager()) } label: { Text("Timeline") }
+ NavigationLink { AccountView() } label: { Text("Accounts") }
+ NavigationLink { SearchView() } label: { Text("Search") }
+ NavigationLink { SettingsView() } label: { Text("Settings") }
+ }
+ }
+ .frame(width: geo.size.width,height:geo.size.height)
+ .background(settings.theme.appbackColor)
+ .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage,done: {})
+ .messageAlert(title: "Info", show:$errorSystem.infoType, msg: errorSystem.infoMessage, done: {})
+ }
+ }
+ */
 

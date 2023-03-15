@@ -32,11 +32,13 @@ class AppState : ObservableObject
     static var localAccountRecords = Dictionary<AccountKey,LocalAccountRecord>()
     static var mastIOs = Dictionary<AccountKey,MastodonIO>()
     static var userMastAccounts = Dictionary<AccountKey,MastodonKit.Account>()
-    
+    static var shared : AppState!
     
     init()
     {
         Log.log(msg:"Starting up...",rewindfile:true)
+
+        AppState.shared = self
         loadAccounts()
     }
     

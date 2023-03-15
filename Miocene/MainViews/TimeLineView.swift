@@ -27,15 +27,17 @@ struct TimeLineView: View
     
     func mainView() -> some View
     {
+        GeometryReader
+        { geo in
         VStack(alignment: .center)
-        {
+            {
                 HStack(alignment: .center )
                 {
-                    HStack()
-                   {
-                        toolbarToggleButton()
-                   }
-                   .frame(alignment: .leading)
+                   //HStack()
+                   // {
+                   //     toolbarToggleButton()
+                   // }
+                   // .frame(alignment: .leading)
                     
                     HStack(spacing: 20)
                     {
@@ -45,12 +47,14 @@ struct TimeLineView: View
                         refreshButton()
                         NewPostButton()
                     }
+                    .padding(.top,20)
                     .opacity(settings.showTimelineToolBar == true ? 1.0 : 0.0)
                     .frame(maxHeight:settings.showTimelineToolBar == true ? 55 : 5)
                     .animation(.easeInOut(duration: 0.25))
                 }
                 
-                SpacerLine(color: settings.theme.minorColor)
+                //  SpacerLine(color: settings.theme.minorColor)
+                Rectangle().frame(width:geo.size.width - 15,height: 0.5).foregroundColor(settings.theme.minorColor)
                 
                 if appState.selectedTimeline == .tag
                 {
@@ -103,6 +107,7 @@ struct TimeLineView: View
                         timelineManger.setTimelineRequestAndFetch(request: TimelineRequest(timelineWhen: .current, timeLine: .home, tag: "")) // get this request from defaults. last used.
                     }
                 }
+            }
         }
     }
     

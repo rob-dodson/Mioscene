@@ -216,10 +216,14 @@ struct PopButtonColor: View
                 .onTapGesture
                 {
                     tap = true
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2)
+                    Task
                     {
-                        tap = false
-                        ontap()
+                        try? await Task.sleep(for:.milliseconds(200))
+                        await MainActor.run
+                        {
+                            tap = false
+                            ontap()
+                        }
                     }
                 }
             
@@ -231,10 +235,14 @@ struct PopButtonColor: View
                     .onTapGesture
                     {
                         tap = true
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2)
+                        Task
                         {
-                            tap = false
-                            ontap()
+                            try? await Task.sleep(for:.milliseconds(200))
+                            await MainActor.run
+                            {
+                                tap = false
+                                ontap()
+                            }
                         }
                     }
             }
@@ -269,10 +277,13 @@ struct PopTextButton: View
                 .onTapGesture
             {
                 tap = true
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2)
+                Task
                 {
-                    tap = false
-                    ontap(text)
+                    await MainActor.run
+                    {
+                        tap = false
+                        ontap(text)
+                    }
                 }
             }
         }

@@ -144,9 +144,6 @@ struct EditPost: View
                 visibilityMenu()
             }
             
-            
-            
-            
             ToolbarItem(placement: .primaryAction)
             {
                 PopButton(text: "Post", icon: "paperplane",isSelected: true,help:"Send Post")
@@ -180,6 +177,7 @@ struct EditPost: View
             }
         }
         .frame(height: showPoll == true ? pollViewSize() : 375)
+        .background(settings.theme.appbackColor)
     }
     
     

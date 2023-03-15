@@ -13,14 +13,15 @@ class Settings: ObservableObject
 {
     @Published var theme : Theme
     @Published var font : MFont
-    @Published var hideStatusButtons : Bool = false
-    @Published var showCards : Bool = false
-    @Published var hideIconText : Bool = false
-    @Published var showTimelineToolBar = true
-    @Published var addMentionsToHome = false
-    @Published var flagBots = true
-    @Published var hidePostsWithCW = false
+    @Published var hideStatusButtons : Bool  = false
+    @Published var showCards : Bool          = false
+    @Published var hideIconText : Bool       = false
+    @Published var showTimelineToolBar       = true
+    @Published var addMentionsToHome         = false
+    @Published var flagBots                  = true
+    @Published var hidePostsWithCW           = false
     
+    static var shared : Settings!
     
     var iconSize = 20
     var themes = Themes()
@@ -28,8 +29,8 @@ class Settings: ObservableObject
     init()
     {
         let defaults = UserDefaults.standard
-        
         theme = themes.themeslist[0]
+        
         if let themename = defaults.string(forKey: "theme")
         {
             for tmptheme in themes.themeslist
@@ -53,6 +54,8 @@ class Settings: ObservableObject
         addMentionsToHome = defaults.bool(forKey: "addmentionstohome")
         flagBots = defaults.bool(forKey: "flagbots")
         hidePostsWithCW = defaults.bool(forKey: "hidepostswithcw")
+        
+        Settings.shared = self
     }
 }
 

@@ -62,24 +62,24 @@ class TimelineRequest
 
 class TimelineManager : ObservableObject
 {
-    @State var settings: Settings
-    @State var appState: AppState
-    
     //
     // TimeLineView uses these in it's ScrollView ===
     //
     @Published var theStats = [MStatus]()
     @Published var theNotifications = [MNotification]()
 
-    
+    @State private var settings: Settings
+    @State private var appState: AppState
     @State private var fetching : Bool = false
     private var currentRequest : TimelineRequest? //(timelineWhen: .current, timeLine: .home, tag: "")
     @State private var timelineTimer : Timer?
     
-    init(settings: Settings, appState: AppState)
+    
+    
+    init()
     {
-        self.settings = settings
-        self.appState = appState
+        self.settings = Settings.shared
+        self.appState = AppState.shared
     }
     
     
@@ -363,23 +363,33 @@ class TimelineManager : ObservableObject
     }
    
     
+    @available(*, renamed: "getNewStatuses(timelineRequest:)")
     private func getNewStatuses(timelineRequest:TimelineRequest, done: @escaping ([MStatus]) -> Void)
     {
-        guard var newid = timelineRequest.firstId else { return }
+        Task
+        {
+            let result = await getNewStatuses(timelineRequest: timelineRequest)
+            done(result)
+        }
+    }
+    
+    
+    private func getNewStatuses(timelineRequest:TimelineRequest) async -> [MStatus]
+    {
+        guard var newid = timelineRequest.firstId else { return [MStatus]() }
         
         var retstats = [MStatus]()
         var nomore = false
         
         while(nomore == false)
         {
-            let group = DispatchGroup()
-            group.setTarget(queue:.global(qos: .background))
-            group.enter()
+            let result = await appState.mastio()?.getNewerStatuses(timeline: timelineRequest.timeLine, id: newid, tag: timelineRequest.tag)
             
-            appState.mastio()?.getNewerStatuses(timeline: timelineRequest.timeLine, id: newid, tag:timelineRequest.tag)
-            { newstats,morestats in
-                
-                print("NEW \(newstats.count) more:\(morestats)")
+            if let newstats = result?.newstats
+            {
+                let morestats = result?.morestats
+                print("new \(newstats.count) more:\(morestats ?? false)")
+
                 if newstats.count > 0
                 {
                     retstats = retstats + newstats
@@ -393,20 +403,16 @@ class TimelineManager : ObservableObject
                 {
                     newid = (newstats.first?.status.id)!
                 }
-                
-                group.leave()
             }
-            
-            group.wait()
         }
         
         retstats = retstats + self.theStats
-        if retstats.count > 150
+        if retstats.count > 250
         {
             print("removing last 50 from stats")
             retstats.removeLast(50)
         }
-        done(retstats)
+        return retstats
     }
     
 }
