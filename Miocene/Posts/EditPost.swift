@@ -208,8 +208,8 @@ struct EditPost: View
         }
         else if postVisibility == .direct
         {
-            DispatchQueue.main.async
-            {
+            Task
+            { @MainActor in
                 currentSelectedVisibilty = MastodonKit.Visibility.direct.rawValue
             }
             menuitems = [PopMenuItem(text: MastodonKit.Visibility.direct.rawValue,help:help,userData:MastodonKit.Visibility.direct)]

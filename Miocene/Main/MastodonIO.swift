@@ -96,8 +96,8 @@ class MastodonIO : ObservableObject
 
                 guard let authURL = URL(string: oauthhurl) else { done(.loginError,"oauth url error"); return }
                 
-                DispatchQueue.main.async
-                {
+                Task
+                { @MainActor in
                     let session = ASWebAuthenticationSession(url: authURL, callbackURLScheme: scheme)
                     { callbackURL, error in
                         

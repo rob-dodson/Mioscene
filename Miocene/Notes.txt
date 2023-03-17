@@ -2,6 +2,11 @@
 # add additional fonts
 defaults write shyfrogproductions.com.Miocene addfonts -array Myriad Courier
 
+I didn’t know about
+Task { @MainActor in
+Thanks for that!
+You’re welcome! Do note that does something different from await MainActor.run { }
+
 
 /*
  

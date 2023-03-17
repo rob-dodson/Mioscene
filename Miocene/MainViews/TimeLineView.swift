@@ -186,8 +186,8 @@ struct TimeLineView: View
         }
         popitems.append(PopMenuItem<AccountKey>(text: "Add Account",help:"Add Account",userData: nil))
         
-        DispatchQueue.main.async
-        {
+        Task
+        { @MainActor in
             if let localrec = appState.currentLocalAccountRecord()
             {
                 currentAccountServer = localrec.server

@@ -183,8 +183,8 @@ class TimelineManager : ObservableObject
                    
                     self.currentRequest = timelineRequest
                    
-                    DispatchQueue.main.async
-                    {
+                    Task
+                    { @MainActor in
                         self.theStats = newstats
                     }
                     self.fetching = false
@@ -201,8 +201,8 @@ class TimelineManager : ObservableObject
                 { newstats in
                     self.currentRequest = timelineRequest
                     
-                    DispatchQueue.main.async
-                    {
+                    Task
+                    { @MainActor in
                         self.theStats = newstats
                     }
                     self.fetching = false
@@ -216,8 +216,8 @@ class TimelineManager : ObservableObject
         appState.mastio()?.getNotifications(mentionsOnly:timelineRequest.timeLine == .mentions ? true : false)
         { mnotes in
             
-            DispatchQueue.main.async
-            {
+            Task
+            { @MainActor in
                 self.theNotifications = mnotes
             }
         }

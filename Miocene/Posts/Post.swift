@@ -637,7 +637,8 @@ func gifimage(urlstring:String,done: @escaping (Image) -> some View) -> some Vie
 {
     if let url = URL(string:urlstring)
     {
-        DispatchQueue.global().async {
+        Task
+        { @MainActor in
             if let data = try? Data(contentsOf: url)
             {
                 if let nsimage = try? NSImage(gifData: data)

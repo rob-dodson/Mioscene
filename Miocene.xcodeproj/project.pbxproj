@@ -114,7 +114,6 @@
 			isa = PBXGroup;
 			children = (
 				AE11F8BE299AE55C0007D0FA /* MastodonKit-Rob */,
-				AEE6EB772985CBC300463A71 /* Notes.txt */,
 				AEAFA2DE297A3FD900970F40 /* Localizable.strings */,
 				AE06EBEE294D16BB006CAB67 /* Miocene */,
 				AE06EBED294D16BB006CAB67 /* Products */,
@@ -133,6 +132,7 @@
 		AE06EBEE294D16BB006CAB67 /* Miocene */ = {
 			isa = PBXGroup;
 			children = (
+				AEE6EB772985CBC300463A71 /* Notes.txt */,
 				AED3518C299E761700082074 /* Info.plist */,
 				AE9CCCF529959A9B00FB3449 /* Main */,
 				AEAFA2DF297B279E00970F40 /* MainViews */,

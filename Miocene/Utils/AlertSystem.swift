@@ -25,8 +25,8 @@ class AlertSystem : ObservableObject
     
     func reportError(type:MioceneError,msg:String)
     {
-        DispatchQueue.main.async
-        {
+        Task
+        { @MainActor in
             self.errorMessage = msg
             self.errorType = type
         }
@@ -34,8 +34,8 @@ class AlertSystem : ObservableObject
     
     func showMessage(type:MioceneInfo,msg:String)
     {
-        DispatchQueue.main.async
-        {
+        Task
+        { @MainActor in
             self.infoMessage = msg
             self.infoType = .info
         }
