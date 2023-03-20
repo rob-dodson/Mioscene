@@ -277,7 +277,7 @@ struct AccountLarge: View
                 }
             }
             
-            if relationship != nil
+            if relationship != nil && relationship?.id != appState.currentMastodonAccount()?.id
             {
                 VStack
                 {
