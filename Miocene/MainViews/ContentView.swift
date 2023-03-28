@@ -12,7 +12,7 @@ import MastodonKit
 struct ContentView: View
 {
     @EnvironmentObject var settings : Settings
-    @EnvironmentObject var errorSystem : AlertSystem
+    @EnvironmentObject var alertSystem : AlertSystem
     @EnvironmentObject var appState : AppState
 
     
@@ -41,8 +41,8 @@ struct ContentView: View
             }
         }
         .background(settings.theme.appbackColor)
-        .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage,done: {})
-        .messageAlert(title: "Info", show:$errorSystem.infoType, msg: errorSystem.infoMessage, done: {})
+        .errorAlert(error: $alertSystem.errorType,msg:alertSystem.errorMessage,done: {})
+        .messageAlert(title: "Info", show:$alertSystem.infoType, msg: alertSystem.infoMessage, done: {})
     }
 }
  
@@ -104,8 +104,8 @@ struct CustomTopTabBar: View
  }
  .frame(width: geo.size.width,height:geo.size.height)
  .background(settings.theme.appbackColor)
- .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage,done: {})
- .messageAlert(title: "Info", show:$errorSystem.infoType, msg: errorSystem.infoMessage, done: {})
+ .errorAlert(error: $alertSystem.errorType,msg:alertSystem.errorMessage,done: {})
+ .messageAlert(title: "Info", show:$alertSystem.infoType, msg: alertSystem.infoMessage, done: {})
  }
  }
  */

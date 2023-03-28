@@ -18,7 +18,7 @@ struct Post: View
     
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
-    @EnvironmentObject var errorSystem : AlertSystem
+    @EnvironmentObject var alertSystem : AlertSystem
     
     @State private var showSensitiveContent : Bool = false
     @State private var showContentWarning : Bool = false

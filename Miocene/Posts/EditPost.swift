@@ -17,7 +17,7 @@ struct EditPost: View
     var done: () -> Void
     
     @EnvironmentObject var settings: Settings
-    @EnvironmentObject var errorSystem : AlertSystem
+    @EnvironmentObject var alertSystem : AlertSystem
     @EnvironmentObject var appState: AppState
 
     

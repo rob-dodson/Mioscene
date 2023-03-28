@@ -13,7 +13,7 @@ struct AddAccountPanel: View
     var done : () -> Void
     
     @EnvironmentObject var settings: Settings
-    @EnvironmentObject var errorSystem : AlertSystem
+    @EnvironmentObject var alertSystem : AlertSystem
     @EnvironmentObject var appState : AppState
     
     @State private var server : String = "shyfrog.masto.host"
@@ -55,9 +55,9 @@ struct AddAccountPanel: View
                 .symbolRenderingMode(.multicolor)
             }
         }
-        .errorAlert(error: $errorSystem.errorType,msg:errorSystem.errorMessage)
+        .errorAlert(error: $alertSystem.errorType,msg:alertSystem.errorMessage)
         {
-            if errorSystem.errorType == .ok
+            if alertSystem.errorType == .ok
             {
                 appState.showHome()
                 done()
