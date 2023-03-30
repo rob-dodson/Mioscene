@@ -230,6 +230,7 @@ struct PopButtonColor: View
             if settings.hideIconText == false
             {
                 Text(text)
+                    .textSelection(.disabled)
                     .font(settings.font.footnote)
                     .foregroundColor(textColor)
                     .onTapGesture
@@ -269,6 +270,7 @@ struct PopTextButton: View
         VStack(alignment: .center,spacing: 3)
         {
             Text(text)
+                .textSelection(.disabled)
                 .font(font)
                 .foregroundColor(tap ? settings.theme.accentColor : settings.theme.minorColor)
                 .scaleEffect(tap ? 1.1 : 1)
