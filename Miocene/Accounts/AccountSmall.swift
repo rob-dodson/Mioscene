@@ -48,6 +48,43 @@ struct AccountSmall: View
                         Text("@\(account.acct)")
                             .font(settings.font.subheadline)
                             .foregroundColor(settings.theme.minorColor)
+                        
+                        if let fields = account.fields
+                        {
+                            if fields.count > 0
+                            {
+                                ForEach(fields.indices, id:\.self)
+                                { index in
+                                    
+                                    if fields[index].verification != nil
+                                    {
+                                        HStack
+                                        {
+                                            Text("\(fields[index].name):")
+                                                .foregroundColor(settings.theme.minorColor)
+                                                .font(settings.font.subheadline)
+                                            
+                                            if let nsAttrString = fields[index].value.htmlAttributedString(color:settings.theme.bodyColor,font:settings.font.body)
+                                            {
+                                                Text(AttributedString(nsAttrString))
+                                                    .textSelection(.enabled)
+                                                    .fixedSize(horizontal: false, vertical: true) // make the text wrap
+                                                
+                                                
+                                                if fields[index].verification != nil
+                                                {
+                                                    Image(systemName: "checkmark").foregroundColor(.green)
+                                                }
+                                            }
+                                            else
+                                            {
+                                                Text(fields[index].value)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                     .onTapGesture
                     {
