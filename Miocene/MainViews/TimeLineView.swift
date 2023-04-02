@@ -11,8 +11,7 @@ struct TimeLineView: View
 {
     @EnvironmentObject var settings: Settings
     @EnvironmentObject var appState: AppState
-    
-    @StateObject var timelineManger : TimelineManager
+    @EnvironmentObject var timelineManger : TimelineManager
     
     @State private var presentAddAccountSheet = false
     @State private var currentAccountServer = "Add Account"
@@ -29,7 +28,7 @@ struct TimeLineView: View
     {
         GeometryReader
         { geo in
-        VStack(alignment: .center)
+            VStack(alignment: .center)
             {
                 HStack(alignment: .center )
                 {

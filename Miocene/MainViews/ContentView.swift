@@ -14,7 +14,8 @@ struct ContentView: View
     @EnvironmentObject var settings : Settings
     @EnvironmentObject var alertSystem : AlertSystem
     @EnvironmentObject var appState : AppState
-
+    @EnvironmentObject var timeLineManager : TimelineManager
+    
     
     var body: some View
     {
@@ -31,7 +32,7 @@ struct ContentView: View
                     
                     switch appState.tabIndex
                     {
-                        case .TimeLine: TimeLineView(timelineManger: TimelineManager())
+                        case .TimeLine: TimeLineView()
                         case .Accounts: AccountView()
                         case .Search:  SearchView()
                         case .Settings: SettingsView()

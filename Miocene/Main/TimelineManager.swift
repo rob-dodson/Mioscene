@@ -88,7 +88,7 @@ class TimelineManager : ObservableObject
     //
     func start()
     {
-        print("START TLM")
+        print("START TLM LOOP")
         loop()
     }
     

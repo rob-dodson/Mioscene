@@ -10,15 +10,16 @@ import SwiftUI
 @main
 struct MioceneApp: App
 {
-    @StateObject var settings      = Settings()
-    @StateObject var alertSystem   = AlertSystem()
-    @StateObject var appState      = AppState()
+    @StateObject var settings          = Settings()
+    @StateObject var alertSystem       = AlertSystem()
+    @StateObject var appState          = AppState()
+    @StateObject var timeLineManager   = TimelineManager()
     
     var body: some Scene
     {
         WindowGroup
         {
-            ContentView().environmentObject(settings).environmentObject(alertSystem).environmentObject(appState)
+            ContentView().environmentObject(settings).environmentObject(alertSystem).environmentObject(appState).environmentObject(timeLineManager)
         }
     }
 }
