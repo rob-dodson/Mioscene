@@ -42,8 +42,8 @@ struct ContentView: View
             }
         }
         .background(settings.theme.appbackColor)
-        .errorAlert(error: $alertSystem.errorType,msg:alertSystem.errorMessage,done: {})
-        .messageAlert(title: "Info", show:$alertSystem.infoType, msg: alertSystem.infoMessage, done: {})
+        .errorAlert(error: $alertSystem.errorType,msg:alertSystem.errorMessage,done: {}) // All error alerts get rendered here.
+        .messageAlert(title: "Info", show:$alertSystem.infoType, msg: alertSystem.infoMessage, done: {}) // All message alerts get rendered here.
     }
 }
  
@@ -74,7 +74,6 @@ struct CustomTopTabBar: View
                 { onButtonTapped(index: .Settings) }
         }
         .padding(.top,15)
-        //.border(width: 1, edges: [.bottom], color: .black)
     }
     
     

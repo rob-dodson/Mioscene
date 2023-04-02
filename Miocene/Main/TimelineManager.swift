@@ -11,15 +11,15 @@ import SwiftUI
 
 enum TimeLine : String,CaseIterable,Identifiable,Equatable
 {
-    case custom = "Custom",
-         home = "Home",
-         localTimeline = "Local Timeline",
-         publicTimeline = "Public Timeline",
-         tag = "Tag",
-         favorites = "Favorites",
-         bookmarks = "Bookmarks",
-         notifications = "All Notifications",
-         mentions = "Mentions Only"
+    case custom          = "Custom",
+         home            = "Home",
+         localTimeline   = "Local Timeline",
+         publicTimeline  = "Public Timeline",
+         tag             = "Tag",
+         favorites       = "Favorites",
+         bookmarks       = "Bookmarks",
+         notifications   = "All Notifications",
+         mentions        = "Mentions Only"
     
     var id: Self { self }
 }
@@ -321,7 +321,6 @@ class TimelineManager : ObservableObject
                     done(stats)
                 }
         }
-        
     }
     
     
