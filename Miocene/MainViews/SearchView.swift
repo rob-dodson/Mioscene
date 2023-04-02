@@ -26,17 +26,16 @@ struct SearchView: View
                 TextField("@name, #hashtag, or anything", text: $searchTerm)
                     .padding()
                     .font(settings.font.title)
-                
-                Button("Search")
-                {
-                    results = nil
-                    appState.mastio()?.search(searchTerm: searchTerm)
-                    { theresults in
-                        results = theresults
+                    .onSubmit
+                    {
+                        onsubmit()
                     }
+                
+                PopButton(text: "Load", icon: "return", isSelected: true,help:"Load Tag Timeline")
+                {
+                    onsubmit()
                 }
                 .padding([.bottom,.trailing])
-                .keyboardShortcut(.defaultAction)
             }
             
             SpacerLine(color: settings.theme.minorColor)
@@ -77,6 +76,15 @@ struct SearchView: View
         }
     }
     
+    
+    func onsubmit()
+    {
+        results = nil
+        appState.mastio()?.search(searchTerm: searchTerm)
+        { theresults in
+            results = theresults
+        }
+    }
     
     func accountview(accounts:[Account]) -> some View
     {
