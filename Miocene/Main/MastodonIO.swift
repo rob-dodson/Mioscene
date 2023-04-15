@@ -616,6 +616,7 @@ class MastodonIO : ObservableObject
         
         return await withCheckedContinuation
         { continuation in
+            
             getTimeline(request: request)
             { statuses, pagination in
                 continuation.resume(returning: (statuses, pagination == nil ? false : true)) // Fix why why pagination return max?
@@ -644,6 +645,7 @@ class MastodonIO : ObservableObject
                     
                 case .failure(let error):
                     Log.log(msg:"error getting statuses \(error)")
+                    done(returnstats,nil)
             }
         }
     }
