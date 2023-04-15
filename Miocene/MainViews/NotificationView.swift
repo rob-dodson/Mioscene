@@ -20,16 +20,11 @@ struct NotificationView: View
     {
         let note = mnotification.notification
         
-        GroupBox()
+        VStack
         {
-            VStack
+            if let status = mnotification.notification.status
             {
-                if let status = mnotification.notification.status
-                {
-                    let mstatus = MStatus(status:status)
-                    
-                    Post(mstat: mstatus,notification: note)
-                }
+                Post(mstat: MStatus(status:status),notification: note)
             }
         }
         .contextMenu

@@ -72,9 +72,11 @@ struct Post: View
                     
                     AccountSmall(account: note.account)
                 }
-                .font(settings.font.headline)
+                .font(settings.font.footnote)
                 .foregroundColor(settings.theme.accentColor)
+                .padding(.bottom)
             }
+
             
             HStack(alignment: .top)
             {
@@ -581,6 +583,7 @@ struct Post: View
             calcDate(status: status)
         }
     }
+    
     
     func calcDate(status:Status)
     {

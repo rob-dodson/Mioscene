@@ -64,7 +64,7 @@ struct AccountSmall: View
                                                 .foregroundColor(settings.theme.minorColor)
                                                 .font(settings.font.subheadline)
                                             
-                                            if let nsAttrString = fields[index].value.htmlAttributedString(color:settings.theme.bodyColor,font:settings.font.body)
+                                            if let nsAttrString = fields[index].value.htmlAttributedString(color:settings.theme.bodyColor,font:settings.font.title)
                                             {
                                                 Text(AttributedString(nsAttrString))
                                                     .textSelection(.enabled)
