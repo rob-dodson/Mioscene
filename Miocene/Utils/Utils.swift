@@ -167,6 +167,7 @@ extension String
                 }
                 a {
                     color: \(linkColor.hexaRGB ?? "#000088");
+                     text-decoration: none;
                 }
             </style>
           </head>
