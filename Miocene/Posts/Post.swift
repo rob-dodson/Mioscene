@@ -70,7 +70,7 @@ struct Post: View
                             Text("\(textstr)")
                     }
                     
-                    AccountSmall(account: note.account)
+                    AccountSmall(account: note.account,showDetails: false)
                 }
                 .font(settings.font.footnote)
                 .foregroundColor(settings.theme.accentColor)

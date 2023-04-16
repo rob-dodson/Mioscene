@@ -15,6 +15,7 @@ struct AccountSmall: View
     @EnvironmentObject var appState: AppState
     
     @State var account : MastodonKit.Account
+    @State var showDetails : Bool
     
     var body: some View
     {
@@ -48,6 +49,23 @@ struct AccountSmall: View
                         Text("@\(account.acct)")
                             .font(settings.font.subheadline)
                             .foregroundColor(settings.theme.minorColor)
+                        
+                        if showDetails == true
+                        {
+                            HStack
+                            {
+                                VStack
+                                {
+                                    Text("\(account.statusesCount)")
+                                    Text("Posts")
+                                }
+                                VStack
+                                {
+                                    Text("\(account.followersCount)")
+                                    Text("Followers")
+                                }
+                            }
+                        }
                         
                         if let fields = account.fields
                         {
