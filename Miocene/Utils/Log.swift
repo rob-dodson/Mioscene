@@ -26,8 +26,6 @@ class Log
     
     static func log(msg:String, rewindfile:Bool)
     {
-        print("debug: \(msg)")
-        
         do
         {
             if fileName == nil
@@ -44,7 +42,9 @@ class Log
             
             if let filepath = fileName
             {
-                let logmsg = "\(Date().description): \(msg)"
+                let logmsg = "\(Date().formatted(date:.numeric,time:.complete)): \(msg)"
+                
+                print("\(logmsg)")
                 
                 if rewindfile == true
                 {
