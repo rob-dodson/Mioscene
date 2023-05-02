@@ -260,6 +260,7 @@ struct PopTextButton: View
     
     let text : String
     let font : Font
+    let textColor : Color
     let help : String
     var ontap: (String) -> Void
     
@@ -272,7 +273,7 @@ struct PopTextButton: View
             Text(text)
                 .textSelection(.disabled)
                 .font(font)
-                .foregroundColor(tap ? settings.theme.accentColor : settings.theme.minorColor)
+                .foregroundColor(tap ? settings.theme.accentColor : textColor)
                 .scaleEffect(tap ? 1.1 : 1)
                 .animation(.spring(response: 0.4, dampingFraction: 0.6),value: tap)
                 .help(help)
