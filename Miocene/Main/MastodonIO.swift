@@ -244,6 +244,49 @@ class MastodonIO : ObservableObject
         }
     }
     
+    
+    
+    func followTag(tagname:String,done: @escaping (Tag) -> Void)
+    {
+        let request = Tags.follow(name: tagname)
+        client.run(request)
+        { result in
+            Log.log(msg:"follow result \(result)")
+            if let tag = result.value
+            {
+                done(tag)
+            }
+        }
+    }
+    
+    
+    func followed_tags(done: @escaping ([Tag]) -> Void)
+    {
+        let request = Tags.followed_tags()
+        client.run(request)
+        { result in
+            Log.log(msg:"followed_tags result \(result)")
+            if let tags = result.value
+            {
+                done(tags)
+            }
+        }
+    }
+    
+    
+    func unfollowTag(tagname:String,done: @escaping (Tag) -> Void)
+    {
+        let request = Tags.unfollow(name: tagname)
+        client.run(request)
+        { result in
+            Log.log(msg:"unfollow result \(result)")
+            if let tag = result.value
+            {
+                done(tag)
+            }
+        }
+    }
+    
     func follow(account:Account,done: @escaping (Relationship) -> Void)
     {
         let request = Accounts.follow(id: account.id)

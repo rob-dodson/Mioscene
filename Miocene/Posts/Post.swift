@@ -609,10 +609,10 @@ struct Post: View
                     {
                         GridRow
                         {
-                            displayTag(name: "#\(tags[index].name)")
+                            displayTag(tag: tags[index])
                             if (index + 1 < tags.count)
                             {
-                                displayTag(name: "#\(tags[index + 1].name)")
+                                displayTag(tag: tags[index + 1])
                             }
                         }
                     }
@@ -622,16 +622,62 @@ struct Post: View
     }
  
     
-    func displayTag(name:String) -> some  View
+    func displayTag(tag:Tag) -> some View
     {
-        PopTextButton(text: name, font: settings.font.subheadline, help:"Tag \(name)", ontap:
+        var following = false
+        
+        if let tagdict = appState.getTagDict()
+        {
+            if tagdict[tag.name]?.following == true
+            {
+               following = true
+            }
+        }
+        
+        let textcolor = following == false ? settings.theme.minorColor : settings.theme.accentColor
+        
+        return  PopTextButton(text: "#\(tag.name)", font: settings.font.subheadline, textColor: textcolor ,help:"Tag #\(tag.name)", ontap:
         { tag in
             appState.showTag(showtag: tag)
         })
-        .help(name)
-        .padding(EdgeInsets(top: 2, leading: 4, bottom: 2, trailing: 4))
-        .background(settings.theme.blockColor)
-        .cornerRadius(5)
+        .help("#\(tag.name)")
+        .padding(EdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2))
+        .contextMenu
+        {
+            VStack
+            {
+               
+                if following == false
+                {
+                    Button
+                    {
+                        appState.mastio()?.followTag(tagname: tag.name, done:
+                        { tag in
+                            Log.log(msg: "Tag follow result: \(tag)")
+                        })
+                    }
+                label:
+                    {
+                        Text("Follow")
+                    }
+                }
+                else
+                {
+                    Button
+                    {
+                        appState.mastio()?.unfollowTag(tagname: tag.name, done:
+                        { tag in
+                            Log.log(msg: "Tag Unfollow result: \(tag)")
+                        })
+                    }
+                label:
+                    {
+                        Text("UnFollow")
+                    }
+                }
+
+            }
+        }
     }
 }
 

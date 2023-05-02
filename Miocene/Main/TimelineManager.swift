@@ -387,7 +387,7 @@ class TimelineManager : ObservableObject
             if let newstats = result?.newstats
             {
                 let morestats = result?.morestats
-                print("new \(newstats.count) more:\(morestats ?? false)")
+                Log.log(msg:"new \(newstats.count) more:\(morestats ?? false)")
 
                 if newstats.count > 0
                 {

@@ -33,6 +33,8 @@ class AppState : ObservableObject
     static var mastIOs = Dictionary<AccountKey,MastodonIO>()
     static var userMastAccounts = Dictionary<AccountKey,MastodonKit.Account>()
     static var shared : AppState!
+    static var TagDicts : Dictionary<AccountKey,Dictionary<String,Tag>> = Dictionary<AccountKey,Dictionary<String,Tag>>()
+    
     
     init()
     {
@@ -60,6 +62,10 @@ class AppState : ObservableObject
         return AppState.localAccountRecords[currentAccountKey]
     }
     
+    func getTagDict() -> Dictionary<String,Tag>?
+    {
+        return AppState.TagDicts[currentAccountKey]
+    }
     
     func currentMastodonAccount() -> Account?
     {
@@ -150,6 +156,15 @@ class AppState : ObservableObject
                 AppState.userMastAccounts[localrec.accountKey()] = account
                 
                 Log.log(msg: "Account \(account.username) is connected to \(localrec.server)!")
+            
+                mastio.followed_tags()
+                { tags in
+                    print("followed tags:\(tags.count)")
+                    AppState.TagDicts[self.currentAccountKey] = Dictionary<String,Tag>()
+                    tags.forEach { tag in
+                        AppState.TagDicts[self.currentAccountKey]?[tag.name] = tag
+                    }
+                }
             }
             else if let error = result.error
             {
