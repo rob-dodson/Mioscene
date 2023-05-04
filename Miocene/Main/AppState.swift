@@ -134,6 +134,26 @@ class AppState : ObservableObject
     }
 
     
+    func followTag(tag:Tag)
+    {
+        mastio()?.followTag(tagname: tag.name, done:
+        { tag in
+            Log.log(msg: "Tag follow result: \(tag)")
+            AppState.TagDicts[self.currentAccountKey]?[tag.name] = tag
+        })
+    }
+    
+    
+    func unfollowTag(tag:Tag)
+    {
+        mastio()?.followTag(tagname: tag.name, done:
+        { tag in
+            Log.log(msg: "Tag unfollow result: \(tag)")
+            AppState.TagDicts[self.currentAccountKey]?[tag.name] = nil
+        })
+    }
+    
+    
     func connectMastIOForAccount(localrec:LocalAccountRecord)
     {
         guard let token = Keys.getFromKeychain(name: localrec.makeKeyChainName()) else

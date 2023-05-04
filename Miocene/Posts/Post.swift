@@ -644,39 +644,28 @@ struct Post: View
         .padding(EdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2))
         .contextMenu
         {
-            VStack
-            {
-               
                 if following == false
                 {
                     Button
                     {
-                        appState.mastio()?.followTag(tagname: tag.name, done:
-                        { tag in
-                            Log.log(msg: "Tag follow result: \(tag)")
-                        })
+                        appState.followTag(tag: tag)
                     }
                 label:
                     {
-                        Text("Follow")
+                        Text("Follow this tag")
                     }
                 }
                 else
                 {
                     Button
                     {
-                        appState.mastio()?.unfollowTag(tagname: tag.name, done:
-                        { tag in
-                            Log.log(msg: "Tag Unfollow result: \(tag)")
-                        })
+                        appState.unfollowTag(tag: tag)
                     }
                 label:
                     {
-                        Text("UnFollow")
+                        Text("Unfollow this tag")
                     }
                 }
-
-            }
         }
     }
 }
