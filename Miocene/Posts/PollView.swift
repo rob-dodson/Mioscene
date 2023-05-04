@@ -78,7 +78,7 @@ struct PollView: View
                                 
                                 if voted == true || poll.voted == true || poll.expired == true
                                 {
-                                    Rectangle().frame(width:CGFloat(percent),height: 20)
+                                    Rectangle().frame(width:geo.size.width * (percent / 100.0) ,height: 20)
                                         .foregroundColor(settings.theme.accentColor)
                                     
                                     HStack
