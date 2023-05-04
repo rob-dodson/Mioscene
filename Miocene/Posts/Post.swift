@@ -259,6 +259,7 @@ struct Post: View
                         }
                     }
                     
+                    
                     //
                     // Cards
                     //
@@ -271,13 +272,12 @@ struct Post: View
                                 AsyncImage(url: card.imageUrl)
                                 { image in
                                     image.resizable()
-                                        .aspectRatio(contentMode: .fit)
+                                        .frame(height:90)
                                 }
                             placeholder:
                                 {
                                     Image(systemName: "person.fill.questionmark")
                                 }
-                                .frame(width: CGFloat(card.width ?? 50) / 3.0, height: CGFloat(card.height ?? 50) / 3.0)
                                 
                                 VStack
                                 {
@@ -289,11 +289,12 @@ struct Post: View
                             {
                                 NSWorkspace.shared.open(card.url)
                             }
-                            // .frame(minWidth: 150,minHeight: 75)
+                            .frame(width: 300,height: 90)
                             .background(settings.theme.blockColor)
                             .border(width: 1, edges: [.leading,.top,.bottom,.trailing], color: settings.theme.minorColor)
                         }
                     }
+                    
                     
                     //
                     // sensitive flag
