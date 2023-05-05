@@ -146,7 +146,7 @@ class AppState : ObservableObject
     
     func unfollowTag(tag:Tag)
     {
-        mastio()?.followTag(tagname: tag.name, done:
+        mastio()?.unfollowTag(tagname: tag.name, done:
         { tag in
             Log.log(msg: "Tag unfollow result: \(tag)")
             AppState.TagDicts[self.currentAccountKey]?[tag.name] = nil
@@ -182,6 +182,7 @@ class AppState : ObservableObject
                     print("followed tags:\(tags.count)")
                     AppState.TagDicts[self.currentAccountKey] = Dictionary<String,Tag>()
                     tags.forEach { tag in
+                        print("   \(tag.name)")
                         AppState.TagDicts[self.currentAccountKey]?[tag.name] = tag
                     }
                 }
