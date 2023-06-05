@@ -72,7 +72,7 @@ class TimelineManager : ObservableObject
     @State private var appState: AppState
     @State private var fetching : Bool = false
     private var currentRequest : TimelineRequest? //(timelineWhen: .current, timeLine: .home, tag: "")
-    @State private var timelineTimer : Timer?
+    private var timelineTimer : Timer?
     
     
     
@@ -148,8 +148,8 @@ class TimelineManager : ObservableObject
     
     private func loop()
     {
-        if timelineTimer != nil { timelineTimer?.invalidate() }
-        
+        if timelineTimer != nil { print("TIMER STOPPED !! ");timelineTimer?.invalidate() }
+        print("TIMER STARTED")
         timelineTimer = Timer.scheduledTimer(withTimeInterval: 60 * 5, repeats: true)
         { timer in
             self.loopfunc()

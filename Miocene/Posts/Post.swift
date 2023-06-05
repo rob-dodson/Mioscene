@@ -629,7 +629,7 @@ struct Post: View
         
         if let tagdict = appState.getTagDict()
         {
-            if tagdict[tag.name]?.following == true
+            if tagdict[tag.name.lowercased()]?.following == true || tagdict[tag.name.uppercased()]?.following == true
             {
                following = true
             }

@@ -236,13 +236,13 @@ struct TimeLineView: View
         let filter1 = Filter(name: "macOS", isOn: true, keepOrReject: .keep, isRegex: false, filterString: "macOS", type: .body)
         let filter2 = Filter(name: "#macOS", isOn: true, keepOrReject: .keep, isRegex: false, filterString: "macOS", type: .hashtag)
         let filterset = FilterSet(name: "macOS", filters: [filter1,filter2], setType: .AnyFilter)
-        let timelinerequest = TimelineRequest(timelineWhen: .current, timeLine: .localTimeline, tag: "")
-        let customtimeline = CustomTimeline(name: "macOS - Local", timelineRequests: [timelinerequest], filterSet: filterset)
+        let timelinerequest = TimelineRequest(timelineWhen: .current, timeLine: .home, tag: "")
+        let customtimeline = CustomTimeline(name: "macOS - Home", timelineRequests: [timelinerequest], filterSet: filterset)
         
         let filter0 = Filter(name: "Ivory", isOn: true, keepOrReject: .keep, isRegex: false, filterString: "Ivory", type: .body)
         let filterset0 = FilterSet(name: "Ivory", filters: [filter0], setType: .AnyFilter)
-        let timelinerequest0 = TimelineRequest(timelineWhen: .current, timeLine: .home, tag: "")
-        let customtimeline0 = CustomTimeline(name: "Ivory - Home", timelineRequests: [timelinerequest0], filterSet: filterset0)
+        let timelinerequest0 = TimelineRequest(timelineWhen: .current, timeLine: .localTimeline, tag: "")
+        let customtimeline0 = CustomTimeline(name: "Ivory - Local", timelineRequests: [timelinerequest0], filterSet: filterset0)
         
         
         
