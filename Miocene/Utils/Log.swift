@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import OSLog
 
 class Log
 {
     static var fileName : String?
+    static var logger : Logger?
     
     static func logAlert(errorType:MioceneError,msg:String)
     {
@@ -23,9 +25,14 @@ class Log
         log(msg: msg, rewindfile: false)
     }
     
-    
+   
     static func log(msg:String, rewindfile:Bool)
     {
+        if logger == nil
+        {
+            logger = Logger(subsystem: "logging", category: "general")
+        }
+        
         do
         {
             if fileName == nil
@@ -44,7 +51,7 @@ class Log
             {
                 let logmsg = "\(Date().formatted(date:.numeric,time:.complete)): \(msg)"
                 
-                print("\(logmsg)")
+                logger?.log("\(logmsg, privacy: .public)" )
                 
                 if rewindfile == true
                 {
@@ -66,7 +73,7 @@ class Log
         }
         catch
         {
-            print("write to debug file failed. error: \(error) - msg: \(msg)")
+            logger?.error("write to debug file failed. error: \(error) - msg: \(msg)")
         }
     }
 }

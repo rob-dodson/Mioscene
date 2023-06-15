@@ -196,7 +196,7 @@ struct TimeLineView: View
         return PopMenu(icon: "person.crop.circle",selected:$currentAccountServer,menuItems:popitems)
         { result in
             
-            print("Account Picked: \(result.text)")
+            Log.log(msg:"Account Picked: \(result.text)")
             
             if result.text == "Add Account"
             {
@@ -255,7 +255,7 @@ struct TimeLineView: View
                                                 PopMenuItem(text: customtimeline.name,help:"Filter \(customtimeline.name)",userData:TimeLine.custom)
                                                 ])
         { item in
-            print("Custom Sub Menu \(item.text)")
+            Log.log(msg:"Custom Sub Menu \(item.text)")
             
             let timeline = custdict[item.text]
             

@@ -88,7 +88,7 @@ class TimelineManager : ObservableObject
     //
     func start()
     {
-        print("START TLM LOOP")
+        Log.log(msg:"START TLM LOOP")
         loop()
     }
     
@@ -149,7 +149,7 @@ class TimelineManager : ObservableObject
     private func loop()
     {
         if timelineTimer != nil { print("TIMER STOPPED !! ");timelineTimer?.invalidate() }
-        print("TIMER STARTED")
+        Log.log(msg:"TIMER STARTED")
         timelineTimer = Timer.scheduledTimer(withTimeInterval: 60 * 5, repeats: true)
         { timer in
             self.loopfunc()
@@ -257,7 +257,7 @@ class TimelineManager : ObservableObject
                     counter += 1
                     getTimeline(timelineRequest:custreq)
                     { custstats in
-                        print("cust stats \(custstats.count)")
+                        Log.log(msg:"cust stats \(custstats.count)")
                         retstats = retstats + custstats
                         custreq.firstId = custstats.last?.status.id
                         custreq.lastId = custstats.last?.status.id
@@ -408,7 +408,7 @@ class TimelineManager : ObservableObject
         retstats = retstats + self.theStats
         if retstats.count > 250
         {
-            print("removing last 50 from stats")
+            Log.log(msg:"removing last 50 from stats")
             retstats.removeLast(50)
         }
         return retstats

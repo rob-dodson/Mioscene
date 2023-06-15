@@ -179,7 +179,7 @@ class AppState : ObservableObject
             
                 mastio.followed_tags()
                 { tags in
-                    print("followed tags:\(tags.count)")
+                    Log.log(msg:"followed tags:\(tags.count)")
                     AppState.TagDicts[self.currentAccountKey] = Dictionary<String,Tag>()
                     tags.forEach { tag in
                         print("   \(tag.name)")

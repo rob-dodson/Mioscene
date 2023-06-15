@@ -194,7 +194,7 @@ extension String
         
         attributedString.addAttribute(NSAttributedString.Key.font, value:font, range:NSRange(location: 0, length: attributedString.length))
 
-       // print("HTML \(self)")
+       // Log.log(msg:"HTML \(self)")
         return attributedString
     }
 }

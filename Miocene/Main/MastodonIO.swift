@@ -101,7 +101,7 @@ class MastodonIO : ObservableObject
                     let session = ASWebAuthenticationSession(url: authURL, callbackURLScheme: scheme)
                     { callbackURL, error in
                         
-                        print("OAUTH \(String(describing: callbackURL?.debugDescription)) \(String(describing: error?.localizedDescription))")
+                        Log.log(msg:"OAUTH \(String(describing: callbackURL?.debugDescription)) \(String(describing: error?.localizedDescription))")
                         
                         guard error == nil, let callbackURL = callbackURL else { return }
                         let queryItems = URLComponents(string: callbackURL.absoluteString)?.queryItems
