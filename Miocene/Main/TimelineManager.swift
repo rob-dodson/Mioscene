@@ -148,7 +148,7 @@ class TimelineManager : ObservableObject
     
     private func loop()
     {
-        if timelineTimer != nil { print("TIMER STOPPED !! ");timelineTimer?.invalidate() }
+        if timelineTimer != nil {  Log.log(msg:"TIMER STOPPED !! ");timelineTimer?.invalidate() }
         Log.log(msg:"TIMER STARTED")
         timelineTimer = Timer.scheduledTimer(withTimeInterval: 60 * 5, repeats: true)
         { timer in
@@ -283,7 +283,7 @@ class TimelineManager : ObservableObject
                 // now apply filters
                 //
                 retstats = FilterTools.shared.filterStats(filterSet:customtimeline.filterSet,stats:retstats)
-                print("cust stats after filters: \(retstats.count)")
+                Log.log(msg:"cust stats after filters: \(retstats.count)")
                 
                 done(retstats)
             }

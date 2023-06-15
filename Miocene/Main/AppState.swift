@@ -182,7 +182,7 @@ class AppState : ObservableObject
                     Log.log(msg:"followed tags:\(tags.count)")
                     AppState.TagDicts[self.currentAccountKey] = Dictionary<String,Tag>()
                     tags.forEach { tag in
-                        print("   \(tag.name)")
+                        Log.log(msg:"   \(tag.name)")
                         AppState.TagDicts[self.currentAccountKey]?[tag.name] = tag
                     }
                 }
