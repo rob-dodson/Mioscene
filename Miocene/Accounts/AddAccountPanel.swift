@@ -16,7 +16,7 @@ struct AddAccountPanel: View
     @EnvironmentObject var alertSystem : AlertSystem
     @EnvironmentObject var appState : AppState
     
-    @State private var server : String = "shyfrog.masto.host"
+    @State private var server : String = "mastodon.social"
     @State private var password : String = ""
     @State private var useOAuth = true
     @State private var step = 0
