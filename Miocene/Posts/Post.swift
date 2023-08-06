@@ -28,8 +28,12 @@ struct Post: View
     @State private var imageShowIndex : Int  = 1
     @State var datePublished = ""
     @State var hoursstr : String = ""
+    @State var replyStatus : MStatus?
+    @State var replyTo: Bool = false
+    
     
     static var timer : Timer.TimerPublisher?
+    
     
     var body: some View
     {
@@ -37,18 +41,18 @@ struct Post: View
         
         if status.reblog != nil
         {
-            dopost(status: status.reblog!,mstatus:mstat)
+            return dopost(status: status.reblog!,mstatus:mstat)
         }
         else
         {
-            dopost(status: status,mstatus:mstat)
+            return dopost(status: status,mstatus:mstat)
         }
     }
     
     
     func dopost(status:Status,mstatus:MStatus) -> some View
     {
-        GroupBox()
+        return GroupBox()
         {
             if let note = notification
             {
@@ -77,379 +81,390 @@ struct Post: View
                 .padding(.bottom)
             }
 
-            
-            HStack(alignment: .top)
+           
+            VStack
             {
-                //
-                // Poster's avatar
-                //
-                let account = status.account
-                AsyncImage(url: URL(string: account.avatar ?? ""))
-                { image in
-                    image.resizable()
-                }
-            placeholder:
+                if replyTo == false
                 {
-                    Image(systemName: "person.fill.questionmark")
-                }
-                .frame(width: 50, height: 50)
-                .cornerRadius(5)
-                .onTapGesture
-                {
-                    appState.showAccount(showaccount:account)
-                }
-                
-                
-                VStack(alignment: .leading,spacing: 10)
-                {
-                    //
-                    // names
-                    //
-                    VStack(alignment: .leading,spacing: -2)
+                    if let replyid = status.inReplyToID
                     {
-                        HStack
+                        getReplyToStatus(id: replyid)
+                    }
+                }
+            
+                HStack(alignment: .top)
+                {
+                    //
+                    // Poster's avatar
+                    //
+                    let account = status.account
+                    AsyncImage(url: URL(string: account.avatar ?? ""))
+                    { image in
+                        image.resizable()
+                    }
+                placeholder:
+                    {
+                        Image(systemName: "person.fill.questionmark")
+                    }
+                    .frame(width: 50, height: 50)
+                    .cornerRadius(5)
+                    .onTapGesture
+                    {
+                        appState.showAccount(showaccount:account)
+                    }
+                    
+                    
+                    VStack(alignment: .leading,spacing: 10)
+                    {
+                        //
+                        // names
+                        //
+                        VStack(alignment: .leading,spacing: -2)
                         {
-                            Text(status.account.displayName)
-                                .contentShape(Rectangle())
-                                .font(settings.font.headline)
-                                .foregroundColor(settings.theme.nameColor)
+                            HStack
+                            {
+                                Text(status.account.displayName)
+                                    .contentShape(Rectangle())
+                                    .font(settings.font.headline)
+                                    .foregroundColor(settings.theme.nameColor)
+                                    .onTapGesture
+                                {
+                                    appState.showAccount(showaccount:status.account)
+                                }
+                                
+                                if status.account.bot == true && UserDefaults.standard.bool(forKey: "flagbots") == true
+                                {
+                                    Text("[BOT]")
+                                        .foregroundColor(settings.theme.accentColor)
+                                        .font(settings.font.footnote)
+                                }
+                            }
+                            
+                            Text("@\(status.account.acct)")
+                                .font(settings.font.subheadline)
+                                .foregroundColor(settings.theme.minorColor)
                                 .onTapGesture
                             {
                                 appState.showAccount(showaccount:status.account)
                             }
                             
-                            if status.account.bot == true && UserDefaults.standard.bool(forKey: "flagbots") == true
+                            if let appname = status.application?.name
                             {
-                                Text("[BOT]")
-                                    .foregroundColor(settings.theme.accentColor)
-                                    .font(settings.font.footnote)
+                                Text("posted with \(appname)")
+                                    .font(settings.font.footnote).italic()
+                                    .foregroundColor(settings.theme.minorColor)
                             }
                         }
                         
-                        Text("@\(status.account.acct)")
-                            .font(settings.font.subheadline)
-                            .foregroundColor(settings.theme.minorColor)
-                            .onTapGesture
-                        {
-                            appState.showAccount(showaccount:status.account)
-                        }
                         
-                        if let appname = status.application?.name
+                        //
+                        // content warning
+                        //
+                        if status.spoilerText.count > 0
                         {
-                            Text("posted with \(appname)")
-                                .font(settings.font.footnote).italic()
-                                .foregroundColor(settings.theme.minorColor)
-                        }
-                    }
-                    
-                    
-                    //
-                    // content warning
-                    //
-                    if status.spoilerText.count > 0
-                    {
-                        HStack(alignment: .center)
-                        {
-                            PopButton(text: "", icon: "exclamationmark.triangle", isSelected: showContentWarning == true ? false : true,help:"Toggle Content Warning (CW)")
+                            HStack(alignment: .center)
+                            {
+                                PopButton(text: "", icon: "exclamationmark.triangle", isSelected: showContentWarning == true ? false : true,help:"Toggle Content Warning (CW)")
+                                {
+                                    showContentWarning.toggle()
+                                }
+                                
+                                Text(status.spoilerText)
+                                    .baselineOffset(15.0)
+                            }
+                            .padding(EdgeInsets(top: 4, leading: 4, bottom: -12, trailing: 4))
+                            .border(width: 1, edges: [.top,.bottom,.leading,.trailing], color: settings.theme.accentColor)
+                            .onTapGesture
                             {
                                 showContentWarning.toggle()
                             }
-                            
-                            Text(status.spoilerText)
-                                .baselineOffset(15.0)
                         }
-                        .padding(EdgeInsets(top: 4, leading: 4, bottom: -12, trailing: 4))
-                        .border(width: 1, edges: [.top,.bottom,.leading,.trailing], color: settings.theme.accentColor)
-                        .onTapGesture
+                        
+                        
+                        //
+                        // html body of post
+                        //
+                        
+                        if status.spoilerText.count == 0 || (status.spoilerText.count > 0 && showContentWarning == true)
                         {
-                            showContentWarning.toggle()
-                        }
-                    }
-                    
-                    
-                    //
-                    // html body of post
-                    //
-                    
-                    if status.spoilerText.count == 0 || (status.spoilerText.count > 0 && showContentWarning == true)
-                    {
-                        let betterPSpaceing = status.content.replacingOccurrences(of: "</p>", with: "</p><br />")
-                        if let nsAttrString = betterPSpaceing.htmlAttributedString(color:settings.theme.bodyColor,
-                                                                                   linkColor:settings.theme.linkColor,
-                                                                                   font: settings.font.body)
-                        {
-                            Text(AttributedString(nsAttrString))
-                                .font(settings.font.body)
-                                .foregroundColor(settings.theme.bodyColor)
-                                .textSelection(.enabled)
-                        }
-                    }
-                    
-                    
-                    //
-                    // attachments.
-                    //
-                    if status.sensitive == false || (status.sensitive == true && showSensitiveContent == true)
-                    {
-                        ForEach(status.mediaAttachments.indices, id:\.self)
-                        { index in
-                            let attachment = status.mediaAttachments[index]
-                            
-                            //
-                            // video
-                            //
-                            if attachment.type == .video || attachment.type == .gifv
+                            let betterPSpaceing = status.content.replacingOccurrences(of: "</p>", with: "</p><br />")
+                            if let nsAttrString = betterPSpaceing.htmlAttributedString(color:settings.theme.bodyColor,
+                                                                                       linkColor:settings.theme.linkColor,
+                                                                                       font: settings.font.body)
                             {
-                                let player = AVPlayer(url: URL(string:attachment.url)!)
-                                VideoPlayer(player: player)
-                                    .frame(width: 400, height: 300, alignment: .center)
+                                Text(AttributedString(nsAttrString))
+                                    .font(settings.font.body)
+                                    .foregroundColor(settings.theme.bodyColor)
+                                    .textSelection(.enabled)
                             }
-                            //
-                            // image
-                            //
-                            /*
-                             else if attachment.type == .gifv
-                             {
-                             Text(".gifv")
-                             gifimage(urlstring:attachment.url)
-                             { image in
-                             image.resizable()
-                             }
-                             }*/
-                            else if attachment.type == .image
-                            {
-                                AsyncImage(url: URL(string:attachment.url))
-                                { image in
-                                    image.resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(maxWidth:300)
-                                }
-                            placeholder:
+                        }
+                        
+                        
+                        //
+                        // attachments.
+                        //
+                        if status.sensitive == false || (status.sensitive == true && showSensitiveContent == true)
+                        {
+                            ForEach(status.mediaAttachments.indices, id:\.self)
+                            { index in
+                                let attachment = status.mediaAttachments[index]
+                                
+                                //
+                                // video
+                                //
+                                if attachment.type == .video || attachment.type == .gifv
                                 {
-                                    Image(systemName: "photo")
+                                    let player = AVPlayer(url: URL(string:attachment.url)!)
+                                    VideoPlayer(player: player)
+                                        .frame(width: 400, height: 300, alignment: .center)
                                 }
-                                .cornerRadius(5)
+                                //
+                                // image
+                                //
+                                /*
+                                 else if attachment.type == .gifv
+                                 {
+                                 Text(".gifv")
+                                 gifimage(urlstring:attachment.url)
+                                 { image in
+                                 image.resizable()
+                                 }
+                                 }*/
+                                else if attachment.type == .image
+                                {
+                                    AsyncImage(url: URL(string:attachment.url))
+                                    { image in
+                                        image.resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(maxWidth:300)
+                                    }
+                                placeholder:
+                                    {
+                                        Image(systemName: "photo")
+                                    }
+                                    .cornerRadius(5)
+                                    .onTapGesture
+                                    {
+                                        if let url = URL(string: status.mediaAttachments[index].url)
+                                        {
+                                            ShowImagePanel.url = url
+                                            shouldPresentImageSheet = true
+                                        }
+                                    }
+                                    .onDrag()
+                                    {
+                                        NSItemProvider(object: URL(string:attachment.url)! as NSURL)
+                                    }
+                                    .sheet(isPresented: $shouldPresentImageSheet)
+                                    {
+                                    }
+                                content:
+                                    {
+                                        ShowImagePanel()
+                                        {
+                                            shouldPresentImageSheet = false
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    Text("ATTACHMENT TYPE NOT SUPPORTED \(attachment.type.rawValue)")
+                                }
+                            }
+                        }
+                        
+                        
+                        //
+                        // Cards
+                        //
+                        if let card = status.card
+                        {
+                            if settings.showCards == true && card.imageUrl != nil
+                            {
+                                HStack
+                                {
+                                    AsyncImage(url: card.imageUrl)
+                                    { image in
+                                        image.resizable()
+                                            .frame(height:90)
+                                    }
+                                placeholder:
+                                    {
+                                        Image(systemName: "person.fill.questionmark")
+                                    }
+                                    
+                                    VStack
+                                    {
+                                        Text(card.title)
+                                    }
+                                    .padding(3)
+                                }
                                 .onTapGesture
                                 {
-                                    if let url = URL(string: status.mediaAttachments[index].url)
-                                    {
-                                        ShowImagePanel.url = url
-                                        shouldPresentImageSheet = true
-                                    }
+                                    NSWorkspace.shared.open(card.url)
                                 }
-                                .onDrag()
-                                {
-                                    NSItemProvider(object: URL(string:attachment.url)! as NSURL)
-                                }
-                                .sheet(isPresented: $shouldPresentImageSheet)
-                                {
-                                }
-                            content:
-                                {
-                                    ShowImagePanel()
-                                    {
-                                        shouldPresentImageSheet = false
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                Text("ATTACHMENT TYPE NOT SUPPORTED \(attachment.type.rawValue)")
+                                .frame(width: 300,height: 90)
+                                .background(settings.theme.blockColor)
+                                .border(width: 1, edges: [.leading,.top,.bottom,.trailing], color: settings.theme.minorColor)
                             }
                         }
-                    }
-                    
-                    
-                    //
-                    // Cards
-                    //
-                    if let card = status.card
-                    {
-                        if settings.showCards == true && card.imageUrl != nil
+                        
+                        
+                        //
+                        // sensitive flag
+                        //
+                        if status.sensitive == true
+                        {
+                            PopButtonColor(text: "Sensitive",
+                                           icon: "eye.slash",
+                                           textColor: settings.theme.accentColor,
+                                           iconColor: settings.theme.accentColor,
+                                           isSelected: true,
+                                           help:"Toggle Sensitive")
+                            {
+                                showSensitiveContent.toggle()
+                            }
+                        }
+                        
+                        
+                        //
+                        // Poll
+                        //
+                        if let poll = status.poll
+                        {
+                            PollView(poll:poll)
+                        }
+                        
+                        
+                        //
+                        // tags
+                        //
+                        if status.tags.count > 0
+                        {
+                            makeTagStack(tags: status.tags)
+                        }
+                        
+                        
+                        //
+                        // reblogged
+                        //
+                        if mstatus.status.reblog != nil
                         {
                             HStack
                             {
-                                AsyncImage(url: card.imageUrl)
-                                { image in
-                                    image.resizable()
-                                        .frame(height:90)
-                                }
-                            placeholder:
+                                Image(systemName: "arrow.2.squarepath")
+                                Text("by")
+                                Text("\(mstatus.status.account.displayName)")
+                                    .foregroundColor(settings.theme.linkColor)
+                                    .onTapGesture
                                 {
-                                    Image(systemName: "person.fill.questionmark")
+                                    appState.showAccount(showaccount: mstatus.status.account)
+                                }
+                                .onHover
+                                { inside in
+                                    if inside
+                                    {
+                                        NSCursor.pointingHand.push()
+                                    } else {
+                                        NSCursor.pop()
+                                    }
+                                }
+                            }
+                        }
+                        
+                        
+                        //
+                        // buttons
+                        //
+                        HStack(spacing: 10)
+                        {
+                            if settings.hideStatusButtons == false && replyTo == false
+                            {
+                                //
+                                // reply
+                                //
+                                PopButton(text: "", icon: "arrowshape.turn.up.left",isSelected: false,help:"Reply to this author")
+                                {
+                                    shouldPresentSheet.toggle()
                                 }
                                 
-                                VStack
+                                
+                                
+                                //
+                                // favorite
+                                //
+                                PopButtonColor(text: "\(mstatus.favoritesCount)",
+                                               icon: "star",
+                                               textColor:settings.theme.minorColor,
+                                               iconColor:mstatus.favorited == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false,help:"Mark as favorite")
                                 {
-                                    Text(card.title)
+                                    if mstatus.favorited == true
+                                    {
+                                        appState.mastio()?.unfavorite(status: status)
+                                        mstatus.favoritesCount -= 1
+                                    }
+                                    else
+                                    {
+                                        appState.mastio()?.favorite(status: status)
+                                        mstatus.favoritesCount += 1
+                                        
+                                    }
+                                    mstatus.favorited.toggle()
                                 }
-                                .padding(3)
-                            }
-                            .onTapGesture
-                            {
-                                NSWorkspace.shared.open(card.url)
-                            }
-                            .frame(width: 300,height: 90)
-                            .background(settings.theme.blockColor)
-                            .border(width: 1, edges: [.leading,.top,.bottom,.trailing], color: settings.theme.minorColor)
-                        }
-                    }
-                    
-                    
-                    //
-                    // sensitive flag
-                    //
-                    if status.sensitive == true
-                    {
-                        PopButtonColor(text: "Sensitive",
-                                       icon: "eye.slash",
-                                       textColor: settings.theme.accentColor,
-                                       iconColor: settings.theme.accentColor,
-                                       isSelected: true,
-                                       help:"Toggle Sensitive")
-                        {
-                            showSensitiveContent.toggle()
-                        }
-                    }
-                    
-                    
-                    //
-                    // Poll
-                    //
-                    if let poll = status.poll
-                    {
-                        PollView(poll:poll)
-                    }
-                    
-                    
-                    //
-                    // tags
-                    //
-                    if status.tags.count > 0
-                    {
-                        makeTagStack(tags: status.tags)
-                    }
-                    
-                    
-                    //
-                    // reblogged
-                    //
-                    if mstatus.status.reblog != nil
-                    {
-                        HStack
-                        {
-                            Image(systemName: "arrow.2.squarepath")
-                            Text("by")
-                            Text("\(mstatus.status.account.displayName)")
-                                .foregroundColor(settings.theme.linkColor)
-                                .onTapGesture
-                            {
-                                appState.showAccount(showaccount: mstatus.status.account)
-                            }
-                            .onHover
-                            { inside in
-                                if inside
+                                
+                                
+                                //
+                                // reblog
+                                //
+                                PopButtonColor(text: "\(mstatus.reblogsCount)",
+                                               icon: "arrow.2.squarepath",
+                                               textColor:settings.theme.minorColor,
+                                               iconColor:mstatus.reblogged == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false,help:"Reblog this post")
                                 {
-                                    NSCursor.pointingHand.push()
-                                } else {
-                                    NSCursor.pop()
+                                    if mstatus.reblogged == true
+                                    {
+                                        appState.mastio()?.unreblog(status: status)
+                                        mstatus.reblogsCount -= 1
+                                    }
+                                    else
+                                    {
+                                        appState.mastio()?.reblog(status: status)
+                                        mstatus.reblogsCount += 1
+                                        
+                                    }
+                                    mstatus.reblogged.toggle()
                                 }
-                            }
-                        }
-                    }
-                    
-                    
-                    //
-                    // buttons
-                    //
-                    HStack(spacing: 10)
-                    {
-                        if settings.hideStatusButtons == false
-                        {
-                            //
-                            // reply
-                            //
-                            PopButton(text: "", icon: "arrowshape.turn.up.left",isSelected: false,help:"Reply to this author")
-                            {
-                                shouldPresentSheet.toggle()
-                            }
-                            
-                            
-                            
-                            //
-                            // favorite
-                            //
-                            PopButtonColor(text: "\(mstatus.favoritesCount)",
-                                           icon: "star",
-                                           textColor:settings.theme.minorColor,
-                                           iconColor:mstatus.favorited == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false,help:"Mark as favorite")
-                            {
-                                if mstatus.favorited == true
+                                
+                                //
+                                // bookmark
+                                //
+                                PopButtonColor(text: "",
+                                               icon: "bookmark",
+                                               textColor:settings.theme.minorColor,
+                                               iconColor:mstatus.bookmarked == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false,help:"Bookmark this post")
                                 {
-                                    appState.mastio()?.unfavorite(status: status)
-                                    mstatus.favoritesCount -= 1
+                                    if mstatus.bookmarked == true
+                                    {
+                                        appState.mastio()?.unbookmark(status: status)
+                                    }
+                                    else
+                                    {
+                                        appState.mastio()?.bookmark(status: status)
+                                    }
+                                    mstatus.bookmarked.toggle()
                                 }
-                                else
-                                {
-                                    appState.mastio()?.favorite(status: status)
-                                    mstatus.favoritesCount += 1
-                                    
-                                }
-                                mstatus.favorited.toggle()
-                            }
-                            
-                            
-                            //
-                            // reblog
-                            //
-                            PopButtonColor(text: "\(mstatus.reblogsCount)",
-                                           icon: "arrow.2.squarepath",
-                                           textColor:settings.theme.minorColor,
-                                           iconColor:mstatus.reblogged == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false,help:"Reblog this post")
-                            {
-                                if mstatus.reblogged == true
-                                {
-                                    appState.mastio()?.unreblog(status: status)
-                                    mstatus.reblogsCount -= 1
-                                }
-                                else
-                                {
-                                    appState.mastio()?.reblog(status: status)
-                                    mstatus.reblogsCount += 1
-                                    
-                                }
-                                mstatus.reblogged.toggle()
+                                
                             }
                             
                             //
-                            // bookmark
+                            // created Date
                             //
-                            PopButtonColor(text: "",
-                                           icon: "bookmark",
-                                           textColor:settings.theme.minorColor,
-                                           iconColor:mstatus.bookmarked == true ? settings.theme.accentColor : settings.theme.bodyColor,isSelected: false,help:"Bookmark this post")
-                            {
-                                if mstatus.bookmarked == true
-                                {
-                                    appState.mastio()?.unbookmark(status: status)
-                                }
-                                else
-                                {
-                                    appState.mastio()?.bookmark(status: status)
-                                }
-                                mstatus.bookmarked.toggle()
-                            }
+                            makeDateView(status: status)
                             
                         }
-                        
-                        //
-                        // created Date
-                        //
-                        makeDateView(status: status)
-                        
                     }
+                    .frame(minWidth:150,maxWidth:.infinity, alignment: .leading)  // .infinity
                 }
-                .frame(minWidth:150,maxWidth:.infinity, alignment: .leading)  // .infinity
             }
             .padding(.bottom,5)
         }
@@ -458,7 +473,7 @@ struct Post: View
         }
     content:
         {
-            EditPost(newPost: "@\(status.account.acct): ",replyTo:status.account.id,postVisibility:.direct)
+            EditPost(newPost: "@\(status.account.acct): ",replyTo:mstat.status.id,postVisibility:.direct)
             {
                 shouldPresentDirectSheet = false
             }
@@ -468,17 +483,52 @@ struct Post: View
         }
     content:
         {
-            EditPost(newPost: "@\(status.account.acct): ",replyTo:status.account.id,postVisibility:.public)
+            EditPost(newPost: "@\(status.account.acct): ",replyTo:mstat.status.id,postVisibility:.public)
             {
                 shouldPresentSheet = false
             }
         }
-        .background(status.account.id == appState.currentMastodonAccount()?.id ? settings.theme.ownpostColor : settings.theme.blockColor)
+        .background(status.account.id == appState.currentMastodonAccount()?.id ?
+                    (replyTo == false ? settings.theme.ownpostColor : settings.theme.replyToColor) :
+                        (replyTo == false ? settings.theme.blockColor : settings.theme.replyToColor))
         .cornerRadius(5)
+        .padding(EdgeInsets(top: replyTo == false ? 0.0 : 0.0,
+                            leading: replyTo == false ? 0.0 : 20.0,
+                            bottom: replyTo == false ? 0.0 : 20.0,
+                            trailing: replyTo == false ? 0.0 : 20.0))
         .contextMenu
         {
             contextMenu(status:status)
         }
+    }
+    
+    
+    func getReplyToStatus(id:String) -> some View
+    {
+        Task
+        {
+            if let reply = await appState.mastio()?.getStatus(id:id)
+            {
+                replyStatus = reply
+            }
+        }
+        
+        return VStack(alignment: .leading)
+        {
+            Text("In reply to:")
+                .contentShape(Rectangle())
+                .font(settings.font.headline)
+                .foregroundColor(settings.theme.accentColor)
+                .onTapGesture
+            {
+            }
+            
+            if let status = replyStatus
+            {
+                Post(mstat: status,replyTo: true)
+            }
+        }
+        
     }
     
     
@@ -629,7 +679,7 @@ struct Post: View
         
         if let tagdict = appState.getTagDict()
         {
-            if tagdict[tag.name.lowercased()]?.following == true || tagdict[tag.name.uppercased()]?.following == true
+            if tagdict[tag.name.uppercased()] != nil
             {
                following = true
             }

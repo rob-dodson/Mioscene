@@ -122,7 +122,6 @@ class AppState : ObservableObject
                     {
                         self.userLoggedIn = true
                         self.setAccount(accountKey: localrec.accountKey())
-                        currentAccountKey = localrec.accountKey()
                     }
                 }
             }
@@ -179,11 +178,11 @@ class AppState : ObservableObject
             
                 mastio.followed_tags()
                 { tags in
-                    Log.log(msg:"followed tags:\(tags.count)")
-                    AppState.TagDicts[self.currentAccountKey] = Dictionary<String,Tag>()
+                    Log.log(msg:"\(localrec.accountKey()) followed tags:\(tags.count)")
+                    AppState.TagDicts[localrec.accountKey()] = Dictionary<String,Tag>()
                     tags.forEach { tag in
-                        Log.log(msg:"   \(tag.name)")
-                        AppState.TagDicts[self.currentAccountKey]?[tag.name] = tag
+                        Log.log(msg:"   \(localrec.accountKey()) \(tag.name.uppercased())")
+                        AppState.TagDicts[localrec.accountKey()]?[tag.name.uppercased()] = tag
                     }
                 }
             }

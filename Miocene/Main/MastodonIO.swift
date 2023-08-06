@@ -532,7 +532,10 @@ class MastodonIO : ObservableObject
         }
         else
         {
-            let request = Statuses.create(status: newpost,spoilerText: spoiler,
+            let request = Statuses.create(status: newpost,
+                                          replyToID:replyTo,
+                                          sensitive: sensitive,
+                                          spoilerText: spoiler,
                                           poll:pollpayload,
                                       visibility: visibility)
             client.run(request)
@@ -560,6 +563,8 @@ class MastodonIO : ObservableObject
             Log.log(msg:"deleteAllNotifications result \(result)")
         }
     }
+    
+    
     
     func deletePost(id:String)
     {
@@ -641,6 +646,29 @@ class MastodonIO : ObservableObject
             done(statuses)
         }
     }
+    
+    
+    func getStatus(id:String) async -> MStatus?
+    {
+        let request = MastodonKit.Statuses.status(id: id)
+        
+        return await withCheckedContinuation
+        { continuation in
+            
+            client.run(request)
+            { result in
+                if let status = result.value
+                {
+                    continuation.resume(returning: self.convert(status:status))
+                }
+                else
+                {
+                    continuation.resume(returning: nil)
+                }
+            }
+        }
+    }
+    
     
     /*
     @available(*, renamed: "getNewerStatuses(timeline:id:tag:)")

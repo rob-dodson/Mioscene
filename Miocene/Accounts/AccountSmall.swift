@@ -16,6 +16,7 @@ struct AccountSmall: View
     
     @State var account : MastodonKit.Account
     @State var showDetails : Bool
+    @State var superSmall : Bool = false
     
     var body: some View
     {
@@ -67,36 +68,39 @@ struct AccountSmall: View
                             }
                         }
                         
-                        if let fields = account.fields
+                        if superSmall == false
                         {
-                            if fields.count > 0
+                            if let fields = account.fields
                             {
-                                ForEach(fields.indices, id:\.self)
-                                { index in
-                                    
-                                    if fields[index].verification != nil
-                                    {
-                                        HStack
+                                if fields.count > 0
+                                {
+                                    ForEach(fields.indices, id:\.self)
+                                    { index in
+                                        
+                                        if fields[index].verification != nil
                                         {
-                                            Text("\(fields[index].name):")
-                                                .foregroundColor(settings.theme.minorColor)
-                                                .font(settings.font.subheadline)
-                                            
-                                            if let nsAttrString = fields[index].value.htmlAttributedString(color:settings.theme.bodyColor,font:settings.font.title)
+                                            HStack
                                             {
-                                                Text(AttributedString(nsAttrString))
-                                                    .textSelection(.enabled)
-                                                    .fixedSize(horizontal: false, vertical: true) // make the text wrap
+                                                Text("\(fields[index].name):")
+                                                    .foregroundColor(settings.theme.minorColor)
+                                                    .font(settings.font.subheadline)
                                                 
-                                                
-                                                if fields[index].verification != nil
+                                                if let nsAttrString = fields[index].value.htmlAttributedString(color:settings.theme.bodyColor,font:settings.font.title)
                                                 {
-                                                    Image(systemName: "checkmark").foregroundColor(.green)
+                                                    Text(AttributedString(nsAttrString))
+                                                        .textSelection(.enabled)
+                                                        .fixedSize(horizontal: false, vertical: true) // make the text wrap
+                                                    
+                                                    
+                                                    if fields[index].verification != nil
+                                                    {
+                                                        Image(systemName: "checkmark").foregroundColor(.green)
+                                                    }
                                                 }
-                                            }
-                                            else
-                                            {
-                                                Text(fields[index].value)
+                                                else
+                                                {
+                                                    Text(fields[index].value)
+                                                }
                                             }
                                         }
                                     }
