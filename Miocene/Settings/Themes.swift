@@ -20,6 +20,7 @@ struct Theme : Identifiable
         case block = "block"
         case ownpost = "ownpost"
         case appback = "appback"
+        case replyto = "replyto"
         
         var id: Self { return self }
     }
@@ -35,6 +36,8 @@ struct Theme : Identifiable
     var blockColor : Color
     var ownpostColor : Color
     var appbackColor : Color
+    var replyToColor : Color
+
 
     init(name: String, colors: Dictionary<String, Color>, id: UUID = UUID())
     {
@@ -50,6 +53,7 @@ struct Theme : Identifiable
         blockColor = colors[colorName.block.rawValue] ?? Color.init(red: 0.2, green: 0.2, blue: 0.2)
         ownpostColor = colors[colorName.ownpost.rawValue] ?? Color.gray
         appbackColor = colors[colorName.appback.rawValue] ?? Color.gray
+        replyToColor = colors[colorName.replyto.rawValue] ?? Color.brown
 
     }
 }
@@ -77,6 +81,7 @@ class Themes
                           Theme.colorName.block.rawValue:Color("block\(index)"),
                           Theme.colorName.ownpost.rawValue:Color("ownpost\(index)"),
                           Theme.colorName.appback.rawValue:Color("appback\(index)"),
+                          Theme.colorName.replyto.rawValue:Color("replyto\(index)"),
                            ]
             
             let theme = Theme(name: themeNames[index], colors: colors)
